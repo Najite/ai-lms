@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -11,7 +11,8 @@ import {
 } from "@xyflow/react";
 import { CurriculumNode, CurriculumEdge } from "@/lib/supabase";
 import { CustomQuestNode } from "./CustomQuestNode";
-import { Compass, Sparkles } from "lucide-react";
+import { getNodeStatus, NodeStatus } from "@/lib/prerequisites";
+import { Compass, Sparkles, Lock, CheckCircle2, Shield } from "lucide-react";
 
 interface SkillGraphProps {
   nodes: CurriculumNode[];
@@ -32,10 +33,10 @@ export function SkillGraph({
   onSelectNode,
   userProgress,
 }: SkillGraphProps) {
-  // Convert Supabase curriculum_nodes into ReactFlow nodes
+  // Convert Supabase curriculum_nodes into ReactFlow nodes with prerequisite-evaluated status
   const flowNodes: Node[] = useMemo(() => {
     return nodes.map((node) => {
-      const status = (userProgress[node.id] || "available") as any;
+      const status: NodeStatus = getNodeStatus(node.id, edges, userProgress);
       return {
         id: node.id,
         type: "questNode",
@@ -48,40 +49,64 @@ export function SkillGraph({
         },
       };
     });
-  }, [nodes, selectedNodeId, onSelectNode, userProgress]);
+  }, [nodes, edges, selectedNodeId, onSelectNode, userProgress]);
 
-  // Convert Supabase curriculum_edges into ReactFlow edges
+  // Convert Supabase curriculum_edges into dynamic ReactFlow edges
   const flowEdges: Edge[] = useMemo(() => {
-    return edges.map((edge) => ({
-      id: edge.id,
-      source: edge.source_node_id,
-      target: edge.target_node_id,
-      animated: true,
-      style: { stroke: "#2a3041", strokeWidth: 2 },
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: "#2a3041",
-      },
-    }));
-  }, [edges]);
+    return edges.map((edge) => {
+      const targetStatus = getNodeStatus(edge.target_node_id, edges, userProgress);
+      const isTargetUnlocked = targetStatus !== "locked";
+
+      return {
+        id: edge.id,
+        source: edge.source_node_id,
+        target: edge.target_node_id,
+        animated: isTargetUnlocked,
+        style: {
+          stroke: isTargetUnlocked ? "#06b6d4" : "#1e222e",
+          strokeWidth: isTargetUnlocked ? 2 : 1.5,
+          strokeDasharray: isTargetUnlocked ? undefined : "4 4",
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: isTargetUnlocked ? "#06b6d4" : "#1e222e",
+        },
+      };
+    });
+  }, [edges, userProgress]);
 
   return (
     <div
-      className="w-full h-full flex-1 relative bg-[#07080b] overflow-hidden"
+      className="w-full h-full flex-1 relative bg-[#07080b] overflow-hidden select-none"
       style={{ width: "100%", height: "100%", minHeight: "600px" }}
     >
       {/* Top Banner overlay */}
-      <div className="absolute top-4 left-4 z-10 flex items-center gap-3 p-3 rounded-lg border border-[#1e222e] bg-[#0e1017]/90 backdrop-blur-md">
-        <div className="w-7 h-7 rounded border border-[#06b6d4]/40 bg-[#06b6d4]/10 flex items-center justify-center text-[#06b6d4]">
-          <Compass className="w-4 h-4" />
+      <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 p-3.5 rounded-xl border border-[#1e222e] bg-[#0e1017]/95 backdrop-blur-md max-w-md shadow-2xl font-mono">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg border border-[#06b6d4]/40 bg-[#06b6d4]/10 flex items-center justify-center text-[#06b6d4]">
+            <Compass className="w-4 h-4" />
+          </div>
+          <div>
+            <h2 className="text-xs font-bold text-slate-100 flex items-center gap-2">
+              THE SKILL CONSTELLATION <Sparkles className="w-3.5 h-3.5 text-[#f59e0b]" />
+            </h2>
+            <p className="text-[11px] text-slate-400 font-sans">
+              Prerequisite DAG discipline. Foundation lessons must be mastered to unlock the next branches.
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-xs font-mono font-bold text-slate-100 flex items-center gap-2">
-            THE SKILL CONSTELLATION <Sparkles className="w-3 h-3 text-[#f59e0b]" />
-          </h2>
-          <p className="text-[11px] text-slate-400 font-mono">
-            Click any node to enter its deep-dive handbook and live execution sandbox.
-          </p>
+
+        {/* Legend */}
+        <div className="flex items-center gap-3 pt-2 border-t border-[#1e222e] text-[10px] text-slate-400">
+          <span className="flex items-center gap-1 text-[#10b981]">
+            <CheckCircle2 className="w-3 h-3" /> Mastered
+          </span>
+          <span className="flex items-center gap-1 text-[#06b6d4]">
+            <span className="w-2 h-2 rounded-full bg-[#06b6d4] animate-pulse" /> Unlocked
+          </span>
+          <span className="flex items-center gap-1 text-slate-500">
+            <Lock className="w-3 h-3 text-[#f43f5e]" /> Locked
+          </span>
         </div>
       </div>
 

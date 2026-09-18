@@ -10,7 +10,11 @@ import { SocraticDefenseModal } from "@/components/SocraticDefenseModal";
 import { ChaosIncidentSimulator } from "@/components/ChaosIncidentSimulator";
 import { RedTeamArena } from "@/components/RedTeamArena";
 import { LandingPage } from "@/components/LandingPage";
-import { Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { LockedNodeModal } from "@/components/LockedNodeModal";
+import { UnlockedCelebrationModal } from "@/components/UnlockedCelebrationModal";
+import { getNodeStatus, getMissingPrerequisites, NodeStatus } from "@/lib/prerequisites";
+import { Loader2, AlertCircle, RefreshCw, Lock, ArrowRight, ShieldAlert } from "lucide-react";
+import confetti from "canvas-confetti";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<"landing" | "galaxy" | "workspace">("landing");
@@ -22,21 +26,74 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [dbError, setDbError] = useState<string | null>(null);
 
-  // User Game Stats & State Tracking
-  const [xp, setXp] = useState<number>(150);
-  const [hackerXp, setHackerXp] = useState<number>(0);
-  const [level, setLevel] = useState<number>(1);
-  const [streak, setStreak] = useState<number>(14);
-  const [userProgress, setUserProgress] = useState<Record<string, string>>({
-    "node-1-1-bpe-tokenizer": "in_progress",
-    "node-1-2-cli-orchestrator": "available",
-    "node-2-1-hybrid-retrieval": "available",
+  // User Game Stats & State Tracking with LocalStorage Persistence
+  const [xp, setXp] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ainative_xp");
+      if (saved) return parseInt(saved, 10) || 150;
+    }
+    return 150;
   });
 
-  // Modal states
+  const [hackerXp, setHackerXp] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ainative_hacker_xp");
+      if (saved) return parseInt(saved, 10) || 0;
+    }
+    return 0;
+  });
+
+  const [level, setLevel] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ainative_level");
+      if (saved) return parseInt(saved, 10) || 1;
+    }
+    return 1;
+  });
+
+  const [streak, setStreak] = useState<number>(14);
+
+  // Initial user progress: ONLY the foundation lesson (Phase 1, Node 1.1) is available/in_progress!
+  // Every other lesson is strictly LOCKED until prerequisites are mastered!
+  const [userProgress, setUserProgress] = useState<Record<string, string>>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("ainative_user_progress");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+    }
+    return {
+      "node-1-1-bpe-tokenizer": "in_progress",
+    };
+  });
+
+  // Modals
   const [isDefenseModalOpen, setIsDefenseModalOpen] = useState(false);
   const [isChaosModalOpen, setIsChaosModalOpen] = useState(false);
   const [isRedTeamModalOpen, setIsRedTeamModalOpen] = useState(false);
+
+  // Locked & Unlocked Celebration Modals
+  const [lockedModalData, setLockedModalData] = useState<{
+    node: CurriculumNode | null;
+    missingPrereqs: CurriculumNode[];
+  } | null>(null);
+
+  const [celebrationData, setCelebrationData] = useState<{
+    completedNode: CurriculumNode | null;
+    newlyUnlocked: CurriculumNode[];
+  } | null>(null);
+
+  // Persist progression to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ainative_user_progress", JSON.stringify(userProgress));
+      localStorage.setItem("ainative_xp", xp.toString());
+      localStorage.setItem("ainative_hacker_xp", hackerXp.toString());
+      localStorage.setItem("ainative_level", level.toString());
+    }
+  }, [userProgress, xp, hackerXp, level]);
 
   // Fetch real data from live Supabase
   const fetchData = async () => {
@@ -74,6 +131,19 @@ export default function Home() {
   }, []);
 
   const handleSelectNode = (node: CurriculumNode) => {
+    const status = getNodeStatus(node.id, edges, userProgress);
+
+    // If locked, show locked dialog detailing prerequisites
+    if (status === "locked") {
+      const missing = getMissingPrerequisites(node.id, nodes, edges, userProgress);
+      setLockedModalData({
+        node,
+        missingPrereqs: missing,
+      });
+      return;
+    }
+
+    // Otherwise, open in workspace
     setSelectedNode(node);
     setCurrentView("workspace");
   };
@@ -95,10 +165,36 @@ export default function Home() {
       setLevel(newLevel);
     }
 
-    setUserProgress((prev) => ({
-      ...prev,
+    const updatedProgress = {
+      ...userProgress,
       [selectedNode.id]: "mastered",
-    }));
+    };
+    setUserProgress(updatedProgress);
+
+    // Trigger celebration confetti
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.5 },
+      colors: ["#06b6d4", "#10b981", "#8b5cf6"],
+    });
+
+    // Check which downstream nodes were unlocked by mastering this node
+    const downstreamNodes = edges
+      .filter((e) => e.source_node_id === selectedNode.id)
+      .map((e) => nodes.find((n) => n.id === e.target_node_id))
+      .filter((n): n is CurriculumNode => {
+        if (!n) return false;
+        // Verify node is now unlocked under updated progress
+        return getNodeStatus(n.id, edges, updatedProgress) !== "locked";
+      });
+
+    if (downstreamNodes.length > 0) {
+      setCelebrationData({
+        completedNode: selectedNode,
+        newlyUnlocked: downstreamNodes,
+      });
+    }
   };
 
   const handleIncidentResolved = (earnedXp: number) => {
@@ -118,8 +214,11 @@ export default function Home() {
 
   const activeNode = selectedNode || nodes[0];
   const activeNodeId = activeNode?.id || "node-1-1-bpe-tokenizer";
+  const activeNodeStatus: NodeStatus = activeNode
+    ? getNodeStatus(activeNode.id, edges, userProgress)
+    : "available";
 
-  // If on Landing Page view, render immediately (non-blocking)
+  // If on Landing Page view, render immediately
   if (currentView === "landing") {
     return (
       <>
@@ -203,7 +302,7 @@ export default function Home() {
         style={{ width: "100%", height: "calc(100vh - 3.5rem)" }}
       >
         {currentView === "galaxy" ? (
-          /* View 1: The Interactive Skill Galaxy DAG Graph */
+          /* View 1: The Interactive Skill Galaxy DAG Graph with Prerequisite Enforcement */
           <SkillGraph
             nodes={nodes}
             edges={edges}
@@ -214,22 +313,53 @@ export default function Home() {
         ) : (
           /* View 2: Split-Pane Workspace (Handbook & NotebookLM | Monaco IDE & Test Runner) */
           activeNode ? (
-            <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
-              {/* Left Pane: Dual Mode Viewer (Technical Handbook + NotebookLM Player) */}
-              <div className="h-full overflow-hidden">
-                <DualModeViewer node={activeNode} />
+            activeNodeStatus === "locked" ? (
+              /* Access Denied Gate if navigated to locked lesson */
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center font-mono space-y-4">
+                <div className="p-8 rounded-2xl border border-[#f43f5e]/30 bg-[#0e1017] max-w-lg space-y-4 shadow-2xl">
+                  <div className="w-12 h-12 rounded-full border border-[#f43f5e]/40 bg-[#f43f5e]/10 flex items-center justify-center text-[#f43f5e] mx-auto">
+                    <Lock className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-100">
+                    MODULE ACCESS LOCKED
+                  </h2>
+                  <p className="text-xs text-slate-400 font-sans leading-relaxed">
+                    You cannot work on <strong className="text-slate-200">{activeNode.title}</strong> yet. You must master the foundational prerequisites in the DAG first.
+                  </p>
+                  <button
+                    onClick={() => {
+                      const missing = getMissingPrerequisites(activeNode.id, nodes, edges, userProgress);
+                      if (missing[0]) {
+                        setSelectedNode(missing[0]);
+                      } else {
+                        setCurrentView("galaxy");
+                      }
+                    }}
+                    className="px-5 py-2.5 rounded bg-[#06b6d4] hover:bg-[#22d3ee] text-[#07080b] text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] inline-flex items-center gap-2"
+                  >
+                    <span>Go to Foundational Lesson</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
+            ) : (
+              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+                {/* Left Pane: Dual Mode Viewer (Technical Handbook + NotebookLM Player) */}
+                <div className="h-full overflow-hidden">
+                  <DualModeViewer node={activeNode} />
+                </div>
 
-              {/* Right Pane: Monaco Code Editor + In-Browser Pyodide Test Runner */}
-              <div className="h-full overflow-hidden">
-                <MonacoWorkspace
-                  node={activeNode}
-                  onOpenDefense={() => setIsDefenseModalOpen(true)}
-                  onTestsPassed={handleTestsPassed}
-                  isDefensePassed={isCurrentNodeDefensePassed}
-                />
+                {/* Right Pane: Monaco Code Editor + In-Browser Pyodide Test Runner */}
+                <div className="h-full overflow-hidden">
+                  <MonacoWorkspace
+                    node={activeNode}
+                    onOpenDefense={() => setIsDefenseModalOpen(true)}
+                    onTestsPassed={handleTestsPassed}
+                    isDefensePassed={isCurrentNodeDefensePassed}
+                  />
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <div className="w-full h-full flex items-center justify-center font-mono text-xs text-slate-500">
               No module selected. Click Skill Galaxy to select a module.
@@ -262,6 +392,32 @@ export default function Home() {
         isOpen={isRedTeamModalOpen}
         onClose={() => setIsRedTeamModalOpen(false)}
         onExploitPassed={handleExploitPassed}
+      />
+
+      {/* Locked Node Intercept Modal */}
+      <LockedNodeModal
+        node={lockedModalData?.node || null}
+        missingPrereqs={lockedModalData?.missingPrereqs || []}
+        isOpen={!!lockedModalData}
+        onClose={() => setLockedModalData(null)}
+        onSelectPrereq={(prereq) => {
+          setLockedModalData(null);
+          setSelectedNode(prereq);
+          setCurrentView("workspace");
+        }}
+      />
+
+      {/* Unlocked Celebration Modal */}
+      <UnlockedCelebrationModal
+        completedNode={celebrationData?.completedNode || null}
+        newlyUnlocked={celebrationData?.newlyUnlocked || []}
+        isOpen={!!celebrationData}
+        onClose={() => setCelebrationData(null)}
+        onSelectNextNode={(next) => {
+          setCelebrationData(null);
+          setSelectedNode(next);
+          setCurrentView("workspace");
+        }}
       />
     </div>
   );
