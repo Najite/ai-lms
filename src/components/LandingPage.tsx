@@ -262,6 +262,134 @@ def hybrid_rank(dense_score: float, bm25_score: float, k: int = 60) -> float:
         </div>
       </section>
 
+      {/* Comparison Section: Vibe Coder vs. AI-Native Software Engineer */}
+      <section className="border-b border-[#1e222e] py-16 px-4 sm:px-8 max-w-7xl mx-auto w-full font-mono">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-[#06b6d4]/30 bg-[#06b6d4]/10 text-[#06b6d4] text-xs font-mono mb-4">
+            <span>The Paradigm Shift</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight font-sans mb-3">
+            The Vibe Coder vs. The AI-Native Software Engineer
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 font-sans">
+            AI models are probabilistic. Industrial systems demand determinism. Here is the difference between hoping code works and engineering production resilience.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Column 1: The Vibe Coder */}
+          <div className="p-6 rounded-xl border border-[#f43f5e]/30 bg-[#0e1017]/80 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#1e222e] pb-3">
+              <span className="text-xs font-bold text-[#f43f5e] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#f43f5e]" /> The Vibe Coder / Prompt Tweaker
+              </span>
+              <span className="text-[10px] text-slate-500">Fragile in Production</span>
+            </div>
+            <ul className="space-y-3 text-xs text-slate-400 font-sans">
+              <li className="flex items-start gap-2">
+                <span className="text-[#f43f5e] font-mono mt-0.5">✕</span>
+                <span>Copy-pastes LLM responses without understanding underlying memory buffers or token overhead.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#f43f5e] font-mono mt-0.5">✕</span>
+                <span>Evaluates quality by eyeballing 2-3 chat responses instead of statistical CI/CD assertion gates.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#f43f5e] font-mono mt-0.5">✕</span>
+                <span>Treats vector databases as black boxes, suffering from score divergence when mixing sparse and dense retrieval.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#f43f5e] font-mono mt-0.5">✕</span>
+                <span>Panics during 2 AM production outages when models hallucinate or trigger infinite agent retry loops.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 2: The AI-Native Software Engineer */}
+          <div className="p-6 rounded-xl border border-[#06b6d4]/40 bg-[#0e1017]/80 space-y-4 shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+            <div className="flex items-center justify-between border-b border-[#1e222e] pb-3">
+              <span className="text-xs font-bold text-[#06b6d4] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#06b6d4]" /> The AI-Native Software Engineer
+              </span>
+              <span className="text-[10px] text-[#10b981] font-mono">Industry Standard</span>
+            </div>
+            <ul className="space-y-3 text-xs text-slate-300 font-sans">
+              <li className="flex items-start gap-2">
+                <span className="text-[#10b981] font-mono mt-0.5">✔</span>
+                <span>Architects deterministic harnesses around probabilistic LLMs with strict timeouts, sandbox boundaries, and AST monitors.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#10b981] font-mono mt-0.5">✔</span>
+                <span>Deploys automated LLM-as-a-judge (G-Eval) regression matrices in CI/CD before any prompt or model weights reach staging.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#10b981] font-mono mt-0.5">✔</span>
+                <span>Masters Reciprocal Rank Fusion (RRF), HNSW vector tuning, and multi-hop Graph-RAG to guarantee zero hallucinated context.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#10b981] font-mono mt-0.5">✔</span>
+                <span>Commands P0 incident crisis rooms, manages PagedAttention KV-caches, and builds crash-resilient Write-Ahead Log (WAL) agent memory.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Curriculum Trajectory Section */}
+      <section className="border-b border-[#1e222e] py-16 px-4 sm:px-8 max-w-7xl mx-auto w-full font-mono">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-xs uppercase tracking-widest text-[#06b6d4] font-bold mb-2">
+            THE 6-PHASE ENGINEERING TRAJECTORY
+          </h2>
+          <p className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight font-sans">
+            From Zero to Industrial AI Systems Architect
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#06b6d4]">PHASE 01</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Systems, Memory & Computation</h4>
+            <p className="text-xs text-slate-400 font-sans">Raw byte streams, UTF-8 buffers, BPE tokenizer mechanics, and headless Unix agent execution harnesses.</p>
+          </div>
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#8b5cf6]">PHASE 02</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Data Structures & Retrieval Systems</h4>
+            <p className="text-xs text-slate-400 font-sans">Inverted indexes, BM25 ranking, dense vector spaces, Reciprocal Rank Fusion (RRF), and Graph-RAG BFS traversal.</p>
+          </div>
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#3b82f6]">PHASE 03</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Concurrency & Streaming Protocols</h4>
+            <p className="text-xs text-slate-400 font-sans">Non-blocking asyncio loops, Server-Sent Events (SSE) token streaming, and parallel multi-tool dispatchers.</p>
+          </div>
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#10b981]">PHASE 04</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Database Internals & Persistence</h4>
+            <p className="text-xs text-slate-400 font-sans">Postgres relational modeling, pgvector HNSW indexing graphs, and crash-resilient Write-Ahead Log (WAL) agent state.</p>
+          </div>
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#f59e0b]">PHASE 05</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Clean Architecture & Evaluation CI/CD</h4>
+            <p className="text-xs text-slate-400 font-sans">LLM-as-a-Judge rubric testing matrices, G-Eval automated CI assertions, and adversarial prompt injection firewalls.</p>
+          </div>
+          <div className="p-5 rounded-lg border border-[#1e222e] bg-[#0e1017]">
+            <span className="text-[10px] font-bold text-[#f43f5e]">PHASE 06</span>
+            <h4 className="text-sm font-bold text-slate-100 mt-1 mb-2">Distributed Systems & Capstone</h4>
+            <p className="text-xs text-slate-400 font-sans">vLLM PagedAttention GPU memory blocks, continuous batching, and autonomous supervisor-worker multi-agent synthesis.</p>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center">
+          <button
+            onClick={onEnterApp}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#06b6d4] hover:bg-[#22d3ee] text-[#07080b] font-mono text-xs font-bold transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+          >
+            <span>Explore The 12-Module Skill Constellation</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-[#1e222e] py-8 px-4 sm:px-8 text-center text-xs font-mono text-slate-500">
         AI:NATIVE OS — Built on Supabase, Pyodide WASM, and Better Stack Design Tokens. 100% Free & Open-Source.
