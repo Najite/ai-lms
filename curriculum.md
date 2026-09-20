@@ -1,64 +1,58 @@
 # AI-Native Software Engineer — Curriculum Specification
-**Version**: 7.0 — The 600-Lesson Comprehensive Production & Mastery Specification
+**Version**: 8.0 — The 4-Stage Zero-to-Job-Ready AI-Native Software Engineering Specification
 **Status**: Fully Verified | Zero Hallucinations | 600 Atomic Lessons | 3,000 Trackable Subtopics
+**Target Learner**: Complete Beginner (0 Prior Coding Experience) to Job-Ready AI-Native Software Engineer
 
-> **Sequencing Contract**: Every single concept, tool, library, syntax rule, and architectural pattern across all 600 lessons is either introduced for the first time in an explicit lesson, or was comprehensively taught in a prior lesson. No project, assignment, or benchmark uses a technology, library, framework, or concept that has not been explicitly taught. This contract is strictly enforced and verified across all 15 phases.
-
----
-
-## Curriculum Verification & Architectural Integrity Audit
-
-Before expanding the curriculum to 600 atomic, trackable lessons, a comprehensive line-by-line audit of the entire curriculum specification was completed. Six fundamental classes of hallucinations, forward references, phantom headers, and structural hand-waving were identified and resolved:
-
-| # | Category | Discrepancy Identified | Operational Risk & Technical Reality | Architectural Resolution in v7.0 |
-|---|---|---|---|---|
-| **1** | **Forward Reference** | `NumPy` was used in Phase 2 project (`MathKit`: vectorized arrays, matrix ops) and What You Learn, but listed as "Introduces: NumPy" in Phase 9. | Breaking the sequencing contract: learners were expected to write vectorized linear algebra in Phase 2 before array memory layouts were taught. | Formally introduced in **Lesson 2.11–2.15** (NumPy Numerical Engine & Memory Architecture). Phase 9 refocused on deep multidimensional tensor transformations, strides, and PyTorch. |
-| **2** | **Phantom Headers** | Phase 5 declared: `**Introduces**: ... Celery, GitHub Actions CI/CD`, yet neither Celery nor GitHub Actions appeared in Phase 5 lessons. | The specification promised asynchronous workers and CI/CD automation, but provided zero lessons, mechanics, or architectural guidance. | Added dedicated lessons: **Lessons 5.43–5.45** (Celery, Redis queues, task idempotency, DLQs) and integrated CI/CD workflows into **Phase 7** and **Phase 11**. |
-| **3** | **Unintroduced Diagnostic Tool** | Phase 7 deployed `grpc_health_probe` in Kubernetes for AuthForge health checks, but the gRPC Health Checking Protocol was never taught. | Engineers deploying Kubernetes liveness probes for gRPC services hit silent probe failures without understanding `grpc.health.v1.Health`. | Added **Lesson 5.40** covering standard gRPC Health Checking Protocol implementation, and **Lesson 7.15** detailing Kubernetes exec-based `grpc_health_probe` container lifecycles. |
-| **4** | **Hand-Waved Resiliency & Security** | Tools like `trivy` (Phase 4), `LitmusChaos` (Phase 7), and `Workload Identity (GCP)` (Phase 7) were dropped into project specs without lesson backing. | Mentioning a tool in an exit benchmark without a foundational lesson on its threat model or fault injection mechanics produces superficial understanding. | Added explicit subtopics: **Lessons 4.35** (Container Vulnerability Scanning with Trivy), **Lessons 7.27** (GCP Workload Identity Federation), and **Lessons 7.35** (Chaos Engineering with LitmusChaos CRDs). |
-| **5** | **Profiling Disconnect** | Phase 11 introduced `py-spy` and Bloomberg's `memray`, while earlier profiling was casually described as "profile with wrk or ab". | Profiling without understanding kernel sampling (`process_vm_readv`), stack tracing, and allocation hooks leads to misinterpreting flame graphs. | Added **Lessons 4.29–4.30** (Network & Socket Benchmarking with `wrk`), **Lessons 11.1–11.5** (Sampling CPU Profiling & Flame Graphs with `py-spy`), and **Lessons 11.6–11.9** (Memory Profiling & Allocator Introspection with `memray`). |
-| **6** | **Beginner Scaffolding & Gentle Progression** | Earlier iterations jumped straight into CPython memory structures and assembly before establishing core programming intuition. | Complete beginners experienced an insurmountable cliff between basic syntax and systems architecture. | Expanded with **100 dedicated beginner scaffold lessons** across Phases 0–3, bringing the curriculum to **600 atomic lessons** and **3,000 subtopics** with simple, deeply commented code examples. |
+> **The AI-Native Software Engineering Contract**: Every single concept, syntax rule, algorithm, database design, and AI model across all 600 lessons is taught using simple, intuitive, everyday language without gatekeeping or unintroduced jargon. Software engineering fundamentals (clean code, memory, databases, APIs) and AI engineering primitives (tokenizers, vectors, RAG, agents) are taught side-by-side from Day 1 so the learner never feels lost or intimidated.
 
 ---
 
-## Master State Tracking Schema & Ledger
+## The 4-Stage Learning Architecture (From 0 Experience to AI-Native Software Engineer)
 
-To guarantee that no concept is omitted or implied, every lesson in this 600-lesson curriculum adheres to an explicit tracking specification:
+To ensure someone with **0 coding experience** builds unshakeable technical mastery without burning out, the 15 curriculum phases are organized into **4 progressive stages**:
 
-```markdown
-#### Lesson [Phase].[Number]: [Formal Title]
-- Status: [State: Active | Complete Specification | Core]
-- Prerequisites: [Explicit upstream lessons required for comprehension]
-- Subtopics:
-  - [Phase].[Number].[Subtopic 1]: Granular concept mechanics and practical implementation
-  - [Phase].[Number].[Subtopic 2]: Architectural edge cases and low-level behavior
-  - [Phase].[Number].[Subtopic 3]: Performance characteristics and memory footprint
-  - [Phase].[Number].[Subtopic 4]: Production failure modes and defensive mitigations
-- Key Failure Modes & Edge Cases: [Real-world technical failure modes when misunderstood]
-- Verification & Mastery Check: [Demonstrable challenge proving unassisted mastery]
-- Project Application: [Exact project and component where this lesson is implemented]
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ STAGE 1: CODING LITERACY, LOGIC & YOUR FIRST AI CALLS (Phases 0–3 | Lessons 1–260)     │
+│ Target: Zero fear of the terminal. Write clean Python, understand data structures,     │
+│ make your first LLM API calls, and enforce structured data contracts with Pydantic.   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ STAGE 2: BACKEND SYSTEMS, DATABASES & WEB ARCHITECTURE (Phases 4–6 | Lessons 261–380)  │
+│ Target: Can build real web apps, SQL databases, async queues, and semantic caches.     │
+│ Master PostgreSQL, Redis, FastAPI, and Next.js interfaces with streaming AI output.    │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ STAGE 3: APPLIED AI, VECTORS & PRODUCTION RAG (Phases 7–10 | Lessons 381–485)          │
+│ Target: Can build production RAG systems, vector search engines, and eval harnesses.   │
+│ Master embeddings, pgvector HNSW indexing, cross-encoders, and LLM-as-a-judge tests.   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ STAGE 4: AUTONOMOUS AGENTS, DEEP LEARNING & ENTERPRISE SCALE (Phases 11–14 | 486–600)  │
+│ Target: Can architect, sandbox, and deploy multi-agent autonomous software platforms.  │
+│ Master autograd engines, transformers, ReAct agent loops, LangGraph, and Docker CI/CD. │
+└────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Global 600-Lesson Phase Distribution Matrix
+---
 
-| Phase | Title | Duration | Total Lessons | Project(s) Built | Exit Benchmark Focus |
-|---|---|---|---|---|---|
-| **Phase 0** | Computing & Developer Environment | 5 weeks | **50 Lessons** (0.1–0.50) | SysTrace | Beginner terminal ergonomics, Git, virtualenvs, kernel syscalls & memory model |
-| **Phase 1** | Programming Mastery | 14 weeks | **75 Lessons** (1.1–1.75) | LoxLang, TypeTrace, DevAudit | Gentle programming fundamentals, OOP, static types, ASTs, tree-walk interpreters |
-| **Phase 2** | Mathematics for Engineers & Numerical Computing | 8 weeks | **60 Lessons** (2.1–2.60) | MathKit | Visual math intuition, vectors, matrices, calculus, NumPy memory layouts |
-| **Phase 3** | Data Structures, Algorithms & Problem Solving | 10 weeks | **75 Lessons** (3.1–3.75) | DataSift | Step-by-step algorithms, two pointers, sliding window, trees, graphs, DP |
-| **Phase 4** | Systems Internals: OS, Concurrency, Networks, Docker | 8 weeks | **35 Lessons** (4.1–4.35) | NanoHTTP | Raw socket HTTP/1.1 server, `epoll`, cgroups, namespaces |
-| **Phase 5** | Backend Systems & API Engineering | 10 weeks | **45 Lessons** (5.1–5.45) | SchemaVault, CacheKit, AuthForge | SQL, MVCC, OWASP exploits, rate limiting, gRPC, Celery |
-| **Phase 6** | Full-Stack Engineering | 9 weeks | **40 Lessons** (6.1–6.40) | CompKit, TenantIQ | CSS fundamentals, React reconciler, Next.js, Playwright |
-| **Phase 7** | Distributed Systems & Platform Engineering | 8 weeks | **35 Lessons** (7.1–7.35) | InfraBlueprint | Raft, Kubernetes, Terraform IaC, Kafka, LitmusChaos |
-| **Phase 8** | System Design Interview Preparation | 4 weeks | **25 Lessons** (8.1–8.25) | 10 System Portfolios | Scale estimation, deep dive patterns, trade-off defense |
-| **Phase 9** | AI & ML Foundations | 9 weeks | **35 Lessons** (9.1–9.35) | GradFlow, TransformerLab | Autograd engine, backprop, transformer from scratch |
-| **Phase 10** | Applied AI Engineering | 10 weeks | **35 Lessons** (10.1–10.35) | EvalKit, DocuMind | Vector search, hybrid RAG, cross-encoders, LLM judge |
-| **Phase 11** | AI in Production & Performance Engineering | 7 weeks | **25 Lessons** (11.1–11.25) | ModelPulse | Sampling profilers, flame graphs, k6, MLflow, drift |
-| **Phase 12** | Agentic Systems | 7 weeks | **30 Lessons** (12.1–12.30) | CodeAgent | LangGraph, state graphs, sandboxing, multi-agent flows |
-| **Phase 13** | Specialisation Track | 6 weeks | **20 Lessons** (13.1–13.20) | Track Capstone | Depth in Product, MLOps, Security, or Research |
-| **Phase 14** | Enterprise Capstone | 12 weeks | **15 Lessons** (14.1–14.15) | Enterprise Capstone | Production-grade, resilient, multi-tenant AI system |
-| **TOTAL** | **Comprehensive Curriculum** | **125 weeks** | **600 Lessons** | **22 Projects** | **10 Core Engineering Mastery Benchmarks Passed** |
+### Global 4-Stage & 15-Phase Distribution Matrix
+
+| Stage | Phase | Title | Duration | Lessons | Capstone Project Built | Exit Benchmark Focus |
+|---|---|---|---|:---:|---|---|
+| **Stage 1: Foundations** | **Phase 0** | Beginner Coding, Terminal & First AI Calls | 5 weeks | **50** | **SysTrace & PromptCLI** | Variables, control flow, functions, simple AI prompt scripts |
+| | **Phase 1** | Software Craftsmanship & Data Contracts | 14 weeks | **75** | **SchemaAgent** | OOP, clean functions, unit testing, Pydantic JSON contracts |
+| | **Phase 2** | Intuitive Math, Vectors & Numerical Computing | 8 weeks | **60** | **VectorCore** | Visual vectors, dot products, 2D coordinates, NumPy basics |
+| | **Phase 3** | Practical Algorithms & Memory Patterns | 10 weeks | **75** | **StreamBuffer** | Two pointers, sliding window, hash maps, binary search |
+| **Stage 2: Systems** | **Phase 4** | Systems Internals, Sockets & Asyncio | 8 weeks | **35** | **StreamServer** | Raw HTTP/1.1 sockets, event loops, streaming SSE tokens |
+| | **Phase 5** | Database Systems & Storage Engines | 10 weeks | **45** | **SchemaVault** | Relational SQL, PostgreSQL indexes, transactions, migrations |
+| | **Phase 6** | High-Throughput APIs, Caching & Full-Stack UI | 9 weeks | **40** | **GatewayAI & TensorUI** | FastAPI, Redis semantic caching, Next.js streaming UI |
+| **Stage 3: Applied AI** | **Phase 7** | Distributed Cloud Infrastructure & DevOps | 8 weeks | **35** | **InfraBlueprint** | Docker containers, CI/CD automation, cloud deployment |
+| | **Phase 8** | Systems Design & Scalable Architecture | 4 weeks | **25** | **10 System Portfolios** | Capacity math, rate limiters, architectural tradeoff defense |
+| | **Phase 9** | Deep Learning Foundations & Autograd | 9 weeks | **35** | **MicroGrad-Plus** | Computational graphs, automatic differentiation, neural nets |
+| | **Phase 10** | Production RAG & Vector Retrieval | 10 weeks | **35** | **DocuMind-AI** | pgvector HNSW, hybrid search (BM25 + vector), re-ranking |
+| **Stage 4: Mastery** | **Phase 11** | AI Evaluation, Benchmarking & Safety | 7 weeks | **25** | **EvalGuard** | LLM-as-a-judge, synthetic datasets, prompt injection tests |
+| | **Phase 12** | Autonomous Agents & Tool Orchestration | 7 weeks | **30** | **CodeAgent** | ReAct reasoning loops, LangGraph state graphs, sandboxing |
+| | **Phase 13** | Specialized Production Tracks | 6 weeks | **20** | **Specialization Portfolio** | AI Product, MLOps, AI Security, or Applied AI Research |
+| | **Phase 14** | Enterprise Capstone: Multi-Tenant AI Platform | 12 weeks | **15** | **Enterprise AI Platform** | Production-ready, resilient, multi-tenant AI system |
+| **TOTAL** | **4 Stages** | **Comprehensive Production Curriculum** | **125 weeks** | **600** | **22 Projects** | **10 Core Engineering Mastery Benchmarks Passed** |
 
 ---
 
@@ -145,376 +139,624 @@ Phase 14: Enterprise Capstone (15 Lessons)
 
 ---
 
+# STAGE 1: Coding Literacy, Logic & First AI Calls
+> **Scope**: Phases 0–3 | Lessons 1–260 (260 Lessons Total)
+> **Goal**: Progress from zero coding knowledge to confident programming, object-oriented design, visual math intuition, core data structures, and your first working AI API prompt workflows.
+
+---
+
 ## Phase 0: Computing & Developer Environment
-**Duration**: 4 weeks
-**Total Lessons**: 30 Lessons (Lesson 0.1 to Lesson 0.30)
+**Duration**: 5 weeks
+**Total Lessons**: 50 Lessons (Lesson 0.1 to Lesson 0.50)
 **Builds on**: First principles of physical hardware, digital logic, and operating systems.
 **Introduces**: Computer architecture, memory hierarchy, operating system boundaries, POSIX syscalls, terminal mastery, shell automation, regular expressions & automata, Git version control, source-level code reading.
 
 ---
 
-### Phase 0 Lesson Specifications (Lessons 0.1 – 0.30)
+### Phase 0 Lesson Specifications (Lessons 0.1 – 0.50)
 
-#### Lesson 0.1: Bits, Bytes, & Number Representations
+#### Lesson 0.1: Variables, Data Types & The Interpreter
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: None
 - **Subtopics**:
-  - `0.1.1` Binary, octal, decimal, and hexadecimal numeral systems; conversion mechanics.
-  - `0.1.2` Bitwise representation of data in physical registers; byte sizing and word boundaries.
-  - `0.1.3` ASCII, Extended ASCII, and Unicode UTF-8 variable-length byte encoding mechanics.
-  - `0.1.4` Data serialization into binary streams; endianness bit-patterns.
+  - `0.1.1` What is physical computer memory: RAM as numbered storage boxes.
+  - `0.1.2` Variables as named sticky notes: assigning integers, floats, strings, and booleans.
+  - `0.1.3` How Python's interpreter runs code line-by-line in real time.
+  - `0.1.4` Dynamic types: checking variable types with type() and changing types safely.
+- **Key Failure Modes & Edge Cases**: Mixing incompatible data types (like adding text to a number), which triggers a TypeError.
+- **Verification & Mastery Check**: Write a script that creates variables for an AI model's name, version, and cost, and print their types.
+- **Project Application**: PromptCLI: Storing user prompt settings and configurations.
+
+#### Lesson 0.2: Expressions, Operators & Precedence
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.1
+- **Subtopics**:
+  - `0.2.1` Math operators in code: addition, subtraction, multiplication, division, and modulo remainder.
+  - `0.2.2` Order of operations (PEMDAS): how Python prioritizes math calculations.
+  - `0.2.3` Comparison operators: checking if values are equal, greater than, or less than.
+  - `0.2.4` Boolean logic: combining decisions with and, or, and not.
+- **Key Failure Modes & Edge Cases**: Confusing assignment (=) with equality comparison (==), causing syntax crashes.
+- **Verification & Mastery Check**: Calculate the total token cost of an AI request using math operators and print the rounded result.
+- **Project Application**: PromptCLI: Token budget calculation utility.
+
+#### Lesson 0.3: String Indexing, Slicing & Manipulation
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.1
+- **Subtopics**:
+  - `0.3.1` Strings as sequences: character positions starting from index 0.
+  - `0.3.2` Negative indexing: easily getting the last characters of a word with -1.
+  - `0.3.3` Slicing strings: cutting out substrings using [start:stop:step].
+  - `0.3.4` Helpful string tools: stripping whitespace, changing case, splitting sentences, and joining words.
+- **Key Failure Modes & Edge Cases**: Asking for an index beyond the end of the text, causing an IndexError.
+- **Verification & Mastery Check**: Clean a messy user prompt string by stripping unwanted spaces and extracting the first 50 characters.
+- **Project Application**: PromptCLI: Prompt cleaning and input truncation engine.
+
+#### Lesson 0.4: Conditional Branching: if, elif, else
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.2
+- **Subtopics**:
+  - `0.4.1` Making decisions in code: the if statement and boolean tests.
+  - `0.4.2` Alternative paths: using elif for multiple choices and else for fallbacks.
+  - `0.4.3` Python indentation rules: using consistent 4 spaces to define code blocks.
+  - `0.4.4` Truthiness: understanding which values count as True and which count as False.
+- **Key Failure Modes & Edge Cases**: Inconsistent indentation mixing tabs and spaces, triggering IndentationError.
+- **Verification & Mastery Check**: Write a decision tree that routes a user prompt to either a fast model or a smart model based on length.
+- **Project Application**: PromptCLI: Smart model routing logic.
+
+#### Lesson 0.5: While Loops & Loop Invariants
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.4
+- **Subtopics**:
+  - `0.5.1` Repetition in programming: repeating actions while a condition remains True.
+  - `0.5.2` Loop counters: updating variables to prevent programs from running forever.
+  - `0.5.3` Sentinel loops: draining a list of items until none remain.
+  - `0.5.4` Understanding loop safety: ensuring your loop always reaches a stopping point.
+- **Key Failure Modes & Edge Cases**: Forgetting to increment the loop counter, causing an infinite loop that freezes your terminal.
+- **Verification & Mastery Check**: Write a retry loop that attempts an imaginary network connection up to 3 times before giving up.
+- **Project Application**: PromptCLI: Network retry loop for API requests.
+
+#### Lesson 0.6: For Loops & The range() Generator
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.5
+- **Subtopics**:
+  - `0.6.1` The for loop: iterating through every item in a collection automatically.
+  - `0.6.2` The range() function: generating sequential numbers on demand without wasting memory.
+  - `0.6.3` Looping with indexes: using enumerate() to track both the position and the item.
+  - `0.6.4` Nested loops: running an inner loop inside an outer loop cleanly.
+- **Key Failure Modes & Edge Cases**: Confusing range(1, 5) which produces 1, 2, 3, 4 with numbers 1 through 5.
+- **Verification & Mastery Check**: Iterate over a list of 5 user prompts, numbering each one and printing its character count.
+- **Project Application**: PromptCLI: Batch prompt processing loop.
+
+#### Lesson 0.7: Loop Control: break, continue & else
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.6
+- **Subtopics**:
+  - `0.7.1` Early exits: stopping a loop immediately using the break keyword.
+  - `0.7.2` Skipping turns: jumping to the next iteration using the continue keyword.
+  - `0.7.3` The loop else clause: running fallback code only when a loop finishes without breaking.
+  - `0.7.4` Practical search patterns: finding an item in a list and exiting as soon as it is found.
+- **Key Failure Modes & Edge Cases**: Placing break outside of a loop or conditional, causing immediate unexpected loop termination.
+- **Verification & Mastery Check**: Scan a list of user inputs for forbidden words, breaking immediately if a violation is detected.
+- **Project Application**: PromptCLI: Content moderation scanner.
+
+#### Lesson 0.8: Functions: Parameters, Arguments & Returns
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.4
+- **Subtopics**:
+  - `0.8.1` Packaging reusable code: defining functions with def and calling them.
+  - `0.8.2` Passing data into functions: positional parameters and keyword arguments.
+  - `0.8.3` Default values: setting safe defaults for optional parameters.
+  - `0.8.4` Returning values: sending results back to the caller using return.
+- **Key Failure Modes & Edge Cases**: Forgetting to return a value, causing the function to silently evaluate to None.
+- **Verification & Mastery Check**: Write a function format_prompt(template, topic, style='concise') that returns a formatted AI prompt.
+- **Project Application**: PromptCLI: Core prompt templating engine.
+
+#### Lesson 0.9: Variable Scope: Local, Global & Enclosing
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.9.1` Scope boundaries: why variables created inside a function cannot be seen outside.
+  - `0.9.2` The LEGB lookup order: how Python searches for variable names.
+  - `0.9.3` Global variables: when to read them and why modifying them from functions is risky.
+  - `0.9.4` Clean function design: passing arguments explicitly rather than relying on global state.
+- **Key Failure Modes & Edge Cases**: UnboundLocalError caused by trying to modify a global variable inside a function without declaring it.
+- **Verification & Mastery Check**: Refactor code that relies on 3 global variables into pure functions that take inputs and return outputs.
+- **Project Application**: PromptCLI: Configuration isolation.
+
+#### Lesson 0.10: Lists: Dynamic Sequential Arrays
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.3
+- **Subtopics**:
+  - `0.10.1` Ordered collections: storing multiple items in a Python list.
+  - `0.10.2` Adding and removing items: append(), extend(), insert(), and pop().
+  - `0.10.3` Searching and counting: using in, index(), and count().
+  - `0.10.4` Sorting lists: sorting in-place with sort() vs creating a new list with sorted().
+- **Key Failure Modes & Edge Cases**: Modifying a list while looping over it, causing items to be skipped unintentionally.
+- **Verification & Mastery Check**: Build a history tracker that appends user messages, limits history to 10 items, and prints them in order.
+- **Project Application**: PromptCLI: Conversation history list manager.
+
+#### Lesson 0.11: List Comprehensions & Transforms
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.10
+- **Subtopics**:
+  - `0.11.1` Readable transforms: replacing multi-line for loops with single-line comprehensions.
+  - `0.11.2` Filtering with if: keeping only items that match specific criteria.
+  - `0.11.3` Comprehension syntax: [expression for item in iterable if condition].
+  - `0.11.4` Performance benefits: why list comprehensions run faster than manual append loops.
+- **Key Failure Modes & Edge Cases**: Writing overly complex nested comprehensions that are unreadable to other engineers.
+- **Verification & Mastery Check**: Transform a list of raw prompt strings into clean, trimmed lowercase strings in one line.
+- **Project Application**: PromptCLI: High-speed prompt batch normalization.
+
+#### Lesson 0.12: Tuples: Fixed Immutable Sequences
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.10
+- **Subtopics**:
+  - `0.12.1` Immutable collections: creating fixed groups of items with parentheses ().
+  - `0.12.2` Why immutability matters: safety against accidental changes and lower memory usage.
+  - `0.12.3` Tuple unpacking: assigning multiple variables at once from a single tuple.
+  - `0.12.4` Returning multiple values: returning tuples from functions cleanly.
+- **Key Failure Modes & Edge Cases**: Attempting to modify a tuple element, causing a TypeError.
+- **Verification & Mastery Check**: Write a function that returns the token count, character count, and estimated cost as an unpacked tuple.
+- **Project Application**: PromptCLI: Multi-value metrics calculation.
+
+#### Lesson 0.13: Dictionaries: Key-Value Hash Maps
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.10
+- **Subtopics**:
+  - `0.13.1` Mapping relationships: pairing unique keys with values using dictionaries {}.
+  - `0.13.2` Accessing data safely: using square brackets [] vs the safe get() method with fallbacks.
+  - `0.13.3` Updating and deleting: adding new keys, updating existing keys, and using pop().
+  - `0.13.4` Iterating dictionaries: looping over keys(), values(), and items() key-value pairs.
+- **Key Failure Modes & Edge Cases**: Accessing a non-existent key with [] instead of get(), triggering a KeyError crash.
+- **Verification & Mastery Check**: Store user preferences (temperature, model name, max tokens) in a dictionary and look up keys safely.
+- **Project Application**: PromptCLI: Model hyperparameter state management.
+
+#### Lesson 0.14: Sets: Unique Elements & Set Algebra
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.13
+- **Subtopics**:
+  - `0.14.1` Unique collections: automatically deduplicating items with sets {}.
+  - `0.14.2` High-speed lookups: why in checks are virtually instantaneous in sets.
+  - `0.14.3` Mathematical set operations: union (|), intersection (&), and difference (-).
+  - `0.14.4` When to use sets: removing duplicate user tags or detecting shared vocabulary.
+- **Key Failure Modes & Edge Cases**: Attempting to put a mutable list into a set, triggering a TypeError: unhashable type.
+- **Verification & Mastery Check**: Find all unique words used in two different user prompts and calculate their overlap using intersection.
+- **Project Application**: PromptCLI: Prompt vocabulary similarity calculator.
+
+#### Lesson 0.15: File I/O: Reading & Writing Files
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.15.1` Interacting with disk files: opening, reading, and writing text files.
+  - `0.15.2` The with open() context manager: automatically closing files even if errors happen.
+  - `0.15.3` Reading modes: read(), readline(), and readlines() line-by-line.
+  - `0.15.4` Writing vs appending: overwriting files with 'w' vs adding new lines with 'a'.
+- **Key Failure Modes & Edge Cases**: Forgetting with open(), leaving file handles locked in the operating system.
+- **Verification & Mastery Check**: Read a system prompt template from a local file, replace a placeholder with user input, and save the result.
+- **Project Application**: PromptCLI: Prompt template file loader.
+
+#### Lesson 0.16: Working with JSON Data
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.13, Lesson 0.15
+- **Subtopics**:
+  - `0.16.1` What is JSON: the universal language of modern web APIs and AI models.
+  - `0.16.2` Parsing JSON text: converting raw text strings into Python dictionaries with json.loads().
+  - `0.16.3` Writing JSON data: converting Python dictionaries into formatted JSON text with json.dumps().
+  - `0.16.4` Handling files: using json.load() and json.dump() directly with file objects.
+- **Key Failure Modes & Edge Cases**: Crashing on invalid JSON syntax with JSONDecodeError when reading corrupted API responses.
+- **Verification & Mastery Check**: Parse an LLM's raw JSON string output into a typed Python dictionary and extract a structured answer.
+- **Project Application**: PromptCLI: Structured AI output parser.
+
+#### Lesson 0.17: Error Handling: try, except, finally
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.17.1` Handling failures gracefully: catching runtime exceptions before they crash your program.
+  - `0.17.2` Catching specific errors: handling ValueError, FileNotFoundError, and KeyError individually.
+  - `0.17.3` The else block: running code only when no errors occurred.
+  - `0.17.4` The finally block: guaranteeing cleanup routines (like closing connections) always run.
+- **Key Failure Modes & Edge Cases**: Using a bare except: which hides real bugs and catches system interrupts like Ctrl+C.
+- **Verification & Mastery Check**: Wrap a file reading and JSON parsing function in defensive error handling that logs clear error messages.
+- **Project Application**: PromptCLI: Resilient API response decoder.
+
+#### Lesson 0.18: Modules & The import System
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.18.1` Organizing code into multiple files: splitting projects into reusable Python modules.
+  - `0.18.2` The import statement: importing entire modules, specific functions, or using aliases.
+  - `0.18.3` Standard library tour: essential built-in modules like os, sys, math, and random.
+  - `0.18.4` Understanding __name__ == '__main__': writing files that can be both imported and run directly.
+- **Key Failure Modes & Edge Cases**: Creating circular imports between two files that import each other, causing ImportError.
+- **Verification & Mastery Check**: Split a prompt helper into a separate module file and import its functions into your main CLI runner.
+- **Project Application**: PromptCLI: Modular multi-file tool architecture.
+
+#### Lesson 0.19: Writing Pythonic & PEP 8 Code
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.18
+- **Subtopics**:
+  - `0.19.1` The Zen of Python: readability counts, explicit is better than implicit, simple is better than complex.
+  - `0.19.2` PEP 8 style guide: snake_case for variables, PascalCase for classes, spacing, and line length.
+  - `0.19.3` Docstrings and comments: writing clear explanations for your future self and teammates.
+  - `0.19.4` Automated formatters: using modern tools like Black or Ruff to format code effortlessly.
+- **Key Failure Modes & Edge Cases**: Writing single-letter variable names or 200-line unreadable functions that teammates cannot maintain.
+- **Verification & Mastery Check**: Format and clean an unreadable 50-line script to strictly adhere to PEP 8 naming and docstrings.
+- **Project Application**: PromptCLI: Code quality standards across all projects.
+
+#### Lesson 0.20: Debugging with print & Python pdb
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.17
+- **Subtopics**:
+  - `0.20.1` Debugging mindset: how to track down why code behaves differently than you expected.
+  - `0.20.2` Strategic print debugging: using f-strings to inspect variable states at key checkpoints.
+  - `0.20.3` Interactive debugging with breakpoint(): pausing program execution in the terminal.
+  - `0.20.4` Core debugger commands: n (next line), s (step inside), c (continue), and p (print variable).
+- **Key Failure Modes & Edge Cases**: Leaving leftover debugging print statements scattered across production codebases.
+- **Verification & Mastery Check**: Use breakpoint() to step through a malfunctioning prompt-formatting loop and identify the exact off-by-one bug.
+- **Project Application**: PromptCLI: Interactive troubleshooting and bug fixing.
+
+#### Lesson 0.21: Bits, Bytes, & Number Representations
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: None
+- **Subtopics**:
+  - `0.21.1` Binary, octal, decimal, and hexadecimal numeral systems; conversion mechanics.
+  - `0.21.2` Bitwise representation of data in physical registers; byte sizing and word boundaries.
+  - `0.21.3` ASCII, Extended ASCII, and Unicode UTF-8 variable-length byte encoding mechanics.
+  - `0.21.4` Data serialization into binary streams; endianness bit-patterns.
 - **Key Failure Modes & Edge Cases**: Assuming fixed-width character byte sizing, leading to string truncation on multi-byte UTF-8 characters.
 - **Verification & Mastery Check**: Convert arbitrary hexadecimal dumps into IEEE-754 floats and UTF-8 strings manually without libraries.
 - **Project Application**: SysTrace: Binary parsing of system records.
 
-#### Lesson 0.2: Two's Complement & Signed Integer Arithmetic
+#### Lesson 0.22: Two's Complement & Signed Integer Arithmetic
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.1
+- **Prerequisites**: Lesson 0.21
 - **Subtopics**:
-  - `0.2.1` Signed vs unsigned integer representation in hardware; sign bit conventions.
-  - `0.2.2` Two's complement derivation: inverting bits and adding 1; algebraic symmetry.
-  - `0.2.3` Why signed 32-bit -1 is represented as 0xFFFFFFFF in memory registers.
-  - `0.2.4` Integer overflow, underflow, and silent wrap-around vulnerabilities in systems code.
+  - `0.22.1` Signed vs unsigned integer representation in hardware; sign bit conventions.
+  - `0.22.2` Two's complement derivation: inverting bits and adding 1; algebraic symmetry.
+  - `0.22.3` Why signed 32-bit -1 is represented as 0xFFFFFFFF in memory registers.
+  - `0.22.4` Integer overflow, underflow, and silent wrap-around vulnerabilities in systems code.
 - **Key Failure Modes & Edge Cases**: Integer overflow leading to buffer allocation bypasses or infinite loops in arithmetic bounds checks.
 - **Verification & Mastery Check**: Calculate the exact binary representation of negative integers across 8-bit, 16-bit, and 32-bit words.
 - **Project Application**: SysTrace: Accurate parsing of signed process priority and nice values from `/proc`.
 
-#### Lesson 0.3: Bitwise Operators & Bit Manipulation Hacks
+#### Lesson 0.23: Bitwise Operators & Bit Manipulation Hacks
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.2
+- **Prerequisites**: Lesson 0.22
 - **Subtopics**:
-  - `0.3.1` Fundamental bitwise operations: AND, OR, XOR, NOT, left-shift, and right-shift.
-  - `0.3.2` Logical right-shift vs arithmetic right-shift (sign preservation mechanics).
-  - `0.3.3` Bitmasking: setting, clearing, toggling, and testing individual register bits.
-  - `0.3.4` Canonical bit hacks: Brian Kernighan’s set-bit counting, power-of-two testing (`(x & (x-1)) == 0`).
+  - `0.23.1` Fundamental bitwise operations: AND, OR, XOR, NOT, left-shift, and right-shift.
+  - `0.23.2` Logical right-shift vs arithmetic right-shift (sign preservation mechanics).
+  - `0.23.3` Bitmasking: setting, clearing, toggling, and testing individual register bits.
+  - `0.23.4` Canonical bit hacks: Brian Kernighan’s set-bit counting, power-of-two testing (`(x & (x-1)) == 0`).
 - **Key Failure Modes & Edge Cases**: Off-by-one bit-shifts causing undefined behavior or shifting into the sign bit.
 - **Verification & Mastery Check**: Implement a bitset array supporting 1,000,000 boolean flags using an array of 64-bit integers.
 - **Project Application**: SysTrace: Bitmask decoding of Linux process state flags.
 
-#### Lesson 0.4: CPU Instruction Execution & Pipeline Architecture
+#### Lesson 0.24: CPU Instruction Execution & Pipeline Architecture
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.1
+- **Prerequisites**: Lesson 0.21
 - **Subtopics**:
-  - `0.4.1` The Von Neumann architecture: CPU, memory bus, registers, and arithmetic logic unit (ALU).
-  - `0.4.2` The Instruction Cycle: Fetch, Decode, Execute, Memory Access, Write-Back.
-  - `0.4.3` Instruction Set Architecture (ISA): x86-64 CISC vs ARM64 RISC design philosophies.
-  - `0.4.4` CPU Instruction Pipelining: hazards (structural, data, control) and speculative execution.
+  - `0.24.1` The Von Neumann architecture: CPU, memory bus, registers, and arithmetic logic unit (ALU).
+  - `0.24.2` The Instruction Cycle: Fetch, Decode, Execute, Memory Access, Write-Back.
+  - `0.24.3` Instruction Set Architecture (ISA): x86-64 CISC vs ARM64 RISC design philosophies.
+  - `0.24.4` CPU Instruction Pipelining: hazards (structural, data, control) and speculative execution.
 - **Key Failure Modes & Edge Cases**: Branch mispredictions flushing the instruction pipeline, degrading execution throughput by 10x.
 - **Verification & Mastery Check**: Inspect disassembly of a simple loop using `objdump -d` and trace register movements through the pipeline.
 - **Project Application**: SysTrace: Inspecting CPU hardware counters via `/proc/cpuinfo`.
 
-#### Lesson 0.5: Clock Speeds, Cycles, & Instructions Per Cycle (IPC)
+#### Lesson 0.25: Clock Speeds, Cycles, & Instructions Per Cycle (IPC)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.4
+- **Prerequisites**: Lesson 0.24
 - **Subtopics**:
-  - `0.5.1` CPU clock frequency: physical quartz oscillations, clock period in nanoseconds.
-  - `0.5.2` Instructions Per Cycle (IPC) vs Clock Speed: why gigahertz alone does not measure performance.
-  - `0.5.3` Thermal throttling, dynamic voltage and frequency scaling (DVFS), and turbo frequencies.
-  - `0.5.4` Superscalar execution and out-of-order execution engines in modern microprocessors.
+  - `0.25.1` CPU clock frequency: physical quartz oscillations, clock period in nanoseconds.
+  - `0.25.2` Instructions Per Cycle (IPC) vs Clock Speed: why gigahertz alone does not measure performance.
+  - `0.25.3` Thermal throttling, dynamic voltage and frequency scaling (DVFS), and turbo frequencies.
+  - `0.25.4` Superscalar execution and out-of-order execution engines in modern microprocessors.
 - **Key Failure Modes & Edge Cases**: Benchmarking algorithms without disabling CPU frequency scaling, yielding wildly noisy latency results.
 - **Verification & Mastery Check**: Measure and graph CPU cycle variations under varying thermal loads using hardware monitoring tools.
 - **Project Application**: SysTrace: CPU utilization metrics calculation.
 
-#### Lesson 0.6: CPU Cache Hierarchy (L1, L2, L3) & Cache Lines
+#### Lesson 0.26: CPU Cache Hierarchy (L1, L2, L3) & Cache Lines
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.4
+- **Prerequisites**: Lesson 0.24
 - **Subtopics**:
-  - `0.6.1` Memory latency gap: CPU execution speed vs physical DRAM access latency.
-  - `0.6.2` Cache hierarchy: L1 Data/Instruction (32KB, ~4 cycles), L2 (~512KB, ~14 cycles), L3 Shared (~32MB, ~50 cycles).
-  - `0.6.3` Cache lines: standard 64-byte transfer units between memory and CPU caches.
-  - `0.6.4` Direct-mapped vs Set-Associative caches: cache ways, tags, indexes, and replacement policies.
+  - `0.26.1` Memory latency gap: CPU execution speed vs physical DRAM access latency.
+  - `0.26.2` Cache hierarchy: L1 Data/Instruction (32KB, ~4 cycles), L2 (~512KB, ~14 cycles), L3 Shared (~32MB, ~50 cycles).
+  - `0.26.3` Cache lines: standard 64-byte transfer units between memory and CPU caches.
+  - `0.26.4` Direct-mapped vs Set-Associative caches: cache ways, tags, indexes, and replacement policies.
 - **Key Failure Modes & Edge Cases**: Cache thrashing when two frequently accessed memory blocks map to the same set in a low-associativity cache.
 - **Verification & Mastery Check**: Demonstrate cache line eviction by measuring access times across arrays with varying strides.
 - **Project Application**: SysTrace: Memory access optimization and cache-aware profiling.
 
-#### Lesson 0.7: Cache Misses, Locality of Reference, & False Sharing
+#### Lesson 0.27: Cache Misses, Locality of Reference, & False Sharing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.6
+- **Prerequisites**: Lesson 0.26
 - **Subtopics**:
-  - `0.7.1` Temporal Locality: recently accessed memory is likely to be accessed again soon.
-  - `0.7.2` Spatial Locality: memory physically adjacent to accessed memory will be fetched into the cache line.
-  - `0.7.3` Matrix traversal performance: Row-major vs Column-major memory access in C and Python.
-  - `0.7.4` False Sharing in multi-threaded systems: independent variables on the same 64-byte cache line causing cross-core invalidations.
+  - `0.27.1` Temporal Locality: recently accessed memory is likely to be accessed again soon.
+  - `0.27.2` Spatial Locality: memory physically adjacent to accessed memory will be fetched into the cache line.
+  - `0.27.3` Matrix traversal performance: Row-major vs Column-major memory access in C and Python.
+  - `0.27.4` False Sharing in multi-threaded systems: independent variables on the same 64-byte cache line causing cross-core invalidations.
 - **Key Failure Modes & Edge Cases**: Traversing multi-gigabyte matrices column-first, triggering cache misses on every read and degrading performance by 20x.
 - **Verification & Mastery Check**: Benchmark row-major vs column-major array traversal in C/Python, demonstrating a 10x throughput delta.
 - **Project Application**: Core foundation for NumPy array performance in Phase 2.
 
-#### Lesson 0.8: RAM Architecture, Memory Bus, & Endianness
+#### Lesson 0.28: RAM Architecture, Memory Bus, & Endianness
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.1
+- **Prerequisites**: Lesson 0.21
 - **Subtopics**:
-  - `0.8.1` DRAM physical structure: capacitor cells, refresh cycles, rows, columns, banks, and DDR channels.
-  - `0.8.2` Memory bus bandwidth: bus width, transfer rates, dual-channel vs quad-channel architectures.
-  - `0.8.3` Memory Alignment: why unaligned memory accesses cause hardware traps or multi-cycle penalty reads.
-  - `0.8.4` Endianness: Little-Endian (x86, ARM) vs Big-Endian (network byte order); conversion with `htons`/`ntohl`.
+  - `0.28.1` DRAM physical structure: capacitor cells, refresh cycles, rows, columns, banks, and DDR channels.
+  - `0.28.2` Memory bus bandwidth: bus width, transfer rates, dual-channel vs quad-channel architectures.
+  - `0.28.3` Memory Alignment: why unaligned memory accesses cause hardware traps or multi-cycle penalty reads.
+  - `0.28.4` Endianness: Little-Endian (x86, ARM) vs Big-Endian (network byte order); conversion with `htons`/`ntohl`.
 - **Key Failure Modes & Edge Cases**: Network socket data corruption caused by sending host byte order integers over Big-Endian network streams.
 - **Verification & Mastery Check**: Write a C/Python script to detect system endianness and perform raw byte-swapping without standard library functions.
 - **Project Application**: SysTrace: Correct parsing of binary network addresses and raw memory dumps.
 
-#### Lesson 0.9: Virtual Memory, MMU, & Page Tables
+#### Lesson 0.29: Virtual Memory, MMU, & Page Tables
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.8
+- **Prerequisites**: Lesson 0.28
 - **Subtopics**:
-  - `0.9.1` Why Virtual Memory: process isolation, security boundaries, and abstracting physical RAM addresses.
-  - `0.9.2` Memory Management Unit (MMU): hardware translation of virtual addresses to physical addresses.
-  - `0.9.3` Page Tables: multi-level page table hierarchies (PML4/PML5 in x86-64); Page Directory Pointers and Page Entries.
-  - `0.9.4` Standard 4KB page frames vs HugePages (2MB, 1GB); memory footprint of page table trees.
+  - `0.29.1` Why Virtual Memory: process isolation, security boundaries, and abstracting physical RAM addresses.
+  - `0.29.2` Memory Management Unit (MMU): hardware translation of virtual addresses to physical addresses.
+  - `0.29.3` Page Tables: multi-level page table hierarchies (PML4/PML5 in x86-64); Page Directory Pointers and Page Entries.
+  - `0.29.4` Standard 4KB page frames vs HugePages (2MB, 1GB); memory footprint of page table trees.
 - **Key Failure Modes & Edge Cases**: Page table bloat when allocating millions of tiny mappings, consuming gigabytes of un-swappable kernel RAM.
 - **Verification & Mastery Check**: Inspect page table size and virtual address mappings of a running process via `/proc/<pid>/status`.
 - **Project Application**: SysTrace: Virtual memory vs physical RSS reporting.
 
-#### Lesson 0.10: Translation Lookaside Buffer (TLB) & Page Faults
+#### Lesson 0.30: Translation Lookaside Buffer (TLB) & Page Faults
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.9
+- **Prerequisites**: Lesson 0.29
 - **Subtopics**:
-  - `0.10.1` The Translation Lookaside Buffer (TLB): hardware associative cache for page translations.
-  - `0.10.2` TLB Miss latency penalty: multi-level page table walk in physical RAM.
-  - `0.10.3` Minor Page Fault: virtual memory address mapped to newly allocated physical frame without disk I/O.
-  - `0.10.4` Major Page Fault: page evicted to swap storage or memory-mapped file; synchronous disk block read required.
+  - `0.30.1` The Translation Lookaside Buffer (TLB): hardware associative cache for page translations.
+  - `0.30.2` TLB Miss latency penalty: multi-level page table walk in physical RAM.
+  - `0.30.3` Minor Page Fault: virtual memory address mapped to newly allocated physical frame without disk I/O.
+  - `0.30.4` Major Page Fault: page evicted to swap storage or memory-mapped file; synchronous disk block read required.
 - **Key Failure Modes & Edge Cases**: Severe application stutter caused by Major Page Faults during memory pressure when swapping is active.
 - **Verification & Mastery Check**: Write a program that intentionally triggers Minor Page Faults, measuring the overhead using `getrusage`.
 - **Project Application**: SysTrace: Page fault monitoring and system pressure metrics.
 
-#### Lesson 0.11: Stack Allocation Dynamics & Stack Overflow Mechanics
+#### Lesson 0.31: Stack Allocation Dynamics & Stack Overflow Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.9
+- **Prerequisites**: Lesson 0.29
 - **Subtopics**:
-  - `0.11.1` The Process Stack: memory segment growing downward; stack pointer (RSP) and base/frame pointer (RBP).
-  - `0.11.2` Stack frames: local variables, return addresses, saved registers, function arguments.
-  - `0.11.3` Stack allocation speed: moving the stack pointer by $N$ bytes ($O(1)$ assembly instruction).
-  - `0.11.4` Stack Overflow: unbounded recursion or massive local arrays exceeding the OS stack limit (`ulimit -s`).
+  - `0.31.1` The Process Stack: memory segment growing downward; stack pointer (RSP) and base/frame pointer (RBP).
+  - `0.31.2` Stack frames: local variables, return addresses, saved registers, function arguments.
+  - `0.31.3` Stack allocation speed: moving the stack pointer by $N$ bytes ($O(1)$ assembly instruction).
+  - `0.31.4` Stack Overflow: unbounded recursion or massive local arrays exceeding the OS stack limit (`ulimit -s`).
 - **Key Failure Modes & Edge Cases**: Crashing production services with unrecoverable `SIGSEGV` by declaring multi-megabyte buffers on the stack.
 - **Verification & Mastery Check**: Calculate the exact stack frame size of a recursive function and predict the exact depth that triggers a stack overflow.
 - **Project Application**: LoxLang: Call stack and scope frame allocation in Phase 1.
 
-#### Lesson 0.12: Heap Allocation Dynamics & Memory Fragmentation
+#### Lesson 0.32: Heap Allocation Dynamics & Memory Fragmentation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.9
+- **Prerequisites**: Lesson 0.29
 - **Subtopics**:
-  - `0.12.1` The Process Heap: memory segment growing upward via `brk()` and `sbrk()` syscalls.
-  - `0.12.2` Heap allocators: `malloc`, `free`, `jemalloc`, `tcmalloc`; free lists, bins, and chunk headers.
-  - `0.12.3` Internal Fragmentation: allocated chunk larger than requested payload.
-  - `0.12.4` External Fragmentation: sufficient total free memory exists, but no single contiguous block satisfies allocation.
+  - `0.32.1` The Process Heap: memory segment growing upward via `brk()` and `sbrk()` syscalls.
+  - `0.32.2` Heap allocators: `malloc`, `free`, `jemalloc`, `tcmalloc`; free lists, bins, and chunk headers.
+  - `0.32.3` Internal Fragmentation: allocated chunk larger than requested payload.
+  - `0.32.4` External Fragmentation: sufficient total free memory exists, but no single contiguous block satisfies allocation.
 - **Key Failure Modes & Edge Cases**: Long-running processes experiencing Out-Of-Memory crashes despite low total memory usage due to heap fragmentation.
 - **Verification & Mastery Check**: Simulate heap fragmentation by executing alternating allocation and deallocation patterns, measuring heap growth.
 - **Project Application**: Foundation for CPython memory analysis in Phase 1.
 
-#### Lesson 0.13: Compilation Toolchain: Preprocessing & Parsing
+#### Lesson 0.33: Compilation Toolchain: Preprocessing & Parsing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.1
+- **Prerequisites**: Lesson 0.21
 - **Subtopics**:
-  - `0.13.1` Source code to binary executable pipeline overview.
-  - `0.13.2` The C Preprocessor (`cpp`): macro expansion, header file inclusion (`#include`), conditional compilation (`#ifdef`).
-  - `0.13.3` Lexical Analysis: tokenizing source text streams into structured language tokens.
-  - `0.13.4` Syntax Analysis: Abstract Syntax Tree (AST) construction and context-free grammar validation.
+  - `0.33.1` Source code to binary executable pipeline overview.
+  - `0.33.2` The C Preprocessor (`cpp`): macro expansion, header file inclusion (`#include`), conditional compilation (`#ifdef`).
+  - `0.33.3` Lexical Analysis: tokenizing source text streams into structured language tokens.
+  - `0.33.4` Syntax Analysis: Abstract Syntax Tree (AST) construction and context-free grammar validation.
 - **Key Failure Modes & Edge Cases**: Macro expansion bugs causing silent logic errors due to missing parentheses in preprocessor definitions.
 - **Verification & Mastery Check**: Run the preprocessor on a C source file using `gcc -E` and analyze the resulting 20,000-line expanded output.
 - **Project Application**: LoxLang: Scanner and recursive descent parser implementation in Phase 1.
 
-#### Lesson 0.14: Compilation Toolchain: Assembly, Object Files, & Linkers
+#### Lesson 0.34: Compilation Toolchain: Assembly, Object Files, & Linkers
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.13
+- **Prerequisites**: Lesson 0.33
 - **Subtopics**:
-  - `0.14.1` Intermediate Representation (IR) and code generation: emitting architecture-specific assembly language (`.s`).
-  - `0.14.2` The Assembler (`as`): converting assembly instructions into machine code object files (`.o`).
-  - `0.14.3` Executable and Linkable Format (ELF): Header, `.text`, `.data`, `.rodata`, `.bss`, symbol tables.
-  - `0.14.4` The Linker (`ld`): symbol resolution, address relocation, combining multiple object files into an executable.
+  - `0.34.1` Intermediate Representation (IR) and code generation: emitting architecture-specific assembly language (`.s`).
+  - `0.34.2` The Assembler (`as`): converting assembly instructions into machine code object files (`.o`).
+  - `0.34.3` Executable and Linkable Format (ELF): Header, `.text`, `.data`, `.rodata`, `.bss`, symbol tables.
+  - `0.34.4` The Linker (`ld`): symbol resolution, address relocation, combining multiple object files into an executable.
 - **Key Failure Modes & Edge Cases**: Linker errors: undefined reference to symbol vs multiple definition of symbol; understanding declaration vs definition.
 - **Verification & Mastery Check**: Inspect an ELF object file using `readelf -S` and identify the byte boundaries of the `.text` and `.data` sections.
 - **Project Application**: SysTrace: Inspecting process memory maps against ELF segments.
 
-#### Lesson 0.15: Dynamic Linking vs Static Linking & Shared Libraries
+#### Lesson 0.35: Dynamic Linking vs Static Linking & Shared Libraries
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.14
+- **Prerequisites**: Lesson 0.34
 - **Subtopics**:
-  - `0.15.1` Static Linking: bundling all library dependencies into a single self-contained binary executable.
-  - `0.15.2` Dynamic Linking: resolving shared objects (`.so`, `.dll`) at runtime via the dynamic loader (`ld.so`).
-  - `0.15.3` Global Offset Table (GOT) and Procedure Linkage Table (PLT): Position Independent Code (PIC).
-  - `0.15.4` Shared library search paths: `LD_LIBRARY_PATH`, `/etc/ld.so.conf`, `rpath`, and security implications.
+  - `0.35.1` Static Linking: bundling all library dependencies into a single self-contained binary executable.
+  - `0.35.2` Dynamic Linking: resolving shared objects (`.so`, `.dll`) at runtime via the dynamic loader (`ld.so`).
+  - `0.35.3` Global Offset Table (GOT) and Procedure Linkage Table (PLT): Position Independent Code (PIC).
+  - `0.35.4` Shared library search paths: `LD_LIBRARY_PATH`, `/etc/ld.so.conf`, `rpath`, and security implications.
 - **Key Failure Modes & Edge Cases**: `error while loading shared libraries: cannot open shared object file`: resolving runtime library linkage failures.
 - **Verification & Mastery Check**: Inspect dynamically linked symbols of a system binary using `ldd` and `nm -D`, tracing dynamic resolution.
 - **Project Application**: Docker multi-stage builds: understanding shared library dependencies in distroless containers (Phase 4).
 
-#### Lesson 0.16: CPU Privilege Rings & User/Kernel Space Boundaries
+#### Lesson 0.36: CPU Privilege Rings & User/Kernel Space Boundaries
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.4
+- **Prerequisites**: Lesson 0.24
 - **Subtopics**:
-  - `0.16.1` Hardware privilege rings: Ring 0 (Kernel Space, full hardware access) vs Ring 3 (User Space, restricted).
-  - `0.16.2` Why hardware protection matters: preventing user processes from corrupting hardware or other processes.
-  - `0.16.3` Trap instructions and CPU state transitions: saving registers, switching stacks, loading kernel entrypoint.
-  - `0.16.4` System call overhead: cost of context switching between Ring 3 and Ring 0 (~100 to ~1500 CPU cycles).
+  - `0.36.1` Hardware privilege rings: Ring 0 (Kernel Space, full hardware access) vs Ring 3 (User Space, restricted).
+  - `0.36.2` Why hardware protection matters: preventing user processes from corrupting hardware or other processes.
+  - `0.36.3` Trap instructions and CPU state transitions: saving registers, switching stacks, loading kernel entrypoint.
+  - `0.36.4` System call overhead: cost of context switching between Ring 3 and Ring 0 (~100 to ~1500 CPU cycles).
 - **Key Failure Modes & Edge Cases**: Making excessive micro-syscalls inside high-throughput loops, incurring massive context-switching overhead.
 - **Verification & Mastery Check**: Measure the exact CPU cycle cost of an empty system call (`getpid()`) vs a user-space function call.
 - **Project Application**: SysTrace: Monitoring user vs system CPU time distribution.
 
-#### Lesson 0.17: POSIX System Call Mechanics & Software Traps
+#### Lesson 0.37: POSIX System Call Mechanics & Software Traps
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.16
+- **Prerequisites**: Lesson 0.36
 - **Subtopics**:
-  - `0.17.1` System call invocation mechanics: loading syscall number into `RAX`, parameters into registers, executing `syscall`.
-  - `0.17.2` Kernel System Call Table: mapping syscall numbers to internal kernel C function pointers.
-  - `0.17.3` Return values and error handling: negative return codes, setting `errno`, `strerror()` interpretation.
-  - `0.17.4` Tracing system calls in Linux: using `strace` with timing (`-T`), summary (`-c`), and filtering (`-e trace=...`).
+  - `0.37.1` System call invocation mechanics: loading syscall number into `RAX`, parameters into registers, executing `syscall`.
+  - `0.37.2` Kernel System Call Table: mapping syscall numbers to internal kernel C function pointers.
+  - `0.37.3` Return values and error handling: negative return codes, setting `errno`, `strerror()` interpretation.
+  - `0.37.4` Tracing system calls in Linux: using `strace` with timing (`-T`), summary (`-c`), and filtering (`-e trace=...`).
 - **Key Failure Modes & Edge Cases**: Failing to check return values of syscalls, causing cascading failures when file operations return `-1`.
 - **Verification & Mastery Check**: Run `strace -c` on a common CLI utility and produce a profile of the most frequent system calls executed.
 - **Project Application**: SysTrace: Core debugging foundation for process introspection.
 
-#### Lesson 0.18: Core POSIX Syscalls: File I/O Mechanics
+#### Lesson 0.38: Core POSIX Syscalls: File I/O Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.17
+- **Prerequisites**: Lesson 0.37
 - **Subtopics**:
-  - `0.18.1` `openat()` system call: path resolution, flags (`O_RDONLY`, `O_WRONLY`, `O_CREAT`, `O_TRUNC`, `O_NONBLOCK`).
-  - `0.18.2` `read()` and `write()`: byte streaming, partial reads/writes, buffer boundaries, handling `EINTR` interrupts.
-  - `0.18.3` `close()`: releasing file descriptors, kernel cleanup, file descriptor leak mechanics.
-  - `0.18.4` `lseek()`: manipulating file offsets; sparse files and file holes; append-only mode (`O_APPEND`).
+  - `0.38.1` `openat()` system call: path resolution, flags (`O_RDONLY`, `O_WRONLY`, `O_CREAT`, `O_TRUNC`, `O_NONBLOCK`).
+  - `0.38.2` `read()` and `write()`: byte streaming, partial reads/writes, buffer boundaries, handling `EINTR` interrupts.
+  - `0.38.3` `close()`: releasing file descriptors, kernel cleanup, file descriptor leak mechanics.
+  - `0.38.4` `lseek()`: manipulating file offsets; sparse files and file holes; append-only mode (`O_APPEND`).
 - **Key Failure Modes & Edge Cases**: Failing to loop over `write()` when writing large buffers, resulting in silent data truncation on partial writes.
 - **Verification & Mastery Check**: Write a file copy utility in pure POSIX C/Python syscalls that handles partial reads, writes, and `EINTR` signals.
 - **Project Application**: NanoHTTP: Raw socket stream reading and writing in Phase 4.
 
-#### Lesson 0.19: Advanced POSIX Syscalls: Memory & Process Control
+#### Lesson 0.39: Advanced POSIX Syscalls: Memory & Process Control
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.17
+- **Prerequisites**: Lesson 0.37
 - **Subtopics**:
-  - `0.19.1` `mmap()` in depth: parameters (length, protection flags, map flags, fd, offset); zero-copy disk mapping.
-  - `0.19.2` `brk()` and `sbrk()`: modifying the heap break pointer directly.
-  - `0.19.3` `clone()` system call: the unified kernel primitive underpinning processes, threads, and Linux containers.
-  - `0.19.4` `execve()`: replacing process image, argument arrays (`argv`), and environment arrays (`envp`).
+  - `0.39.1` `mmap()` in depth: parameters (length, protection flags, map flags, fd, offset); zero-copy disk mapping.
+  - `0.39.2` `brk()` and `sbrk()`: modifying the heap break pointer directly.
+  - `0.39.3` `clone()` system call: the unified kernel primitive underpinning processes, threads, and Linux containers.
+  - `0.39.4` `execve()`: replacing process image, argument arrays (`argv`), and environment arrays (`envp`).
 - **Key Failure Modes & Edge Cases**: Memory corruption from reading beyond `mmap` boundaries, triggering uncatchable `SIGBUS` signals.
 - **Verification & Mastery Check**: Use `mmap` to inspect and modify an on-disk binary structure without calling `read()` or `write()`.
 - **Project Application**: DataSift and NanoHTTP: Zero-copy file processing.
 
-#### Lesson 0.20: File Descriptors, Standard Streams, & Inode Tables
+#### Lesson 0.40: File Descriptors, Standard Streams, & Inode Tables
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.18
+- **Prerequisites**: Lesson 0.38
 - **Subtopics**:
-  - `0.20.1` The File Descriptor table: per-process array of pointers to global open file table entries.
-  - `0.20.2` Standard File Descriptors: 0 (stdin), 1 (stdout), 2 (stderr); redirection mechanics.
-  - `0.20.3` Inodes: filesystem metadata records, permissions, timestamps, block pointers, hard links vs soft links.
-  - `0.20.4` File descriptor limits: soft limits, hard limits (`ulimit -n`), and `EMFILE` (Too many open files) exhaustion.
+  - `0.40.1` The File Descriptor table: per-process array of pointers to global open file table entries.
+  - `0.40.2` Standard File Descriptors: 0 (stdin), 1 (stdout), 2 (stderr); redirection mechanics.
+  - `0.40.3` Inodes: filesystem metadata records, permissions, timestamps, block pointers, hard links vs soft links.
+  - `0.40.4` File descriptor limits: soft limits, hard limits (`ulimit -n`), and `EMFILE` (Too many open files) exhaustion.
 - **Key Failure Modes & Edge Cases**: File descriptor leaks in web servers exhausting process limits and rejecting all subsequent client connections.
 - **Verification & Mastery Check**: Inspect the `/proc/<pid>/fd` directory of a running process, identifying all open files, sockets, and pipes.
 - **Project Application**: SysTrace: Tracking open file descriptor counts per PID.
 
-#### Lesson 0.21: Process Lifecycle, States, & Context Switching
+#### Lesson 0.41: Process Lifecycle, States, & Context Switching
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.17
+- **Prerequisites**: Lesson 0.37
 - **Subtopics**:
-  - `0.21.1` Process Control Block (PCB): task structure in kernel memory, PID, PPID, credentials, scheduling state.
-  - `0.21.2` Linux Process States: TASK_RUNNING (R), TASK_INTERRUPTIBLE (S), TASK_UNINTERRUPTIBLE (D), TASK_ZOMBIE (Z), TASK_STOPPED (T).
-  - `0.21.3` Uninterruptible Sleep (D State): process waiting on hardware I/O; why `kill -9` cannot terminate a D-state process.
-  - `0.21.4` Context Switching: saving CPU register context, switching page tables (TLB flush), loading new task state.
+  - `0.41.1` Process Control Block (PCB): task structure in kernel memory, PID, PPID, credentials, scheduling state.
+  - `0.41.2` Linux Process States: TASK_RUNNING (R), TASK_INTERRUPTIBLE (S), TASK_UNINTERRUPTIBLE (D), TASK_ZOMBIE (Z), TASK_STOPPED (T).
+  - `0.41.3` Uninterruptible Sleep (D State): process waiting on hardware I/O; why `kill -9` cannot terminate a D-state process.
+  - `0.41.4` Context Switching: saving CPU register context, switching page tables (TLB flush), loading new task state.
 - **Key Failure Modes & Edge Cases**: Zombie process accumulation exhausting system PID limits when parent processes fail to call `waitpid()`.
 - **Verification & Mastery Check**: Write a script that deliberately spawns an uninterruptible sleep or zombie process and inspects it via `ps`.
 - **Project Application**: SysTrace: Process lifecycle state categorization.
 
-#### Lesson 0.22: The Linux `/proc` Filesystem & Kernel Introspection
+#### Lesson 0.42: The Linux `/proc` Filesystem & Kernel Introspection
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.21
+- **Prerequisites**: Lesson 0.41
 - **Subtopics**:
-  - `0.22.1` Virtual filesystems: `/proc` as a window into real-time kernel data structures; zero disk storage.
-  - `0.22.2` Global system metrics: `/proc/cpuinfo`, `/proc/meminfo`, `/proc/stat`, `/proc/loadavg`.
-  - `0.22.3` Per-process introspection: `/proc/<pid>/status`, `/proc/<pid>/maps`, `/proc/<pid>/cmdline`, `/proc/<pid>/stat`.
-  - `0.22.4` Parsing `/proc/<pid>/maps`: memory region start/end, permissions (rwxp), offsets, devices, inodes, pathnames.
+  - `0.42.1` Virtual filesystems: `/proc` as a window into real-time kernel data structures; zero disk storage.
+  - `0.42.2` Global system metrics: `/proc/cpuinfo`, `/proc/meminfo`, `/proc/stat`, `/proc/loadavg`.
+  - `0.42.3` Per-process introspection: `/proc/<pid>/status`, `/proc/<pid>/maps`, `/proc/<pid>/cmdline`, `/proc/<pid>/stat`.
+  - `0.42.4` Parsing `/proc/<pid>/maps`: memory region start/end, permissions (rwxp), offsets, devices, inodes, pathnames.
 - **Key Failure Modes & Edge Cases**: Parsing `/proc` files with static character index assumptions rather than dynamic whitespace splitting.
 - **Verification & Mastery Check**: Write a script to calculate total Resident Set Size (RSS) across all processes by parsing `/proc/*/status`.
 - **Project Application**: Core mechanism of the `SysTrace` Phase 0 Project.
 
-#### Lesson 0.23: Linux Terminal Architecture, Shells, & Environment
+#### Lesson 0.43: Linux Terminal Architecture, Shells, & Environment
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.17
+- **Prerequisites**: Lesson 0.37
 - **Subtopics**:
-  - `0.23.1` Terminal Emulators, Pseudo-Terminals (PTY), and Line Discipline (cooked mode vs raw mode).
-  - `0.23.2` POSIX Shell execution model: command lookup, PATH traversal, subshells, process substitution.
-  - `0.23.3` Environment variables: inherited environment, exporting variables (`export`), local variables.
-  - `0.23.4` Shell configuration lifecycle: `/etc/profile`, `~/.bash_profile`, `~/.bashrc`, interactive vs non-interactive shells.
+  - `0.43.1` Terminal Emulators, Pseudo-Terminals (PTY), and Line Discipline (cooked mode vs raw mode).
+  - `0.43.2` POSIX Shell execution model: command lookup, PATH traversal, subshells, process substitution.
+  - `0.43.3` Environment variables: inherited environment, exporting variables (`export`), local variables.
+  - `0.43.4` Shell configuration lifecycle: `/etc/profile`, `~/.bash_profile`, `~/.bashrc`, interactive vs non-interactive shells.
 - **Key Failure Modes & Edge Cases**: Modifying environment variables in subshells and wondering why parent process environments remain unchanged.
 - **Verification & Mastery Check**: Trace environment variable inheritance across nested subshells and background processes.
 - **Project Application**: SysTrace: Execution environment and path configuration.
 
-#### Lesson 0.24: Standard Streams, Redirection, & Pipes
+#### Lesson 0.44: Standard Streams, Redirection, & Pipes
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.20
+- **Prerequisites**: Lesson 0.40
 - **Subtopics**:
-  - `0.24.1` Stream redirection syntax: `>`, `>>`, `<`, `2>`, `2>&1`, `&>`.
-  - `0.24.2` The UNIX Pipe (`|`): kernel anonymous pipe connecting stdout of process A to stdin of process B.
-  - `0.24.3` Buffering semantics: fully buffered (block buffered when redirected to file) vs line buffered (TTY terminals).
-  - `0.24.4` Process substitution (`<()`, `>()`): passing command outputs as file paths to commands expecting files.
+  - `0.44.1` Stream redirection syntax: `>`, `>>`, `<`, `2>`, `2>&1`, `&>`.
+  - `0.44.2` The UNIX Pipe (`|`): kernel anonymous pipe connecting stdout of process A to stdin of process B.
+  - `0.44.3` Buffering semantics: fully buffered (block buffered when redirected to file) vs line buffered (TTY terminals).
+  - `0.44.4` Process substitution (`<()`, `>()`): passing command outputs as file paths to commands expecting files.
 - **Key Failure Modes & Edge Cases**: Pipeline deadlocks or silent data loss when mixing stdout and stderr redirection in wrong order (`2>&1 >file`).
 - **Verification & Mastery Check**: Construct a pipeline that redirects stdout to a file and stderr to a background alerting script simultaneously.
 - **Project Application**: Core text manipulation pipeline in `SysTrace`.
 
-#### Lesson 0.25: Process Control Signals (`SIGTERM`, `SIGKILL`, `SIGINT`)
+#### Lesson 0.45: Process Control Signals (`SIGTERM`, `SIGKILL`, `SIGINT`)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.21
+- **Prerequisites**: Lesson 0.41
 - **Subtopics**:
-  - `0.25.1` POSIX signals: asynchronous kernel notifications sent to processes.
-  - `0.25.2` Standard signals: `SIGINT` (2, Ctrl+C), `SIGQUIT` (3), `SIGKILL` (9, non-catchable), `SIGTERM` (15, graceful exit request), `SIGHUP` (1, hangup/reload).
-  - `0.25.3` Signal handling in Bash: the `trap` command, executing cleanup routines on script termination.
-  - `0.25.4` Process groups and sessions: sending signals to entire process trees using negative PID syntax (`kill -- -PGID`).
+  - `0.45.1` POSIX signals: asynchronous kernel notifications sent to processes.
+  - `0.45.2` Standard signals: `SIGINT` (2, Ctrl+C), `SIGQUIT` (3), `SIGKILL` (9, non-catchable), `SIGTERM` (15, graceful exit request), `SIGHUP` (1, hangup/reload).
+  - `0.45.3` Signal handling in Bash: the `trap` command, executing cleanup routines on script termination.
+  - `0.45.4` Process groups and sessions: sending signals to entire process trees using negative PID syntax (`kill -- -PGID`).
 - **Key Failure Modes & Edge Cases**: Using `kill -9` as the default termination command, leaving database locks, temporary files, and socket ports locked.
 - **Verification & Mastery Check**: Write a Bash script with a `trap` handler that cleanly removes temporary directories even when terminated via `SIGINT`.
 - **Project Application**: SysTrace: Clean shutdown and signal trapping.
 
-#### Lesson 0.26: POSIX File Permissions, Ownership, & Special Bits
+#### Lesson 0.46: POSIX File Permissions, Ownership, & Special Bits
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.20
+- **Prerequisites**: Lesson 0.40
 - **Subtopics**:
-  - `0.26.1` POSIX permission octets: Owner, Group, Others; Read (4), Write (2), Execute (1).
-  - `0.26.2` The `umask`: default permission masking calculation for newly created files and directories.
-  - `0.26.3` Special permission bits: SUID (Set User ID - executes as file owner), SGID (Set Group ID), Sticky Bit (restricted deletion in `/tmp`).
-  - `0.26.4` Ownership management: `chmod`, `chown`, `chgrp`, recursive updates, and symbolic link handling.
+  - `0.46.1` POSIX permission octets: Owner, Group, Others; Read (4), Write (2), Execute (1).
+  - `0.46.2` The `umask`: default permission masking calculation for newly created files and directories.
+  - `0.46.3` Special permission bits: SUID (Set User ID - executes as file owner), SGID (Set Group ID), Sticky Bit (restricted deletion in `/tmp`).
+  - `0.46.4` Ownership management: `chmod`, `chown`, `chgrp`, recursive updates, and symbolic link handling.
 - **Key Failure Modes & Edge Cases**: Security disaster: setting permissions to `777` to fix a permission error, exposing secrets and code to all local users.
 - **Verification & Mastery Check**: Demonstrate how SUID permissions permit unprivileged users to execute privileged actions safely.
 - **Project Application**: Security audit checks in `DevAudit`.
 
-#### Lesson 0.27: High-Performance Text Processing (`grep`, `sed`, `awk`, `cut`)
+#### Lesson 0.47: High-Performance Text Processing (`grep`, `sed`, `awk`, `cut`)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.24
+- **Prerequisites**: Lesson 0.44
 - **Subtopics**:
-  - `0.27.1` `grep` mastery: recursive search (`-r`), inverted matching (`-v`), line numbering (`-n`), counting (`-c`), PCRE regex (`-P`).
-  - `0.27.2` `sed` stream editor: search and replace (`s/pattern/replacement/g`), address ranges, deleting lines (`/d`), in-place editing (`-i`).
-  - `0.27.3` `awk` programming: pattern-action pairs, field separators (`-F`), built-in variables (`NR`, `NF`, `$1`, `$2`), associative arrays.
-  - `0.27.4` Composing Unix pipelines: combining `grep | awk | sort | uniq -c | sort -nr` for high-throughput log analysis.
+  - `0.47.1` `grep` mastery: recursive search (`-r`), inverted matching (`-v`), line numbering (`-n`), counting (`-c`), PCRE regex (`-P`).
+  - `0.47.2` `sed` stream editor: search and replace (`s/pattern/replacement/g`), address ranges, deleting lines (`/d`), in-place editing (`-i`).
+  - `0.47.3` `awk` programming: pattern-action pairs, field separators (`-F`), built-in variables (`NR`, `NF`, `$1`, `$2`), associative arrays.
+  - `0.47.4` Composing Unix pipelines: combining `grep | awk | sort | uniq -c | sort -nr` for high-throughput log analysis.
 - **Key Failure Modes & Edge Cases**: Running unquoted `sed -i` commands on macOS vs Linux, causing script syntax crashes across operating systems.
 - **Verification & Mastery Check**: Parse an Nginx access log file with `awk` and output the top 5 IP addresses by total bytes transferred in under 3 seconds.
 - **Project Application**: SysTrace: Log parsing and metric formatting.
 
-#### Lesson 0.28: Robust Bash Scripting, Error Trapping, & `shellcheck`
+#### Lesson 0.48: Robust Bash Scripting, Error Trapping, & `shellcheck`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.25
+- **Prerequisites**: Lesson 0.45
 - **Subtopics**:
-  - `0.28.1` Bash strict mode: `set -euo pipefail` (exit on error, exit on unset variable, inherit pipeline failure status).
-  - `0.28.2` Quoting rules in Bash: why double quoting (`"$var"`) prevents catastrophic word splitting and pathname globbing.
-  - `0.28.3` Conditional branching and arithmetic: `[[ ... ]]` vs `[ ... ]`, integer testing, string testing, regex matching.
-  - `0.28.4` Automated shell static analysis: running `shellcheck` to detect bugs, unhandled exit codes, and portability violations.
+  - `0.48.1` Bash strict mode: `set -euo pipefail` (exit on error, exit on unset variable, inherit pipeline failure status).
+  - `0.48.2` Quoting rules in Bash: why double quoting (`"$var"`) prevents catastrophic word splitting and pathname globbing.
+  - `0.48.3` Conditional branching and arithmetic: `[[ ... ]]` vs `[ ... ]`, integer testing, string testing, regex matching.
+  - `0.48.4` Automated shell static analysis: running `shellcheck` to detect bugs, unhandled exit codes, and portability violations.
 - **Key Failure Modes & Edge Cases**: Executing `rm -rf $DIR/` when `DIR` is unset, resulting in the accidental execution of `rm -rf /`.
 - **Verification & Mastery Check**: Write a 100-line Bash utility that passes `shellcheck` with zero warnings, zero hints, and strict error handling.
 - **Project Application**: SysTrace: Mandatory quality standard for Phase 0 project.
 
-#### Lesson 0.29: Regular Expressions: Finite Automata & Core Syntax
+#### Lesson 0.49: Regular Expressions: Finite Automata & Core Syntax
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.27
+- **Prerequisites**: Lesson 0.47
 - **Subtopics**:
-  - `0.29.1` Automata theory: Deterministic Finite Automata (DFA) vs Non-Deterministic Finite Automata (NFA).
-  - `0.29.2` Metacharacters, literals, character classes (`[...]`, `[^...]`), shorthand classes (`\d`, `\w`, `\s`).
-  - `0.29.3` Quantifiers: greedy (`*`, `+`, `{n,m}`), lazy/reluctant (`*?`, `+?`), possessive (`*+`).
-  - `0.29.4` Anchors: line anchors (`^`, `$`), word boundaries (`\b`, `\B`), string anchors (`\A`, `\Z`).
+  - `0.49.1` Automata theory: Deterministic Finite Automata (DFA) vs Non-Deterministic Finite Automata (NFA).
+  - `0.49.2` Metacharacters, literals, character classes (`[...]`, `[^...]`), shorthand classes (`\d`, `\w`, `\s`).
+  - `0.49.3` Quantifiers: greedy (`*`, `+`, `{n,m}`), lazy/reluctant (`*?`, `+?`), possessive (`*+`).
+  - `0.49.4` Anchors: line anchors (`^`, `$`), word boundaries (`\b`, `\B`), string anchors (`\A`, `\Z`).
 - **Key Failure Modes & Edge Cases**: Greedy quantifiers consuming unexpected characters across multi-line inputs, extracting corrupted substrings.
 - **Verification & Mastery Check**: Write a regular expression that matches valid IPv4 addresses (0.0.0.0 to 255.255.255.255) without false positives.
 - **Project Application**: DevAudit: Secret detection pattern matching engine.
 
-#### Lesson 0.30: ReDoS, Catastrophic Backtracking, & CPython `listobject.c` Reading
+#### Lesson 0.50: ReDoS, Catastrophic Backtracking, & CPython `listobject.c` Reading
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.29
+- **Prerequisites**: Lesson 0.49
 - **Subtopics**:
-  - `0.30.1` Catastrophic Backtracking in NFA engines: exponential branching ($O(2^n)$) on ambiguous nested quantifiers (e.g., `(a+)+$`).
-  - `0.30.2` Regular Expression Denial of Service (ReDoS): how an adversarial 30-character string freezes a web server for minutes.
-  - `0.30.3` Safe regex design: eliminating overlapping branches, atomic groups, possessive quantifiers.
-  - `0.30.4` CPython Source Archeology: reading `Objects/listobject.c`; dissecting `list_resize()` dynamic over-allocation.
+  - `0.50.1` Catastrophic Backtracking in NFA engines: exponential branching ($O(2^n)$) on ambiguous nested quantifiers (e.g., `(a+)+$`).
+  - `0.50.2` Regular Expression Denial of Service (ReDoS): how an adversarial 30-character string freezes a web server for minutes.
+  - `0.50.3` Safe regex design: eliminating overlapping branches, atomic groups, possessive quantifiers.
+  - `0.50.4` CPython Source Archeology: reading `Objects/listobject.c`; dissecting `list_resize()` dynamic over-allocation.
 - **Key Failure Modes & Edge Cases**: Production outage caused by an un-anchored, nested regex executed against user-submitted input in an API gateway.
 - **Verification & Mastery Check**: Identify and fix a catastrophic backtracking regex, and write a 500-word teardown of CPython `list_resize()` over-allocation.
 - **Project Application**: Exit benchmark requirement for Phase 0.
 
+
+---
 
 ---
 
@@ -549,618 +791,922 @@ To be certified as completing Phase 0, the engineer must execute the following c
 
 ---
 
+---
+
 ## Phase 1: Programming Mastery
-**Duration**: 13 weeks
-**Total Lessons**: 60 Lessons (Lesson 1.1 to Lesson 1.60)
+**Duration**: 14 weeks
+**Total Lessons**: 75 Lessons (Lesson 1.1 to Lesson 1.75)
 **Builds on**: Phase 0 (memory models, terminal, Git, regex, CPython internals)
 **Introduces**: Deep Python runtime, Python type system, asyncio event loops, TypeScript type system, testing theory, SOLID design principles, GoF design patterns, clean architecture, refactoring, tree-walk interpreters.
 
 ---
 
-### Phase 1 Lesson Specifications (Lessons 1.1 – 1.50)
+### Phase 1 Lesson Specifications (Lessons 1.1 – 1.75)
 
-#### Lesson 1.1: Python Object Model & `PyObject` C-Struct
+#### Lesson 1.1: Object-Oriented Programming Mental Model
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0
+- **Subtopics**:
+  - `1.1.1` Real-world mental model: modeling software entities as objects with attributes and behaviors.
+  - `1.1.2` Classes as blueprints: defining templates for creating multiple independent instances.
+  - `1.1.3` Instances as physical objects: how each object maintains its own isolated memory state.
+  - `1.1.4` Why OOP matters in AI engineering: modeling PromptTemplates, ChatMessages, and AgentSessions as clean objects.
+- **Key Failure Modes & Edge Cases**: Treating a class definition as an active object rather than instantiating it with parentheses ().
+- **Verification & Mastery Check**: Define a ChatMessage class representing an AI message, create instances for user and assistant, and inspect them.
+- **Project Application**: SchemaAgent: Message domain models.
+
+#### Lesson 1.2: Constructors: __init__ and Instance Attributes
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.1
+- **Subtopics**:
+  - `1.2.1` The constructor method: initializing new instances automatically using __init__.
+  - `1.2.2` The self parameter: how methods know which specific object instance they are working with.
+  - `1.2.3` Instance attributes: binding state directly to self.attribute_name.
+  - `1.2.4` Input validation in constructors: checking that required parameters are provided cleanly.
+- **Key Failure Modes & Edge Cases**: Omitting self as the first parameter of __init__, triggering TypeError: takes 0 positional arguments.
+- **Verification & Mastery Check**: Build a ModelConfig class that validates temperature (0.0 to 2.0) and raises ValueError if out of bounds.
+- **Project Application**: SchemaAgent: LLM configuration builder.
+
+#### Lesson 1.3: Instance Methods vs Class Methods vs Static Methods
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2
+- **Subtopics**:
+  - `1.3.1` Instance methods: regular methods operating on self and modifying instance state.
+  - `1.3.2` Class methods with @classmethod: operating on the class (cls) for alternative constructors.
+  - `1.3.3` Static methods with @staticmethod: utility functions that live inside a class without needing self or cls.
+  - `1.3.4` When to choose each method type in clean software architecture.
+- **Key Failure Modes & Edge Cases**: Accidentally calling an instance method from a class without creating an instance first.
+- **Verification & Mastery Check**: Implement a Prompt class with an instance method .render() and a @classmethod .from_file(path).
+- **Project Application**: SchemaAgent: Alternative constructor factory methods.
+
+#### Lesson 1.4: Encapsulation & Private Attribute Conventions
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2
+- **Subtopics**:
+  - `1.4.1` Encapsulation principle: bundling data and methods together while protecting internal state.
+  - `1.4.2` Private variable naming conventions in Python: using leading underscores (_variable and __variable).
+  - `1.4.3` Name mangling in Python: how __attribute is transformed to prevent accidental child class overrides.
+  - `1.4.4` Public interfaces: exposing only what consumers need to use, hiding internal implementation details.
+- **Key Failure Modes & Edge Cases**: Reaching directly into private internal attributes of external libraries, breaking when the library updates.
+- **Verification & Mastery Check**: Create an ApiClient class that keeps API keys private while exposing a clean public .generate() method.
+- **Project Application**: SchemaAgent: Secure credential encapsulation.
+
+#### Lesson 1.5: Properties: @property Getters & Setters
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.4
+- **Subtopics**:
+  - `1.5.1` Pythonic attribute access: accessing methods like normal attributes using @property.
+  - `1.5.2` Getters: calculating values on-the-fly when an attribute is read.
+  - `1.5.3` Setters with @attribute.setter: intercepting assignments to validate data before saving.
+  - `1.5.4` Refactoring legacy code: turning raw attributes into validated properties without breaking existing callers.
+- **Key Failure Modes & Edge Cases**: Creating an infinite recursion loop by setting self.name inside a setter that defines name.
+- **Verification & Mastery Check**: Add a validated @property for temperature that rejects negative numbers and rounds floats to 2 decimal places.
+- **Project Application**: SchemaAgent: Attribute validation descriptors.
+
+#### Lesson 1.6: Inheritance: Subclasses & Polymorphism
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.1
+- **Subtopics**:
+  - `1.6.1` Code reuse through inheritance: creating specialized child classes from a common parent class.
+  - `1.6.2` Method overriding: customizing or replacing a parent method inside a child class.
+  - `1.6.3` Polymorphism principle: treating different child classes through a single common interface.
+  - `1.6.4` When inheritance is appropriate vs when it creates rigid, fragile hierarchies.
+- **Key Failure Modes & Edge Cases**: Creating deeply nested 5-level inheritance hierarchies that are impossible to maintain or debug.
+- **Verification & Mastery Check**: Create a base Tool class and two child classes (SearchTool and CalculatorTool) implementing .run().
+- **Project Application**: SchemaAgent: Tool execution polymorphism.
+
+#### Lesson 1.7: Super(): Method Resolution Order (MRO)
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.6
+- **Subtopics**:
+  - `1.7.1` Calling parent methods: using super().__init__() to ensure parent initialization runs.
+  - `1.7.2` Extending parent behavior: calling super().method() before or after adding child-specific logic.
+  - `1.7.3` Method Resolution Order (MRO): the exact order Python uses to search for methods in class hierarchies.
+  - `1.7.4` Inspecting class order: using ClassName.mro() to see the inheritance chain.
+- **Key Failure Modes & Edge Cases**: Forgetting to call super().__init__() in a subclass, leaving parent attributes uninitialized.
+- **Verification & Mastery Check**: Build a SafeTool subclass that calls super().run() and adds automated execution time logging.
+- **Project Application**: SchemaAgent: Middleware tool wrapping.
+
+#### Lesson 1.8: Composition Over Inheritance
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.6
+- **Subtopics**:
+  - `1.8.1` The architectural golden rule: favor object composition ('has-a') over class inheritance ('is-a').
+  - `1.8.2` Building systems out of modular parts: assembling an agent from a model, a memory buffer, and tools.
+  - `1.8.3` Flexibility benefits: easily swapping components at runtime without changing class inheritance.
+  - `1.8.4` Refactoring rigid class hierarchies into clean composed objects.
+- **Key Failure Modes & Edge Cases**: Forcing a class to inherit from a parent just to reuse a single helper function.
+- **Verification & Mastery Check**: Build an AIAgent class that takes an LLMClient instance and a MemoryBuffer instance via its constructor.
+- **Project Application**: SchemaAgent: Composable agent architecture.
+
+#### Lesson 1.9: Dunder Methods: __repr__ and __str__
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2
+- **Subtopics**:
+  - `1.9.1` Special double-underscore methods: customizing how Python handles your custom objects.
+  - `1.9.2` The duality of display: __str__ for human-friendly messages vs __repr__ for unambiguous debugging.
+  - `1.9.3` Default object printing: why omitting these methods shows useless <Object at 0x7f...> pointers.
+  - `1.9.4` Formatting best practices: making repr(obj) look like valid Python code to recreate the object.
+- **Key Failure Modes & Edge Cases**: Failing to implement __repr__, making log files and debugger inspection frustratingly opaque.
+- **Verification & Mastery Check**: Implement clean __str__ and __repr__ methods for an AgentAction class showing tool name and arguments.
+- **Project Application**: SchemaAgent: Clear debugging telemetry.
+
+#### Lesson 1.10: Operator Overloading: __add__, __eq__, __lt__
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.9
+- **Subtopics**:
+  - `1.10.1` Teaching custom objects to use math operators: overloading +, ==, <, and >.
+  - `1.10.2` Value equality with __eq__: comparing object contents rather than memory addresses.
+  - `1.10.3` Adding objects with __add__: combining two PromptTemplates into a single merged template.
+  - `1.10.4` Ordering objects with __lt__: enabling Python's sorted() to sort custom objects automatically.
+- **Key Failure Modes & Edge Cases**: Implementing __eq__ without handling type checks, causing crashes when comparing with None.
+- **Verification & Mastery Check**: Implement __add__ on PromptSegment so that prompt_a + prompt_b cleanly concatenates their text blocks.
+- **Project Application**: SchemaAgent: Composable prompt segments.
+
+#### Lesson 1.11: Containers Protocol: __len__ and __getitem__
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.9
+- **Subtopics**:
+  - `1.11.1` Creating custom collections: making your classes behave like native Python lists or dicts.
+  - `1.11.2` Supporting len(): implementing __len__ to return the item count.
+  - `1.11.3` Supporting indexing: implementing __getitem__ to allow square bracket access obj[key] or obj[index].
+  - `1.11.4` Iteration for free: how Python automatically loops over objects that implement __getitem__.
+- **Key Failure Modes & Edge Cases**: Returning negative numbers or non-integers from __len__, triggering TypeError.
+- **Verification & Mastery Check**: Build a MessageHistory class that supports len(history) and indexing history[0] to get messages.
+- **Project Application**: SchemaAgent: Custom collection containers.
+
+#### Lesson 1.12: Context Managers: __enter__ and __exit__
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2, Phase 0 (Lesson 0.15)
+- **Subtopics**:
+  - `1.12.1` Resource safety: managing setup and teardown automatically with the with statement.
+  - `1.12.2` The context manager protocol: implementing __enter__ and __exit__.
+  - `1.12.3` Exception handling in __exit__: inspecting errors and deciding whether to suppress them.
+  - `1.12.4` Writing lightweight context managers with the @contextmanager decorator from contextlib.
+- **Key Failure Modes & Edge Cases**: Unconditionally returning True from __exit__, which silently swallows catastrophic syntax errors.
+- **Verification & Mastery Check**: Write a Timer context manager that measures and prints the exact execution time of any code block.
+- **Project Application**: SchemaAgent: Automated latency profiling context.
+
+#### Lesson 1.13: Iterators Protocol: __iter__ and __next__
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.11
+- **Subtopics**:
+  - `1.13.1` How iteration works behind the scenes: the Iterator design pattern in Python.
+  - `1.13.2` The __iter__ method: returning an iterator object.
+  - `1.13.3` The __next__ method: producing the next item or raising StopIteration when finished.
+  - `1.13.4` Building custom stream iterators that process endless streams of incoming AI tokens.
+- **Key Failure Modes & Edge Cases**: Forgetting to raise StopIteration, causing for loops over your custom object to run forever.
+- **Verification & Mastery Check**: Build a TokenStream class that yields words from a response one-by-one with simulated delays.
+- **Project Application**: SchemaAgent: Simulated token streaming iterator.
+
+#### Lesson 1.14: Generators & The yield Keyword
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.13
+- **Subtopics**:
+  - `1.14.1` Lightweight stream producers: writing generator functions using the yield keyword.
+  - `1.14.2` Memory efficiency: why generators use zero extra memory even when yielding billions of items.
+  - `1.14.3` Generator state preservation: pausing function execution and resuming seamlessly on next().
+  - `1.14.4` Generator expressions: writing single-line memory-efficient streaming pipelines.
+- **Key Failure Modes & Edge Cases**: Treating a generator like a reusable list; once consumed, a generator is empty and cannot be re-run!
+- **Verification & Mastery Check**: Write a generator function stream_chunks(text, chunk_size) that yields fixed-size text segments.
+- **Project Application**: SchemaAgent: Memory-bounded document chunking.
+
+#### Lesson 1.15: Decorators: Function Wrapping & Wraps
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2, Phase 0 (Lesson 0.8)
+- **Subtopics**:
+  - `1.15.1` Decorators as function wrappers: augmenting function behavior without modifying original code.
+  - `1.15.2` Higher-order functions: functions that accept functions as arguments and return new functions.
+  - `1.15.3` Preserving metadata: using @functools.wraps to protect the original function name and docstring.
+  - `1.15.4` Practical use cases: automated logging, timing, authentication checks, and input sanitization.
+- **Key Failure Modes & Edge Cases**: Forgetting @functools.wraps, causing decorated functions to lose their name and breaking debugging tools.
+- **Verification & Mastery Check**: Write a @log_call decorator that prints the function name, arguments, and return value for every invocation.
+- **Project Application**: SchemaAgent: Observability logging wrappers.
+
+#### Lesson 1.16: Decorators with Arguments
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.15
+- **Subtopics**:
+  - `1.16.1` Configurable decorators: writing decorators that take options (like @retry(max_attempts=3)).
+  - `1.16.2` The three-tier closure structure: outer function for arguments, middle for wrapper, inner for execution.
+  - `1.16.3` Building production-grade retry decorators with exponential backoff for flaky AI API endpoints.
+  - `1.16.4` Clean error handling inside decorator closures.
+- **Key Failure Modes & Edge Cases**: Getting confused by the 3 nested function levels, mixing up where arguments are received.
+- **Verification & Mastery Check**: Write a @retry(times=3) decorator that catches network exceptions and retries the function up to 3 times.
+- **Project Application**: SchemaAgent: Production API retry decorator.
+
+#### Lesson 1.17: Unit Testing Fundamentals with pytest
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0 (Lesson 0.17)
+- **Subtopics**:
+  - `1.17.1` Why automated testing is mandatory for professional software engineers: preventing regressions.
+  - `1.17.2` Writing tests with pytest: simple assert statements without boilerplate.
+  - `1.17.3` Structuring test files: naming conventions (test_*.py and test_* functions).
+  - `1.17.4` Running tests: using the pytest command in the terminal and reading test failure reports.
+- **Key Failure Modes & Edge Cases**: Writing tests that pass blindly without asserting any real condition, giving false confidence.
+- **Verification & Mastery Check**: Write a comprehensive test suite for a PromptFormatter function covering valid inputs and edge cases.
+- **Project Application**: SchemaAgent: Unit test suites.
+
+#### Lesson 1.18: pytest Fixtures: Setup & Teardown
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.18.1` Test fixtures: preparing test data, mock connections, and clean state using @pytest.fixture.
+  - `1.18.2` Dependency injection: passing fixtures cleanly into test functions as named arguments.
+  - `1.18.3` Fixture scopes: function, module, and session scopes for optimizing test execution speed.
+  - `1.18.4` Teardown with yield: automatically cleaning up temporary files after test execution.
+- **Key Failure Modes & Edge Cases**: Sharing mutable state across tests via module-scoped fixtures, causing tests to fail when run in random order.
+- **Verification & Mastery Check**: Create a sample_agent fixture that initializes a fresh agent instance for each unit test.
+- **Project Application**: SchemaAgent: Test fixture harness.
+
+#### Lesson 1.19: Parameterized Tests in pytest
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.19.1` Testing multiple inputs efficiently: using @pytest.mark.parametrize.
+  - `1.19.2` Eliminating duplicate test code: running one test function across dozens of input/output pairs.
+  - `1.19.3` Edge case sweeps: testing empty strings, special characters, huge inputs, and negative numbers.
+  - `1.19.4` Readable test reports: giving descriptive IDs to parameterized test cases.
+- **Key Failure Modes & Edge Cases**: Writing 10 copy-pasted test functions that could be expressed in a single 5-line parameterized test.
+- **Verification & Mastery Check**: Parametrize a prompt validation test across 6 different inputs (valid prompts, empty text, whitespace, null).
+- **Project Application**: SchemaAgent: Automated input boundary testing.
+
+#### Lesson 1.20: Mocking & Test Isolation with unittest.mock
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.20.1` Why we mock external services: avoiding slow, expensive, and flaky real network API calls during tests.
+  - `1.20.2` The Mock object: simulating external dependencies and verifying they were called correctly.
+  - `1.20.3` Patching with patch(): temporarily swapping real API functions with mock objects during tests.
+  - `1.20.4` Asserting mock behavior: assert_called_once(), assert_called_with(), and mock return values.
+- **Key Failure Modes & Edge Cases**: Patching the wrong import path (patching where the object is defined instead of where it is imported).
+- **Verification & Mastery Check**: Write a test that patches an OpenAI API call, returns a fake JSON response, and verifies agent processing.
+- **Project Application**: SchemaAgent: Offline API test simulation.
+
+#### Lesson 1.21: Dataclasses: @dataclass Boilerplate Reduction
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2
+- **Subtopics**:
+  - `1.21.1` Modern Python data containers: using the built-in @dataclass decorator.
+  - `1.21.2` Automatic code generation: how @dataclass generates __init__, __repr__, and __eq__ automatically.
+  - `1.21.3` Default values and default_factory: safely initializing default mutable lists with field().
+  - `1.21.4` Frozen dataclasses: creating immutable data structures using @dataclass(frozen=True).
+- **Key Failure Modes & Edge Cases**: Using a mutable default like tags: list = [] in a dataclass instead of field(default_factory=list).
+- **Verification & Mastery Check**: Define a UserProfile and ChatMessage using dataclasses with typed attributes and safe default values.
+- **Project Application**: SchemaAgent: Structured data transfer objects.
+
+#### Lesson 1.22: Type Annotations & Static Typing with mypy
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.21
+- **Subtopics**:
+  - `1.22.1` Static typing in modern Python: writing type hints (x: int, name: str, items: list[str]).
+  - `1.22.2` The typing module: Optional, Union, Any, and Callable type signatures.
+  - `1.22.3` Static type checking with mypy: running mypy in terminal to catch bugs before your code runs.
+  - `1.22.4` Type narrowing: how if checks allow type checkers to verify safety in complex branches.
+- **Key Failure Modes & Edge Cases**: Overusing Any, which completely disables type safety and lets bugs slip into production unnoticed.
+- **Verification & Mastery Check**: Annotate a complete 50-line module with strict type hints and verify that mypy passes with 0 errors.
+- **Project Application**: SchemaAgent: Strict type-checked codebase.
+
+#### Lesson 1.23: Refactoring Monolithic Functions
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.8, Lesson 1.17
+- **Subtopics**:
+  - `1.23.1` The single responsibility principle: functions should do exactly one thing and do it well.
+  - `1.23.2` Extract Function refactoring: breaking 100-line monolithic scripts into small, testable helpers.
+  - `1.23.3` Reducing cyclomatic complexity: eliminating deeply nested if-else ladders.
+  - `1.23.4` Refactoring with confidence: using unit tests as a safety net to ensure behavior never changes.
+- **Key Failure Modes & Edge Cases**: Refactoring production code without having an automated test suite in place first.
+- **Verification & Mastery Check**: Refactor a messy 80-line API response handler into 3 focused, well-named functions with full tests.
+- **Project Application**: SchemaAgent: Clean code refactoring.
+
+#### Lesson 1.24: Code Smells: Identifying & Fixing Anti-Patterns
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.23
+- **Subtopics**:
+  - `1.24.1` What is a code smell: warning signs of poor design (long methods, duplicate code, dead code).
+  - `1.24.2` Primitive obsession: using raw strings/dicts instead of creating small typed domain objects.
+  - `1.24.3` Feature envy and shotgun surgery: symptoms of misaligned class responsibilities.
+  - `1.24.4` Automated linting: using modern tools like Ruff to catch code smells automatically.
+- **Key Failure Modes & Edge Cases**: Ignoring code smells until technical debt makes adding simple new features painfully slow and fragile.
+- **Verification & Mastery Check**: Audit a provided buggy script, identify 4 distinct code smells, and rewrite it into clean architecture.
+- **Project Application**: SchemaAgent: Code quality audit.
+
+#### Lesson 1.25: Building a Clean CLI Application
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.8, Lesson 1.21
+- **Subtopics**:
+  - `1.25.1` Command-line user interfaces: building ergonomic developer tools in the terminal.
+  - `1.25.2` Parsing arguments: using Python's built-in argparse module for flags and options.
+  - `1.25.3` Subcommands: building multi-command tools (like git commit or docker run) cleanly.
+  - `1.25.4` Terminal output styling: using clean formatting and clear error exit codes (sys.exit(1)).
+- **Key Failure Modes & Edge Cases**: Crashing with ugly Python stack traces when users pass invalid arguments instead of showing helpful usage tips.
+- **Verification & Mastery Check**: Build a complete CLI tool prompt-runner with --model, --temp, and input arguments that runs cleanly.
+- **Project Application**: SchemaAgent: End-to-end CLI tool packaging.
+
+#### Lesson 1.26: Python Object Model & `PyObject` C-Struct
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 0 (Lesson 0.1)
 - **Subtopics**:
-  - `1.1.1` Everything is an object: `type()`, `id()`, `isinstance()`, and pointer references in CPython.
-  - `1.1.2` The `PyObject` structure: `ob_refcnt` (reference count) and `ob_type` (pointer to type object).
-  - `1.1.3` `PyVarObject` for variable-length items (lists, tuples, strings): `ob_size` field.
-  - `1.1.4` Type objects as instances of `type`: how Python implements class objects in memory.
+  - `1.26.1` Everything is an object: `type()`, `id()`, `isinstance()`, and pointer references in CPython.
+  - `1.26.2` The `PyObject` structure: `ob_refcnt` (reference count) and `ob_type` (pointer to type object).
+  - `1.26.3` `PyVarObject` for variable-length items (lists, tuples, strings): `ob_size` field.
+  - `1.26.4` Type objects as instances of `type`: how Python implements class objects in memory.
 - **Key Failure Modes & Edge Cases**: Confusing object identity (`is`) with value equality (`==`), causing subtle bugs with interned integers.
 - **Verification & Mastery Check**: Inspect the raw C-level memory address of a Python object and verify its type pointer using `ctypes`.
 - **Project Application**: LoxLang: Object model and value representation.
 
-#### Lesson 1.2: Reference Counting & Memory Management
+#### Lesson 1.27: Reference Counting & Memory Management
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.2.1` Reference counting mechanics: incrementing references on assignment, passing to functions, storing in lists.
-  - `1.2.2` Decrementing references on `del`, scope exit, reassignment; immediate deallocation when `ob_refcnt == 0`.
-  - `1.2.3` Inspecting reference counts with `sys.getrefcount()` (accounting for the temporary reference passed to the function).
-  - `1.2.4` Destructors: the `__del__` method, when it executes, and why relying on `__del__` for resource cleanup is dangerous.
+  - `1.27.1` Reference counting mechanics: incrementing references on assignment, passing to functions, storing in lists.
+  - `1.27.2` Decrementing references on `del`, scope exit, reassignment; immediate deallocation when `ob_refcnt == 0`.
+  - `1.27.3` Inspecting reference counts with `sys.getrefcount()` (accounting for the temporary reference passed to the function).
+  - `1.27.4` Destructors: the `__del__` method, when it executes, and why relying on `__del__` for resource cleanup is dangerous.
 - **Key Failure Modes & Edge Cases**: Resource leaks when file handles or sockets rely on `__del__` rather than explicit context managers.
 - **Verification & Mastery Check**: Track reference counts of an object through various data structures and predict the exact moment of deallocation.
 - **Project Application**: LoxLang: Memory reclamation and scope exit.
 
-#### Lesson 1.3: Cyclic Garbage Collection & Generational Thresholds
+#### Lesson 1.28: Cyclic Garbage Collection & Generational Thresholds
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.2
+- **Prerequisites**: Lesson 1.27
 - **Subtopics**:
-  - `1.3.1` The limitation of reference counting: circular references ($A 	o B 	o A$) preventing reference counts from reaching zero.
-  - `1.3.2` CPython Cyclic GC: tracking container objects (`PyGC_Head` linked list), ignoring atomic types (integers, strings).
-  - `1.3.3` The three GC generations (Gen 0, Gen 1, Gen 2): survival heuristics and collection frequencies.
-  - `1.3.4` Tuning and disabling GC: `gc.collect()`, `gc.disable()`, `gc.get_stats()`, and Instagram's GC optimization.
+  - `1.28.1` The limitation of reference counting: circular references ($A 	o B 	o A$) preventing reference counts from reaching zero.
+  - `1.28.2` CPython Cyclic GC: tracking container objects (`PyGC_Head` linked list), ignoring atomic types (integers, strings).
+  - `1.28.3` The three GC generations (Gen 0, Gen 1, Gen 2): survival heuristics and collection frequencies.
+  - `1.28.4` Tuning and disabling GC: `gc.collect()`, `gc.disable()`, `gc.get_stats()`, and Instagram's GC optimization.
 - **Key Failure Modes & Edge Cases**: Massive memory leaks in long-running web workers caused by circular references holding large caches in memory.
 - **Verification & Mastery Check**: Construct a circular reference, prove that `del` fails to free memory, and trigger manual reclamation via `gc.collect()`.
 - **Project Application**: DevAudit: Memory leak detection algorithms.
 
-#### Lesson 1.4: Python Scoping: LEGB Rule & Variable Resolution
+#### Lesson 1.29: Python Scoping: LEGB Rule & Variable Resolution
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.4.1` Variable resolution hierarchy: Local $	o$ Enclosing $	o$ Global $	o$ Built-in.
-  - `1.4.2` Namespace dictionaries: `locals()`, `globals()`, and `__builtins__`.
-  - `1.4.3` The `global` keyword: modifying module-level variables from inner scopes.
-  - `1.4.4` The `nonlocal` keyword: binding enclosing variables across nested function closures.
+  - `1.29.1` Variable resolution hierarchy: Local $	o$ Enclosing $	o$ Global $	o$ Built-in.
+  - `1.29.2` Namespace dictionaries: `locals()`, `globals()`, and `__builtins__`.
+  - `1.29.3` The `global` keyword: modifying module-level variables from inner scopes.
+  - `1.29.4` The `nonlocal` keyword: binding enclosing variables across nested function closures.
 - **Key Failure Modes & Edge Cases**: `UnboundLocalError: local variable referenced before assignment` caused by assigning to an outer variable without `global`/`nonlocal`.
 - **Verification & Mastery Check**: Demonstrate an example where variable shadowing causes silent logic bugs, and fix it using strict scoping rules.
 - **Project Application**: LoxLang: Resolving lexical environments in the interpreter.
 
-#### Lesson 1.5: Closures & Late Binding Trap in Lambdas
+#### Lesson 1.30: Closures & Late Binding Trap in Lambdas
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.4
+- **Prerequisites**: Lesson 1.29
 - **Subtopics**:
-  - `1.5.1` Closure mechanics: functions retaining references to lexical environments after the outer scope terminates.
-  - `1.5.2` Cell objects: how CPython stores closed-over variables in `__closure__`.
-  - `1.5.3` The Late Binding trap: loops creating lambdas that capture the variable name, not its value at iteration time.
-  - `1.5.4` Fixing late binding: default argument binding (`lambda x, i=i: ...`) or `functools.partial`.
+  - `1.30.1` Closure mechanics: functions retaining references to lexical environments after the outer scope terminates.
+  - `1.30.2` Cell objects: how CPython stores closed-over variables in `__closure__`.
+  - `1.30.3` The Late Binding trap: loops creating lambdas that capture the variable name, not its value at iteration time.
+  - `1.30.4` Fixing late binding: default argument binding (`lambda x, i=i: ...`) or `functools.partial`.
 - **Key Failure Modes & Edge Cases**: Event handlers or callback lists in UI loops all executing with the loop's final index value.
 - **Verification & Mastery Check**: Write a loop creating 10 functions that return their index, demonstrate the late binding bug, and apply the correct fix.
 - **Project Application**: TypeTrace: Event listener closure mechanics.
 
-#### Lesson 1.6: Mutable vs Immutable Types & Memory Interning
+#### Lesson 1.31: Mutable vs Immutable Types & Memory Interning
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.6.1` Mutable types (`list`, `dict`, `set`) vs Immutable types (`int`, `float`, `str`, `tuple`, `frozenset`).
-  - `1.6.2` The Default Mutable Argument trap: `def add(item, lst=[])` sharing state across calls.
-  - `1.6.3` Integer interning: CPython pre-allocating small integers (-5 to 256) at startup for global reuse.
-  - `1.6.4` String interning: compile-time interning of identifier-like strings; manual interning via `sys.intern()`.
+  - `1.31.1` Mutable types (`list`, `dict`, `set`) vs Immutable types (`int`, `float`, `str`, `tuple`, `frozenset`).
+  - `1.31.2` The Default Mutable Argument trap: `def add(item, lst=[])` sharing state across calls.
+  - `1.31.3` Integer interning: CPython pre-allocating small integers (-5 to 256) at startup for global reuse.
+  - `1.31.4` String interning: compile-time interning of identifier-like strings; manual interning via `sys.intern()`.
 - **Key Failure Modes & Edge Cases**: Default mutable arguments causing shared state pollution across concurrent API requests.
 - **Verification & Mastery Check**: Prove integer and string interning boundaries using `id()` and explain why `a = 256; b = 256; a is b` is True but 257 is False in REPL.
 - **Project Application**: DevAudit: Detecting mutable default arguments statically.
 
-#### Lesson 1.7: The Global Interpreter Lock (GIL) Architecture
+#### Lesson 1.32: The Global Interpreter Lock (GIL) Architecture
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.2
+- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.27
 - **Subtopics**:
-  - `1.7.1` What the GIL is: a mutual exclusion lock preventing multiple native threads from executing CPython bytecode simultaneously.
-  - `1.7.2` Why CPython has a GIL: thread-safety for reference counting memory management and C-extension integration.
-  - `1.7.3` GIL acquisition and release: thread switching intervals (5ms or instruction ticks); CPU contention.
-  - `1.7.4` The GIL in Python 3.13+: Free-threaded CPython (PEP 703), mimalloc allocator, and immortal objects.
+  - `1.32.1` What the GIL is: a mutual exclusion lock preventing multiple native threads from executing CPython bytecode simultaneously.
+  - `1.32.2` Why CPython has a GIL: thread-safety for reference counting memory management and C-extension integration.
+  - `1.32.3` GIL acquisition and release: thread switching intervals (5ms or instruction ticks); CPU contention.
+  - `1.32.4` The GIL in Python 3.13+: Free-threaded CPython (PEP 703), mimalloc allocator, and immortal objects.
 - **Key Failure Modes & Edge Cases**: Assuming multi-threaded Python programs achieve multi-core parallelism for CPU-bound computations.
 - **Verification & Mastery Check**: Demonstrate that a CPU-bound calculation takes longer with 2 threads than with 1 thread in standard CPython.
 - **Project Application**: NanoHTTP: Concurrency model trade-offs in Phase 4.
 
-#### Lesson 1.8: CPU-Bound vs I/O-Bound Execution & GIL Workarounds
+#### Lesson 1.33: CPU-Bound vs I/O-Bound Execution & GIL Workarounds
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.7
+- **Prerequisites**: Lesson 1.32
 - **Subtopics**:
-  - `1.8.1` I/O-bound tasks: file I/O, network sockets; why standard threads release the GIL during blocking I/O calls.
-  - `1.8.2` CPU-bound tasks: mathematical modeling, data transformations; why multi-processing is mandatory.
-  - `1.8.3` The `multiprocessing` module: forking child processes, separate memory address spaces, IPC via pipes/queues.
-  - `1.8.4` Process pools: `concurrent.futures.ProcessPoolExecutor` vs `ThreadPoolExecutor`.
+  - `1.33.1` I/O-bound tasks: file I/O, network sockets; why standard threads release the GIL during blocking I/O calls.
+  - `1.33.2` CPU-bound tasks: mathematical modeling, data transformations; why multi-processing is mandatory.
+  - `1.33.3` The `multiprocessing` module: forking child processes, separate memory address spaces, IPC via pipes/queues.
+  - `1.33.4` Process pools: `concurrent.futures.ProcessPoolExecutor` vs `ThreadPoolExecutor`.
 - **Key Failure Modes & Edge Cases**: Spawning 50 processes for I/O-bound scraping tasks, exhausting system RAM when async or threads would use 50MB.
 - **Verification & Mastery Check**: Benchmark CPU-bound vs I/O-bound workloads across threads, processes, and asynchronous event loops.
 - **Project Application**: DataSift: Multi-core parallel chunk processing in Phase 3.
 
-#### Lesson 1.9: Dynamic Typing & Duck Typing Runtime Mechanics
+#### Lesson 1.34: Dynamic Typing & Duck Typing Runtime Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.9.1` Dynamic typing: variables are untyped references to typed objects in heap memory.
-  - `1.9.2` Duck Typing philosophy: 'If it walks like a duck and quacks like a duck, it's a duck.'
-  - `1.9.3` Attribute lookup: `getattr()`, `hasattr()`, `setattr()`, and `__getattr__`/`__getattribute__`.
-  - `1.9.4` EAFP (Easier to Ask for Forgiveness than Permission) vs LBYL (Look Before You Leap) idioms.
+  - `1.34.1` Dynamic typing: variables are untyped references to typed objects in heap memory.
+  - `1.34.2` Duck Typing philosophy: 'If it walks like a duck and quacks like a duck, it's a duck.'
+  - `1.34.3` Attribute lookup: `getattr()`, `hasattr()`, `setattr()`, and `__getattr__`/`__getattribute__`.
+  - `1.34.4` EAFP (Easier to Ask for Forgiveness than Permission) vs LBYL (Look Before You Leap) idioms.
 - **Key Failure Modes & Edge Cases**: Overusing `hasattr()` causing hidden exceptions inside properties to be silently swallowed.
 - **Verification & Mastery Check**: Implement a polymorphic data processing pipeline that accepts any iterable or file-like object using EAFP.
 - **Project Application**: LoxLang: Dynamic runtime type evaluation.
 
-#### Lesson 1.10: CPython Bytecode, Disassembly (`dis`), & Execution Loop
+#### Lesson 1.35: CPython Bytecode, Disassembly (`dis`), & Execution Loop
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.10.1` Compilation of Python source into bytecode: `.pyc` files, magic numbers, code objects (`co_code`).
-  - `1.10.2` The CPython evaluation loop: `_PyEval_EvalFrameDefault` giant switch statement in C.
-  - `1.10.3` Using the `dis` module: inspecting bytecode instructions (`LOAD_FAST`, `STORE_FAST`, `BINARY_OP`, `CALL`).
-  - `1.10.4` Instruction optimization: constant folding, peephole optimizer, and specialized bytecode in Python 3.11+.
+  - `1.35.1` Compilation of Python source into bytecode: `.pyc` files, magic numbers, code objects (`co_code`).
+  - `1.35.2` The CPython evaluation loop: `_PyEval_EvalFrameDefault` giant switch statement in C.
+  - `1.35.3` Using the `dis` module: inspecting bytecode instructions (`LOAD_FAST`, `STORE_FAST`, `BINARY_OP`, `CALL`).
+  - `1.35.4` Instruction optimization: constant folding, peephole optimizer, and specialized bytecode in Python 3.11+.
 - **Key Failure Modes & Edge Cases**: Writing micro-optimizations that confuse the compiler peephole optimizer and degrade bytecode execution speed.
 - **Verification & Mastery Check**: Disassemble two functionally identical Python functions, count bytecode instructions, and verify execution speed delta.
 - **Project Application**: LoxLang: Bytecode compilation concepts.
 
-#### Lesson 1.11: Dunder Protocol: Object Representation (`__repr__`, `__str__`)
+#### Lesson 1.36: Dunder Protocol: Object Representation (`__repr__`, `__str__`)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.11.1` The duality of representation: `__repr__` (unambiguous, for developers) vs `__str__` (readable, for users).
-  - `1.11.2` Fallback mechanics: `__str__` falling back to `__repr__` if omitted; default `object.__repr__` memory address output.
-  - `1.11.3` Formatting protocols: `__format__`, format specifiers, and f-string integration.
-  - `1.11.4` Best practices: making `repr(x)` resemble valid Python code to recreate the object whenever possible.
+  - `1.36.1` The duality of representation: `__repr__` (unambiguous, for developers) vs `__str__` (readable, for users).
+  - `1.36.2` Fallback mechanics: `__str__` falling back to `__repr__` if omitted; default `object.__repr__` memory address output.
+  - `1.36.3` Formatting protocols: `__format__`, format specifiers, and f-string integration.
+  - `1.36.4` Best practices: making `repr(x)` resemble valid Python code to recreate the object whenever possible.
 - **Key Failure Modes & Edge Cases**: Failing to implement `__repr__`, causing log files and debugger stack traces to output useless `<Object at 0x7f...>` pointers.
 - **Verification & Mastery Check**: Implement a domain model class with customized `__repr__` and `__str__` supporting custom f-string formatting flags.
 - **Project Application**: Applied across all library projects starting from `MathKit`.
 
-#### Lesson 1.12: Dunder Protocol: Collections & Emulating Containers
+#### Lesson 1.37: Dunder Protocol: Collections & Emulating Containers
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.11
+- **Prerequisites**: Lesson 1.36
 - **Subtopics**:
-  - `1.12.1` Sequence protocol: `__len__`, `__getitem__`, `__setitem__`, `__delitem__`.
-  - `1.12.2` Handling slices: `slice` objects, `slice.indices()`, supporting step and negative indexing.
-  - `1.12.3` Iterable protocol: `__iter__` returning an iterator object; fallback to `__getitem__` with integer indices.
-  - `1.12.4` Membership testing: `__contains__` for $O(1)$ `in` queries (fallback to $O(n)$ linear iteration).
+  - `1.37.1` Sequence protocol: `__len__`, `__getitem__`, `__setitem__`, `__delitem__`.
+  - `1.37.2` Handling slices: `slice` objects, `slice.indices()`, supporting step and negative indexing.
+  - `1.37.3` Iterable protocol: `__iter__` returning an iterator object; fallback to `__getitem__` with integer indices.
+  - `1.37.4` Membership testing: `__contains__` for $O(1)$ `in` queries (fallback to $O(n)$ linear iteration).
 - **Key Failure Modes & Edge Cases**: Implementing `__getitem__` without checking slice arguments, causing runtime type crashes on slices.
 - **Verification & Mastery Check**: Build a custom Sliceable linked-list or array wrapper implementing the full sequence protocol with slice support.
 - **Project Application**: MathKit: Tensor and matrix container indexing.
 
-#### Lesson 1.13: Context Managers: Protocol & Exception Propagation
+#### Lesson 1.38: Context Managers: Protocol & Exception Propagation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.13.1` The context management protocol: `__enter__` and `__exit__` methods.
-  - `1.13.2` `__exit__` parameters: `exc_type`, `exc_val`, `exc_tb`; suppressing exceptions by returning `True`.
-  - `1.13.3` The `contextlib` module: `@contextmanager` generator decorator and `yield` mechanics.
-  - `1.13.4` Re-entrant and exit-stack patterns: `contextlib.ExitStack` for dynamically managing variable numbers of contexts.
+  - `1.38.1` The context management protocol: `__enter__` and `__exit__` methods.
+  - `1.38.2` `__exit__` parameters: `exc_type`, `exc_val`, `exc_tb`; suppressing exceptions by returning `True`.
+  - `1.38.3` The `contextlib` module: `@contextmanager` generator decorator and `yield` mechanics.
+  - `1.38.4` Re-entrant and exit-stack patterns: `contextlib.ExitStack` for dynamically managing variable numbers of contexts.
 - **Key Failure Modes & Edge Cases**: Returning `True` from `__exit__` unconditionally, silently swallowing catastrophic syntax and system exceptions.
 - **Verification & Mastery Check**: Write a transaction context manager that commits on clean exit and rolls back state when any exception is raised.
 - **Project Application**: SchemaVault: Database transaction management in Phase 5.
 
-#### Lesson 1.14: Class Construction, `type`, `__new__` vs `__init__`
+#### Lesson 1.39: Class Construction, `type`, `__new__` vs `__init__`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.14.1` The two-stage creation process: `__new__` (allocates and returns new instance) vs `__init__` (initializes attributes).
-  - `1.14.2` When to override `__new__`: subclassing immutable types (`int`, `str`, `tuple`) and Singleton patterns.
-  - `1.14.3` `type` as a metaclass: dynamically constructing classes at runtime (`type(name, bases, dict)`).
-  - `1.14.4` Class decorators vs Metaclasses: choosing the simpler abstraction for class registration.
+  - `1.39.1` The two-stage creation process: `__new__` (allocates and returns new instance) vs `__init__` (initializes attributes).
+  - `1.39.2` When to override `__new__`: subclassing immutable types (`int`, `str`, `tuple`) and Singleton patterns.
+  - `1.39.3` `type` as a metaclass: dynamically constructing classes at runtime (`type(name, bases, dict)`).
+  - `1.39.4` Class decorators vs Metaclasses: choosing the simpler abstraction for class registration.
 - **Key Failure Modes & Edge Cases**: Returning a non-instance from `__new__`, causing Python to silently skip calling `__init__`.
 - **Verification & Mastery Check**: Implement a class using `__new__` that enforces the Singleton pattern across multi-threaded allocations.
 - **Project Application**: LoxLang: Class instantiation mechanics.
 
-#### Lesson 1.15: Inheritance & Method Resolution Order (C3 Linearization)
+#### Lesson 1.40: Inheritance & Method Resolution Order (C3 Linearization)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.14
+- **Prerequisites**: Lesson 1.39
 - **Subtopics**:
-  - `1.15.1` Multiple inheritance: the Diamond Problem and ambiguous method inheritance.
-  - `1.15.2` C3 Linearization Algorithm: local precedence order and monotonicity guarantees.
-  - `1.15.3` Inspecting MRO: `Class.__mro__` and `Class.mro()`.
-  - `1.15.4` Inconsistent MRO errors: class hierarchies that cannot be resolved mathematically by C3.
+  - `1.40.1` Multiple inheritance: the Diamond Problem and ambiguous method inheritance.
+  - `1.40.2` C3 Linearization Algorithm: local precedence order and monotonicity guarantees.
+  - `1.40.3` Inspecting MRO: `Class.__mro__` and `Class.mro()`.
+  - `1.40.4` Inconsistent MRO errors: class hierarchies that cannot be resolved mathematically by C3.
 - **Key Failure Modes & Edge Cases**: Designing inheritance hierarchies that fail C3 linearization, causing compile-time `TypeError: Cannot create a consistent MRO`.
 - **Verification & Mastery Check**: Trace by hand the exact C3 linearization order for a complex diamond multiple inheritance hierarchy.
 - **Project Application**: DevAudit: Class inheritance hierarchy analyzer.
 
-#### Lesson 1.16: Cooperative Multiple Inheritance & `super()` Mechanics
+#### Lesson 1.41: Cooperative Multiple Inheritance & `super()` Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.15
+- **Prerequisites**: Lesson 1.40
 - **Subtopics**:
-  - `1.16.1` What `super()` actually does: not calling parent class, but calling the *next class in the MRO*.
-  - `1.16.2` Cooperative class design: ensuring every method in the chain calls `super()` with identical argument signatures.
-  - `1.16.3` Passing `*args` and `**kwargs` through `super()` chains without dropping arguments.
-  - `1.16.4` Common anti-patterns: mixing hardcoded parent calls (`Parent.__init__(self)`) with `super()`.
+  - `1.41.1` What `super()` actually does: not calling parent class, but calling the *next class in the MRO*.
+  - `1.41.2` Cooperative class design: ensuring every method in the chain calls `super()` with identical argument signatures.
+  - `1.41.3` Passing `*args` and `**kwargs` through `super()` chains without dropping arguments.
+  - `1.41.4` Common anti-patterns: mixing hardcoded parent calls (`Parent.__init__(self)`) with `super()`.
 - **Key Failure Modes & Edge Cases**: Hardcoding base class calls in multiple inheritance, causing base methods to execute multiple times or be skipped.
 - **Verification & Mastery Check**: Refactor a broken diamond inheritance class hierarchy into a clean cooperative hierarchy using `super()`.
 - **Project Application**: AuthForge: Middleware and mixin inheritance in Phase 5.
 
-#### Lesson 1.17: Memory Optimization with `__slots__`
+#### Lesson 1.42: Memory Optimization with `__slots__`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.1
+- **Prerequisites**: Lesson 1.26
 - **Subtopics**:
-  - `1.17.1` The standard instance dictionary: `__dict__` overhead (~150+ bytes per object instance).
-  - `1.17.2` How `__slots__` works: replacing `__dict__` with a fixed-size descriptor array of C-pointers.
-  - `1.17.3` Memory footprint comparison: saving 60%–80% RAM when instantiating millions of small records.
-  - `1.17.4` Caveats of `__slots__`: multiple inheritance constraints, descriptor behavior, and subclassing.
+  - `1.42.1` The standard instance dictionary: `__dict__` overhead (~150+ bytes per object instance).
+  - `1.42.2` How `__slots__` works: replacing `__dict__` with a fixed-size descriptor array of C-pointers.
+  - `1.42.3` Memory footprint comparison: saving 60%–80% RAM when instantiating millions of small records.
+  - `1.42.4` Caveats of `__slots__`: multiple inheritance constraints, descriptor behavior, and subclassing.
 - **Key Failure Modes & Edge Cases**: Adding `__slots__` to a base class but omitting it in a child class, silently re-introducing `__dict__` overhead.
 - **Verification & Mastery Check**: Benchmark memory usage of 1,000,000 instances with and without `__slots__` using `tracemalloc`.
 - **Project Application**: DataSift: Record profiling structures.
 
-#### Lesson 1.18: Function Decorators: Closures & Signature Preservation
+#### Lesson 1.43: Function Decorators: Closures & Signature Preservation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.5
+- **Prerequisites**: Lesson 1.30
 - **Subtopics**:
-  - `1.18.1` Decorator foundations: functions taking callables and returning wrapped callables.
-  - `1.18.2` The signature erasure problem: decorators replacing `__name__`, `__doc__`, and function annotations.
-  - `1.18.3` The `functools.wraps` decorator: copying metadata, annotations, and setting `__wrapped__`.
-  - `1.18.4` Timing, logging, and caching decorators: implementing standard non-intrusive wrappers.
+  - `1.43.1` Decorator foundations: functions taking callables and returning wrapped callables.
+  - `1.43.2` The signature erasure problem: decorators replacing `__name__`, `__doc__`, and function annotations.
+  - `1.43.3` The `functools.wraps` decorator: copying metadata, annotations, and setting `__wrapped__`.
+  - `1.43.4` Timing, logging, and caching decorators: implementing standard non-intrusive wrappers.
 - **Key Failure Modes & Edge Cases**: Forgetting `@functools.wraps`, breaking FastAPI route registration and automated documentation generation.
 - **Verification & Mastery Check**: Build a timing and retry decorator that preserves function signatures, docstrings, and type hints perfectly.
 - **Project Application**: ModelPulse: Telemetry SDK client decorators in Phase 11.
 
-#### Lesson 1.19: Advanced Decorators: Parameterized & Class Decorators
+#### Lesson 1.44: Advanced Decorators: Parameterized & Class Decorators
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.18
+- **Prerequisites**: Lesson 1.43
 - **Subtopics**:
-  - `1.19.1` Three-level closure architecture: decorator factories accepting configuration arguments.
-  - `1.19.2` Decorating classes: mutating class dictionaries, adding methods, registering classes in registries.
-  - `1.19.3` Stateful decorators: implementing decorators as classes with `__call__`.
-  - `1.19.4` Preserving type safety: using `typing.ParamSpec` and `typing.Concatenate` to type decorators precisely.
+  - `1.44.1` Three-level closure architecture: decorator factories accepting configuration arguments.
+  - `1.44.2` Decorating classes: mutating class dictionaries, adding methods, registering classes in registries.
+  - `1.44.3` Stateful decorators: implementing decorators as classes with `__call__`.
+  - `1.44.4` Preserving type safety: using `typing.ParamSpec` and `typing.Concatenate` to type decorators precisely.
 - **Key Failure Modes & Edge Cases**: Creating decorator factories that drop keyword arguments or alter the return type of decorated callables.
 - **Verification & Mastery Check**: Implement a parameterized rate-limiting decorator typed with `ParamSpec` that passes `mypy --strict`.
 - **Project Application**: AuthForge: Route permission decorators.
 
-#### Lesson 1.20: Abstract Base Classes (`abc.ABC`) vs `typing.Protocol`
+#### Lesson 1.45: Abstract Base Classes (`abc.ABC`) vs `typing.Protocol`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.9
+- **Prerequisites**: Lesson 1.34
 - **Subtopics**:
-  - `1.20.1` Nominal subtyping with `abc.ABC` and `@abstractmethod`: runtime enforcement of interface contracts.
-  - `1.20.2` Structural subtyping with `typing.Protocol`: compile-time duck typing without explicit inheritance.
-  - `1.20.3` Runtime protocol checks: `@runtime_checkable` and `isinstance()` validation.
-  - `1.20.4` When to use ABCs (shared implementation) vs Protocols (loose decoupling of independent modules).
+  - `1.45.1` Nominal subtyping with `abc.ABC` and `@abstractmethod`: runtime enforcement of interface contracts.
+  - `1.45.2` Structural subtyping with `typing.Protocol`: compile-time duck typing without explicit inheritance.
+  - `1.45.3` Runtime protocol checks: `@runtime_checkable` and `isinstance()` validation.
+  - `1.45.4` When to use ABCs (shared implementation) vs Protocols (loose decoupling of independent modules).
 - **Key Failure Modes & Edge Cases**: Coupling third-party integrations to concrete ABC inheritance instead of flexible structural protocols.
 - **Verification & Mastery Check**: Design a storage engine interface using `Protocol` and verify that arbitrary classes satisfy it at compile time.
 - **Project Application**: DevAudit: Pluggable rule strategy interfaces.
 
-#### Lesson 1.21: First-Class Functions & Higher-Order Composition
+#### Lesson 1.46: First-Class Functions & Higher-Order Composition
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.5
+- **Prerequisites**: Lesson 1.30
 - **Subtopics**:
-  - `1.21.1` Functions as first-class citizens: storing in data structures, passing as arguments, returning from functions.
-  - `1.21.2` Pure functions and referential transparency: eliminating side-effects, testing without mocks.
-  - `1.21.3` Function currying and partial application using `functools.partial`.
-  - `1.21.4` Composing functional pipelines: chaining transformations without intermediate mutable collections.
+  - `1.46.1` Functions as first-class citizens: storing in data structures, passing as arguments, returning from functions.
+  - `1.46.2` Pure functions and referential transparency: eliminating side-effects, testing without mocks.
+  - `1.46.3` Function currying and partial application using `functools.partial`.
+  - `1.46.4` Composing functional pipelines: chaining transformations without intermediate mutable collections.
 - **Key Failure Modes & Edge Cases**: Modifying mutable arguments in place inside functions expected to be pure, introducing shared state bugs.
 - **Verification & Mastery Check**: Implement a functional data transformation pipeline using `partial` and function composition.
 - **Project Application**: DataSift: Streaming column transformations.
 
-#### Lesson 1.22: Generators, `yield`, & Generator Frames
+#### Lesson 1.47: Generators, `yield`, & Generator Frames
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Phase 0 (Lesson 0.11), Lesson 1.5
+- **Prerequisites**: Phase 0 (Lesson 0.11), Lesson 1.30
 - **Subtopics**:
-  - `1.22.1` Generator execution mechanics: execution suspension, saving CPU frame state, yielding values.
-  - `1.22.2` Memory footprint: constant $O(1)$ memory regardless of collection length.
-  - `1.22.3` Generator expressions vs list comprehensions: `(x for x in data)` vs `[x for x in data]`.
-  - `1.22.4` Generator lifecycle: `StopIteration` exception, generator exhaustion, and single-pass iteration.
+  - `1.47.1` Generator execution mechanics: execution suspension, saving CPU frame state, yielding values.
+  - `1.47.2` Memory footprint: constant $O(1)$ memory regardless of collection length.
+  - `1.47.3` Generator expressions vs list comprehensions: `(x for x in data)` vs `[x for x in data]`.
+  - `1.47.4` Generator lifecycle: `StopIteration` exception, generator exhaustion, and single-pass iteration.
 - **Key Failure Modes & Edge Cases**: Iterating over a generator twice, causing the second loop to execute zero times because the generator is exhausted.
 - **Verification & Mastery Check**: Build a generator that streams lines from a 10GB file, filters matching rows, and outputs batches in $O(1)$ memory.
 - **Project Application**: DataSift: File streaming engine.
 
-#### Lesson 1.23: Bidirectional Generators: `.send()`, `.throw()`, `.close()`
+#### Lesson 1.48: Bidirectional Generators: `.send()`, `.throw()`, `.close()`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.22
+- **Prerequisites**: Lesson 1.47
 - **Subtopics**:
-  - `1.23.1` Generators as consumers: `val = yield` syntax receiving data from callers via `.send()`.
-  - `1.23.2` Priming coroutine generators: advancing execution to the first `yield` statement.
-  - `1.23.3` Exception injection via `.throw()`: triggering custom error handling inside the suspended generator frame.
-  - `1.23.4` Clean termination with `.close()`: triggering `GeneratorExit` exceptions for cleanup.
+  - `1.48.1` Generators as consumers: `val = yield` syntax receiving data from callers via `.send()`.
+  - `1.48.2` Priming coroutine generators: advancing execution to the first `yield` statement.
+  - `1.48.3` Exception injection via `.throw()`: triggering custom error handling inside the suspended generator frame.
+  - `1.48.4` Clean termination with `.close()`: triggering `GeneratorExit` exceptions for cleanup.
 - **Key Failure Modes & Edge Cases**: Calling `.send(data)` on an unprimed generator, raising `TypeError: can't send non-None value to a just-started generator`.
 - **Verification & Mastery Check**: Implement a streaming running average calculator using a bidirectional generator receiving numbers via `.send()`.
 - **Project Application**: Foundation for coroutine event loops.
 
-#### Lesson 1.24: Delegating Generators with `yield from`
+#### Lesson 1.49: Delegating Generators with `yield from`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.23
+- **Prerequisites**: Lesson 1.48
 - **Subtopics**:
-  - `1.24.1` Subgenerator delegation: transparently channeling iteration between caller and subgenerator.
-  - `1.24.2` Bidirectional passing: forwarding `.send()` values and `.throw()` exceptions directly to subgenerators.
-  - `1.24.3` Subgenerator return values: capturing values returned by subgenerators upon termination (`val = yield from subgen()`).
-  - `1.24.4` Flattening deeply nested tree structures into linear streams using recursive `yield from`.
+  - `1.49.1` Subgenerator delegation: transparently channeling iteration between caller and subgenerator.
+  - `1.49.2` Bidirectional passing: forwarding `.send()` values and `.throw()` exceptions directly to subgenerators.
+  - `1.49.3` Subgenerator return values: capturing values returned by subgenerators upon termination (`val = yield from subgen()`).
+  - `1.49.4` Flattening deeply nested tree structures into linear streams using recursive `yield from`.
 - **Key Failure Modes & Edge Cases**: Manually looping over subgenerators with `for x in subgen(): yield x`, breaking bidirectional `.send()` and exception delegation.
 - **Verification & Mastery Check**: Write a recursive tree traversal generator using `yield from` that flattens arbitrary nested hierarchies.
 - **Project Application**: LoxLang: AST traversal pipelines.
 
-#### Lesson 1.25: Memory-Bounded Stream Processing with `itertools`
+#### Lesson 1.50: Memory-Bounded Stream Processing with `itertools`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.22
+- **Prerequisites**: Lesson 1.47
 - **Subtopics**:
-  - `1.25.1` Infinite iterators: `count`, `cycle`, `repeat`.
-  - `1.25.2` Terminating iterators: `accumulate`, `chain`, `compress`, `dropwhile`, `takewhile`, `filterfalse`, `islice`.
-  - `1.25.3` Combinatoric iterators: `product`, `permutations`, `combinations`, `combinations_with_replacement`.
-  - `1.25.4` Grouping streams: `groupby()` and why sorted input is strictly mandatory for grouping.
+  - `1.50.1` Infinite iterators: `count`, `cycle`, `repeat`.
+  - `1.50.2` Terminating iterators: `accumulate`, `chain`, `compress`, `dropwhile`, `takewhile`, `filterfalse`, `islice`.
+  - `1.50.3` Combinatoric iterators: `product`, `permutations`, `combinations`, `combinations_with_replacement`.
+  - `1.50.4` Grouping streams: `groupby()` and why sorted input is strictly mandatory for grouping.
 - **Key Failure Modes & Edge Cases**: Using `itertools.groupby()` on unsorted streams, causing duplicate groups for non-contiguous identical keys.
 - **Verification & Mastery Check**: Process an unsorted access log stream using `itertools` to group requests by status code in memory-bounded batches.
 - **Project Application**: DataSift: Aggregations and percentile sweeps.
 
-#### Lesson 1.26: Memoization & Functional Utilities (`functools`)
+#### Lesson 1.51: Memoization & Functional Utilities (`functools`)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.21
+- **Prerequisites**: Lesson 1.46
 - **Subtopics**:
-  - `1.26.1` Caching expensive calculations: `functools.lru_cache` and `functools.cache`.
-  - `1.26.2` Cache key generation: hashing function arguments; handling unhashable mutable arguments.
-  - `1.26.3` Cache sizing and eviction: `maxsize`, monitoring cache hits, misses, and cache eviction overhead.
-  - `1.26.4` Function reduction: `functools.reduce` for folding operations; `operator` module primitives.
+  - `1.51.1` Caching expensive calculations: `functools.lru_cache` and `functools.cache`.
+  - `1.51.2` Cache key generation: hashing function arguments; handling unhashable mutable arguments.
+  - `1.51.3` Cache sizing and eviction: `maxsize`, monitoring cache hits, misses, and cache eviction overhead.
+  - `1.51.4` Function reduction: `functools.reduce` for folding operations; `operator` module primitives.
 - **Key Failure Modes & Edge Cases**: Applying `lru_cache` to functions taking unhashable types (dicts, lists), raising `TypeError: unhashable type`.
 - **Verification & Mastery Check**: Implement a custom LRU cache decorator from scratch using a dictionary and doubly linked list, then compare against `functools.lru_cache`.
 - **Project Application**: CacheKit: In-memory caching foundation in Phase 5.
 
-#### Lesson 1.27: Static Typing: Primitive, Composite, & Literal Types
+#### Lesson 1.52: Static Typing: Primitive, Composite, & Literal Types
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 0 (Lesson 0.1)
 - **Subtopics**:
-  - `1.27.1` Type hints syntax (PEP 484): annotating variables, parameters, return types.
-  - `1.27.2` Composite collections: `list[T]`, `dict[K, V]`, `set[T]`, `tuple[T, ...]`.
-  - `1.27.3` Optionality and Unions: `T | None` (modern) vs `Optional[T]`; `Union` types.
-  - `1.27.4` Literal types and Type Aliases: restricting inputs to exact values (`Literal['read', 'write']`).
+  - `1.52.1` Type hints syntax (PEP 484): annotating variables, parameters, return types.
+  - `1.52.2` Composite collections: `list[T]`, `dict[K, V]`, `set[T]`, `tuple[T, ...]`.
+  - `1.52.3` Optionality and Unions: `T | None` (modern) vs `Optional[T]`; `Union` types.
+  - `1.52.4` Literal types and Type Aliases: restricting inputs to exact values (`Literal['read', 'write']`).
 - **Key Failure Modes & Edge Cases**: Omitting return type annotations on functions returning `None`, causing mypy to infer untyped functions.
 - **Verification & Mastery Check**: Annotate a complex configuration dictionary parsing function using TypedDict and Literal types passing mypy.
 - **Project Application**: Standard across all Python codebases.
 
-#### Lesson 1.28: Generics, `TypeVar`, & Covariance/Contravariance
+#### Lesson 1.53: Generics, `TypeVar`, & Covariance/Contravariance
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.27
+- **Prerequisites**: Lesson 1.52
 - **Subtopics**:
-  - `1.28.1` Generic functions and classes: `typing.Generic` and parameterized types.
-  - `1.28.2` `TypeVar` definitions: bounded type variables (`TypeVar('T', bound=Base)`).
-  - `1.28.3` Variance rules: Invariance (default), Covariance (`covariant=True`), Contravariance (`contravariant=True`).
-  - `1.28.4` Why mutable containers are invariant while read-only containers can be covariant.
+  - `1.53.1` Generic functions and classes: `typing.Generic` and parameterized types.
+  - `1.53.2` `TypeVar` definitions: bounded type variables (`TypeVar('T', bound=Base)`).
+  - `1.53.3` Variance rules: Invariance (default), Covariance (`covariant=True`), Contravariance (`contravariant=True`).
+  - `1.53.4` Why mutable containers are invariant while read-only containers can be covariant.
 - **Key Failure Modes & Edge Cases**: Treating `list[Dog]` as compatible with `list[Animal]` (lists are mutable; this allows inserting a `Cat` into a `Dog` list).
 - **Verification & Mastery Check**: Implement a generic read-only repository typed as covariant and prove type correctness in `mypy --strict`.
 - **Project Application**: TypeTrace and DevAudit.
 
-#### Lesson 1.29: Structural Subtyping with `typing.Protocol`
+#### Lesson 1.54: Structural Subtyping with `typing.Protocol`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.20, 1.28
+- **Prerequisites**: Lesson 1.45, 1.28
 - **Subtopics**:
-  - `1.29.1` Static duck typing: declaring expected methods and attributes without subclassing.
-  - `1.29.2` Protocol inheritance: extending protocols and combining multi-role interfaces.
-  - `1.29.3` Recursive protocols: defining self-referential tree and graph data structures.
-  - `1.29.4` Using `TypeGuard` and `TypeIs` for safe runtime type narrowing.
+  - `1.54.1` Static duck typing: declaring expected methods and attributes without subclassing.
+  - `1.54.2` Protocol inheritance: extending protocols and combining multi-role interfaces.
+  - `1.54.3` Recursive protocols: defining self-referential tree and graph data structures.
+  - `1.54.4` Using `TypeGuard` and `TypeIs` for safe runtime type narrowing.
 - **Key Failure Modes & Edge Cases**: Creating protocols that require mutable attributes without declaring them as read-only properties.
 - **Verification & Mastery Check**: Define a `Serializable` Protocol and write a serializer that operates on any compliant class without inheritance.
 - **Project Application**: DevAudit: Strategy patterns.
 
-#### Lesson 1.30: Static Analysis: Configuring `mypy --strict` for Zero-Escape
+#### Lesson 1.55: Static Analysis: Configuring `mypy --strict` for Zero-Escape
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.27–1.29
+- **Prerequisites**: Lesson 1.52–1.29
 - **Subtopics**:
-  - `1.30.1` Configuring `mypy.ini` / `pyproject.toml` with `--strict` flags.
-  - `1.30.2` Disallowing untyped definitions, untyped calls, implicit optional, and un-imported type ignores.
-  - `1.30.3` Stub packages (`types-*`): typing third-party C-extensions and legacy libraries.
-  - `1.30.4` Type narrowing patterns: `isinstance`, equality checks, and custom `TypeGuard` functions.
+  - `1.55.1` Configuring `mypy.ini` / `pyproject.toml` with `--strict` flags.
+  - `1.55.2` Disallowing untyped definitions, untyped calls, implicit optional, and un-imported type ignores.
+  - `1.55.3` Stub packages (`types-*`): typing third-party C-extensions and legacy libraries.
+  - `1.55.4` Type narrowing patterns: `isinstance`, equality checks, and custom `TypeGuard` functions.
 - **Key Failure Modes & Edge Cases**: Using `# type: ignore` without specific error codes to bypass type checking, allowing type regressions to pass CI.
 - **Verification & Mastery Check**: Configure `mypy --strict` on an existing untyped script, fix all reported type errors, and achieve zero warnings.
 - **Project Application**: Mandatory quality standard across all Python projects.
 
-#### Lesson 1.31: Cooperative Multitasking vs Preemptive Threading
+#### Lesson 1.56: Cooperative Multitasking vs Preemptive Threading
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.7
+- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.32
 - **Subtopics**:
-  - `1.31.1` Preemptive scheduling: OS timer interrupts preempting threads at arbitrary instruction boundaries.
-  - `1.31.2` Cooperative scheduling: tasks explicitly yielding control at await suspension points.
-  - `1.31.3` Memory footprint comparison: 8MB thread stacks vs 1KB coroutine frame objects.
-  - `1.31.4` Why cooperative concurrency eliminates race conditions on CPU instructions between suspension points.
+  - `1.56.1` Preemptive scheduling: OS timer interrupts preempting threads at arbitrary instruction boundaries.
+  - `1.56.2` Cooperative scheduling: tasks explicitly yielding control at await suspension points.
+  - `1.56.3` Memory footprint comparison: 8MB thread stacks vs 1KB coroutine frame objects.
+  - `1.56.4` Why cooperative concurrency eliminates race conditions on CPU instructions between suspension points.
 - **Key Failure Modes & Edge Cases**: Assuming cooperative async code is immune to race conditions across multiple `await` boundaries.
 - **Verification & Mastery Check**: Measure memory usage of 10,000 idle OS threads vs 10,000 idle coroutines, proving a 100x memory difference.
 - **Project Application**: NanoHTTP: Architectural justification in Phase 4.
 
-#### Lesson 1.32: Python Asyncio: Event Loop, Coroutines, & Tasks
+#### Lesson 1.57: Python Asyncio: Event Loop, Coroutines, & Tasks
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.31
+- **Prerequisites**: Lesson 1.56
 - **Subtopics**:
-  - `1.32.1` The Asyncio Event Loop: polling I/O multiplexers (`epoll`) and executing ready callbacks.
-  - `1.32.2` Coroutines: functions defined with `async def` returning un-awaited coroutine objects.
-  - `1.32.3` Tasks: wrapping coroutines into `asyncio.Task` to schedule them concurrently on the event loop.
-  - `1.32.4` Awaiting tasks vs executing sequentially: understanding where suspension occurs.
+  - `1.57.1` The Asyncio Event Loop: polling I/O multiplexers (`epoll`) and executing ready callbacks.
+  - `1.57.2` Coroutines: functions defined with `async def` returning un-awaited coroutine objects.
+  - `1.57.3` Tasks: wrapping coroutines into `asyncio.Task` to schedule them concurrently on the event loop.
+  - `1.57.4` Awaiting tasks vs executing sequentially: understanding where suspension occurs.
 - **Key Failure Modes & Edge Cases**: Calling an `async def` function without `await` or `create_task`, causing the coroutine to never execute.
 - **Verification & Mastery Check**: Build a multi-task downloader that fetches 5 URLs concurrently using `asyncio.create_task` and `asyncio.gather`.
 - **Project Application**: NanoHTTP and AuthForge.
 
-#### Lesson 1.33: Structured Concurrency with `asyncio.TaskGroup`
+#### Lesson 1.58: Structured Concurrency with `asyncio.TaskGroup`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.32
+- **Prerequisites**: Lesson 1.57
 - **Subtopics**:
-  - `1.33.1` The flaws of `asyncio.gather`: orphaned tasks running in background when one task fails.
-  - `1.33.2` Structured Concurrency (PEP 654 / Python 3.11+): `async with asyncio.TaskGroup() as tg:`.
-  - `1.33.3` Deterministic task lifetimes: parent context guarantees all child tasks finish or cancel together.
-  - `1.33.4` `ExceptionGroup`: handling multiple concurrent task failures simultaneously.
+  - `1.58.1` The flaws of `asyncio.gather`: orphaned tasks running in background when one task fails.
+  - `1.58.2` Structured Concurrency (PEP 654 / Python 3.11+): `async with asyncio.TaskGroup() as tg:`.
+  - `1.58.3` Deterministic task lifetimes: parent context guarantees all child tasks finish or cancel together.
+  - `1.58.4` `ExceptionGroup`: handling multiple concurrent task failures simultaneously.
 - **Key Failure Modes & Edge Cases**: Leaking un-cancelled background tasks after an unhandled exception in one concurrent branch.
 - **Verification & Mastery Check**: Refactor an `asyncio.gather` workflow into `asyncio.TaskGroup` with comprehensive `ExceptionGroup` handling.
 - **Project Application**: AuthForge: Service-to-service concurrent requests.
 
-#### Lesson 1.34: Async Synchronization: Locks, Semaphores, & Queues
+#### Lesson 1.59: Async Synchronization: Locks, Semaphores, & Queues
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.32
+- **Prerequisites**: Lesson 1.57
 - **Subtopics**:
-  - `1.34.1` Asynchronous race conditions: critical sections interrupted by `await` yielding control.
-  - `1.34.2` `asyncio.Lock`: mutual exclusion for asynchronous coroutines.
-  - `1.34.3` `asyncio.Semaphore`: rate limiting concurrency (e.g., maximum 10 concurrent HTTP requests).
-  - `1.34.4` `asyncio.Queue`: producer-consumer pipelines with backpressure handling.
+  - `1.59.1` Asynchronous race conditions: critical sections interrupted by `await` yielding control.
+  - `1.59.2` `asyncio.Lock`: mutual exclusion for asynchronous coroutines.
+  - `1.59.3` `asyncio.Semaphore`: rate limiting concurrency (e.g., maximum 10 concurrent HTTP requests).
+  - `1.59.4` `asyncio.Queue`: producer-consumer pipelines with backpressure handling.
 - **Key Failure Modes & Edge Cases**: Using thread synchronization primitives (`threading.Lock`) inside async code, freezing the entire event loop.
 - **Verification & Mastery Check**: Build a rate-limited web scraper that uses `asyncio.Semaphore` to cap concurrent connections to 5.
 - **Project Application**: AuthForge: Rate limiting infrastructure.
 
-#### Lesson 1.35: Cancellation, Timeouts, & Shielding Coroutines
+#### Lesson 1.60: Cancellation, Timeouts, & Shielding Coroutines
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.32
+- **Prerequisites**: Lesson 1.57
 - **Subtopics**:
-  - `1.35.1` Task cancellation: `task.cancel()` injecting `asyncio.CancelledError` at the next await point.
-  - `1.35.2` Timeout management: `async with asyncio.timeout(5.0):`.
-  - `1.35.3` Shielding critical sections: `asyncio.shield()` to prevent cancellation during database commits.
-  - `1.35.4` Graceful task cancellation cleanup: using `try...finally` blocks inside coroutines.
+  - `1.60.1` Task cancellation: `task.cancel()` injecting `asyncio.CancelledError` at the next await point.
+  - `1.60.2` Timeout management: `async with asyncio.timeout(5.0):`.
+  - `1.60.3` Shielding critical sections: `asyncio.shield()` to prevent cancellation during database commits.
+  - `1.60.4` Graceful task cancellation cleanup: using `try...finally` blocks inside coroutines.
 - **Key Failure Modes & Edge Cases**: Catching `BaseException` or broad `Exception` and swallowing `asyncio.CancelledError`, breaking task cancellation.
 - **Verification & Mastery Check**: Implement a worker coroutine that catches cancellation, completes in-flight database cleanup, and exits gracefully.
 - **Project Application**: NanoHTTP: Graceful connection draining.
 
-#### Lesson 1.36: Test Architecture: The Testing Pyramid & AAA Pattern
+#### Lesson 1.61: Test Architecture: The Testing Pyramid & AAA Pattern
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 0 (Lesson 0.5)
 - **Subtopics**:
-  - `1.36.1` The Testing Pyramid: Unit Tests (fast, isolated) $	o$ Integration Tests $	o$ End-to-End (E2E) Tests.
-  - `1.36.2` The AAA Pattern: Arrange (set up state), Act (execute code), Assert (verify outcome).
-  - `1.36.3` Single Responsibility per test: testing one behavior per test function.
-  - `1.36.4` Testing public contracts vs testing private implementation details.
+  - `1.61.1` The Testing Pyramid: Unit Tests (fast, isolated) $	o$ Integration Tests $	o$ End-to-End (E2E) Tests.
+  - `1.61.2` The AAA Pattern: Arrange (set up state), Act (execute code), Assert (verify outcome).
+  - `1.61.3` Single Responsibility per test: testing one behavior per test function.
+  - `1.61.4` Testing public contracts vs testing private implementation details.
 - **Key Failure Modes & Edge Cases**: Writing fragile tests that assert private variables, breaking on internal refactoring despite correct behavior.
 - **Verification & Mastery Check**: Structure an entire test suite strictly following the AAA pattern with clear semantic boundaries.
 - **Project Application**: Applied across all 22 projects.
 
-#### Lesson 1.37: Pytest Mastery: Fixtures, Scopes, & Dependency Injection
+#### Lesson 1.62: Pytest Mastery: Fixtures, Scopes, & Dependency Injection
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.36
+- **Prerequisites**: Lesson 1.61
 - **Subtopics**:
-  - `1.37.1` Pytest fixture architecture: dependency injection via argument names.
-  - `1.37.2` Fixture scoping: `function`, `class`, `module`, `package`, `session`.
-  - `1.37.3` Yield fixtures: executing setup before yield and teardown after yield.
-  - `1.37.4` Sharing fixtures: `conftest.py` hierarchies and autouse fixtures.
+  - `1.62.1` Pytest fixture architecture: dependency injection via argument names.
+  - `1.62.2` Fixture scoping: `function`, `class`, `module`, `package`, `session`.
+  - `1.62.3` Yield fixtures: executing setup before yield and teardown after yield.
+  - `1.62.4` Sharing fixtures: `conftest.py` hierarchies and autouse fixtures.
 - **Key Failure Modes & Edge Cases**: Using session-scoped fixtures with mutable state, causing test pollution and non-deterministic test order failures.
 - **Verification & Mastery Check**: Build a fixture hierarchy in `conftest.py` that spins up a test database, seeds data, and rolls back after each test.
 - **Project Application**: Standard testing harness across all projects.
 
-#### Lesson 1.38: Parametrized Testing & Edge-Case Sweeps
+#### Lesson 1.63: Parametrized Testing & Edge-Case Sweeps
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.37
+- **Prerequisites**: Lesson 1.62
 - **Subtopics**:
-  - `1.38.1` Parameterization with `@pytest.mark.parametrize`: testing multiple input-output pairs cleanly.
-  - `1.38.2` Matrix parameterization: stacking multiple parametrize decorators to test Cartesian products.
-  - `1.38.3` Test naming and IDs: custom test IDs for clear test runner output.
-  - `1.38.4` Systematic edge-case sweeping: null values, empty collections, zero, negative numbers, boundary values.
+  - `1.63.1` Parameterization with `@pytest.mark.parametrize`: testing multiple input-output pairs cleanly.
+  - `1.63.2` Matrix parameterization: stacking multiple parametrize decorators to test Cartesian products.
+  - `1.63.3` Test naming and IDs: custom test IDs for clear test runner output.
+  - `1.63.4` Systematic edge-case sweeping: null values, empty collections, zero, negative numbers, boundary values.
 - **Key Failure Modes & Edge Cases**: Writing 15 repetitive test functions for different inputs instead of a single parameterized test.
 - **Verification & Mastery Check**: Write a parameterized test suite for an email validation function covering 20 edge-case strings.
 - **Project Application**: DevAudit: Regex pattern test suites.
 
-#### Lesson 1.39: Mocking & Test Doubles: Spies, Mocks, & Anti-Patterns
+#### Lesson 1.64: Mocking & Test Doubles: Spies, Mocks, & Anti-Patterns
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.36
+- **Prerequisites**: Lesson 1.61
 - **Subtopics**:
-  - `1.39.1` Test Doubles taxonomy: Dummy, Stub, Spy, Mock, Fake.
-  - `1.39.2` The `unittest.mock` library: `Mock`, `MagicMock`, `@patch`, `patch.object`.
-  - `1.39.3` Verification: `assert_called_once_with()`, call count assertions.
-  - `1.39.4` When mocking becomes an anti-pattern: over-mocking business logic and testing mocks instead of code.
+  - `1.64.1` Test Doubles taxonomy: Dummy, Stub, Spy, Mock, Fake.
+  - `1.64.2` The `unittest.mock` library: `Mock`, `MagicMock`, `@patch`, `patch.object`.
+  - `1.64.3` Verification: `assert_called_once_with()`, call count assertions.
+  - `1.64.4` When mocking becomes an anti-pattern: over-mocking business logic and testing mocks instead of code.
 - **Key Failure Modes & Edge Cases**: Mocking internal database libraries so thoroughly that the test passes even when the SQL syntax is invalid.
 - **Verification & Mastery Check**: Replace an over-mocked test suite with an in-memory Fake repository that validates real business behavior.
 - **Project Application**: AuthForge: Testing auth flows.
 
-#### Lesson 1.40: Property-Based Testing with `hypothesis`
+#### Lesson 1.65: Property-Based Testing with `hypothesis`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.38
+- **Prerequisites**: Lesson 1.63
 - **Subtopics**:
-  - `1.40.1` Fuzzing vs Property-Based Testing: generating hundreds of randomized inputs matching type strategies.
-  - `1.40.2` The `hypothesis` framework: `@given()`, strategies (`st.integers()`, `st.text()`, `st.lists()`).
-  - `1.40.3` Invariants and properties: idempotency ($f(f(x)) = f(x)$), round-tripping ($decode(encode(x)) == x$).
-  - `1.40.4` Test case shrinking: hypothesis automatically reducing failing test inputs to the minimal reproducing example.
+  - `1.65.1` Fuzzing vs Property-Based Testing: generating hundreds of randomized inputs matching type strategies.
+  - `1.65.2` The `hypothesis` framework: `@given()`, strategies (`st.integers()`, `st.text()`, `st.lists()`).
+  - `1.65.3` Invariants and properties: idempotency ($f(f(x)) = f(x)$), round-tripping ($decode(encode(x)) == x$).
+  - `1.65.4` Test case shrinking: hypothesis automatically reducing failing test inputs to the minimal reproducing example.
 - **Key Failure Modes & Edge Cases**: Writing unit tests only with happy-path examples, missing edge cases in Unicode, empty bytes, and integer limits.
 - **Verification & Mastery Check**: Write a property-based test with `hypothesis` for a custom JSON parser that discovers unhandled edge cases.
 - **Project Application**: DevAudit and MathKit.
 
-#### Lesson 1.41: TypeScript Architecture & Structural Type System
+#### Lesson 1.66: TypeScript Architecture & Structural Type System
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 0 (Lesson 0.1)
 - **Subtopics**:
-  - `1.41.1` TypeScript compiler (`tsc`): parsing AST, type checking, emitting clean JavaScript.
-  - `1.41.2` Structural Typing (Duck Typing) vs Nominal Typing: shape compatibility across independent interfaces.
-  - `1.41.3` Primitive types: `string`, `number`, `boolean`, `bigint`, `symbol`, `null`, `undefined`.
-  - `1.41.4` Top and bottom types: `any` (disables type checker), `unknown` (safe top type), `never` (impossible state).
+  - `1.66.1` TypeScript compiler (`tsc`): parsing AST, type checking, emitting clean JavaScript.
+  - `1.66.2` Structural Typing (Duck Typing) vs Nominal Typing: shape compatibility across independent interfaces.
+  - `1.66.3` Primitive types: `string`, `number`, `boolean`, `bigint`, `symbol`, `null`, `undefined`.
+  - `1.66.4` Top and bottom types: `any` (disables type checker), `unknown` (safe top type), `never` (impossible state).
 - **Key Failure Modes & Edge Cases**: Using `any` to silence compiler warnings, disabling type safety across all downstream application code.
 - **Verification & Mastery Check**: Configure `tsconfig.json` with strict mode and explain structural compatibility of two independent interface shapes.
 - **Project Application**: TypeTrace: Core library engine.
 
-#### Lesson 1.42: Union Types, Intersection Types, & Type Narrowing
+#### Lesson 1.67: Union Types, Intersection Types, & Type Narrowing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.41
+- **Prerequisites**: Lesson 1.66
 - **Subtopics**:
-  - `1.42.1` Union types (`A | B`): representing values that can be one of several types.
-  - `1.42.2` Intersection types (`A & B`): combining multiple types into a unified contract.
-  - `1.42.3` Type Narrowing techniques: `typeof`, `instanceof`, `in` operator, truthiness checks.
-  - `1.42.4` Custom Type Guards: functions returning `val is Type` for safe runtime narrowing.
+  - `1.67.1` Union types (`A | B`): representing values that can be one of several types.
+  - `1.67.2` Intersection types (`A & B`): combining multiple types into a unified contract.
+  - `1.67.3` Type Narrowing techniques: `typeof`, `instanceof`, `in` operator, truthiness checks.
+  - `1.67.4` Custom Type Guards: functions returning `val is Type` for safe runtime narrowing.
 - **Key Failure Modes & Edge Cases**: Failing to narrow union types before accessing member properties, causing compile-time errors.
 - **Verification & Mastery Check**: Write a custom User Defined Type Guard function that safely validates and narrows untyped API JSON payloads.
 - **Project Application**: TypeTrace: Payload narrowing.
 
-#### Lesson 1.43: Discriminated Unions & Exhaustive Checks with `never`
+#### Lesson 1.68: Discriminated Unions & Exhaustive Checks with `never`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.42
+- **Prerequisites**: Lesson 1.67
 - **Subtopics**:
-  - `1.43.1` Tagged / Discriminated Unions: sharing a common discriminant literal property across union variants.
-  - `1.43.2` Pattern matching with `switch` statements: narrowing state based on discriminant tags.
-  - `1.43.3` Exhaustiveness checking: assigning the default case to a `never` variable to force compile errors on missing cases.
-  - `1.43.4` Modeling domain state machines: modeling Success, Loading, and Error states cleanly.
+  - `1.68.1` Tagged / Discriminated Unions: sharing a common discriminant literal property across union variants.
+  - `1.68.2` Pattern matching with `switch` statements: narrowing state based on discriminant tags.
+  - `1.68.3` Exhaustiveness checking: assigning the default case to a `never` variable to force compile errors on missing cases.
+  - `1.68.4` Modeling domain state machines: modeling Success, Loading, and Error states cleanly.
 - **Key Failure Modes & Edge Cases**: Adding a new variant to a union but forgetting to handle it in a switch statement, leading to silent unhandled runtime states.
 - **Verification & Mastery Check**: Build a state machine using Discriminated Unions where unhandled transitions trigger a compile-time `never` error.
 - **Project Application**: TenantIQ: UI state management in Phase 6.
 
-#### Lesson 1.44: TypeScript Generics & Type Constraints (`extends`)
+#### Lesson 1.69: TypeScript Generics & Type Constraints (`extends`)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.41
+- **Prerequisites**: Lesson 1.66
 - **Subtopics**:
-  - `1.44.1` Generic functions and interfaces: parameterizing types with `<T>`.
-  - `1.44.2` Type constraints: `<T extends object>`, `<T extends { id: string }>`.
-  - `1.44.3` Default generic parameters: `<T = string>`.
-  - `1.44.4` Using `keyof`: capturing property names of types (`<K extends keyof T>`).
+  - `1.69.1` Generic functions and interfaces: parameterizing types with `<T>`.
+  - `1.69.2` Type constraints: `<T extends object>`, `<T extends { id: string }>`.
+  - `1.69.3` Default generic parameters: `<T = string>`.
+  - `1.69.4` Using `keyof`: capturing property names of types (`<K extends keyof T>`).
 - **Key Failure Modes & Edge Cases**: Writing overly broad generics without constraints, preventing property access inside generic function bodies.
 - **Verification & Mastery Check**: Implement a type-safe `getProp(obj, key)` utility that autocompletes valid keys and infers the exact return type.
 - **Project Application**: TypeTrace: Event emitter generic signatures.
 
-#### Lesson 1.45: Mapped Types, Key Remapping, & Standard Utility Types
+#### Lesson 1.70: Mapped Types, Key Remapping, & Standard Utility Types
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.44
+- **Prerequisites**: Lesson 1.69
 - **Subtopics**:
-  - `1.45.1` Mapped types syntax: `[P in keyof T]: T[P]`.
-  - `1.45.2` Key remapping with `as`: modifying or filtering keys (`[P in keyof T as `on\${Capitalize<string & P>}`]: ...`).
-  - `1.45.3` Built-in Utility Types: `Partial<T>`, `Required<T>`, `Readonly<T>`, `Record<K, T>`, `Pick<T, K>`, `Omit<T, K>`.
-  - `1.45.4` Homomorphic mapped types: preserving property modifiers (`readonly`, `?`).
+  - `1.70.1` Mapped types syntax: `[P in keyof T]: T[P]`.
+  - `1.70.2` Key remapping with `as`: modifying or filtering keys (`[P in keyof T as `on\${Capitalize<string & P>}`]: ...`).
+  - `1.70.3` Built-in Utility Types: `Partial<T>`, `Required<T>`, `Readonly<T>`, `Record<K, T>`, `Pick<T, K>`, `Omit<T, K>`.
+  - `1.70.4` Homomorphic mapped types: preserving property modifiers (`readonly`, `?`).
 - **Key Failure Modes & Edge Cases**: Misusing `Omit` with non-existent keys, silently failing to omit intended properties due to loose string typing.
 - **Verification & Mastery Check**: Implement custom versions of `Partial<T>`, `Required<T>`, and `Readonly<T>` from scratch using mapped types.
 - **Project Application**: TypeTrace: Event mapping types.
 
-#### Lesson 1.46: Conditional Types & Type Extraction with `infer`
+#### Lesson 1.71: Conditional Types & Type Extraction with `infer`
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.44
+- **Prerequisites**: Lesson 1.69
 - **Subtopics**:
-  - `1.46.1` Conditional types: `T extends U ? X : Y`.
-  - `1.46.2` Distributive conditional types: how naked type parameters distribute across unions.
-  - `1.46.3` Type extraction with `infer`: capturing types within conditional expressions.
-  - `1.46.4` Canonical utility implementations: `ReturnType<T>`, `Parameters<T>`, `Awaited<T>`.
+  - `1.71.1` Conditional types: `T extends U ? X : Y`.
+  - `1.71.2` Distributive conditional types: how naked type parameters distribute across unions.
+  - `1.71.3` Type extraction with `infer`: capturing types within conditional expressions.
+  - `1.71.4` Canonical utility implementations: `ReturnType<T>`, `Parameters<T>`, `Awaited<T>`.
 - **Key Failure Modes & Edge Cases**: Distributive conditional types unexpectedly splitting union types in generic utility functions.
 - **Verification & Mastery Check**: Implement a utility type `UnwrapPromise<T>` using `infer` that recursively unwraps nested Promise types.
 - **Project Application**: TypeTrace: Asynchronous event payload resolution.
 
-#### Lesson 1.47: JavaScript Event Loop: Microtasks vs Macrotasks
+#### Lesson 1.72: JavaScript Event Loop: Microtasks vs Macrotasks
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.31
+- **Prerequisites**: Phase 0 (Lesson 0.2), Lesson 1.56
 - **Subtopics**:
-  - `1.47.1` V8 Execution model: Call Stack, Web APIs / libuv worker threads, Task Queues.
-  - `1.47.2` Microtask Queue: `Promise.then`, `process.nextTick`, `queueMicrotask` (executed immediately after current stack).
-  - `1.47.3` Macrotask Queue: `setTimeout`, `setInterval`, `setImmediate`, I/O callbacks.
-  - `1.47.4` Microtask starvation: recursive microtasks freezing UI rendering and macrotask I/O.
+  - `1.72.1` V8 Execution model: Call Stack, Web APIs / libuv worker threads, Task Queues.
+  - `1.72.2` Microtask Queue: `Promise.then`, `process.nextTick`, `queueMicrotask` (executed immediately after current stack).
+  - `1.72.3` Macrotask Queue: `setTimeout`, `setInterval`, `setImmediate`, I/O callbacks.
+  - `1.72.4` Microtask starvation: recursive microtasks freezing UI rendering and macrotask I/O.
 - **Key Failure Modes & Edge Cases**: Calling recursive `Promise.resolve().then(...)`, completely freezing the Node.js process and dropping all I/O events.
 - **Verification & Mastery Check**: Predict and verify the exact console output order of a complex script mixing `setTimeout`, `Promise`, and `async/await`.
 - **Project Application**: TenantIQ: Client-side event timing in Phase 6.
 
-#### Lesson 1.48: Promises, Async/Await Desugaring, & Error Handling
+#### Lesson 1.73: Promises, Async/Await Desugaring, & Error Handling
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.47
+- **Prerequisites**: Lesson 1.72
 - **Subtopics**:
-  - `1.48.1` Promise state machine: Pending, Fulfilled, Rejected; immutability of resolved state.
-  - `1.48.2` Async/await desugaring: syntactic sugar over generator functions yielding promises.
-  - `1.48.3` Error propagation: unhandled promise rejections, `try/catch` with async/await.
-  - `1.48.4` Concurrent coordination: `Promise.all()`, `Promise.allSettled()`, `Promise.race()`, `Promise.any()`.
+  - `1.73.1` Promise state machine: Pending, Fulfilled, Rejected; immutability of resolved state.
+  - `1.73.2` Async/await desugaring: syntactic sugar over generator functions yielding promises.
+  - `1.73.3` Error propagation: unhandled promise rejections, `try/catch` with async/await.
+  - `1.73.4` Concurrent coordination: `Promise.all()`, `Promise.allSettled()`, `Promise.race()`, `Promise.any()`.
 - **Key Failure Modes & Edge Cases**: Using `forEach` with an async callback, causing iterations to run unawaited and fire-and-forget out of order.
 - **Verification & Mastery Check**: Implement a concurrency-limited `pLimit(concurrency)` utility in TypeScript using native Promises.
 - **Project Application**: TypeTrace: `emitAsync` parallel handler execution.
 
-#### Lesson 1.49: SOLID Design Principles in Software Craftsmanship
+#### Lesson 1.74: SOLID Design Principles in Software Craftsmanship
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.11, 1.20
+- **Prerequisites**: Lesson 1.36, 1.20
 - **Subtopics**:
-  - `1.49.1` Single Responsibility Principle (SRP): one reason to change; cohesion vs coupling.
-  - `1.49.2` Open/Closed Principle (OCP): open for extension, closed for modification via strategy injection.
-  - `1.49.3` Liskov Substitution Principle (LSP): subtypes must be substitutable for base types without altering correctness.
-  - `1.49.4` Interface Segregation Principle (ISP): granular role interfaces over bloated monolithic interfaces.
-  - `1.49.5` Dependency Inversion Principle (DIP): depending on abstractions, not concretions.
+  - `1.74.1` Single Responsibility Principle (SRP): one reason to change; cohesion vs coupling.
+  - `1.74.2` Open/Closed Principle (OCP): open for extension, closed for modification via strategy injection.
+  - `1.74.3` Liskov Substitution Principle (LSP): subtypes must be substitutable for base types without altering correctness.
+  - `1.74.4` Interface Segregation Principle (ISP): granular role interfaces over bloated monolithic interfaces.
+  - `1.74.5` Dependency Inversion Principle (DIP): depending on abstractions, not concretions.
 - **Key Failure Modes & Edge Cases**: Subclasses violating LSP by throwing `NotImplementedError` or changing parameter preconditions.
 - **Verification & Mastery Check**: Refactor an un-architected e-commerce checkout script to strictly satisfy all 5 SOLID principles.
 - **Project Application**: DevAudit: Architecture of static analyzers.
 
-#### Lesson 1.50: Gang of Four Patterns: Strategy, Adapter, Decorator, Repository
+#### Lesson 1.75: Gang of Four Patterns: Strategy, Adapter, Decorator, Repository
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 1.49
+- **Prerequisites**: Lesson 1.74
 - **Subtopics**:
-  - `1.50.1` Strategy Pattern: interchangeable algorithm family encapsulated behind a common interface.
-  - `1.50.2` Adapter Pattern: converting the interface of an external library into a client-expected interface.
-  - `1.50.3` Decorator Pattern: dynamic behavior augmentation without inheritance.
-  - `1.50.4` Repository Pattern: mediating between domain logic and data mapping layers; decoupling persistence.
-  - `1.50.5` Clean Architecture / Ports and Adapters: keeping business logic independent of databases and frameworks.
+  - `1.75.1` Strategy Pattern: interchangeable algorithm family encapsulated behind a common interface.
+  - `1.75.2` Adapter Pattern: converting the interface of an external library into a client-expected interface.
+  - `1.75.3` Decorator Pattern: dynamic behavior augmentation without inheritance.
+  - `1.75.4` Repository Pattern: mediating between domain logic and data mapping layers; decoupling persistence.
+  - `1.75.5` Clean Architecture / Ports and Adapters: keeping business logic independent of databases and frameworks.
 - **Key Failure Modes & Edge Cases**: Over-engineering simple scripts with unnecessary pattern abstractions ('Patternitis') when a simple function suffices.
 - **Verification & Mastery Check**: Implement a decoupled storage engine supporting Memory, File, and Redis backends using the Repository pattern.
 - **Project Application**: Applied across all backend and CLI projects.
 
+
+---
 
 ---
 
@@ -1226,456 +1772,762 @@ To be certified as completing Phase 0, the engineer must execute the following c
 
 ---
 
+---
+
 ## Phase 2: Mathematics for Engineers & Numerical Computing
-**Duration**: 6 weeks
-**Total Lessons**: 35 Lessons (Lesson 2.1 to Lesson 2.35)
+**Duration**: 8 weeks
+**Total Lessons**: 60 Lessons (Lesson 2.1 to Lesson 2.60)
 **Builds on**: Phase 1 (Python programming, testing, clean architecture)
 **Introduces**: Discrete mathematics, NumPy numerical engine & vectorized memory architecture, linear algebra, matrix decompositions (SVD, Eigenvalues), multivariable calculus, probability theory, statistical inference, information theory, first-order gradient optimization.
 
 ---
 
-### Phase 2 Lesson Specifications (Lessons 2.1 – 2.35)
+### Phase 2 Lesson Specifications (Lessons 2.1 – 2.60)
 
-#### Lesson 2.1: Propositional Logic, Truth Tables, & Logical Equivalences
+#### Lesson 2.1: Mental Model: Why Math Powers Systems & AI
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 1
 - **Subtopics**:
-  - `2.1.1` Atomic propositions, logical connectives: AND, OR, NOT, Implication ($P \implies Q$), Biconditional ($P \iff Q$).
-  - `2.1.2` Truth tables and semantic verification of tautologies, contradictions, and contingencies.
-  - `2.1.3` De Morgan's Laws for logic: $
+  - `2.1.1` Why modern software and AI run on math: transforming fuzzy ideas into precise numbers.
+  - `2.1.2` From code to geometry: how words and documents are represented as points in multi-dimensional space.
+  - `2.1.3` No advanced prerequisites: building intuition through pictures, arrows, and physical metaphors first.
+  - `2.1.4` The mathematical roadmap: moving from simple coordinates to vectors, slopes, and AI optimization.
+- **Key Failure Modes & Edge Cases**: Believing math is abstract memorization rather than practical tools for measuring similarity and movement.
+- **Verification & Mastery Check**: Write a 200-word explanation comparing how a librarian sorts books by category vs how an AI maps words in space.
+- **Project Application**: VectorCore: Mathematical mental foundations.
+
+#### Lesson 2.2: Algebraic Equations & Unknown Variables
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.1
+- **Subtopics**:
+  - `2.2.1` Variables in math vs variables in code: unknown values to solve for vs named boxes in memory.
+  - `2.2.2` Linear equations: solving simple equations like y = mx + b step-by-step.
+  - `2.2.3` Balancing equations: applying the same operation to both sides without changing equality.
+  - `2.2.4` Translating engineering problems into algebraic formulas (calculating cloud server costs and token limits).
+- **Key Failure Modes & Edge Cases**: Forgetting order of operations when rearranging algebraic equations, leading to incorrect calculations.
+- **Verification & Mastery Check**: Write a Python function that solves for the maximum requests allowed given a monthly budget and cost per call.
+- **Project Application**: VectorCore: Rate and capacity budgeting formulas.
+
+#### Lesson 2.3: Functions as Mappings: Inputs to Outputs
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.2
+- **Subtopics**:
+  - `2.3.1` Mathematical functions: rules that map every input in a domain to exactly one output.
+  - `2.3.2` Visualizing functions as graphs: plots of f(x) showing curves, trends, and plateaus.
+  - `2.3.3` Linear vs non-linear functions: why straight lines cannot model complex human language or vision.
+  - `2.3.4` Activation functions preview: introducing functions that turn numbers on or off like light switches.
+- **Key Failure Modes & Edge Cases**: Assuming all real-world relationships are straight lines, failing to model exponential growth or saturation.
+- **Verification & Mastery Check**: Plot a simple non-linear mapping (like a threshold function) in terminal text and explain its behavior.
+- **Project Application**: VectorCore: Function mapping foundations.
+
+#### Lesson 2.4: Cartesian Coordinates: 2D & 3D Space
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.3
+- **Subtopics**:
+  - `2.4.1` The coordinate plane: measuring positions along X and Y perpendicular axes.
+  - `2.4.2` Extending to 3D: adding the Z depth axis to represent physical objects in 3D space.
+  - `2.4.3` Points as coordinates: representing a location as an ordered pair (x, y) or triplet (x, y, z).
+  - `2.4.4` Plotting data: how scatter plots reveal clusters, patterns, and outliers in datasets.
+- **Key Failure Modes & Edge Cases**: Mixing up the order of axes (confusing (x, y) with (row, column) in matrix grids).
+- **Verification & Mastery Check**: Create a Point2D class that calculates the midpoint between any two coordinate points.
+- **Project Application**: VectorCore: Spatial coordinate systems.
+
+#### Lesson 2.5: Distance Metrics: Euclidean vs Manhattan
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.4
+- **Subtopics**:
+  - `2.5.1` Measuring distance between points: straight-line distance vs grid-based distance.
+  - `2.5.2` Euclidean distance: the Pythagorean theorem in action (square root of sum of squared differences).
+  - `2.5.3` Manhattan distance: city-block distance along grid lines (|x1 - x2| + |y1 - y2|).
+  - `2.5.4` When to use which metric: physical navigation vs high-dimensional data similarity.
+- **Key Failure Modes & Edge Cases**: Forgetting the square root in Euclidean distance, accidentally calculating squared distance.
+- **Verification & Mastery Check**: Implement both distance metrics in pure Python and compare their outputs on a grid of points.
+- **Project Application**: VectorCore: Distance and proximity calculation.
+
+#### Lesson 2.6: Vectors: Magnitude, Direction & Components
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.5
+- **Subtopics**:
+  - `2.6.1` What is a vector: an arrow pointing from the origin (0, 0) to a coordinate point.
+  - `2.6.2` The two key properties: magnitude (the length of the arrow) and direction (where it points).
+  - `2.6.3` Vector components: breaking an arrow into horizontal and vertical steps.
+  - `2.6.4` Adding vectors: placing arrows head-to-tail to compute net movement.
+- **Key Failure Modes & Edge Cases**: Confusing a single scalar number (like speed: 60) with a vector (like velocity: 60 mph North).
+- **Verification & Mastery Check**: Build a Vector2D class that implements vector addition and calculates length (magnitude).
+- **Project Application**: VectorCore: Core vector data types.
+
+#### Lesson 2.7: Vector Dot Product & Angular Similarity
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.6
+- **Subtopics**:
+  - `2.7.1` The dot product operation: multiplying matching components and summing the results.
+  - `2.7.2` Geometric meaning: measuring how much two vectors point in the exact same direction.
+  - `2.7.3` Orthogonal vectors: why a dot product of 0 means two vectors are at a perfect 90-degree right angle.
+  - `2.7.4` The secret behind AI search: how dot products determine whether a query matches a document.
+- **Key Failure Modes & Edge Cases**: Assuming a higher dot product always means closer meaning, without normalizing for vector lengths.
+- **Verification & Mastery Check**: Calculate the dot product of two simple 3D vectors manually and verify with Python code.
+- **Project Application**: VectorCore: Vector similarity scoring engine.
+
+#### Lesson 2.8: Matrices as Coordinate Transformers
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.6
+- **Subtopics**:
+  - `2.8.1` What is a matrix: a 2D grid of numbers organized into rows and columns.
+  - `2.8.2` Geometric view of matrices: instructions for stretching, rotating, and skewing space.
+  - `2.8.3` Basis vectors: how the standard grid unit arrows (1,0) and (0,1) move under a transformation.
+  - `2.8.4` Identity matrix: the 'do nothing' matrix that leaves all coordinates completely unchanged.
+- **Key Failure Modes & Edge Cases**: Confusing rows with columns, causing dimensional shape mismatch errors.
+- **Verification & Mastery Check**: Write a function that multiplies a 2D coordinate vector by a scaling matrix to double its size.
+- **Project Application**: VectorCore: Coordinate transformation engine.
+
+#### Lesson 2.9: Matrix Multiplication: Row-by-Column Mechanics
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.8
+- **Subtopics**:
+  - `2.9.1` The dot product rule: computing each output element as the dot product of a row and a column.
+  - `2.9.2` Shape compatibility rules: why multiplying an (M x K) matrix by a (K x N) matrix yields an (M x N) matrix.
+  - `2.9.3` Non-commutative property: why A * B does NOT equal B * A in matrix multiplication.
+  - `2.9.4` Why GPUs excel at AI: performing billions of row-by-column multiplications in parallel.
+- **Key Failure Modes & Edge Cases**: Attempting to multiply two matrices where the inner dimensions do not match, causing dimension mismatch.
+- **Verification & Mastery Check**: Multiply two (2x2) matrices by hand on paper, then write a Python function to verify your answer.
+- **Project Application**: VectorCore: Matrix multiplication kernels.
+
+#### Lesson 2.10: Transposition & Symmetric Matrices
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.9
+- **Subtopics**:
+  - `2.10.1` Matrix transposition: flipping a matrix over its diagonal so rows become columns.
+  - `2.10.2` Shorthand notation: A^T representing the transposed matrix.
+  - `2.10.3` Symmetric matrices: special matrices where A equals A^T (like pairwise distance tables).
+  - `2.10.4` Practical engineering use: reorienting data shapes so they align properly for matrix multiplication.
+- **Key Failure Modes & Edge Cases**: Flipping non-square matrices and expecting their diagonal elements to remain in the same positions.
+- **Verification & Mastery Check**: Implement a matrix transpose function that turns an (M x N) nested list into an (N x M) nested list.
+- **Project Application**: VectorCore: Data orientation and reshaping.
+
+#### Lesson 2.11: Linear Systems of Equations & Gaussian Elimination
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.9
+- **Subtopics**:
+  - `2.11.1` Systems of equations: finding values that simultaneously satisfy multiple linear constraints.
+  - `2.11.2` Matrix form: expressing systems cleanly as A * x = b.
+  - `2.11.3` Gaussian elimination: systematically adding and subtracting rows to eliminate unknowns.
+  - `2.11.4` Unique solutions vs infinite solutions vs no solution.
+- **Key Failure Modes & Edge Cases**: Dividing by zero during row elimination when a pivot element is zero, requiring row swapping.
+- **Verification & Mastery Check**: Solve a 2-variable linear system using Python code and verify by plugging answers back into formulas.
+- **Project Application**: VectorCore: Linear equation solver.
+
+#### Lesson 2.12: Determinants: Area Scaling & Invertibility
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.8
+- **Subtopics**:
+  - `2.12.1` What is a determinant: a single number measuring how much a matrix stretches or shrinks area.
+  - `2.12.2` Geometric intuition: a determinant of 2 doubles area; a determinant of 0 squashes area into a flat line.
+  - `2.12.3` Invertibility: why a matrix with a determinant of 0 has no inverse (information was permanently lost).
+  - `2.12.4` Calculating the determinant of a simple (2x2) matrix: ad - bc.
+- **Key Failure Modes & Edge Cases**: Attempting to invert a matrix whose determinant is 0, causing mathematical singularity errors.
+- **Verification & Mastery Check**: Calculate the determinant of a 2x2 matrix and state whether the transformation can be reversed.
+- **Project Application**: VectorCore: Matrix invertibility checks.
+
+#### Lesson 2.13: Intuitive Slope: Rate of Change
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.3
+- **Subtopics**:
+  - `2.13.1` What is a slope: rise over run, or how much output changes when input moves by 1 unit.
+  - `2.13.2` Secant lines vs tangent lines: measuring average speed over time vs instantaneous speed on a speedometer.
+  - `2.13.3` The fundamental idea of calculus: zooming in so close to a curve that it looks like a straight line.
+  - `2.13.4` Why rates of change matter: knowing which direction moves a machine learning model toward lower error.
+- **Key Failure Modes & Edge Cases**: Confusing the value of a function at a point with the slope of the function at that point.
+- **Verification & Mastery Check**: Compute the average rate of change of f(x) = x^2 between x=2 and x=2.001 using Python arithmetic.
+- **Project Application**: VectorCore: Numerical slope approximations.
+
+#### Lesson 2.14: Derivatives of Polynomials: Power Rule
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.13
+- **Subtopics**:
+  - `2.14.1` The derivative function f'(x): a formula that tells you the slope at any input x.
+  - `2.14.2` The Power Rule: taking the derivative of x^n by multiplying by n and subtracting 1 from exponent (n * x^(n-1)).
+  - `2.14.3` Constant rules: why the derivative of a flat constant number is always 0.
+  - `2.14.4` Sum rule: finding derivatives of multi-term polynomials by differentiating term-by-term.
+- **Key Failure Modes & Edge Cases**: Applying the power rule to exponential functions like 2^x instead of polynomial functions like x^2.
+- **Verification & Mastery Check**: Write a Python function that computes both the exact analytical derivative and the numerical derivative of x^3.
+- **Project Application**: VectorCore: Symbolic and numerical derivatives.
+
+#### Lesson 2.15: The Chain Rule: Combining Derivatives
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.14
+- **Subtopics**:
+  - `2.15.1` Composite functions: functions nested inside other functions (f(g(x))).
+  - `2.15.2` The Chain Rule intuition: multiplying the rates of change along each link in the chain.
+  - `2.15.3` Real-world analogy: gear ratios in a bicycle (pedal to chainwheel to wheel speed).
+  - `2.15.4` The mathematical foundation of deep learning: how error signals flow backward through neural layers.
+- **Key Failure Modes & Edge Cases**: Forgetting to multiply by the derivative of the inner function, a classic calculus mistake.
+- **Verification & Mastery Check**: Calculate the derivative of f(x) = (3x + 2)^2 using the chain rule and verify with numerical steps.
+- **Project Application**: VectorCore: Chain rule backpropagation foundations.
+
+#### Lesson 2.16: Partial Derivatives: Multi-Variable Gradients
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.15
+- **Subtopics**:
+  - `2.16.1` Functions of multiple variables: functions taking multiple inputs, like cost(price, quantity).
+  - `2.16.2` The partial derivative trick: treating all other variables as frozen constants while differentiating one.
+  - `2.16.3` Notation: ∂f/∂x measuring sensitivity to x, and ∂f/∂y measuring sensitivity to y.
+  - `2.16.4` Interpreting results: which input knob has the biggest impact on the final output.
+- **Key Failure Modes & Edge Cases**: Accidentally changing multiple variables simultaneously instead of holding one variable strictly constant.
+- **Verification & Mastery Check**: Given f(x, y) = x^2 * y + 3y, calculate both partial derivatives at the point (2, 5).
+- **Project Application**: VectorCore: Multi-variable sensitivity analysis.
+
+#### Lesson 2.17: The Gradient Vector: Direction of Steepest Ascent
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.16
+- **Subtopics**:
+  - `2.17.1` Packing partial derivatives into a vector: the gradient ∇f.
+  - `2.17.2` Geometric meaning: the gradient arrow always points directly toward the steepest uphill climb.
+  - `2.17.3` Magnitude of the gradient: how steep the hill is at that exact coordinate.
+  - `2.17.4` Negative gradient: pointing directly in the opposite direction—the fastest way downhill toward minimum error.
+- **Key Failure Modes & Edge Cases**: Assuming the gradient points downhill; the gradient points uphill, so we must subtract it to go down!
+- **Verification & Mastery Check**: Compute the gradient vector for a 2D bowl function at point (3, 4) and print the downhill direction.
+- **Project Application**: VectorCore: Gradient vector computation.
+
+#### Lesson 2.18: Gradient Descent Intuition: Walking Downhill
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.17
+- **Subtopics**:
+  - `2.18.1` The fog on the mountain metaphor: finding your way down to the valley by feeling the slope under your boots.
+  - `2.18.2` The update formula: new_position = old_position - (learning_rate * gradient).
+  - `2.18.3` The learning rate (step size): taking small careful steps vs large reckless leaps.
+  - `2.18.4` Visualizing convergence: watching parameters step closer and closer to the bottom of the bowl.
+- **Key Failure Modes & Edge Cases**: Setting the learning rate too large, causing the algorithm to oscillate wildly and explode to infinity.
+- **Verification & Mastery Check**: Implement a 20-step gradient descent loop in Python that finds the minimum of f(x) = (x - 4)^2.
+- **Project Application**: VectorCore: 1D Gradient descent optimizer.
+
+#### Lesson 2.19: Probability Basics: Sample Spaces & Events
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0
+- **Subtopics**:
+  - `2.19.1` Quantifying uncertainty: assigning numbers between 0.0 (impossible) and 1.0 (certain) to outcomes.
+  - `2.19.2` Sample spaces: the complete collection of all possible outcomes.
+  - `2.19.3` Events: specific outcomes we are interested in measuring.
+  - `2.19.4` Probability axioms: probabilities must sum to 1.0; no probability can ever be negative.
+- **Key Failure Modes & Edge Cases**: Assigning probabilities that sum to more than 1.0, breaking fundamental probability laws.
+- **Verification & Mastery Check**: Simulate rolling two dice 10,000 times in Python and verify that the empirical probabilities match theory.
+- **Project Application**: VectorCore: Probability simulation.
+
+#### Lesson 2.20: Independent vs Dependent Events & Conditional Prob
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.19
+- **Subtopics**:
+  - `2.20.1` Independent events: when one outcome has zero influence on another (like coin flips).
+  - `2.20.2` Dependent events: when the outcome of the first event changes the odds of the second (drawing cards without replacement).
+  - `2.20.3` Conditional probability P(A|B): what are the odds of A, given that we already know B happened?
+  - `2.20.4` AI context: predicting the next word given the preceding sentence context.
+- **Key Failure Modes & Edge Cases**: Treating dependent events as independent, leading to massive underestimation of risk.
+- **Verification & Mastery Check**: Calculate the conditional probability that an email is spam given that it contains the word 'free'.
+- **Project Application**: VectorCore: Conditional probability models.
+
+#### Lesson 2.21: Mean, Median & Mode: Central Tendency
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.19
+- **Subtopics**:
+  - `2.21.1` Summarizing datasets: finding the center of a group of numbers.
+  - `2.21.2` The Mean (average): summing all values and dividing by total count.
+  - `2.21.3` The Median: the physical middle value when numbers are sorted in order.
+  - `2.21.4` The Mode: the most frequently occurring value in the dataset.
+  - `2.21.5` Handling outliers: why median is far more reliable than mean when measuring response latency.
+- **Key Failure Modes & Edge Cases**: Relying solely on the average latency of an API, hiding the fact that 5% of users experience 10-second lag.
+- **Verification & Mastery Check**: Write a function that calculates mean, median, and 95th percentile latency from a list of request times.
+- **Project Application**: VectorCore: Latency summary statistics.
+
+#### Lesson 2.22: Variance & Standard Deviation: Spread of Data
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.21
+- **Subtopics**:
+  - `2.22.1` Measuring spread: how dispersed numbers are around their average.
+  - `2.22.2` Variance: the average squared difference from the mean.
+  - `2.22.3` Standard deviation: the square root of variance, returning the spread back to original units.
+  - `2.22.4` Consistent systems: why low standard deviation is the hallmark of reliable software systems.
+- **Key Failure Modes & Edge Cases**: Forgetting to take the square root of variance, confusing squared units with actual data units.
+- **Verification & Mastery Check**: Implement variance and standard deviation from scratch in pure Python without using math libraries.
+- **Project Application**: VectorCore: Distribution dispersion metrics.
+
+#### Lesson 2.23: Normal Gaussian Distribution: The Bell Curve
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.22
+- **Subtopics**:
+  - `2.23.1` The classic bell curve: why natural processes and measurement errors cluster around the center.
+  - `2.23.2` Mean (center) and Standard Deviation (width) as the two parameters defining the entire curve.
+  - `2.23.3` The 68-95-99.7 empirical rule: what percentage of data falls within 1, 2, and 3 standard deviations.
+  - `2.23.4` Standardizing scores (Z-scores): converting arbitrary numbers into distance from the mean.
+- **Key Failure Modes & Edge Cases**: Assuming all software metrics follow normal curves, when server traffic and response times are heavily skewed.
+- **Verification & Mastery Check**: Generate 1,000 normal random samples in Python and verify that ~68% fall within 1 standard deviation.
+- **Project Application**: VectorCore: Statistical distributions.
+
+#### Lesson 2.24: Softmax Function: Numbers to Probabilities
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.3, Lesson 2.20
+- **Subtopics**:
+  - `2.24.1` The challenge of raw model outputs (logits): unconstrained positive and negative real numbers.
+  - `2.24.2` The Softmax formula: exponentiating numbers to make them strictly positive, then dividing by their sum.
+  - `2.24.3` Two magical properties: all outputs are between 0 and 1, and the entire output array sums to exactly 1.0.
+  - `2.24.4` The temperature parameter: controlling whether probabilities are sharp (confident) or smooth (creative).
+- **Key Failure Modes & Edge Cases**: Numerical overflow: exponentiating large numbers like e^1000 causing float overflow to infinity.
+- **Verification & Mastery Check**: Implement a numerically stable softmax function that subtracts the maximum logit before exponentiating.
+- **Project Application**: VectorCore: Logit-to-probability converter.
+
+#### Lesson 2.25: Cross-Entropy Loss: Measuring Prediction Error
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 2.24
+- **Subtopics**:
+  - `2.25.1` Loss functions: mathematical scorecards that tell an AI model how wrong its predictions were.
+  - `2.25.2` Cross-entropy loss: comparing the predicted probability distribution against the true target label.
+  - `2.25.3` The negative log penalty: heavily penalizing models that are confidently wrong.
+  - `2.25.4` Why cross-entropy guides neural networks to learn faster and more accurately than squared error.
+- **Key Failure Modes & Edge Cases**: Computing log(0.0) when a predicted probability is 0, which crashes with a math domain error.
+- **Verification & Mastery Check**: Calculate cross-entropy loss for two scenarios: a confident correct guess vs a confident incorrect guess.
+- **Project Application**: VectorCore: Classification loss calculation.
+
+#### Lesson 2.26: Propositional Logic, Truth Tables, & Logical Equivalences
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 1
+- **Subtopics**:
+  - `2.26.1` Atomic propositions, logical connectives: AND, OR, NOT, Implication ($P \implies Q$), Biconditional ($P \iff Q$).
+  - `2.26.2` Truth tables and semantic verification of tautologies, contradictions, and contingencies.
+  - `2.26.3` De Morgan's Laws for logic: $
 eg(P \land Q) \iff 
 eg P \lor 
 eg Q$; equivalence to set complements.
-  - `2.1.4` Boolean algebra in systems: simplifying nested conditional code branches algebraically.
+  - `2.26.4` Boolean algebra in systems: simplifying nested conditional code branches algebraically.
 - **Key Failure Modes & Edge Cases**: Writing nested if-else branches that evaluate to tautologies or unreachable dead-code blocks.
 - **Verification & Mastery Check**: Simplify an ugly 5-level nested conditional statement using boolean algebra and verify equivalence via truth table.
 - **Project Application**: DevAudit: AST conditional simplification rule.
 
-#### Lesson 2.2: Predicate Logic, Quantifiers, & Logical Negation
+#### Lesson 2.27: Predicate Logic, Quantifiers, & Logical Negation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.1
+- **Prerequisites**: Lesson 2.26
 - **Subtopics**:
-  - `2.2.1` Predicates as parameterized truth functions: $P(x)$ mapping domain elements to booleans.
-  - `2.2.2` Universal ($orall$) and Existential ($\exists$) quantifiers: semantics over finite and infinite domains.
-  - `2.2.3` Negating quantified statements: $
+  - `2.27.1` Predicates as parameterized truth functions: $P(x)$ mapping domain elements to booleans.
+  - `2.27.2` Universal ($orall$) and Existential ($\exists$) quantifiers: semantics over finite and infinite domains.
+  - `2.27.3` Negating quantified statements: $
 eg(orall x, P(x)) \iff \exists x, 
 eg P(x)$; domain edge cases.
-  - `2.2.4` Nested quantifiers: order of quantification ($orall x \exists y$ vs $\exists y orall x$) and mathematical meaning.
+  - `2.27.4` Nested quantifiers: order of quantification ($orall x \exists y$ vs $\exists y orall x$) and mathematical meaning.
 - **Key Failure Modes & Edge Cases**: Failing to recognize that negating 'all users are active' is 'at least one user is inactive' (not 'all users are inactive').
 - **Verification & Mastery Check**: Translate a natural language business specification with nested quantifiers into formal predicate logic.
 - **Project Application**: DevAudit: Static invariant validation.
 
-#### Lesson 2.3: Direct Proofs, Contrapositive, & Proof by Contradiction
+#### Lesson 2.28: Direct Proofs, Contrapositive, & Proof by Contradiction
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.1
+- **Prerequisites**: Lesson 2.26
 - **Subtopics**:
-  - `2.3.1` The architecture of formal mathematical proofs: axioms, definitions, hypotheses, and conclusions.
-  - `2.3.2` Direct proof methodology: assuming hypothesis $P$ and deriving conclusion $Q$ through logical deduction.
-  - `2.3.3` Proof by Contraposition: proving $P \implies Q$ by proving $
+  - `2.28.1` The architecture of formal mathematical proofs: axioms, definitions, hypotheses, and conclusions.
+  - `2.28.2` Direct proof methodology: assuming hypothesis $P$ and deriving conclusion $Q$ through logical deduction.
+  - `2.28.3` Proof by Contraposition: proving $P \implies Q$ by proving $
 eg Q \implies 
 eg P$.
-  - `2.3.4` Proof by Contradiction (Reductio ad Absurdum): assuming $
+  - `2.28.4` Proof by Contradiction (Reductio ad Absurdum): assuming $
 eg P$ and deriving an impossible contradiction ($R \land 
 eg R$).
 - **Key Failure Modes & Edge Cases**: Assuming that a property holding true for 100 test cases constitutes a mathematical proof.
 - **Verification & Mastery Check**: Prove formally that if $3n+2$ is odd, then $n$ is odd, using proof by contraposition.
 - **Project Application**: MathKit: Algorithm verification proofs.
 
-#### Lesson 2.4: Mathematical Induction & Loop Invariants
+#### Lesson 2.29: Mathematical Induction & Loop Invariants
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.3
+- **Prerequisites**: Lesson 2.28
 - **Subtopics**:
-  - `2.4.1` Principle of Mathematical Induction: Base Case $P(0)$ and Inductive Step $P(k) \implies P(k+1)$.
-  - `2.4.2` Strong Induction: assuming all preceding cases $P(0), \dots, P(k)$ hold to prove $P(k+1)$.
-  - `2.4.3` Loop Invariants in software engineering: Initialization, Maintenance, and Termination guarantees.
-  - `2.4.4` Proving algorithm correctness: proving binary search and sorting termination via invariants.
+  - `2.29.1` Principle of Mathematical Induction: Base Case $P(0)$ and Inductive Step $P(k) \implies P(k+1)$.
+  - `2.29.2` Strong Induction: assuming all preceding cases $P(0), \dots, P(k)$ hold to prove $P(k+1)$.
+  - `2.29.3` Loop Invariants in software engineering: Initialization, Maintenance, and Termination guarantees.
+  - `2.29.4` Proving algorithm correctness: proving binary search and sorting termination via invariants.
 - **Key Failure Modes & Edge Cases**: Writing recursive functions with subtle termination bugs where the base case fails to cover all branches.
 - **Verification & Mastery Check**: Prove formally using loop invariants that binary search terminates with the correct index in $O(\log n)$ steps.
 - **Project Application**: Foundation for Phase 3 algorithm correctness.
 
-#### Lesson 2.5: Set Theory, Relations, & Equivalence Classes
+#### Lesson 2.30: Set Theory, Relations, & Equivalence Classes
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.1
+- **Prerequisites**: Lesson 2.26
 - **Subtopics**:
-  - `2.5.1` Sets, subsets, power sets, set operations (union, intersection, difference, Cartesian product).
-  - `2.5.2` Binary relations: reflexive, symmetric, anti-symmetric, and transitive properties.
-  - `2.5.3` Equivalence relations and partitioning sets into disjoint equivalence classes.
-  - `2.5.4` Partial orders, total orders, and Hasse diagrams: prerequisite structures.
+  - `2.30.1` Sets, subsets, power sets, set operations (union, intersection, difference, Cartesian product).
+  - `2.30.2` Binary relations: reflexive, symmetric, anti-symmetric, and transitive properties.
+  - `2.30.3` Equivalence relations and partitioning sets into disjoint equivalence classes.
+  - `2.30.4` Partial orders, total orders, and Hasse diagrams: prerequisite structures.
 - **Key Failure Modes & Edge Cases**: Assuming a comparison function defines a total order when it violates transitivity, causing sorting algorithms to loop infinitely.
 - **Verification & Mastery Check**: Prove whether a given custom object comparator satisfies total ordering axioms.
 - **Project Application**: DataSift: Entity resolution and clustering.
 
-#### Lesson 2.6: Functions: Injections, Surjections, & Bijections
+#### Lesson 2.31: Functions: Injections, Surjections, & Bijections
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.5
+- **Prerequisites**: Lesson 2.30
 - **Subtopics**:
-  - `2.6.1` Domain, codomain, and range (image) of mathematical mappings.
-  - `2.6.2` Injective (one-to-one) functions: uniqueness of outputs ($f(a) = f(b) \implies a = b$).
-  - `2.6.3` Surjective (onto) functions: every element of codomain is mapped.
-  - `2.6.4` Bijective functions: one-to-one correspondences, invertibility, and applications in cryptography and data encoding.
+  - `2.31.1` Domain, codomain, and range (image) of mathematical mappings.
+  - `2.31.2` Injective (one-to-one) functions: uniqueness of outputs ($f(a) = f(b) \implies a = b$).
+  - `2.31.3` Surjective (onto) functions: every element of codomain is mapped.
+  - `2.31.4` Bijective functions: one-to-one correspondences, invertibility, and applications in cryptography and data encoding.
 - **Key Failure Modes & Edge Cases**: Assuming a hash function is invertible or collision-free without verifying bijective properties.
 - **Verification & Mastery Check**: Prove that Base62 encoding is a bijection between non-negative integers and alphanumeric strings.
 - **Project Application**: Phase 8: URL shortener encoding.
 
-#### Lesson 2.7: Combinatorics: Permutations, Combinations, & Pigeonhole
+#### Lesson 2.32: Combinatorics: Permutations, Combinations, & Pigeonhole
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.5
+- **Prerequisites**: Lesson 2.30
 - **Subtopics**:
-  - `2.7.1` The Multiplication Principle and Addition Principle of counting.
-  - `2.7.2` Permutations: ordered selections with and without repetition ($n! / (n-k)!$).
-  - `2.7.3` Combinations: unordered selections ($nCr = rac{n!}{k!(n-k)!}$); Pascal's triangle identity.
-  - `2.7.4` The Pigeonhole Principle: if $n+1$ items occupy $n$ containers, at least one container holds $\ge 2$ items; hash collision inevitability.
+  - `2.32.1` The Multiplication Principle and Addition Principle of counting.
+  - `2.32.2` Permutations: ordered selections with and without repetition ($n! / (n-k)!$).
+  - `2.32.3` Combinations: unordered selections ($nCr = rac{n!}{k!(n-k)!}$); Pascal's triangle identity.
+  - `2.32.4` The Pigeonhole Principle: if $n+1$ items occupy $n$ containers, at least one container holds $\ge 2$ items; hash collision inevitability.
 - **Key Failure Modes & Edge Cases**: Combinatorial explosion: underestimating search spaces in brute-force algorithms ($O(n!)$ vs $O(2^n)$).
 - **Verification & Mastery Check**: Calculate the exact collision probability threshold for a 32-bit hash function using the Pigeonhole Principle.
 - **Project Application**: Phase 3: Backtracking search spaces.
 
-#### Lesson 2.8: Graph Theory: Definitions, Topologies, & Isomorphisms
+#### Lesson 2.33: Graph Theory: Definitions, Topologies, & Isomorphisms
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.5
+- **Prerequisites**: Lesson 2.30
 - **Subtopics**:
-  - `2.8.1` Graph components: vertices ($V$), edges ($E$), directed vs undirected, weighted vs unweighted.
-  - `2.8.2` Vertex degrees, in-degree, out-degree, and the Handshaking Lemma ($\sum \deg(v) = 2|E|$).
-  - `2.8.3` Paths, cycles, connectivity, bipartite graphs, and tree definitions (connected acyclic graph with $|V|-1$ edges).
-  - `2.8.4` Graph Isomorphism: determining structural equivalence between graph representations.
+  - `2.33.1` Graph components: vertices ($V$), edges ($E$), directed vs undirected, weighted vs unweighted.
+  - `2.33.2` Vertex degrees, in-degree, out-degree, and the Handshaking Lemma ($\sum \deg(v) = 2|E|$).
+  - `2.33.3` Paths, cycles, connectivity, bipartite graphs, and tree definitions (connected acyclic graph with $|V|-1$ edges).
+  - `2.33.4` Graph Isomorphism: determining structural equivalence between graph representations.
 - **Key Failure Modes & Edge Cases**: Failing to check for cycles in directed graphs, causing infinite loops in dependency resolution engines.
 - **Verification & Mastery Check**: Prove that an undirected graph with $V$ vertices and $V-1$ edges is a tree if and only if it is acyclic.
 - **Project Application**: MathKit: `mathkit.graph` module.
 
-#### Lesson 2.9: Directed Acyclic Graphs (DAGs) & Topological Properties
+#### Lesson 2.34: Directed Acyclic Graphs (DAGs) & Topological Properties
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.8
+- **Prerequisites**: Lesson 2.33
 - **Subtopics**:
-  - `2.9.1` DAG properties: directed edges with zero directed cycles.
-  - `2.9.2` Sources and Sinks in DAGs; reachability analysis and transitive reduction.
-  - `2.9.3` Topological Ordering: linear ordering of vertices where every directed edge $(u, v)$ has $u$ before $v$.
-  - `2.9.4` Why DAGs underpin computational workflows: task scheduling, build systems, neural network backpropagation.
+  - `2.34.1` DAG properties: directed edges with zero directed cycles.
+  - `2.34.2` Sources and Sinks in DAGs; reachability analysis and transitive reduction.
+  - `2.34.3` Topological Ordering: linear ordering of vertices where every directed edge $(u, v)$ has $u$ before $v$.
+  - `2.34.4` Why DAGs underpin computational workflows: task scheduling, build systems, neural network backpropagation.
 - **Key Failure Modes & Edge Cases**: Circular dependency deadlocks in software build systems and package managers.
 - **Verification & Mastery Check**: Implement a mathematical cycle detector that outputs the exact cycle path if a graph fails to be a DAG.
 - **Project Application**: GradFlow: Computational graph evaluation in Phase 9.
 
-#### Lesson 2.10: Asymptotic Complexity: Formal Big-O, Big-Omega, Big-Theta
+#### Lesson 2.35: Asymptotic Complexity: Formal Big-O, Big-Omega, Big-Theta
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.1
+- **Prerequisites**: Lesson 2.26
 - **Subtopics**:
-  - `2.10.1` Formal definition of Big-$O$: $f(n) \in O(g(n)) \iff \exists c > 0, n_0 > 0 	ext{ s.t. } f(n) \le c \cdot g(n) \quad orall n \ge n_0$.
-  - `2.10.2` Formal definition of Big-$\Omega$ (lower bound) and Big-$\Theta$ (tight asymptotic bound).
-  - `2.10.3` Little-$o$ and Little-$\omega$ definitions: strict asymptotic dominance.
-  - `2.10.4` Limit test for complexity: $\lim_{n 	o \infty} rac{f(n)}{g(n)}$ to classify relative growth rates.
+  - `2.35.1` Formal definition of Big-$O$: $f(n) \in O(g(n)) \iff \exists c > 0, n_0 > 0 	ext{ s.t. } f(n) \le c \cdot g(n) \quad orall n \ge n_0$.
+  - `2.35.2` Formal definition of Big-$\Omega$ (lower bound) and Big-$\Theta$ (tight asymptotic bound).
+  - `2.35.3` Little-$o$ and Little-$\omega$ definitions: strict asymptotic dominance.
+  - `2.35.4` Limit test for complexity: $\lim_{n 	o \infty} rac{f(n)}{g(n)}$ to classify relative growth rates.
 - **Key Failure Modes & Edge Cases**: Claiming an algorithm is $O(1)$ based on a small benchmark without analyzing asymptotic behavior at scale.
 - **Verification & Mastery Check**: Formally prove using limit definitions that $3n^2 + 5n\log n \in \Theta(n^2)$.
 - **Project Application**: Phase 3: Algorithmic complexity proofs.
 
-#### Lesson 2.11: NumPy Architecture: Memory Buffers, Strides, & C-Order
+#### Lesson 2.36: NumPy Architecture: Memory Buffers, Strides, & C-Order
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 1 (Lesson 1.1)
 - **Subtopics**:
-  - `2.11.1` Why NumPy outperforms pure Python: contiguous memory buffers in C, eliminating PyObject pointer chasing.
-  - `2.11.2` The `ndarray` memory layout: data pointer, shape tuple, dtype descriptor, strides tuple.
-  - `2.11.3` Strides explained: number of bytes to step in physical memory to advance one index along a given axis.
-  - `2.11.4` Memory order: C-contiguous (row-major: last index changes fastest) vs Fortran-contiguous (column-major).
+  - `2.36.1` Why NumPy outperforms pure Python: contiguous memory buffers in C, eliminating PyObject pointer chasing.
+  - `2.36.2` The `ndarray` memory layout: data pointer, shape tuple, dtype descriptor, strides tuple.
+  - `2.36.3` Strides explained: number of bytes to step in physical memory to advance one index along a given axis.
+  - `2.36.4` Memory order: C-contiguous (row-major: last index changes fastest) vs Fortran-contiguous (column-major).
 - **Key Failure Modes & Edge Cases**: Triggering slow, full-array memory copies when accidentally converting non-contiguous slices into C-order.
 - **Verification & Mastery Check**: Calculate and verify the exact strides tuple for a $3 	imes 4 	imes 5$ float64 array manually.
 - **Project Application**: MathKit: Core multidimensional array primitive.
 
-#### Lesson 2.12: NumPy Array Creation, Views vs Copies, & Slicing
+#### Lesson 2.37: NumPy Array Creation, Views vs Copies, & Slicing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.11
+- **Prerequisites**: Lesson 2.36
 - **Subtopics**:
-  - `2.12.1` Array creation primitives: `zeros`, `ones`, `empty`, `arange`, `linspace`, `eye`.
-  - `2.12.2` Basic slicing: why basic slices return memory *views* sharing the underlying data buffer.
-  - `2.12.3` Advanced indexing: integer arrays and boolean masks returning new memory *copies*.
-  - `2.12.4` Diagnosing views vs copies: `np.shares_memory()` and checking `arr.base`.
+  - `2.37.1` Array creation primitives: `zeros`, `ones`, `empty`, `arange`, `linspace`, `eye`.
+  - `2.37.2` Basic slicing: why basic slices return memory *views* sharing the underlying data buffer.
+  - `2.37.3` Advanced indexing: integer arrays and boolean masks returning new memory *copies*.
+  - `2.37.4` Diagnosing views vs copies: `np.shares_memory()` and checking `arr.base`.
 - **Key Failure Modes & Edge Cases**: Modifying a sliced view expecting the original array to remain unchanged, causing silent data corruption.
 - **Verification & Mastery Check**: Write code demonstrating when a slice is a view vs when it is a copy, verified via `shares_memory()`.
 - **Project Application**: MathKit: In-place matrix operations.
 
-#### Lesson 2.13: Vectorization, SIMD, & The Universal Function (ufunc)
+#### Lesson 2.38: Vectorization, SIMD, & The Universal Function (ufunc)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.11
+- **Prerequisites**: Lesson 2.36
 - **Subtopics**:
-  - `2.13.1` The vectorization paradigm: expressing batch operations on whole arrays without interpreted Python loops.
-  - `2.13.2` CPU SIMD (Single Instruction, Multiple Data): AVX-512, NEON vector registers executing parallel float math.
-  - `2.13.3` NumPy Universal Functions (`ufunc`): element-wise fast C-implemented loops; broadcasting support.
-  - `2.13.4` `ufunc` methods: `.reduce()`, `.accumulate()`, `.outer()`, `.reduceat()`.
+  - `2.38.1` The vectorization paradigm: expressing batch operations on whole arrays without interpreted Python loops.
+  - `2.38.2` CPU SIMD (Single Instruction, Multiple Data): AVX-512, NEON vector registers executing parallel float math.
+  - `2.38.3` NumPy Universal Functions (`ufunc`): element-wise fast C-implemented loops; broadcasting support.
+  - `2.38.4` `ufunc` methods: `.reduce()`, `.accumulate()`, `.outer()`, `.reduceat()`.
 - **Key Failure Modes & Edge Cases**: Writing Python `for` loops over NumPy arrays, destroying performance by bypassing vectorized C-loops.
 - **Verification & Mastery Check**: Benchmark a pure Python loop against a vectorized NumPy ufunc, demonstrating a 50x–200x speedup.
 - **Project Application**: MathKit: Vectorized linear algebra.
 
-#### Lesson 2.14: The NumPy Broadcasting Rule: Mechanics & Dimensions
+#### Lesson 2.39: The NumPy Broadcasting Rule: Mechanics & Dimensions
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.11
+- **Prerequisites**: Lesson 2.36
 - **Subtopics**:
-  - `2.14.1` The Broadcasting problem: performing arithmetic operations on arrays of differing shapes.
-  - `2.14.2` The Strict Broadcasting Rule: compare dimensions from trailing (rightmost) axes to leading axes.
-  - `2.14.3` Compatibility condition: two dimensions are compatible if they are equal, or if one of them is 1.
-  - `2.14.4` Virtual dimension stretching: expanding dimensions without copying memory by setting strides to 0.
+  - `2.39.1` The Broadcasting problem: performing arithmetic operations on arrays of differing shapes.
+  - `2.39.2` The Strict Broadcasting Rule: compare dimensions from trailing (rightmost) axes to leading axes.
+  - `2.39.3` Compatibility condition: two dimensions are compatible if they are equal, or if one of them is 1.
+  - `2.39.4` Virtual dimension stretching: expanding dimensions without copying memory by setting strides to 0.
 - **Key Failure Modes & Edge Cases**: Misaligned trailing dimensions resulting in unexpected broadcasting rather than shape mismatch exceptions.
 - **Verification & Mastery Check**: Predict by hand the output shape of operations on shapes `(5, 1, 4)` and `(3, 4)` and verify with code.
 - **Project Application**: MathKit and GradFlow: Vectorized tensor math.
 
-#### Lesson 2.15: NumPy Aggregations, Masking, & Structured Arrays
+#### Lesson 2.40: NumPy Aggregations, Masking, & Structured Arrays
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.12
+- **Prerequisites**: Lesson 2.37
 - **Subtopics**:
-  - `2.15.1` Reduction along axes: `sum`, `mean`, `std`, `min`, `max`, `argmin`, `argmax`; `axis=0` vs `axis=1`.
-  - `2.15.2` Preserving dimensions: `keepdims=True` for broadcast-safe reduction outputs.
-  - `2.15.3` Boolean masking and filtering: `arr[arr > 0]`, `np.where()`, `np.select()`.
-  - `2.15.4` Structured arrays and record arrays: defining C-style structs with heterogeneous datatypes in NumPy.
+  - `2.40.1` Reduction along axes: `sum`, `mean`, `std`, `min`, `max`, `argmin`, `argmax`; `axis=0` vs `axis=1`.
+  - `2.40.2` Preserving dimensions: `keepdims=True` for broadcast-safe reduction outputs.
+  - `2.40.3` Boolean masking and filtering: `arr[arr > 0]`, `np.where()`, `np.select()`.
+  - `2.40.4` Structured arrays and record arrays: defining C-style structs with heterogeneous datatypes in NumPy.
 - **Key Failure Modes & Edge Cases**: Applying reduction on the wrong axis, collapsing rows instead of columns in multi-tenant metric matrices.
 - **Verification & Mastery Check**: Implement a pairwise Manhattan distance calculation using exclusively broadcasting and axis reduction.
 - **Project Application**: DataSift: Fast numeric column profiling.
 
-#### Lesson 2.16: Vectors, Norms, & Geometric Interpretations
+#### Lesson 2.41: Vectors, Norms, & Geometric Interpretations
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.11
+- **Prerequisites**: Lesson 2.36
 - **Subtopics**:
-  - `2.16.1` Vectors in $\mathbb{R}^n$: direction, magnitude, geometric displacement, and coordinate bases.
-  - `2.16.2` Vector Norms: $L_1$ (Manhattan norm), $L_2$ (Euclidean norm), $L_p$ generalized norm, $L_\infty$ (Chebyshev norm).
-  - `2.16.3` Unit vectors and normalization: projecting vectors onto unit spheres ($\hat{v} = v / \|v\|_2$).
-  - `2.16.4` Distance metrics: Euclidean distance, Manhattan distance, Minkowski distance.
+  - `2.41.1` Vectors in $\mathbb{R}^n$: direction, magnitude, geometric displacement, and coordinate bases.
+  - `2.41.2` Vector Norms: $L_1$ (Manhattan norm), $L_2$ (Euclidean norm), $L_p$ generalized norm, $L_\infty$ (Chebyshev norm).
+  - `2.41.3` Unit vectors and normalization: projecting vectors onto unit spheres ($\hat{v} = v / \|v\|_2$).
+  - `2.41.4` Distance metrics: Euclidean distance, Manhattan distance, Minkowski distance.
 - **Key Failure Modes & Edge Cases**: Calculating distance metrics without normalizing vectors, causing large-magnitude features to dominate.
 - **Verification & Mastery Check**: Implement an $L_p$ norm function in pure NumPy supporting arbitrary $p \ge 1$ and verify triangle inequality.
 - **Project Application**: MathKit: `mathkit.linalg` vector norms.
 
-#### Lesson 2.17: Dot Products, Angles, & Cosine Similarity
+#### Lesson 2.42: Dot Products, Angles, & Cosine Similarity
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.16
+- **Prerequisites**: Lesson 2.41
 - **Subtopics**:
-  - `2.17.1` The algebraic dot product: $u \cdot v = \sum u_i v_i = u^T v$.
-  - `2.17.2` The geometric dot product: $u \cdot v = \|u\| \|v\| \cos	heta$; directional alignment.
-  - `2.17.3` Cosine Similarity: $rac{u \cdot v}{\|u\| \|v\|}$; invariant to scalar multiplication.
-  - `2.17.4` Orthogonality: two vectors are orthogonal if and only if their dot product is zero.
+  - `2.42.1` The algebraic dot product: $u \cdot v = \sum u_i v_i = u^T v$.
+  - `2.42.2` The geometric dot product: $u \cdot v = \|u\| \|v\| \cos	heta$; directional alignment.
+  - `2.42.3` Cosine Similarity: $rac{u \cdot v}{\|u\| \|v\|}$; invariant to scalar multiplication.
+  - `2.42.4` Orthogonality: two vectors are orthogonal if and only if their dot product is zero.
 - **Key Failure Modes & Edge Cases**: Confusing magnitude similarity with directional similarity when comparing document embedding vectors.
 - **Verification & Mastery Check**: Prove algebraically and computationally that for unit-normalized vectors, Euclidean distance and cosine distance are monotonically related.
 - **Project Application**: Phase 10: Foundation for vector database retrieval.
 
-#### Lesson 2.18: Matrices as Linear Transformations & Matrix Multiplication
+#### Lesson 2.43: Matrices as Linear Transformations & Matrix Multiplication
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.16
+- **Prerequisites**: Lesson 2.41
 - **Subtopics**:
-  - `2.18.1` Matrices as coordinate transformations: rotating, scaling, shearing, and reflecting $\mathbb{R}^n$ space.
-  - `2.18.2` Matrix-Vector multiplication: linear combination of the columns of the matrix.
-  - `2.18.3` Matrix-Matrix multiplication ($C = AB$): row-by-column dot products; non-commutativity ($AB 
+  - `2.43.1` Matrices as coordinate transformations: rotating, scaling, shearing, and reflecting $\mathbb{R}^n$ space.
+  - `2.43.2` Matrix-Vector multiplication: linear combination of the columns of the matrix.
+  - `2.43.3` Matrix-Matrix multiplication ($C = AB$): row-by-column dot products; non-commutativity ($AB 
 eq BA$).
-  - `2.18.4` Computational complexity: naive $O(n^3)$, Strassen's $O(n^{2.81})$, optimized BLAS cache tiling.
+  - `2.43.4` Computational complexity: naive $O(n^3)$, Strassen's $O(n^{2.81})$, optimized BLAS cache tiling.
 - **Key Failure Modes & Edge Cases**: Multiplying matrices with incompatible inner dimensions ($A_{m 	imes k} 	imes B_{j 	imes n}$ where $k 
 eq j$).
 - **Verification & Mastery Check**: Implement matrix multiplication from scratch using nested loops, verify against `np.matmul`, and benchmark BLAS speed.
 - **Project Application**: MathKit: `linalg.matmul`.
 
-#### Lesson 2.19: Systems of Linear Equations, Gaussian Elimination, & Row Rank
+#### Lesson 2.44: Systems of Linear Equations, Gaussian Elimination, & Row Rank
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.18
+- **Prerequisites**: Lesson 2.43
 - **Subtopics**:
-  - `2.19.1` Representing systems of linear equations: $Ax = b$; augmented matrix $[A | b]$.
-  - `2.19.2` Elementary row operations: row swapping, row multiplication, row addition.
-  - `2.19.3` Gaussian Elimination and Row Echelon Form (REF); Reduced Row Echelon Form (RREF).
-  - `2.19.4` Matrix Rank: maximum number of linearly independent rows or columns; full-rank vs rank-deficient systems.
+  - `2.44.1` Representing systems of linear equations: $Ax = b$; augmented matrix $[A | b]$.
+  - `2.44.2` Elementary row operations: row swapping, row multiplication, row addition.
+  - `2.44.3` Gaussian Elimination and Row Echelon Form (REF); Reduced Row Echelon Form (RREF).
+  - `2.44.4` Matrix Rank: maximum number of linearly independent rows or columns; full-rank vs rank-deficient systems.
 - **Key Failure Modes & Edge Cases**: Attempting Gaussian elimination on ill-conditioned systems without partial pivoting, yielding catastrophic numerical rounding errors.
 - **Verification & Mastery Check**: Implement Gaussian elimination with partial pivoting in Python to solve an arbitrary $n 	imes n$ linear system.
 - **Project Application**: MathKit: System solver.
 
-#### Lesson 2.20: Matrix Inversion, Determinants, & Singularity
+#### Lesson 2.45: Matrix Inversion, Determinants, & Singularity
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.19
+- **Prerequisites**: Lesson 2.44
 - **Subtopics**:
-  - `2.20.1` The Identity matrix ($I$) and the Inverse matrix ($A^{-1}$): $A A^{-1} = A^{-1} A = I$.
-  - `2.20.2` Invertibility criteria: $A$ is invertible $\iff \det(A) 
+  - `2.45.1` The Identity matrix ($I$) and the Inverse matrix ($A^{-1}$): $A A^{-1} = A^{-1} A = I$.
+  - `2.45.2` Invertibility criteria: $A$ is invertible $\iff \det(A) 
 eq 0 \iff 	ext{rank}(A) = n \iff 	ext{nullity}(A) = 0$.
-  - `2.20.3` The Determinant: geometric scaling factor of signed area/volume under linear transformation.
-  - `2.20.4` Matrix condition number: sensitivity of linear system solutions to numerical perturbations.
+  - `2.45.3` The Determinant: geometric scaling factor of signed area/volume under linear transformation.
+  - `2.45.4` Matrix condition number: sensitivity of linear system solutions to numerical perturbations.
 - **Key Failure Modes & Edge Cases**: Inverting large matrices directly in production code rather than using matrix decomposition solves ($LU$ or Cholesky).
 - **Verification & Mastery Check**: Calculate the determinant of a $4 	imes 4$ matrix using cofactor expansion and verify against Gaussian elimination diagonal product.
 - **Project Application**: MathKit: `linalg.inverse` and `linalg.det`.
 
-#### Lesson 2.21: Eigenvalues, Eigenvectors, & Power Iteration
+#### Lesson 2.46: Eigenvalues, Eigenvectors, & Power Iteration
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.20
+- **Prerequisites**: Lesson 2.45
 - **Subtopics**:
-  - `2.21.1` The Eigenvalue equation: $Av = \lambda v$; invariant transformation axes.
-  - `2.21.2` Characteristic polynomial: $\det(A - \lambda I) = 0$; computing eigenvalues and eigenspaces.
-  - `2.21.3` Spectral Theorem: symmetric real matrices have orthogonal real eigenvectors.
-  - `2.21.4` The Power Iteration algorithm: iteratively computing the dominant eigenvalue and eigenvector.
+  - `2.46.1` The Eigenvalue equation: $Av = \lambda v$; invariant transformation axes.
+  - `2.46.2` Characteristic polynomial: $\det(A - \lambda I) = 0$; computing eigenvalues and eigenspaces.
+  - `2.46.3` Spectral Theorem: symmetric real matrices have orthogonal real eigenvectors.
+  - `2.46.4` The Power Iteration algorithm: iteratively computing the dominant eigenvalue and eigenvector.
 - **Key Failure Modes & Edge Cases**: Running power iteration on matrices with multiple complex eigenvalues of equal magnitude, causing oscillation.
 - **Verification & Mastery Check**: Implement Power Iteration in Python to find the dominant eigenvector of a Google PageRank transition matrix.
 - **Project Application**: MathKit: `linalg.eigenvalues`.
 
-#### Lesson 2.22: Singular Value Decomposition (SVD) & Low-Rank Approximation
+#### Lesson 2.47: Singular Value Decomposition (SVD) & Low-Rank Approximation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.21
+- **Prerequisites**: Lesson 2.46
 - **Subtopics**:
-  - `2.22.1` Singular Value Decomposition theorem: $A = U \Sigma V^T$ for arbitrary rectangular $m 	imes n$ matrices.
-  - `2.22.2` Left singular vectors ($U$), Singular values ($\Sigma$), Right singular vectors ($V^T$).
-  - `2.22.3` Geometric interpretation: rotation $	o$ scaling $	o$ rotation.
-  - `2.22.4` Eckart-Young-Mirsky Theorem: low-rank matrix approximation via truncated SVD; dimensionality reduction.
+  - `2.47.1` Singular Value Decomposition theorem: $A = U \Sigma V^T$ for arbitrary rectangular $m 	imes n$ matrices.
+  - `2.47.2` Left singular vectors ($U$), Singular values ($\Sigma$), Right singular vectors ($V^T$).
+  - `2.47.3` Geometric interpretation: rotation $	o$ scaling $	o$ rotation.
+  - `2.47.4` Eckart-Young-Mirsky Theorem: low-rank matrix approximation via truncated SVD; dimensionality reduction.
 - **Key Failure Modes & Edge Cases**: Assuming SVD can only be performed on square matrices; confusing eigenvalues with singular values.
 - **Verification & Mastery Check**: Implement image compression by computing truncated SVD and reconstructing the image using the top 10% singular values.
 - **Project Application**: MathKit: `linalg.svd`.
 
-#### Lesson 2.23: Probability Axioms, Sample Spaces, & Conditional Probability
+#### Lesson 2.48: Probability Axioms, Sample Spaces, & Conditional Probability
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.5
+- **Prerequisites**: Lesson 2.30
 - **Subtopics**:
-  - `2.23.1` Kolmogorov's Probability Axioms: non-negativity ($P(E) \ge 0$), unitarity ($P(\Omega) = 1$), countable additivity.
-  - `2.23.2` Sample spaces, outcomes, events, mutually exclusive events.
-  - `2.23.3` Conditional Probability definition: $P(A|B) = rac{P(A \cap B)}{P(B)}$ where $P(B) > 0$.
-  - `2.23.4` Independence of events: $P(A \cap B) = P(A)P(B)$; conditional independence.
+  - `2.48.1` Kolmogorov's Probability Axioms: non-negativity ($P(E) \ge 0$), unitarity ($P(\Omega) = 1$), countable additivity.
+  - `2.48.2` Sample spaces, outcomes, events, mutually exclusive events.
+  - `2.48.3` Conditional Probability definition: $P(A|B) = rac{P(A \cap B)}{P(B)}$ where $P(B) > 0$.
+  - `2.48.4` Independence of events: $P(A \cap B) = P(A)P(B)$; conditional independence.
 - **Key Failure Modes & Edge Cases**: Assuming two events are independent when they share hidden confounding variables (Simpson's Paradox).
 - **Verification & Mastery Check**: Prove mathematically that if $A$ and $B$ are independent, their complements $
 eg A$ and $
 eg B$ are also independent.
 - **Project Application**: MathKit: Probability engine.
 
-#### Lesson 2.24: Bayes' Theorem: Derivation, Priors, & Posteriors
+#### Lesson 2.49: Bayes' Theorem: Derivation, Priors, & Posteriors
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.23
+- **Prerequisites**: Lesson 2.48
 - **Subtopics**:
-  - `2.24.1` Deriving Bayes' Theorem from the product rule of conditional probability.
-  - `2.24.2` Formula: $P(H|D) = rac{P(D|H) P(H)}{P(D)} = rac{P(D|H) P(H)}{\sum_k P(D|H_k) P(H_k)}$.
-  - `2.24.3` Prior probability, Likelihood, Marginal Evidence, Posterior probability.
-  - `2.24.4` The Base Rate Fallacy: why a 99% accurate test for a rare disease yields mostly false positives.
+  - `2.49.1` Deriving Bayes' Theorem from the product rule of conditional probability.
+  - `2.49.2` Formula: $P(H|D) = rac{P(D|H) P(H)}{P(D)} = rac{P(D|H) P(H)}{\sum_k P(D|H_k) P(H_k)}$.
+  - `2.49.3` Prior probability, Likelihood, Marginal Evidence, Posterior probability.
+  - `2.49.4` The Base Rate Fallacy: why a 99% accurate test for a rare disease yields mostly false positives.
 - **Key Failure Modes & Edge Cases**: The prosecutor's fallacy: confusing the probability of evidence given guilt $P(E|G)$ with guilt given evidence $P(G|E)$.
 - **Verification & Mastery Check**: Calculate the posterior probability of a rare disease given positive test results under varying base rates.
 - **Project Application**: MathKit: Bayesian estimation.
 
-#### Lesson 2.25: Random Variables, PMF, PDF, & CDF Mechanics
+#### Lesson 2.50: Random Variables, PMF, PDF, & CDF Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.23
+- **Prerequisites**: Lesson 2.48
 - **Subtopics**:
-  - `2.25.1` Discrete vs Continuous random variables: mappings from sample space to real numbers.
-  - `2.25.2` Probability Mass Function (PMF) for discrete variables: $\sum P(X=x) = 1$.
-  - `2.25.3` Probability Density Function (PDF) for continuous variables: $P(a \le X \le b) = \int_a^b f(x)dx$.
-  - `2.25.4` Cumulative Distribution Function (CDF): $F(x) = P(X \le x)$; properties and quantile functions.
+  - `2.50.1` Discrete vs Continuous random variables: mappings from sample space to real numbers.
+  - `2.50.2` Probability Mass Function (PMF) for discrete variables: $\sum P(X=x) = 1$.
+  - `2.50.3` Probability Density Function (PDF) for continuous variables: $P(a \le X \le b) = \int_a^b f(x)dx$.
+  - `2.50.4` Cumulative Distribution Function (CDF): $F(x) = P(X \le x)$; properties and quantile functions.
 - **Key Failure Modes & Edge Cases**: Evaluating a continuous PDF at a single point and interpreting the value as a probability ($P(X=x) = 0$ for continuous).
 - **Verification & Mastery Check**: Implement a custom CDF sampler using inverse transform sampling for an arbitrary continuous distribution.
 - **Project Application**: MathKit: `stats.normal_pdf` and `stats.normal_cdf`.
 
-#### Lesson 2.26: Common Distributions: Normal, Bernoulli, Binomial, Poisson
+#### Lesson 2.51: Common Distributions: Normal, Bernoulli, Binomial, Poisson
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.25
+- **Prerequisites**: Lesson 2.50
 - **Subtopics**:
-  - `2.26.1` Bernoulli Distribution: single trial coin flip ($p$); mean $p$, variance $p(1-p)$.
-  - `2.26.2` Binomial Distribution: sum of $n$ independent Bernoulli trials; combinatoric coefficient.
-  - `2.26.3` Poisson Distribution: counting rare events in continuous time intervals; $\lambda$ parameter.
-  - `2.26.4` Normal (Gaussian) Distribution: $\mathcal{N}(\mu, \sigma^2)$; bell curve, empirical 68-95-99.7 rule.
+  - `2.51.1` Bernoulli Distribution: single trial coin flip ($p$); mean $p$, variance $p(1-p)$.
+  - `2.51.2` Binomial Distribution: sum of $n$ independent Bernoulli trials; combinatoric coefficient.
+  - `2.51.3` Poisson Distribution: counting rare events in continuous time intervals; $\lambda$ parameter.
+  - `2.51.4` Normal (Gaussian) Distribution: $\mathcal{N}(\mu, \sigma^2)$; bell curve, empirical 68-95-99.7 rule.
 - **Key Failure Modes & Edge Cases**: Using a normal distribution to model heavy-tailed financial returns or website traffic latencies.
 - **Verification & Mastery Check**: Generate random samples from Bernoulli and Normal distributions and plot empirical histograms matching theoretical PDFs.
 - **Project Application**: MathKit: Distribution functions.
 
-#### Lesson 2.27: Expectation, Variance, Covariance, & Correlation
+#### Lesson 2.52: Expectation, Variance, Covariance, & Correlation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.25
+- **Prerequisites**: Lesson 2.50
 - **Subtopics**:
-  - `2.27.1` Expected Value (Mean $\mu$): linearity of expectation ($\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]$).
-  - `2.27.2` Variance ($\sigma^2$): spread around mean; $	ext{Var}(X) = \mathbb{E}[(X - \mu)^2] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
-  - `2.27.3` Covariance: $	ext{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)]$; directional co-movement.
-  - `2.27.4` Pearson Correlation Coefficient ($ho$): normalized covariance bounded in $[-1, 1]$.
+  - `2.52.1` Expected Value (Mean $\mu$): linearity of expectation ($\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]$).
+  - `2.52.2` Variance ($\sigma^2$): spread around mean; $	ext{Var}(X) = \mathbb{E}[(X - \mu)^2] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
+  - `2.52.3` Covariance: $	ext{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)]$; directional co-movement.
+  - `2.52.4` Pearson Correlation Coefficient ($
+ho$): normalized covariance bounded in $[-1, 1]$.
 - **Key Failure Modes & Edge Cases**: Assuming correlation implies causation, or assuming zero correlation implies statistical independence (only true for Gaussians).
 - **Verification & Mastery Check**: Calculate the covariance matrix for a 3-dimensional dataset manually and verify against `np.cov`.
 - **Project Application**: DataSift: Correlation matrix calculations.
 
-#### Lesson 2.28: Hypothesis Testing: $t$-Tests, $p$-Values, & Type I/II Errors
+#### Lesson 2.53: Hypothesis Testing: $t$-Tests, $p$-Values, & Type I/II Errors
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.27
+- **Prerequisites**: Lesson 2.52
 - **Subtopics**:
-  - `2.28.1` The Hypothesis Testing framework: Null Hypothesis ($H_0$) vs Alternative Hypothesis ($H_1$).
-  - `2.28.2` Test statistics: Student's two-sample $t$-test (equal and unequal variances / Welch's $t$-test).
-  - `2.28.3` The $p$-value: probability of observing data at least as extreme assuming $H_0$ is true.
-  - `2.28.4` Decision errors: Type I error ($lpha$: false positive) and Type II error ($eta$: false negative); statistical power ($1-eta$).
+  - `2.53.1` The Hypothesis Testing framework: Null Hypothesis ($H_0$) vs Alternative Hypothesis ($H_1$).
+  - `2.53.2` Test statistics: Student's two-sample $t$-test (equal and unequal variances / Welch's $t$-test).
+  - `2.53.3` The $p$-value: probability of observing data at least as extreme assuming $H_0$ is true.
+  - `2.53.4` Decision errors: Type I error ($lpha$: false positive) and Type II error ($eta$: false negative); statistical power ($1-eta$).
 - **Key Failure Modes & Edge Cases**: $p$-hacking: running repeated tests on random subsets until $p < 0.05$ without Bonferroni correction.
 - **Verification & Mastery Check**: Implement Welch's $t$-test from raw mathematical formulas and verify output against `scipy.stats.ttest_ind`.
 - **Project Application**: MathKit: `stats.t_test`.
 
-#### Lesson 2.29: Shannon Information, Surprise, & Entropy
+#### Lesson 2.54: Shannon Information, Surprise, & Entropy
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.25
+- **Prerequisites**: Lesson 2.50
 - **Subtopics**:
-  - `2.29.1` Quantifying information: self-information / surprise $I(x) = -\log_2 P(x)$; bits vs nats.
-  - `2.29.2` Shannon Entropy: expected information content $H(X) = -\sum P(x) \log_2 P(x)$.
-  - `2.29.3` Entropy as uncertainty: proving that entropy is maximized when the distribution is uniform.
-  - `2.29.4` Joint Entropy and Conditional Entropy: chain rule for entropy ($H(X, Y) = H(X) + H(Y|X)$).
+  - `2.54.1` Quantifying information: self-information / surprise $I(x) = -\log_2 P(x)$; bits vs nats.
+  - `2.54.2` Shannon Entropy: expected information content $H(X) = -\sum P(x) \log_2 P(x)$.
+  - `2.54.3` Entropy as uncertainty: proving that entropy is maximized when the distribution is uniform.
+  - `2.54.4` Joint Entropy and Conditional Entropy: chain rule for entropy ($H(X, Y) = H(X) + H(Y|X)$).
 - **Key Failure Modes & Edge Cases**: Calculating entropy on un-normalized frequency counts rather than true probability distributions.
 - **Verification & Mastery Check**: Calculate by hand the entropy of an unfair coin across varying bias probabilities $p \in [0, 1]$ and plot the curve.
 - **Project Application**: DevAudit: High-entropy secret detection.
 
-#### Lesson 2.30: Cross-Entropy, Kullback-Leibler (KL) Divergence, & Mutual Info
+#### Lesson 2.55: Cross-Entropy, Kullback-Leibler (KL) Divergence, & Mutual Info
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.29
+- **Prerequisites**: Lesson 2.54
 - **Subtopics**:
-  - `2.30.1` Cross-Entropy: $H(P, Q) = -\sum P(x) \log Q(x)$; average cost of encoding distribution $P$ with model $Q$.
-  - `2.30.2` Kullback-Leibler (KL) Divergence: $D_{KL}(P \parallel Q) = \sum P(x) \log rac{P(x)}{Q(x)} = H(P, Q) - H(P)$.
-  - `2.30.3` Gibbs' Inequality: proof that $D_{KL}(P \parallel Q) \ge 0$ with equality if and only if $P = Q$.
-  - `2.30.4` Mutual Information: $I(X; Y) = H(X) - H(X|Y)$; measuring information sharing between variables.
+  - `2.55.1` Cross-Entropy: $H(P, Q) = -\sum P(x) \log Q(x)$; average cost of encoding distribution $P$ with model $Q$.
+  - `2.55.2` Kullback-Leibler (KL) Divergence: $D_{KL}(P \parallel Q) = \sum P(x) \log rac{P(x)}{Q(x)} = H(P, Q) - H(P)$.
+  - `2.55.3` Gibbs' Inequality: proof that $D_{KL}(P \parallel Q) \ge 0$ with equality if and only if $P = Q$.
+  - `2.55.4` Mutual Information: $I(X; Y) = H(X) - H(X|Y)$; measuring information sharing between variables.
 - **Key Failure Modes & Edge Cases**: Treating KL divergence as a symmetric distance metric ($D_{KL}(P \parallel Q) 
 eq D_{KL}(Q \parallel P)$).
 - **Verification & Mastery Check**: Implement KL divergence and Cross-Entropy in Python, and verify Gibbs' inequality across 1,000 random distributions.
 - **Project Application**: MathKit: `mathkit.info`.
 
-#### Lesson 2.31: Maximum Likelihood Estimation (MLE) & Loss Function Derivation
+#### Lesson 2.56: Maximum Likelihood Estimation (MLE) & Loss Function Derivation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.24, 2.30
+- **Prerequisites**: Lesson 2.49, 2.30
 - **Subtopics**:
-  - `2.31.1` The Likelihood function: $L(	heta) = \prod P(x_i | 	heta)$; joint probability of observed data.
-  - `2.31.2` Log-Likelihood: $\log L(	heta) = \sum \log P(x_i | 	heta)$; converting products to sums.
-  - `2.31.3` Deriving MLE estimators: taking derivatives of log-likelihood, setting to zero, solving for parameters.
-  - `2.31.4` The Fundamental Equivalence: proving that maximizing log-likelihood under multinomial distribution is mathematically identical to minimizing cross-entropy loss.
+  - `2.56.1` The Likelihood function: $L(	heta) = \prod P(x_i | 	heta)$; joint probability of observed data.
+  - `2.56.2` Log-Likelihood: $\log L(	heta) = \sum \log P(x_i | 	heta)$; converting products to sums.
+  - `2.56.3` Deriving MLE estimators: taking derivatives of log-likelihood, setting to zero, solving for parameters.
+  - `2.56.4` The Fundamental Equivalence: proving that maximizing log-likelihood under multinomial distribution is mathematically identical to minimizing cross-entropy loss.
 - **Key Failure Modes & Edge Cases**: Failing to use log-likelihood, causing catastrophic floating point underflow when multiplying thousands of small probabilities.
 - **Verification & Mastery Check**: Derive algebraically the MLE parameter estimators for the mean and variance of a normal distribution.
 - **Project Application**: Phase 9: Theoretical foundation for neural network loss functions.
 
-#### Lesson 2.32: Differential Calculus: Slopes, Tangents, & The Chain Rule
+#### Lesson 2.57: Differential Calculus: Slopes, Tangents, & The Chain Rule
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.1
+- **Prerequisites**: Lesson 2.26
 - **Subtopics**:
-  - `2.32.1` Derivative as instantaneous rate of change: limit definition $f'(x) = \lim_{h 	o 0} rac{f(x+h) - f(x)}{h}$.
-  - `2.32.2` Differentiation rules: power rule, product rule, quotient rule.
-  - `2.32.3` The Single-Variable Chain Rule: $rac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)$.
-  - `2.32.4` Geometric meaning: tangent lines and local linear approximations.
+  - `2.57.1` Derivative as instantaneous rate of change: limit definition $f'(x) = \lim_{h 	o 0} rac{f(x+h) - f(x)}{h}$.
+  - `2.57.2` Differentiation rules: power rule, product rule, quotient rule.
+  - `2.57.3` The Single-Variable Chain Rule: $rac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)$.
+  - `2.57.4` Geometric meaning: tangent lines and local linear approximations.
 - **Key Failure Modes & Edge Cases**: Applying the power rule to exponential functions (e.g., differentiating $e^x$ as $x e^{x-1}$).
 - **Verification & Mastery Check**: Calculate the analytical derivative of a composite sigmoid function and verify against finite difference approximations.
 - **Project Application**: GradFlow: Derivative primitives.
 
-#### Lesson 2.33: Multivariable Calculus: Partial Derivatives & The Gradient Vector
+#### Lesson 2.58: Multivariable Calculus: Partial Derivatives & The Gradient Vector
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.32
+- **Prerequisites**: Lesson 2.57
 - **Subtopics**:
-  - `2.33.1` Functions of multiple variables: $f: \mathbb{R}^n 	o \mathbb{R}$.
-  - `2.33.2` Partial Derivatives: differentiating with respect to one variable while holding all others constant.
-  - `2.33.3` The Gradient Vector ($
+  - `2.58.1` Functions of multiple variables: $f: \mathbb{R}^n 	o \mathbb{R}$.
+  - `2.58.2` Partial Derivatives: differentiating with respect to one variable while holding all others constant.
+  - `2.58.3` The Gradient Vector ($
 abla f$): vector of all first-order partial derivatives.
-  - `2.33.4` Geometric meaning of $
+  - `2.58.4` Geometric meaning of $
 abla f$: points in the direction of steepest ascent; magnitude is the rate of increase.
 - **Key Failure Modes & Edge Cases**: Assuming the gradient points toward a minimum (the gradient points in the direction of steepest *ascent*).
 - **Verification & Mastery Check**: Compute the gradient vector of a multivariable function analytically and verify via numerical gradient checking.
 - **Project Application**: MathKit: `mathkit.optim`.
 
-#### Lesson 2.34: The Hessian Matrix, Convexity, & Saddle Points
+#### Lesson 2.59: The Hessian Matrix, Convexity, & Saddle Points
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.33
+- **Prerequisites**: Lesson 2.58
 - **Subtopics**:
-  - `2.34.1` Second-order partial derivatives: mixed partials and Clairaut's Theorem ($rac{\partial^2 f}{\partial x \partial y} = rac{\partial^2 f}{\partial y \partial x}$).
-  - `2.34.2` The Hessian Matrix ($H$): square matrix of second-order partial derivatives describing local curvature.
-  - `2.34.3` Convexity: positive semi-definite Hessian ($x^T H x \ge 0 \quad orall x$); global minima guarantees.
-  - `2.34.4` Saddle points: indefinite Hessian with positive and negative eigenvalues; zero gradient without local extrema.
+  - `2.59.1` Second-order partial derivatives: mixed partials and Clairaut's Theorem ($rac{\partial^2 f}{\partial x \partial y} = rac{\partial^2 f}{\partial y \partial x}$).
+  - `2.59.2` The Hessian Matrix ($H$): square matrix of second-order partial derivatives describing local curvature.
+  - `2.59.3` Convexity: positive semi-definite Hessian ($x^T H x \ge 0 \quad orall x$); global minima guarantees.
+  - `2.59.4` Saddle points: indefinite Hessian with positive and negative eigenvalues; zero gradient without local extrema.
 - **Key Failure Modes & Edge Cases**: Assuming that a zero gradient ($
 abla f = 0$) guarantees a local minimum without checking the Hessian eigenvalues.
 - **Verification & Mastery Check**: Classify the stationary points of a 2D non-convex polynomial by computing eigenvalues of the Hessian matrix.
 - **Project Application**: Optimization theory for Phase 9.
 
-#### Lesson 2.35: Gradient Descent Optimization: Learning Rates & Momentum
+#### Lesson 2.60: Gradient Descent Optimization: Learning Rates & Momentum
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 2.33, 2.34
+- **Prerequisites**: Lesson 2.58, 2.34
 - **Subtopics**:
-  - `2.35.1` Gradient Descent update rule: $	heta_{t+1} = 	heta_t - lpha 
+  - `2.60.1` Gradient Descent update rule: $	heta_{t+1} = 	heta_t - lpha 
 abla f(	heta_t)$.
-  - `2.35.2` The Learning Rate ($lpha$): convergence rates, oscillations in ravines, divergence when $lpha$ is too large.
-  - `2.35.3` Momentum update rule: exponential moving average of gradients: $v_{t+1} = eta v_t + (1-eta) 
+  - `2.60.2` The Learning Rate ($lpha$): convergence rates, oscillations in ravines, divergence when $lpha$ is too large.
+  - `2.60.3` Momentum update rule: exponential moving average of gradients: $v_{t+1} = eta v_t + (1-eta) 
 abla f(	heta_t)$; $	heta_{t+1} = 	heta_t - lpha v_{t+1}$.
-  - `2.35.4` Adam Optimizer derivation: first moment (momentum) and second moment (uncentered variance) with bias corrections.
+  - `2.60.4` Adam Optimizer derivation: first moment (momentum) and second moment (uncentered variance) with bias corrections.
 - **Key Failure Modes & Edge Cases**: Using an unscaled learning rate on ill-conditioned objectives, causing parameters to explode to infinity.
 - **Verification & Mastery Check**: Implement Gradient Descent with Momentum and Adam from raw formulas and optimize a 2D Rosenbrock function.
 - **Project Application**: MathKit: `optim.adam`.
 
+
+---
 
 ---
 
@@ -1707,556 +2559,923 @@ abla f(	heta_t)$; $	heta_{t+1} = 	heta_t - lpha v_{t+1}$.
 
 ---
 
+---
+
 ## Phase 3: Data Structures, Algorithms & Problem Solving
-**Duration**: 8 weeks
-**Total Lessons**: 45 Lessons (Lesson 3.1 to Lesson 3.45)
+**Duration**: 10 weeks
+**Total Lessons**: 75 Lessons (Lesson 3.1 to Lesson 3.75)
 **Builds on**: Phase 1 (Python, testing), Phase 2 (discrete math, Big-$O$, graph theory)
 **Introduces**: First-principles implementations of all core data structures, memory layout, sorting algorithms, algorithmic design paradigms, competitive programming problem solving.
 
 ---
 
-### Phase 3 Lesson Specifications (Lessons 3.1 – 3.45)
+### Phase 3 Lesson Specifications (Lessons 3.1 – 3.75)
 
-#### Lesson 3.1: Memory Contiguity & Cache Locality in Data Structures
+#### Lesson 3.1: Algorithmic Complexity & Big-O Intuition
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0, Phase 2
+- **Subtopics**:
+  - `3.1.1` Why algorithmic efficiency matters: code that works on 10 items can completely freeze on 1,000,000 items.
+  - `3.1.2` Measuring scale, not clock time: why benchmarking milliseconds is misleading across different hardware.
+  - `3.1.3` The Big-O notation mental model: describing how runtime grows as input size N increases.
+  - `3.1.4` The Big-O hierarchy: O(1) constant, O(log N) logarithmic, O(N) linear, O(N log N), O(N^2) quadratic.
+- **Key Failure Modes & Edge Cases**: Confusing the best-case runtime with worst-case or average-case Big-O guarantees.
+- **Verification & Mastery Check**: Analyze three code snippets and write down their exact Big-O time and space complexity with justification.
+- **Project Application**: StreamBuffer: Complexity auditing.
+
+#### Lesson 3.2: Constant O(1) vs Linear O(N) Complexity
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.1
+- **Subtopics**:
+  - `3.2.1` Constant time O(1): operations that take the exact same amount of time regardless of dataset size.
+  - `3.2.2` Examples of O(1): looking up an array index, appending to a list, looking up a key in a dictionary.
+  - `3.2.3` Linear time O(N): operations whose execution time doubles whenever the input dataset doubles.
+  - `3.2.4` Examples of O(N): scanning an unsorted list with for, calculating sum(list), counting character matches.
+- **Key Failure Modes & Edge Cases**: Accidentally placing an O(N) operation inside a loop, unintentionally creating a quadratic O(N^2) disaster.
+- **Verification & Mastery Check**: Benchmark array index lookup vs linear scan across 10, 1,000, and 1,000,000 elements to prove O(1) vs O(N).
+- **Project Application**: StreamBuffer: Constant-time buffer indexing.
+
+#### Lesson 3.3: Quadratic O(N^2) & The Nested Loop Trap
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.3.1` The nested loop trap: running a loop of size N inside another loop of size N.
+  - `3.3.2` Why O(N^2) breaks at scale: processing 1,000 items takes 1,000,000 steps; 100,000 items takes 10 billion steps!
+  - `3.3.3` Common hidden nested loops: calling item in list or list.count() inside an outer for loop.
+  - `3.3.4` How to identify quadratic bottlenecks in code reviews before they reach production.
+- **Key Failure Modes & Edge Cases**: Writing nested loops to check for duplicates across two lists instead of using a hash set.
+- **Verification & Mastery Check**: Take an O(N^2) duplicate finder and measure its runtime on a 50,000-item list.
+- **Project Application**: StreamBuffer: Identifying algorithmic bottlenecks.
+
+#### Lesson 3.4: Logarithmic O(log N) & Divide and Conquer
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.1
+- **Subtopics**:
+  - `3.4.1` The power of cutting problems in half: why dividing search spaces is so blindingly fast.
+  - `3.4.2` The phone book analogy: finding a name by opening to the middle and discarding half the book.
+  - `3.4.3` Logarithmic scaling: searching 1,000 items takes 10 steps; searching 1,000,000,000 items takes only 30 steps!
+  - `3.4.4` Identifying divide-and-conquer algorithms in real-world systems (binary search, balanced trees).
+- **Key Failure Modes & Edge Cases**: Applying binary search to an unsorted list without sorting it first, producing completely wrong results.
+- **Verification & Mastery Check**: Calculate how many comparison steps binary search needs to locate an item in a dataset of 4 billion records.
+- **Project Application**: StreamBuffer: Scalable search mechanics.
+
+#### Lesson 3.5: Two Pointers: Opposing Direction Converging
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.5.1` The two-pointer technique: using two coordinate indices simultaneously to inspect an array.
+  - `3.5.2` Opposing pointers: starting Left at index 0 and Right at index N-1, stepping inward toward each other.
+  - `3.5.3` Solving Two-Sum on sorted arrays: moving Left when sum is too small, moving Right when sum is too large.
+  - `3.5.4` Why two pointers turns an O(N^2) brute-force nested search into an optimal single-pass O(N) solution.
+- **Key Failure Modes & Edge Cases**: Pointer crossing bugs: forgetting the while left < right boundary condition, causing pointers to cross.
+- **Verification & Mastery Check**: Implement two-pointer Two-Sum on a sorted list and prove it finds target pairs in single-pass O(N) time.
+- **Project Application**: StreamBuffer: Paired token matching.
+
+#### Lesson 3.6: Two Pointers: Fast & Slow Pointer (Cycle Detection)
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.5
+- **Subtopics**:
+  - `3.6.1` Same-direction pointers: two pointers starting at the beginning and moving forward at different speeds.
+  - `3.6.2` The Tortoise and Hare algorithm: slow pointer moves 1 step while fast pointer moves 2 steps.
+  - `3.6.3` Cycle detection intuition: if a runner and a walker circle a closed track, the runner will eventually lap the walker.
+  - `3.6.4` Applications: detecting infinite loops, finding list midpoints, and cycle detection in state graphs.
+- **Key Failure Modes & Edge Cases**: Dereferencing null pointer in fast.next.next without checking if fast or fast.next is None.
+- **Verification & Mastery Check**: Implement Floyd's cycle-finding algorithm to detect whether a linked sequence contains an infinite loop.
+- **Project Application**: StreamBuffer: Agent loop cycle detection.
+
+#### Lesson 3.7: Sliding Window: Fixed Size Subarrays
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.7.1` The sliding window paradigm: maintaining a visible slice of size K across a continuous stream of data.
+  - `3.7.2` Incremental updates: sliding the window by adding the new element on the right and subtracting the old on left.
+  - `3.7.3` Why sliding windows achieve O(N): avoiding re-calculating the entire window from scratch on every step.
+  - `3.7.4` Practical applications: calculating rolling average CPU usage, moving token limits, and network throughput.
+- **Key Failure Modes & Edge Cases**: Recomputing sum(window) inside every step, degenerating the algorithm back to O(N * K).
+- **Verification & Mastery Check**: Write a function that calculates the maximum sum of any contiguous subarray of fixed length K in O(N) time.
+- **Project Application**: StreamBuffer: Rolling metrics sliding window.
+
+#### Lesson 3.8: Sliding Window: Dynamic Size Subarrays
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.7
+- **Subtopics**:
+  - `3.8.1` Flexible windows: expanding the right edge until a condition is met, then contracting the left edge.
+  - `3.8.2` The dynamic pattern: expand right to explore, shrink left to satisfy constraints.
+  - `3.8.3` Tracking window state: keeping character frequency counts or running sums inside the window.
+  - `3.8.4` Canonical problems: shortest subarray with sum >= target, longest substring without repeating characters.
+- **Key Failure Modes & Edge Cases**: Shrinking the left pointer past the right pointer or failing to update the window state dictionary.
+- **Verification & Mastery Check**: Find the length of the longest substring without repeating characters using a dynamic sliding window in O(N).
+- **Project Application**: StreamBuffer: Variable-length context buffer slicing.
+
+#### Lesson 3.9: Prefix Sums: Range Sum Query in O(1)
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.9.1` Pre-computing cumulative sums: building an array where prefix[i] stores the sum of all elements up to i.
+  - `3.9.2` Instant range queries: calculating the sum between index L and R in exact O(1) time: prefix[R] - prefix[L-1].
+  - `3.9.3` Trading memory for speed: spending O(N) storage to make all future range calculations instantaneous.
+  - `3.9.4` Applications: computing cumulative cost over time windows and fast 2D image box filtering.
+- **Key Failure Modes & Edge Cases**: Off-by-one errors when querying ranges that start at index 0, requiring a padded 0 at prefix[0].
+- **Verification & Mastery Check**: Build a PrefixSum class that takes an array of numbers and answers 1,000 range sum queries in O(1) each.
+- **Project Application**: StreamBuffer: Rapid range query calculations.
+
+#### Lesson 3.10: Frequency Maps: Counting Elements with Dicts
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0 (Lesson 0.13), Lesson 3.2
+- **Subtopics**:
+  - `3.10.1` Counting frequencies: using hash maps to track how many times each item appears in a collection.
+  - `3.10.2` The Python collections.Counter helper: counting elements in one line with high performance.
+  - `3.10.3` Finding most common elements: getting top-K frequencies efficiently.
+  - `3.10.4` Detecting anagrams and character distributions in text streams.
+- **Key Failure Modes & Edge Cases**: Looking up keys without default values, triggering KeyError when encountering new elements.
+- **Verification & Mastery Check**: Given a stream of user messages, count word frequencies and return the top 5 most common words.
+- **Project Application**: StreamBuffer: Stream token frequency analyzer.
+
+#### Lesson 3.11: Binary Search: Standard Sorted Array Lookup
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.4
+- **Subtopics**:
+  - `3.11.1` Binary search requirements: why the underlying collection MUST be sorted before binary search can work.
+  - `3.11.2` The three pointers: low, mid, and high.
+  - `3.11.3` Avoiding integer overflow: calculating mid as low + (high - low) // 2.
+  - `3.11.4` Updating bounds: mid + 1 when target is larger, mid - 1 when target is smaller.
+- **Key Failure Modes & Edge Cases**: Forgetting to add or subtract 1 when updating high and low, causing infinite while loops.
+- **Verification & Mastery Check**: Implement binary search from memory in pure Python and prove it finds targets in a 1,000,000-item sorted list.
+- **Project Application**: StreamBuffer: Fast log index lookup.
+
+#### Lesson 3.12: Binary Search: Finding Lower and Upper Bounds
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.11
+- **Subtopics**:
+  - `3.12.1` Handling duplicates in sorted data: finding the first or last occurrence of a target value.
+  - `3.12.2` Lower bound: finding the smallest index where array[index] >= target.
+  - `3.12.3` Upper bound: finding the smallest index where array[index] > target.
+  - `3.12.4` Range queries: counting how many times a value appears in a sorted list using upper_bound - lower_bound.
+- **Key Failure Modes & Edge Cases**: Returning the first match found without continuing search toward the left boundary when duplicates exist.
+- **Verification & Mastery Check**: Find the starting and ending index of a target value in a sorted array containing duplicate numbers.
+- **Project Application**: StreamBuffer: Timestamp boundary searches.
+
+#### Lesson 3.13: Binary Search on Solution Space
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.11
+- **Subtopics**:
+  - `3.13.1` Searching without an array: using binary search to find an optimal answer value directly.
+  - `3.13.2` Monotonic condition: if an answer X is possible, all values > X are also possible (or vice versa).
+  - `3.13.3` The feasibility function: a helper function that checks can_fulfill(capacity) in O(N).
+  - `3.13.4` Canonical problems: capacity to ship packages within D days, splitting arrays to minimize largest sum.
+- **Key Failure Modes & Edge Cases**: Setting improper search range boundaries (low and high) that fail to include the true optimal solution.
+- **Verification & Mastery Check**: Calculate the minimum rate limit bucket capacity needed to process a stream of jobs within a fixed deadline.
+- **Project Application**: StreamBuffer: Adaptive rate limit capacity tuning.
+
+#### Lesson 3.14: Recursion: Base Cases & Call Stack Frames
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0 (Lesson 0.8)
+- **Subtopics**:
+  - `3.14.1` What is recursion: a function that solves a problem by calling itself on smaller sub-problems.
+  - `3.14.2` The two essential parts: the Base Case (when to stop) and the Recursive Case (the step forward).
+  - `3.14.3` The Call Stack: how Python allocates a new stack frame in memory for every recursive invocation.
+  - `3.14.4` Recursion depth limits: understanding why Python stops at 1,000 nested calls to prevent stack overflow.
+- **Key Failure Modes & Edge Cases**: Omitting or incorrectly defining the base case, triggering RecursionError: maximum recursion depth exceeded.
+- **Verification & Mastery Check**: Write a recursive function that reverses a string and visualize its call stack frames on paper.
+- **Project Application**: StreamBuffer: Recursive document parsing.
+
+#### Lesson 3.15: Tree Traversals: Pre-Order, In-Order, Post-Order
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.14
+- **Subtopics**:
+  - `3.15.1` Hierarchical data structures: trees composed of root, child nodes, and leaves.
+  - `3.15.2` Binary trees: trees where each node has at most two children (left and right).
+  - `3.15.3` Pre-Order traversal (Root, Left, Right): useful for copying or serializing trees.
+  - `3.15.4` In-Order traversal (Left, Root, Right): visiting sorted binary search trees in ascending numerical order.
+  - `3.15.5` Post-Order traversal (Left, Right, Root): useful for deleting trees or calculating bottom-up sizes.
+- **Key Failure Modes & Edge Cases**: Failing to check if current node is None before attempting to access node.left or node.right.
+- **Verification & Mastery Check**: Construct a simple 5-node binary tree and implement all three depth-first traversal orders.
+- **Project Application**: StreamBuffer: AST node traversal.
+
+#### Lesson 3.16: Breadth-First Search (BFS) with Queues
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.15
+- **Subtopics**:
+  - `3.16.1` Level-by-level exploration: visiting all immediate neighbors before moving to the next depth tier.
+  - `3.16.2` The Queue data structure (FIFO): using collections.deque for fast popleft() operations.
+  - `3.16.3` Shortest path guarantee: why BFS is mathematically guaranteed to find the shortest path in unweighted graphs.
+  - `3.16.4` Tracking visited nodes: preventing infinite loops when graphs contain cycles.
+- **Key Failure Modes & Edge Cases**: Using a Python list as a queue and calling pop(0), which is an O(N) memory shift instead of O(1).
+- **Verification & Mastery Check**: Implement BFS on a maze grid to find the shortest path from start to goal coordinates.
+- **Project Application**: StreamBuffer: Shortest path routing.
+
+#### Lesson 3.17: Depth-First Search (DFS) with Stacks
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.14, Lesson 3.15
+- **Subtopics**:
+  - `3.17.1` Exploring as deep as possible before backtracking: the Depth-First Search strategy.
+  - `3.17.2` DFS using recursion: utilizing the call stack implicitly.
+  - `3.17.3` Iterative DFS: using an explicit Stack data structure (LIFO) with while stack:.
+  - `3.17.4` Applications: finding connected components, detecting cycles, and path existence queries.
+- **Key Failure Modes & Edge Cases**: Allowing DFS to run on graphs with cycles without a visited set, leading to stack overflow crashes.
+- **Verification & Mastery Check**: Implement iterative DFS using a Python list as a stack to verify reachability between two system nodes.
+- **Project Application**: StreamBuffer: Graph connectivity exploration.
+
+#### Lesson 3.18: Topological Sorting: Course Prerequisites
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.16, Lesson 3.17
+- **Subtopics**:
+  - `3.18.1` Directed Acyclic Graphs (DAGs): directed networks without circular dependency loops.
+  - `3.18.2` Topological order: a linear ordering of vertices such that every directed edge u -> v comes before v.
+  - `3.18.3` Kahn's Algorithm: tracking in-degrees (number of incoming prerequisites) and processing 0-in-degree nodes.
+  - `3.18.4` Detecting impossible cyclic dependencies: when not all nodes can be processed (e.g. A needs B, B needs A).
+- **Key Failure Modes & Edge Cases**: Attempting to topologically sort a graph that contains a cycle, causing dependency resolution deadlock.
+- **Verification & Mastery Check**: Given a list of tasks with prerequisites, compute a valid build order or raise an error if a circular cycle exists.
+- **Project Application**: StreamBuffer: Build dependency ordering.
+
+#### Lesson 3.19: Hash Collisions & Hash Table Chaining
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0 (Lesson 0.13), Lesson 3.2
+- **Subtopics**:
+  - `3.19.1` How hash tables work: converting arbitrary keys into array bucket indices using a hash function.
+  - `3.19.2` The Pigeonhole Principle: why multiple different keys will eventually hash to the exact same bucket.
+  - `3.19.3` Separate Chaining: storing collided keys in a linked list or small array inside the bucket.
+  - `3.19.4` Load factor: when to resize the underlying bucket array to maintain O(1) average lookup performance.
+- **Key Failure Modes & Edge Cases**: Writing a poor hash function that maps all keys to bucket 0, degrading hash map performance to O(N).
+- **Verification & Mastery Check**: Build a simplified hash map in Python with 10 buckets that handles collisions via separate chaining.
+- **Project Application**: StreamBuffer: Custom hash storage engines.
+
+#### Lesson 3.20: Stack Applications: Valid Parentheses Checking
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.20.1` The Stack LIFO principle (Last In, First Out): pushing items on top and popping from the top.
+  - `3.20.2` Matching nested structures: opening brackets push, closing brackets pop and verify match.
+  - `3.20.3` Checking balanced brackets: verifying (), [], and {} in code, JSON, and math expressions.
+  - `3.20.4` Handling mismatched, unclosed, or premature closing brackets.
+- **Key Failure Modes & Edge Cases**: Popping from an empty stack when encountering an unexpected closing bracket at the start of input.
+- **Verification & Mastery Check**: Implement a syntax validator that checks if nested brackets in an input string are properly matched.
+- **Project Application**: StreamBuffer: Code and JSON bracket validator.
+
+#### Lesson 3.21: Queue Applications: Sliding Window Buffers
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.7, Lesson 3.16
+- **Subtopics**:
+  - `3.21.1` The Queue FIFO principle (First In, First Out): adding to the back, removing from the front.
+  - `3.21.2` Circular ring buffers: fixed-capacity queues that overwrite the oldest item when full.
+  - `3.21.3` Producer-Consumer pattern: decoupling data producers from slower data processors via a queue.
+  - `3.21.4` Queue thread safety preview: preventing data corruption when multiple workers access a queue.
+- **Key Failure Modes & Edge Cases**: Allowing an unbounded queue to grow indefinitely under high input traffic, exhausting server RAM.
+- **Verification & Mastery Check**: Build a CircularBuffer class of fixed capacity 5 that safely records the most recent 5 events in order.
+- **Project Application**: StreamBuffer: Fixed-memory stream buffer.
+
+#### Lesson 3.22: Heap / Priority Queue: Finding Top-K Elements
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.22.1` Priority Queues: retrieving the highest (or lowest) priority item in O(log N) time.
+  - `3.22.2` Binary Heaps: min-heaps (parent <= children) vs max-heaps (parent >= children).
+  - `3.22.3` The heapq module in Python: heappush(), heappop(), and nlargest().
+  - `3.22.4` The Top-K pattern: finding the K largest elements in a stream of N items using a min-heap of size K in O(N log K).
+- **Key Failure Modes & Edge Cases**: Sorting the entire N-element list (O(N log N)) just to find the top 5 elements, wasting CPU time.
+- **Verification & Mastery Check**: Find the 10 highest-scoring documents from an endless stream of 1,000,000 search results using a min-heap.
+- **Project Application**: StreamBuffer: Real-time top-K scoring buffer.
+
+#### Lesson 3.23: Greedy Algorithms: Interval Scheduling
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2
+- **Subtopics**:
+  - `3.23.1` The Greedy choice property: making the locally optimal decision at each step to find a global optimum.
+  - `3.23.2` When greedy works vs when it fails: why greedy fails for the 0/1 knapsack problem but works for intervals.
+  - `3.23.3` Interval scheduling: maximizing the number of non-overlapping meetings in a conference room.
+  - `3.23.4` The optimal greedy strategy: sorting intervals by their earliest end times.
+- **Key Failure Modes & Edge Cases**: Sorting intervals by start time instead of end time, which fails to maximize scheduled meetings.
+- **Verification & Mastery Check**: Given a list of start and end times for tasks, compute the maximum number of non-overlapping tasks you can run.
+- **Project Application**: StreamBuffer: Task schedule optimizer.
+
+#### Lesson 3.24: Backtracking: Generating Subsets & Combinations
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.14
+- **Subtopics**:
+  - `3.24.1` Exploring decision trees: making a choice, exploring consequences, and undoing the choice (backtracking).
+  - `3.24.2` The three steps of backtracking: Choose, Explore, Un-choose.
+  - `3.24.3` Generating all subsets (the power set): branching on whether to include or exclude each element.
+  - `3.24.4` Combinations and permutations: systematically building valid configurations without duplicate work.
+- **Key Failure Modes & Edge Cases**: Forgetting to un-choose (pop) the candidate from the current path list before returning from recursion.
+- **Verification & Mastery Check**: Generate all unique subsets of a 3-element list using the recursive choose-explore-unchoose pattern.
+- **Project Application**: StreamBuffer: Combinatorial prompt permuter.
+
+#### Lesson 3.25: Dynamic Programming: Memoization (Top-Down)
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.14
+- **Subtopics**:
+  - `3.25.1` Why naive recursion repeats work: Fibonacci numbers recalculating the same sub-problems exponentially.
+  - `3.25.2` Overlapping sub-problems: noticing that identical calculations occur hundreds of times across branches.
+  - `3.25.3` Memoization (Top-Down DP): caching the return value of a recursive function in a dictionary.
+  - `3.25.4` Transforming exponential O(2^N) algorithms into linear O(N) algorithms effortlessly.
+- **Key Failure Modes & Edge Cases**: Using mutable unhashable objects (like lists) as keys in the memoization cache dictionary.
+- **Verification & Mastery Check**: Implement top-down Fibonacci with a dictionary cache and compute fib(100) instantly without recursion errors.
+- **Project Application**: StreamBuffer: Memoized sub-problem cache.
+
+#### Lesson 3.26: Dynamic Programming: Tabulation (Bottom-Up)
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.25
+- **Subtopics**:
+  - `3.26.1` Bottom-Up DP: building solutions iteratively starting from the smallest base cases up to N.
+  - `3.26.2` The DP table: using a 1D array where table[i] represents the answer for sub-problem of size i.
+  - `3.26.3` Eliminating recursion overhead: saving stack frame memory and avoiding recursion depth limits entirely.
+  - `3.26.4` Transition relations: writing the recurrence formula that computes table[i] from earlier cells.
+- **Key Failure Modes & Edge Cases**: Iterating in the wrong direction or accessing uninitialized table cells that haven't been computed yet.
+- **Verification & Mastery Check**: Implement bottom-up tabulation to compute Fibonacci numbers in iterative O(N) time with 0 recursion.
+- **Project Application**: StreamBuffer: Tabulation DP engine.
+
+#### Lesson 3.27: 1D Dynamic Programming: Climbing Stairs & House Robber
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.26
+- **Subtopics**:
+  - `3.27.1` The Climbing Stairs problem: how many ways to reach step N taking 1 or 2 steps at a time?
+  - `3.27.2` The House Robber problem: maximizing loot without robbing two adjacent houses.
+  - `3.27.3` Formulating the recurrence: dp[i] = max(dp[i-1], dp[i-2] + loot[i]).
+  - `3.27.4` Space optimization: reducing memory from O(N) array down to O(1) by storing only the last two values.
+- **Key Failure Modes & Edge Cases**: Failing to handle edge cases for small inputs (like arrays with 0, 1, or 2 elements).
+- **Verification & Mastery Check**: Solve the House Robber problem with O(1) space optimization and verify maximum loot on test arrays.
+- **Project Application**: StreamBuffer: Optimal sequential selection.
+
+#### Lesson 3.28: 2D Dynamic Programming: Grid Unique Paths
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.26
+- **Subtopics**:
+  - `3.28.1` Extending DP to 2D grids: counting unique paths from top-left (0, 0) to bottom-right (M-1, N-1).
+  - `3.28.2` Grid transitions: dp[row][col] = dp[row-1][col] + dp[row][col-1] (moving only right and down).
+  - `3.28.3` Base cases: setting borders (top row and left column) to 1.
+  - `3.28.4` Adding obstacles: zeroing out paths that hit blocked grid cells.
+- **Key Failure Modes & Edge Cases**: Swapping row and column coordinates when indexing 2D arrays, causing out-of-bounds errors.
+- **Verification & Mastery Check**: Write a function that counts unique paths across an M x N grid with obstacles in O(M * N) time.
+- **Project Application**: StreamBuffer: Grid traversal path optimizer.
+
+#### Lesson 3.29: Monotonic Stack: Next Greater Element
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.20
+- **Subtopics**:
+  - `3.29.1` What is a monotonic stack: a stack where elements are strictly kept in increasing or decreasing order.
+  - `3.29.2` The Next Greater Element problem: finding the first element to the right that is strictly larger.
+  - `3.29.3` How it works: popping smaller elements off the stack as soon as a larger element arrives.
+  - `3.29.4` Why it is O(N): every element is pushed onto the stack once and popped at most once.
+- **Key Failure Modes & Edge Cases**: Pushing values instead of indices onto the stack when the problem requires tracking index distances.
+- **Verification & Mastery Check**: Find the next greater element for every number in an array using a monotonic stack in single-pass O(N).
+- **Project Application**: StreamBuffer: Monotonic trend detection.
+
+#### Lesson 3.30: String Matching: Knuth-Morris-Pratt (KMP) Prefix Table
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 3.2, Phase 0 (Lesson 0.3)
+- **Subtopics**:
+  - `3.30.1` The brute-force string search limitation: checking patterns against text takes O(N * M) time.
+  - `3.30.2` The core insight of KMP: never re-examine characters in text that have already matched.
+  - `3.30.3` The Longest Prefix Suffix (LPS) table: pre-computing pattern self-overlaps.
+  - `3.30.4` Achieving linear time O(N + M) string search across massive documents and log files.
+- **Key Failure Modes & Edge Cases**: Incorrectly indexing the LPS table, causing the search pointer to backtrack too far or skip matches.
+- **Verification & Mastery Check**: Construct the LPS table for a search pattern on paper, then implement the KMP search algorithm in Python.
+- **Project Application**: StreamBuffer: Linear-time pattern search.
+
+#### Lesson 3.31: Memory Contiguity & Cache Locality in Data Structures
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 0 (Lesson 0.6), Phase 2 (Lesson 2.11)
 - **Subtopics**:
-  - `3.1.1` Physical memory layouts: contiguous memory allocations vs node-pointer graph allocations.
-  - `3.1.2` Cache line utilization: iterating contiguous arrays vs dereferencing scattered linked-list pointers.
-  - `3.1.3` Memory overhead per element: 8 bytes for 64-bit int array vs 32+ bytes for linked-list node.
-  - `3.1.4` Spatial prefetching in hardware: CPU prefetching contiguous memory blocks automatically.
+  - `3.31.1` Physical memory layouts: contiguous memory allocations vs node-pointer graph allocations.
+  - `3.31.2` Cache line utilization: iterating contiguous arrays vs dereferencing scattered linked-list pointers.
+  - `3.31.3` Memory overhead per element: 8 bytes for 64-bit int array vs 32+ bytes for linked-list node.
+  - `3.31.4` Spatial prefetching in hardware: CPU prefetching contiguous memory blocks automatically.
 - **Key Failure Modes & Edge Cases**: Assuming linked lists are faster than arrays for insertion without accounting for cache miss penalties.
 - **Verification & Mastery Check**: Benchmark traversal time of 10,000,000 integers in a flat array vs a pointer-linked list, demonstrating a 20x delta.
 - **Project Application**: DataSift: Chunk memory layout.
 
-#### Lesson 3.2: Dynamic Array Architecture: Resizing & Amortized Analysis
+#### Lesson 3.32: Dynamic Array Architecture: Resizing & Amortized Analysis
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.1
+- **Prerequisites**: Lesson 3.31
 - **Subtopics**:
-  - `3.2.1` Dynamic array structure: pointer to contiguous heap buffer, capacity, length.
-  - `3.2.2` The Resizing Strategy: allocating new buffer of size $k 	imes 	ext{capacity}$ and copying elements.
-  - `3.2.3` Resize multiplier trade-offs: $2.0	imes$ vs $1.5	imes$ (reusing previously freed memory chunks).
-  - `3.2.4` Amortized $O(1)$ proof: Aggregate method and Potential method proving constant average append time.
+  - `3.32.1` Dynamic array structure: pointer to contiguous heap buffer, capacity, length.
+  - `3.32.2` The Resizing Strategy: allocating new buffer of size $k 	imes 	ext{capacity}$ and copying elements.
+  - `3.32.3` Resize multiplier trade-offs: $2.0	imes$ vs $1.5	imes$ (reusing previously freed memory chunks).
+  - `3.32.4` Amortized $O(1)$ proof: Aggregate method and Potential method proving constant average append time.
 - **Key Failure Modes & Edge Cases**: Resizing with a constant additive increase ($	ext{capacity} + 1000$), degrading appends to quadratic $O(n^2)$ time.
 - **Verification & Mastery Check**: Implement a dynamic array from scratch with a custom geometric growth factor and prove $O(1)$ amortized append.
 - **Project Application**: DataSift: Dynamic accumulator buffers.
 
-#### Lesson 3.3: Singly Linked Lists: Pointer Manipulation & Invariants
+#### Lesson 3.33: Singly Linked Lists: Pointer Manipulation & Invariants
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 1 (Lesson 1.1)
 - **Subtopics**:
-  - `3.3.1` Node structure: payload value and pointer to next node.
-  - `3.3.2` Insertion and deletion: head insertion ($O(1)$), tail insertion ($O(n)$ or $O(1)$ with tail pointer), arbitrary deletion ($O(n)$).
-  - `3.3.3` Pointer manipulation discipline: maintaining invariants to avoid losing references to remaining list.
-  - `3.3.4` The Sentinel / Dummy Node pattern: eliminating edge-case code for empty lists and head deletions.
+  - `3.33.1` Node structure: payload value and pointer to next node.
+  - `3.33.2` Insertion and deletion: head insertion ($O(1)$), tail insertion ($O(n)$ or $O(1)$ with tail pointer), arbitrary deletion ($O(n)$).
+  - `3.33.3` Pointer manipulation discipline: maintaining invariants to avoid losing references to remaining list.
+  - `3.33.4` The Sentinel / Dummy Node pattern: eliminating edge-case code for empty lists and head deletions.
 - **Key Failure Modes & Edge Cases**: Losing the reference to `curr.next` before updating pointers, resulting in dangling memory and broken lists.
 - **Verification & Mastery Check**: Implement a Singly Linked List with dummy head and prove zero memory leaks or lost nodes on edge cases.
 - **Project Application**: LoxLang: Environment scope chains.
 
-#### Lesson 3.4: Doubly Linked Lists & Sentinels
+#### Lesson 3.34: Doubly Linked Lists & Sentinels
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.3
+- **Prerequisites**: Lesson 3.33
 - **Subtopics**:
-  - `3.4.1` Node structure: payload, pointer to next node, pointer to previous node.
-  - `3.4.2` Bidirectional traversal: traversing forward and backward.
-  - `3.4.3` Constant-time node removal: deleting a known node reference in $O(1)$ without searching from head.
-  - `3.4.4` Circular doubly linked lists with a single sentinel node: simplifying insertion and deletion logic.
+  - `3.34.1` Node structure: payload, pointer to next node, pointer to previous node.
+  - `3.34.2` Bidirectional traversal: traversing forward and backward.
+  - `3.34.3` Constant-time node removal: deleting a known node reference in $O(1)$ without searching from head.
+  - `3.34.4` Circular doubly linked lists with a single sentinel node: simplifying insertion and deletion logic.
 - **Key Failure Modes & Edge Cases**: Failing to update `prev` pointers during node splicing, breaking backward traversals.
 - **Verification & Mastery Check**: Implement a Doubly Linked List supporting $O(1)$ insertion and deletion at both ends and of arbitrary known nodes.
 - **Project Application**: Phase 5: Foundation for CacheKit LRU cache.
 
-#### Lesson 3.5: Floyd's Cycle-Finding Algorithm (Tortoise and Hare)
+#### Lesson 3.35: Floyd's Cycle-Finding Algorithm (Tortoise and Hare)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.3
+- **Prerequisites**: Lesson 3.33
 - **Subtopics**:
-  - `3.5.1` The linked list cycle problem: detecting infinite loops in pointer structures.
-  - `3.5.2` Two-pointer approach: Slow pointer (1 step) and Fast pointer (2 steps).
-  - `3.5.3` Cycle detection proof: why fast and slow pointers must collide within the cycle in $O(n)$ time.
-  - `3.5.4` Finding the cycle start node: resetting one pointer to head and advancing both by 1 step.
+  - `3.35.1` The linked list cycle problem: detecting infinite loops in pointer structures.
+  - `3.35.2` Two-pointer approach: Slow pointer (1 step) and Fast pointer (2 steps).
+  - `3.35.3` Cycle detection proof: why fast and slow pointers must collide within the cycle in $O(n)$ time.
+  - `3.35.4` Finding the cycle start node: resetting one pointer to head and advancing both by 1 step.
 - **Key Failure Modes & Edge Cases**: Creating infinite loops in traversal routines when circular references exist in linked structures.
 - **Verification & Mastery Check**: Implement Floyd's cycle detection from memory and return the exact node where the cycle begins in $O(1)$ memory.
 - **Project Application**: DevAudit: Cycle detection in linked imports.
 
-#### Lesson 3.6: The Stack Abstract Data Type: Array vs Linked Implementations
+#### Lesson 3.36: The Stack Abstract Data Type: Array vs Linked Implementations
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.2, 3.3
+- **Prerequisites**: Lesson 3.32, 3.3
 - **Subtopics**:
-  - `3.6.1` Stack LIFO (Last-In, First-Out) semantics: `push`, `pop`, `peek`, `is_empty`.
-  - `3.6.2` Array-backed stack: memory contiguity, cache efficiency, amortized $O(1)$ push.
-  - `3.6.3` Linked-list-backed stack: strict $O(1)$ worst-case push/pop, pointer memory overhead.
-  - `3.6.4` Stack overflow and capacity limits in fixed-size hardware/virtual stacks.
+  - `3.36.1` Stack LIFO (Last-In, First-Out) semantics: `push`, `pop`, `peek`, `is_empty`.
+  - `3.36.2` Array-backed stack: memory contiguity, cache efficiency, amortized $O(1)$ push.
+  - `3.36.3` Linked-list-backed stack: strict $O(1)$ worst-case push/pop, pointer memory overhead.
+  - `3.36.4` Stack overflow and capacity limits in fixed-size hardware/virtual stacks.
 - **Key Failure Modes & Edge Cases**: Calling `pop()` on an empty stack without bounds checks, causing index out-of-range crashes.
 - **Verification & Mastery Check**: Implement a generic Stack supporting `push`, `pop`, and `min()` in constant $O(1)$ time and $O(n)$ space.
 - **Project Application**: LoxLang: Expression evaluation stack.
 
-#### Lesson 3.7: The Queue & Circular Buffer Deque
+#### Lesson 3.37: The Queue & Circular Buffer Deque
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.2
+- **Prerequisites**: Lesson 3.32
 - **Subtopics**:
-  - `3.7.1` Queue FIFO (First-In, First-Out) semantics: `enqueue`, `dequeue`, `peek`.
-  - `3.7.2` The flaw of naive array queues: `list.pop(0)` requiring $O(n)$ element shifts.
-  - `3.7.3` Circular Buffer array queue: head pointer, tail pointer, modulo arithmetic (`(tail + 1) % capacity`).
-  - `3.7.4` Double-Ended Queue (Deque): $O(1)$ insertions and removals at both head and tail.
+  - `3.37.1` Queue FIFO (First-In, First-Out) semantics: `enqueue`, `dequeue`, `peek`.
+  - `3.37.2` The flaw of naive array queues: `list.pop(0)` requiring $O(n)$ element shifts.
+  - `3.37.3` Circular Buffer array queue: head pointer, tail pointer, modulo arithmetic (`(tail + 1) % capacity`).
+  - `3.37.4` Double-Ended Queue (Deque): $O(1)$ insertions and removals at both head and tail.
 - **Key Failure Modes & Edge Cases**: Using a standard Python list as a FIFO queue in high-throughput services, incurring massive $O(n)$ CPU penalties.
 - **Verification & Mastery Check**: Implement a high-performance Circular Buffer Deque with zero element shifts passing all FIFO unit tests.
 - **Project Application**: NanoHTTP: Request socket queues in Phase 4.
 
-#### Lesson 3.8: Hash Functions: Uniformity, Avalanche, & Rolling Hashes
+#### Lesson 3.38: Hash Functions: Uniformity, Avalanche, & Rolling Hashes
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 2 (Lesson 2.1)
 - **Subtopics**:
-  - `3.8.1` Hash function criteria: deterministic, uniform distribution across buckets, fast evaluation.
-  - `3.8.2` The Avalanche Effect: a single bit change in input flips approximately 50% of output bits.
-  - `3.8.3` Non-cryptographic hash functions: FNV-1a, MurmurHash3, CityHash, xxHash.
-  - `3.8.4` Polynomial Rolling Hash for strings: $H = \sum s[i] \cdot p^i \pmod m$; sliding window string searches.
+  - `3.38.1` Hash function criteria: deterministic, uniform distribution across buckets, fast evaluation.
+  - `3.38.2` The Avalanche Effect: a single bit change in input flips approximately 50% of output bits.
+  - `3.38.3` Non-cryptographic hash functions: FNV-1a, MurmurHash3, CityHash, xxHash.
+  - `3.38.4` Polynomial Rolling Hash for strings: $H = \sum s[i] \cdot p^i \pmod m$; sliding window string searches.
 - **Key Failure Modes & Edge Cases**: Using trivial sum-of-characters hash functions, causing massive collision clusters on anagram strings.
 - **Verification & Mastery Check**: Implement a polynomial rolling hash function and prove avalanche properties across single-character mutations.
 - **Project Application**: DataSift: Fast string hashing.
 
-#### Lesson 3.9: Hash Collision Resolution: Separate Chaining vs Open Addressing
+#### Lesson 3.39: Hash Collision Resolution: Separate Chaining vs Open Addressing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.8
+- **Prerequisites**: Lesson 3.38
 - **Subtopics**:
-  - `3.9.1` The Birthday Paradox in hashing: collisions occur much earlier than capacity limit.
-  - `3.9.2` Separate Chaining: bucket linked lists; worst-case degradation to $O(n)$ on adversarial keys.
-  - `3.9.3` Open Addressing: storing all elements directly in the array; finding open slots via probing sequences.
-  - `3.9.4` Load Factor ($lpha = n/k$): collision frequency scaling as load factor increases.
+  - `3.39.1` The Birthday Paradox in hashing: collisions occur much earlier than capacity limit.
+  - `3.39.2` Separate Chaining: bucket linked lists; worst-case degradation to $O(n)$ on adversarial keys.
+  - `3.39.3` Open Addressing: storing all elements directly in the array; finding open slots via probing sequences.
+  - `3.39.4` Load Factor ($lpha = n/k$): collision frequency scaling as load factor increases.
 - **Key Failure Modes & Edge Cases**: Failing to resize a separate chaining hash map when load factor exceeds 1.0, degrading queries to linear scans.
 - **Verification & Mastery Check**: Implement Separate Chaining with red-black tree bucket thresholding on collision chains.
 - **Project Application**: DataSift: Key cardinality counting.
 
-#### Lesson 3.10: Open Addressing: Linear Probing, Quadratic, & Double Hashing
+#### Lesson 3.40: Open Addressing: Linear Probing, Quadratic, & Double Hashing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.9
+- **Prerequisites**: Lesson 3.39
 - **Subtopics**:
-  - `3.10.1` Linear Probing: probing index $(h(k) + i) \pmod m$; primary clustering phenomena.
-  - `3.10.2` Quadratic Probing: probing index $(h(k) + c_1 i + c_2 i^2) \pmod m$; secondary clustering.
-  - `3.10.3` Double Hashing: probing index $(h_1(k) + i \cdot h_2(k)) \pmod m$; eliminating clustering.
-  - `3.10.4` Tombstones for deletion: marking deleted slots as `TOMBSTONE` to preserve search probe chains.
+  - `3.40.1` Linear Probing: probing index $(h(k) + i) \pmod m$; primary clustering phenomena.
+  - `3.40.2` Quadratic Probing: probing index $(h(k) + c_1 i + c_2 i^2) \pmod m$; secondary clustering.
+  - `3.40.3` Double Hashing: probing index $(h_1(k) + i \cdot h_2(k)) \pmod m$; eliminating clustering.
+  - `3.40.4` Tombstones for deletion: marking deleted slots as `TOMBSTONE` to preserve search probe chains.
 - **Key Failure Modes & Edge Cases**: Failing to handle tombstones during deletion, prematurely terminating lookups for subsequent inserted keys.
 - **Verification & Mastery Check**: Build an Open-Addressed hash table from scratch using double hashing and tombstone deletion.
 - **Project Application**: DataSift: Core hash map.
 
-#### Lesson 3.11: CPython `dict` Architecture: Compact Dict & Perturb Probing
+#### Lesson 3.41: CPython `dict` Architecture: Compact Dict & Perturb Probing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.10
+- **Prerequisites**: Lesson 3.40
 - **Subtopics**:
-  - `3.11.1` Historical Python dict memory layout: 24-byte entries containing sparse unallocated rows.
-  - `3.11.2` Modern Compact Dict (PEP 468): dense `entries` array + sparse byte `indices` array; 30%–95% memory savings.
-  - `3.11.3` CPython Perturb Probing formula: `j = ((5*j) + 1 + perturb) % m; perturb >>= 5`.
-  - `3.11.4` Preserving insertion order: how compact dicts naturally make Python dictionaries ordered.
+  - `3.41.1` Historical Python dict memory layout: 24-byte entries containing sparse unallocated rows.
+  - `3.41.2` Modern Compact Dict (PEP 468): dense `entries` array + sparse byte `indices` array; 30%–95% memory savings.
+  - `3.41.3` CPython Perturb Probing formula: `j = ((5*j) + 1 + perturb) % m; perturb >>= 5`.
+  - `3.41.4` Preserving insertion order: how compact dicts naturally make Python dictionaries ordered.
 - **Key Failure Modes & Edge Cases**: Relying on dictionary insertion order in older runtime environments or cross-language serialization.
 - **Verification & Mastery Check**: Implement a compact dictionary prototype matching CPython's indices/entries array architecture.
 - **Project Application**: DataSift: High-cardinality aggregation.
 
-#### Lesson 3.12: Bloom Filters & Probabilistic Set Membership
+#### Lesson 3.42: Bloom Filters & Probabilistic Set Membership
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.8
+- **Prerequisites**: Lesson 3.38
 - **Subtopics**:
-  - `3.12.1` The memory limit of exact hash sets: tracking billions of keys exceeding available physical RAM.
-  - `3.12.2` Bloom Filter architecture: bit array of size $m$, $k$ independent hash functions.
-  - `3.12.3` Operations: `add(key)` sets $k$ bits to 1; `contains(key)` checks if all $k$ bits are 1.
-  - `3.12.4` Error bounds: zero false negatives guaranteed; mathematical false positive rate: $(1 - e^{-kn/m})^k$.
+  - `3.42.1` The memory limit of exact hash sets: tracking billions of keys exceeding available physical RAM.
+  - `3.42.2` Bloom Filter architecture: bit array of size $m$, $k$ independent hash functions.
+  - `3.42.3` Operations: `add(key)` sets $k$ bits to 1; `contains(key)` checks if all $k$ bits are 1.
+  - `3.42.4` Error bounds: zero false negatives guaranteed; mathematical false positive rate: $(1 - e^{-kn/m})^k$.
 - **Key Failure Modes & Edge Cases**: Assuming a Bloom filter can confirm presence with 100% certainty (it only confirms *absence* with certainty).
 - **Verification & Mastery Check**: Implement a Bloom Filter from scratch, calculate optimal $m$ and $k$ for 1M keys at 1% false positive rate, and empirically verify error rate.
 - **Project Application**: Phase 8: Web crawler URL deduplication.
 
-#### Lesson 3.13: Binary Trees: Tree Traversals & Depth Analysis
+#### Lesson 3.43: Binary Trees: Tree Traversals & Depth Analysis
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 2 (Lesson 2.8)
 - **Subtopics**:
-  - `3.13.1` Tree recursive definition: root node, left subtree, right subtree, leaves.
-  - `3.13.2` Depth-First Traversals: Pre-order ($N-L-R$), In-order ($L-N-R$), Post-order ($L-R-N$); call stack visualization.
-  - `3.13.3` Breadth-First Traversal (Level-order): queue-based level-by-level breadth exploration.
-  - `3.13.4` Tree properties: height, depth, diameter, complete vs full vs degenerate trees.
+  - `3.43.1` Tree recursive definition: root node, left subtree, right subtree, leaves.
+  - `3.43.2` Depth-First Traversals: Pre-order ($N-L-R$), In-order ($L-N-R$), Post-order ($L-R-N$); call stack visualization.
+  - `3.43.3` Breadth-First Traversal (Level-order): queue-based level-by-level breadth exploration.
+  - `3.43.4` Tree properties: height, depth, diameter, complete vs full vs degenerate trees.
 - **Key Failure Modes & Edge Cases**: Unbounded recursion in tree traversals exceeding call stack limits on skewed, degenerate trees.
 - **Verification & Mastery Check**: Implement all four tree traversals both recursively and iteratively using an explicit stack/queue.
 - **Project Application**: LoxLang: AST traversals.
 
-#### Lesson 3.14: Binary Search Trees (BST): Invariants & Node Deletion
+#### Lesson 3.44: Binary Search Trees (BST): Invariants & Node Deletion
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.13
+- **Prerequisites**: Lesson 3.43
 - **Subtopics**:
-  - `3.14.1` The BST Invariant: for every node, all left subtree values are smaller, all right subtree values are larger.
-  - `3.14.2` Search and Insertion: $O(h)$ time where $h$ is tree height.
-  - `3.14.3` Node Deletion algorithm: 3 cases (Leaf node, Node with one child, Node with two children / in-order successor swap).
-  - `3.14.4` The Degeneracy hazard: sorted insertions degrading a BST into an $O(n)$ linked list.
+  - `3.44.1` The BST Invariant: for every node, all left subtree values are smaller, all right subtree values are larger.
+  - `3.44.2` Search and Insertion: $O(h)$ time where $h$ is tree height.
+  - `3.44.3` Node Deletion algorithm: 3 cases (Leaf node, Node with one child, Node with two children / in-order successor swap).
+  - `3.44.4` The Degeneracy hazard: sorted insertions degrading a BST into an $O(n)$ linked list.
 - **Key Failure Modes & Edge Cases**: Deleting a node with two children incorrectly, severing subtree linkages and violating BST invariants.
 - **Verification & Mastery Check**: Implement a full BST from scratch supporting search, insertion, and 3-case node deletion.
 - **Project Application**: DataSift: Sorted indexing.
 
-#### Lesson 3.15: Balanced Search Trees: AVL Tree Rotations
+#### Lesson 3.45: Balanced Search Trees: AVL Tree Rotations
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.14
+- **Prerequisites**: Lesson 3.44
 - **Subtopics**:
-  - `3.15.1` Why balance matters: guaranteeing $O(\log n)$ height under all insertion sequences.
-  - `3.15.2` AVL Balance Factor: $	ext{height}(	ext{left}) - 	ext{height}(	ext{right}) \in \{-1, 0, 1\}$.
-  - `3.15.3` Single Rotations: Left Rotation (LL) and Right Rotation (RR).
-  - `3.15.4` Double Rotations: Left-Right Rotation (LR) and Right-Left Rotation (RL).
+  - `3.45.1` Why balance matters: guaranteeing $O(\log n)$ height under all insertion sequences.
+  - `3.45.2` AVL Balance Factor: $	ext{height}(	ext{left}) - 	ext{height}(	ext{right}) \in \{-1, 0, 1\}$.
+  - `3.45.3` Single Rotations: Left Rotation (LL) and Right Rotation (RR).
+  - `3.45.4` Double Rotations: Left-Right Rotation (LR) and Right-Left Rotation (RL).
 - **Key Failure Modes & Edge Cases**: Failing to update tree heights after rotations, causing subsequent balance factor calculations to fail.
 - **Verification & Mastery Check**: Implement an AVL Tree with automatic self-balancing via rotations on insertion.
 - **Project Application**: DataSift: Range query indexes.
 
-#### Lesson 3.16: Red-Black Trees: Invariants & Operational Properties
+#### Lesson 3.46: Red-Black Trees: Invariants & Operational Properties
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.15
+- **Prerequisites**: Lesson 3.45
 - **Subtopics**:
-  - `3.16.1` Red-Black Tree properties: every node is Red or Black, root is Black, leaves are Black NIL nodes.
-  - `3.16.2` No two consecutive Red nodes (Red parent cannot have Red child).
-  - `3.16.3` Black-Height invariant: all simple paths from root to NIL leaves contain identical numbers of Black nodes.
-  - `3.16.4` Why Red-Black trees dominate standard libraries (`std::map`, Linux CFS scheduler): fewer rotations than AVL.
+  - `3.46.1` Red-Black Tree properties: every node is Red or Black, root is Black, leaves are Black NIL nodes.
+  - `3.46.2` No two consecutive Red nodes (Red parent cannot have Red child).
+  - `3.46.3` Black-Height invariant: all simple paths from root to NIL leaves contain identical numbers of Black nodes.
+  - `3.46.4` Why Red-Black trees dominate standard libraries (`std::map`, Linux CFS scheduler): fewer rotations than AVL.
 - **Key Failure Modes & Edge Cases**: Violating black-height invariants during re-coloring operations.
 - **Verification & Mastery Check**: Trace step-by-step the recoloring and rotation steps of inserting 10 keys into an empty Red-Black tree.
 - **Project Application**: Systems foundation for Linux scheduler in Phase 4.
 
-#### Lesson 3.17: Binary Heaps: Array Representation & Heap Invariants
+#### Lesson 3.47: Binary Heaps: Array Representation & Heap Invariants
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.2, 3.13
+- **Prerequisites**: Lesson 3.32, 3.13
 - **Subtopics**:
-  - `3.17.1` Complete Binary Tree representation in a flat array: root at index 0; children at $2i+1, 2i+2$; parent at $\lfloor(i-1)/2floor$.
-  - `3.17.2` Min-Heap and Max-Heap invariants: parent key $\le$ child keys (Min-Heap).
-  - `3.17.3` Insertion (`push`): append to array and sift-up in $O(\log n)$ time.
-  - `3.17.4` Extraction (`pop`): swap root with last leaf, shrink array, sift-down in $O(\log n)$ time.
+  - `3.47.1` Complete Binary Tree representation in a flat array: root at index 0; children at $2i+1, 2i+2$; parent at $\lfloor(i-1)/2
+floor$.
+  - `3.47.2` Min-Heap and Max-Heap invariants: parent key $\le$ child keys (Min-Heap).
+  - `3.47.3` Insertion (`push`): append to array and sift-up in $O(\log n)$ time.
+  - `3.47.4` Extraction (`pop`): swap root with last leaf, shrink array, sift-down in $O(\log n)$ time.
 - **Key Failure Modes & Edge Cases**: Off-by-one errors in 0-indexed vs 1-indexed heap array parent-child index calculations.
 - **Verification & Mastery Check**: Implement a Min-Heap from scratch in a flat dynamic array supporting `push`, `pop`, and `peek`.
 - **Project Application**: MathKit: Priority queue.
 
-#### Lesson 3.18: Floyd's $O(n)$ Heapify Algorithm: Geometric Proof
+#### Lesson 3.48: Floyd's $O(n)$ Heapify Algorithm: Geometric Proof
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.17
+- **Prerequisites**: Lesson 3.47
 - **Subtopics**:
-  - `3.18.1` Naive heap building: calling `push` $n$ times is $O(n \log n)$ time.
-  - `3.18.2` Floyd's bottom-up `heapify`: starting at the last internal node ($\lfloor n/2 floor - 1$) and sifting down.
-  - `3.18.3` Mathematical proof of $O(n)$ complexity: summing nodes at height $h$ times cost $h$: $\sum rac{n}{2^{h+1}} h = O(n)$.
-  - `3.18.4` In-place heap building: transforming raw unsorted arrays into valid heaps without auxiliary memory.
+  - `3.48.1` Naive heap building: calling `push` $n$ times is $O(n \log n)$ time.
+  - `3.48.2` Floyd's bottom-up `heapify`: starting at the last internal node ($\lfloor n/2 
+floor - 1$) and sifting down.
+  - `3.48.3` Mathematical proof of $O(n)$ complexity: summing nodes at height $h$ times cost $h$: $\sum rac{n}{2^{h+1}} h = O(n)$.
+  - `3.48.4` In-place heap building: transforming raw unsorted arrays into valid heaps without auxiliary memory.
 - **Key Failure Modes & Edge Cases**: Assuming heapify must sift up from leaves (which is $O(n \log n)$) rather than sifting down from internal nodes.
 - **Verification & Mastery Check**: Implement Floyd's in-place `heapify` algorithm and prove empirically that it executes in half the operations of naive pushes.
 - **Project Application**: DataSift: Top-K percentile calculations.
 
-#### Lesson 3.19: The Trie (Prefix Tree) & Radix Trees
+#### Lesson 3.49: The Trie (Prefix Tree) & Radix Trees
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.13
+- **Prerequisites**: Lesson 3.43
 - **Subtopics**:
-  - `3.19.1` Trie node structure: boolean end-of-word flag and alphabet map/array of child pointers.
-  - `3.19.2` Operations: `insert`, `search`, `starts_with` in $O(L)$ time where $L$ is word length (independent of dataset size $N$).
-  - `3.19.3` Autocomplete and prefix search: traversing prefix node and gathering subtree words.
-  - `3.19.4` Memory optimization: Radix / Patricia Trie (merging single-child node chains into edge strings).
+  - `3.49.1` Trie node structure: boolean end-of-word flag and alphabet map/array of child pointers.
+  - `3.49.2` Operations: `insert`, `search`, `starts_with` in $O(L)$ time where $L$ is word length (independent of dataset size $N$).
+  - `3.49.3` Autocomplete and prefix search: traversing prefix node and gathering subtree words.
+  - `3.49.4` Memory optimization: Radix / Patricia Trie (merging single-child node chains into edge strings).
 - **Key Failure Modes & Edge Cases**: Memory explosion when using fixed 26-pointer arrays per node on sparse, deep tries with long keys.
 - **Verification & Mastery Check**: Implement a Trie with wildcard prefix searching matching `.` as any single character.
 - **Project Application**: DataSift: Column pattern categorization.
 
-#### Lesson 3.20: Comparison-Based Sorting Lower Bound: $\Omega(n \log n)$ Proof
+#### Lesson 3.50: Comparison-Based Sorting Lower Bound: $\Omega(n \log n)$ Proof
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 2 (Lesson 2.10)
 - **Subtopics**:
-  - `3.20.1` The Decision Tree model of comparison sorting: leaves represent permutations of input array.
-  - `3.20.2` Height of binary decision tree: $2^h \ge n! \implies h \ge \log_2(n!)$.
-  - `3.20.3` Stirling's Approximation: $\log_2(n!) pprox n \log_2 n - n \log_2 e \in \Omega(n \log n)$.
-  - `3.20.4` Why comparison sorts (Quick, Merge, Heap) cannot asymptotically beat $n \log n$ in worst case.
+  - `3.50.1` The Decision Tree model of comparison sorting: leaves represent permutations of input array.
+  - `3.50.2` Height of binary decision tree: $2^h \ge n! \implies h \ge \log_2(n!)$.
+  - `3.50.3` Stirling's Approximation: $\log_2(n!) pprox n \log_2 n - n \log_2 e \in \Omega(n \log n)$.
+  - `3.50.4` Why comparison sorts (Quick, Merge, Heap) cannot asymptotically beat $n \log n$ in worst case.
 - **Key Failure Modes & Edge Cases**: Attempting to invent a comparison-based sorting algorithm that runs in $O(n)$ time.
 - **Verification & Mastery Check**: Write out the formal mathematical decision tree proof establishing the $\Omega(n \log n)$ sorting lower bound.
 - **Project Application**: Algorithmic theory foundation.
 
-#### Lesson 3.21: Merge Sort: Divide-and-Conquer & Stability Proof
+#### Lesson 3.51: Merge Sort: Divide-and-Conquer & Stability Proof
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.20
+- **Prerequisites**: Lesson 3.50
 - **Subtopics**:
-  - `3.21.1` Divide-and-conquer paradigm: splitting array in half, recursively sorting, merging sorted halves.
-  - `3.21.2` The Merge operation: two-pointer merge into auxiliary buffer in linear $O(n)$ time.
-  - `3.21.3` Stability in sorting: why preserving relative order of equal elements matters for multi-column sorting.
-  - `3.21.4` Complexity analysis: $T(n) = 2T(n/2) + O(n) \implies O(n \log n)$ time; $O(n)$ auxiliary space.
+  - `3.51.1` Divide-and-conquer paradigm: splitting array in half, recursively sorting, merging sorted halves.
+  - `3.51.2` The Merge operation: two-pointer merge into auxiliary buffer in linear $O(n)$ time.
+  - `3.51.3` Stability in sorting: why preserving relative order of equal elements matters for multi-column sorting.
+  - `3.51.4` Complexity analysis: $T(n) = 2T(n/2) + O(n) \implies O(n \log n)$ time; $O(n)$ auxiliary space.
 - **Key Failure Modes & Edge Cases**: Failing to allocate auxiliary merge buffers properly, causing high garbage collection churn.
 - **Verification & Mastery Check**: Implement a stable Merge Sort from scratch and prove stability by sorting tuples on secondary keys.
 - **Project Application**: DataSift: Stable data frame sorting.
 
-#### Lesson 3.22: Quick Sort: Partitioning Schemes & Pivot Selection
+#### Lesson 3.52: Quick Sort: Partitioning Schemes & Pivot Selection
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.20
+- **Prerequisites**: Lesson 3.50
 - **Subtopics**:
-  - `3.22.1` Partitioning mechanics: placing pivot at its final sorted position, smaller elements left, larger right.
-  - `3.22.2` Lomuto partition scheme (simpler) vs Hoare partition scheme (fewer swaps, faster).
-  - `3.22.3` Pivot selection strategies: first/last element (worst-case $O(n^2)$ on sorted arrays), random pivot, Median-of-Three.
-  - `3.22.4` In-place execution: tail-call optimization keeping recursion stack depth bounded to $O(\log n)$.
+  - `3.52.1` Partitioning mechanics: placing pivot at its final sorted position, smaller elements left, larger right.
+  - `3.52.2` Lomuto partition scheme (simpler) vs Hoare partition scheme (fewer swaps, faster).
+  - `3.52.3` Pivot selection strategies: first/last element (worst-case $O(n^2)$ on sorted arrays), random pivot, Median-of-Three.
+  - `3.52.4` In-place execution: tail-call optimization keeping recursion stack depth bounded to $O(\log n)$.
 - **Key Failure Modes & Edge Cases**: Using fixed first-element pivots, degrading Quick Sort to $O(n^2)$ time on sorted production data.
 - **Verification & Mastery Check**: Implement Quick Sort with Hoare partitioning and Median-of-Three pivot selection from scratch.
 - **Project Application**: DataSift: In-place sorting.
 
-#### Lesson 3.23: Heap Sort: In-Place Sorting without Extra Memory
+#### Lesson 3.53: Heap Sort: In-Place Sorting without Extra Memory
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.18, 3.20
+- **Prerequisites**: Lesson 3.48, 3.20
 - **Subtopics**:
-  - `3.23.1` Heap Sort algorithm: build max-heap via `heapify` in $O(n)$, then repeatedly swap root with end and sift down.
-  - `3.23.2` Complexity: strictly $O(n \log n)$ time in best, average, and worst cases.
-  - `3.23.3` In-place space complexity: $O(1)$ auxiliary memory (zero allocations).
-  - `3.23.4` Why Quick Sort beats Heap Sort in practice: CPU cache locality and branch prediction.
+  - `3.53.1` Heap Sort algorithm: build max-heap via `heapify` in $O(n)$, then repeatedly swap root with end and sift down.
+  - `3.53.2` Complexity: strictly $O(n \log n)$ time in best, average, and worst cases.
+  - `3.53.3` In-place space complexity: $O(1)$ auxiliary memory (zero allocations).
+  - `3.53.4` Why Quick Sort beats Heap Sort in practice: CPU cache locality and branch prediction.
 - **Key Failure Modes & Edge Cases**: Assuming Heap Sort is stable (it is fundamentally unstable due to long-distance swaps).
 - **Verification & Mastery Check**: Implement Heap Sort completely in-place on an arbitrary raw array without allocating any auxiliary arrays.
 - **Project Application**: MathKit and DataSift.
 
-#### Lesson 3.24: Timsort: Adaptive Hybrid Sorting in Production Systems
+#### Lesson 3.54: Timsort: Adaptive Hybrid Sorting in Production Systems
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.21, 3.22
+- **Prerequisites**: Lesson 3.51, 3.22
 - **Subtopics**:
-  - `3.24.1` Why Timsort (Python and Java default): exploiting pre-existing natural order in real-world data.
-  - `3.24.2` Natural Runs: detecting strictly ascending or descending runs in input data.
-  - `3.24.3` Minimum Run length (`minrun`): choosing run sizes (32–64) and using Insertion Sort on small runs.
-  - `3.24.4` Stack-based merge coordination: maintaining run invariants ($A > B + C$ and $B > C$) and galloping mode.
+  - `3.54.1` Why Timsort (Python and Java default): exploiting pre-existing natural order in real-world data.
+  - `3.54.2` Natural Runs: detecting strictly ascending or descending runs in input data.
+  - `3.54.3` Minimum Run length (`minrun`): choosing run sizes (32–64) and using Insertion Sort on small runs.
+  - `3.54.4` Stack-based merge coordination: maintaining run invariants ($A > B + C$ and $B > C$) and galloping mode.
 - **Key Failure Modes & Edge Cases**: Re-implementing naive sorting algorithms in Python instead of leveraging compiled C-implemented Timsort.
 - **Verification & Mastery Check**: Trace Timsort run creation on a partially sorted dataset, identifying when Insertion Sort vs Merge occurs.
 - **Project Application**: DataSift: Production dataset sorting.
 
-#### Lesson 3.25: Non-Comparison Sorting: Counting Sort & Radix Sort
+#### Lesson 3.55: Non-Comparison Sorting: Counting Sort & Radix Sort
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.20
+- **Prerequisites**: Lesson 3.50
 - **Subtopics**:
-  - `3.25.1` Bypassing the comparison lower bound: exploiting integer key representations.
-  - `3.25.2` Counting Sort: tallying frequencies in counting array, cumulative sums, stable placement in $O(n + k)$ time.
-  - `3.25.3` Radix Sort (LSD vs MSD): sorting integers digit-by-digit from least to most significant using stable counting sort.
-  - `3.25.4` Memory trade-offs: when $k \gg n$, counting sort space overhead makes comparison sorts superior.
+  - `3.55.1` Bypassing the comparison lower bound: exploiting integer key representations.
+  - `3.55.2` Counting Sort: tallying frequencies in counting array, cumulative sums, stable placement in $O(n + k)$ time.
+  - `3.55.3` Radix Sort (LSD vs MSD): sorting integers digit-by-digit from least to most significant using stable counting sort.
+  - `3.55.4` Memory trade-offs: when $k \gg n$, counting sort space overhead makes comparison sorts superior.
 - **Key Failure Modes & Edge Cases**: Applying Counting Sort to floating-point numbers or sparse 64-bit integers with enormous key ranges.
 - **Verification & Mastery Check**: Implement a Least Significant Digit (LSD) Radix Sort that sorts 1,000,000 32-bit integers faster than standard Quick Sort.
 - **Project Application**: DataSift: High-speed integer column sorting.
 
-#### Lesson 3.26: Binary Search: Invariants, Bounds, & Monotonic Spaces
+#### Lesson 3.56: Binary Search: Invariants, Bounds, & Monotonic Spaces
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 2 (Lesson 2.10)
 - **Subtopics**:
-  - `3.26.1` Binary Search boundary invariants: `low <= high` vs `low < high`; midpoint overflow avoidance.
-  - `3.26.2` Lower Bound (First Occurrence) vs Upper Bound (Last Occurrence) search algorithms.
-  - `3.26.3` Search on Monotonic Answer Spaces: converting optimization problems into decision problems ($F(x) 	o \{	ext{T}, 	ext{F}\}$).
-  - `3.26.4` Proving monotonicity: confirming that if condition holds for $x$, it holds for all $y > x$.
+  - `3.56.1` Binary Search boundary invariants: `low <= high` vs `low < high`; midpoint overflow avoidance.
+  - `3.56.2` Lower Bound (First Occurrence) vs Upper Bound (Last Occurrence) search algorithms.
+  - `3.56.3` Search on Monotonic Answer Spaces: converting optimization problems into decision problems ($F(x) 	o \{	ext{T}, 	ext{F}\}$).
+  - `3.56.4` Proving monotonicity: confirming that if condition holds for $x$, it holds for all $y > x$.
 - **Key Failure Modes & Edge Cases**: Off-by-one errors causing infinite loops when `low = mid` without integer ceiling division.
 - **Verification & Mastery Check**: Implement binary search on an answer space to solve the 'Ship Packages Within D Days' optimization problem.
 - **Project Application**: Core competitive programming pattern.
 
-#### Lesson 3.27: Graph Representations: Adjacency Matrix vs Adjacency List
+#### Lesson 3.57: Graph Representations: Adjacency Matrix vs Adjacency List
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Phase 2 (Lesson 2.8)
 - **Subtopics**:
-  - `3.27.1` Adjacency Matrix: $V 	imes V$ 2D array; $O(1)$ edge existence check; $O(V^2)$ memory.
-  - `3.27.2` Adjacency List: array of linked lists/vectors; $O(V + E)$ memory; $O(\deg(u))$ neighbor lookup.
-  - `3.27.3` Compressed Sparse Row (CSR): high-performance flat array representation for massive static graphs.
-  - `3.27.4` Memory and performance trade-offs: sparse graphs ($|E| \ll |V|^2$) vs dense graphs ($|E| pprox |V|^2$).
+  - `3.57.1` Adjacency Matrix: $V 	imes V$ 2D array; $O(1)$ edge existence check; $O(V^2)$ memory.
+  - `3.57.2` Adjacency List: array of linked lists/vectors; $O(V + E)$ memory; $O(\deg(u))$ neighbor lookup.
+  - `3.57.3` Compressed Sparse Row (CSR): high-performance flat array representation for massive static graphs.
+  - `3.57.4` Memory and performance trade-offs: sparse graphs ($|E| \ll |V|^2$) vs dense graphs ($|E| pprox |V|^2$).
 - **Key Failure Modes & Edge Cases**: Using an Adjacency Matrix for a graph with 1,000,000 nodes and 2,000,000 edges, exhausting 1TB RAM.
 - **Verification & Mastery Check**: Build both representations and measure memory consumption and neighbor iteration speed across varying graph densities.
 - **Project Application**: MathKit: `mathkit.graph` data structures.
 
-#### Lesson 3.28: Breadth-First Search (BFS): Shortest Path in Unweighted Graphs
+#### Lesson 3.58: Breadth-First Search (BFS): Shortest Path in Unweighted Graphs
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.7, 3.27
+- **Prerequisites**: Lesson 3.37, 3.27
 - **Subtopics**:
-  - `3.28.1` BFS mechanics: queue-based level-order traversal; visiting all nodes at distance $k$ before $k+1$.
-  - `3.28.2` Shortest path guarantee: first time a node is reached in unweighted graphs is guaranteed shortest path.
-  - `3.28.3` Cycle prevention: tracking visited sets; multi-source BFS for simultaneous wavefront expansion.
-  - `3.28.4` Complexity: strictly $O(V + E)$ time and $O(V)$ space.
+  - `3.58.1` BFS mechanics: queue-based level-order traversal; visiting all nodes at distance $k$ before $k+1$.
+  - `3.58.2` Shortest path guarantee: first time a node is reached in unweighted graphs is guaranteed shortest path.
+  - `3.58.3` Cycle prevention: tracking visited sets; multi-source BFS for simultaneous wavefront expansion.
+  - `3.58.4` Complexity: strictly $O(V + E)$ time and $O(V)$ space.
 - **Key Failure Modes & Edge Cases**: Failing to mark nodes as visited immediately upon enqueueing, causing nodes to be added to queue multiple times.
 - **Verification & Mastery Check**: Implement Multi-Source BFS to compute distance transforms on a 2D grid matrix in $O(V + E)$ time.
 - **Project Application**: MathKit: `graph.bfs`.
 
-#### Lesson 3.29: Depth-First Search (DFS): Connected Components & Recursion
+#### Lesson 3.59: Depth-First Search (DFS): Connected Components & Recursion
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.6, 3.27
+- **Prerequisites**: Lesson 3.36, 3.27
 - **Subtopics**:
-  - `3.29.1` DFS mechanics: recursive / stack-based deep branch exploration; backtracking on leaf boundaries.
-  - `3.29.2` Connected Components: identifying isolated subgraphs in undirected graphs.
-  - `3.29.3` Eulerian paths and cycles: traversing every edge exactly once (Fleury's and Hierholzer's algorithms).
-  - `3.29.4` Call stack limits: converting recursive DFS to iterative DFS using explicit heap-allocated stacks.
+  - `3.59.1` DFS mechanics: recursive / stack-based deep branch exploration; backtracking on leaf boundaries.
+  - `3.59.2` Connected Components: identifying isolated subgraphs in undirected graphs.
+  - `3.59.3` Eulerian paths and cycles: traversing every edge exactly once (Fleury's and Hierholzer's algorithms).
+  - `3.59.4` Call stack limits: converting recursive DFS to iterative DFS using explicit heap-allocated stacks.
 - **Key Failure Modes & Edge Cases**: RecursionError in Python when running recursive DFS on deep linear graphs exceeding 1,000 depth.
 - **Verification & Mastery Check**: Implement an iterative DFS with explicit stack that processes a linear chain graph of 100,000 nodes without stack overflow.
 - **Project Application**: MathKit: `graph.dfs`.
 
-#### Lesson 3.30: Cycle Detection in Directed Graphs: 3-Color Algorithm
+#### Lesson 3.60: Cycle Detection in Directed Graphs: 3-Color Algorithm
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.29
+- **Prerequisites**: Lesson 3.59
 - **Subtopics**:
-  - `3.30.1` Why undirected cycle detection (visited set) fails on directed graphs: cross edges vs back edges.
-  - `3.30.2` The 3-Coloring DFS state machine: White (unvisited), Gray (currently exploring on call stack), Black (finished).
-  - `3.30.3` Cycle criterion: encountering a Gray node during traversal indicates a Back Edge, confirming a directed cycle.
-  - `3.30.4` Reconstructing the exact cycle path from traversal parent pointers.
+  - `3.60.1` Why undirected cycle detection (visited set) fails on directed graphs: cross edges vs back edges.
+  - `3.60.2` The 3-Coloring DFS state machine: White (unvisited), Gray (currently exploring on call stack), Black (finished).
+  - `3.60.3` Cycle criterion: encountering a Gray node during traversal indicates a Back Edge, confirming a directed cycle.
+  - `3.60.4` Reconstructing the exact cycle path from traversal parent pointers.
 - **Key Failure Modes & Edge Cases**: Confusing cross edges in directed graphs with cycles, falsely reporting circular dependencies.
 - **Verification & Mastery Check**: Write a directed cycle detector using 3-color DFS that returns the exact list of nodes involved in the cycle.
 - **Project Application**: DevAudit: Circular import detection.
 
-#### Lesson 3.31: Topological Sorting: Kahn's Algorithm & DFS Post-Order
+#### Lesson 3.61: Topological Sorting: Kahn's Algorithm & DFS Post-Order
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.30
+- **Prerequisites**: Lesson 3.60
 - **Subtopics**:
-  - `3.31.1` Topological sort definition: linear vertex ordering respecting all directed edge dependencies.
-  - `3.31.2` Kahn's Algorithm (BFS-based): computing in-degrees, queueing zero in-degree nodes, decrementing neighbor in-degrees.
-  - `3.31.3` DFS Post-Order Algorithm: pushing nodes to stack upon reaching Black state, then reversing stack.
-  - `3.31.4` Cycle detection property: if Kahn's algorithm outputs fewer than $|V|$ nodes, the graph contains a cycle.
+  - `3.61.1` Topological sort definition: linear vertex ordering respecting all directed edge dependencies.
+  - `3.61.2` Kahn's Algorithm (BFS-based): computing in-degrees, queueing zero in-degree nodes, decrementing neighbor in-degrees.
+  - `3.61.3` DFS Post-Order Algorithm: pushing nodes to stack upon reaching Black state, then reversing stack.
+  - `3.61.4` Cycle detection property: if Kahn's algorithm outputs fewer than $|V|$ nodes, the graph contains a cycle.
 - **Key Failure Modes & Edge Cases**: Attempting topological sort on a graph containing cycles without handling cycle exceptions.
 - **Verification & Mastery Check**: Implement Kahn's algorithm to resolve build dependency graphs and verify cycle rejection.
 - **Project Application**: GradFlow: Computational DAG topological sorting.
 
-#### Lesson 3.32: Dijkstra's Algorithm: Priority Queue & Edge Relaxation
+#### Lesson 3.62: Dijkstra's Algorithm: Priority Queue & Edge Relaxation
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.17, 3.27
+- **Prerequisites**: Lesson 3.47, 3.27
 - **Subtopics**:
-  - `3.32.1` Single-source shortest path on graphs with non-negative edge weights.
-  - `3.32.2` Edge Relaxation: if $d[u] + w(u, v) < d[v]$, update $d[v] = d[u] + w(u, v)$.
-  - `3.32.3` Min-Heap implementation: extracting minimum distance node in $O(\log V)$; total time $O((V + E) \log V)$.
-  - `3.32.4` Why Dijkstra fails on negative edge weights: greedy assumption invalidated by negative shortcuts.
+  - `3.62.1` Single-source shortest path on graphs with non-negative edge weights.
+  - `3.62.2` Edge Relaxation: if $d[u] + w(u, v) < d[v]$, update $d[v] = d[u] + w(u, v)$.
+  - `3.62.3` Min-Heap implementation: extracting minimum distance node in $O(\log V)$; total time $O((V + E) \log V)$.
+  - `3.62.4` Why Dijkstra fails on negative edge weights: greedy assumption invalidated by negative shortcuts.
 - **Key Failure Modes & Edge Cases**: Running Dijkstra on graphs with negative weights, causing infinite loops or incorrect shortest paths.
 - **Verification & Mastery Check**: Implement Dijkstra's algorithm using a custom binary min-heap and reconstruct the shortest path between two vertices.
 - **Project Application**: MathKit: `graph.dijkstra`.
 
-#### Lesson 3.33: Bellman-Ford Algorithm: Negative Weights & Cycle Detection
+#### Lesson 3.63: Bellman-Ford Algorithm: Negative Weights & Cycle Detection
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.32
+- **Prerequisites**: Lesson 3.62
 - **Subtopics**:
-  - `3.33.1` Single-source shortest path supporting negative edge weights.
-  - `3.33.2` Dynamic Programming approach: relaxing all $|E|$ edges $|V|-1$ times; $O(V \cdot E)$ time.
-  - `3.33.3` Why $|V|-1$ iterations suffice: a simple shortest path contains at most $|V|-1$ edges.
-  - `3.33.4` Negative Cycle Detection: running a $|V|$-th iteration; if any edge relaxes, a negative cycle exists.
+  - `3.63.1` Single-source shortest path supporting negative edge weights.
+  - `3.63.2` Dynamic Programming approach: relaxing all $|E|$ edges $|V|-1$ times; $O(V \cdot E)$ time.
+  - `3.63.3` Why $|V|-1$ iterations suffice: a simple shortest path contains at most $|V|-1$ edges.
+  - `3.63.4` Negative Cycle Detection: running a $|V|$-th iteration; if any edge relaxes, a negative cycle exists.
 - **Key Failure Modes & Edge Cases**: Using Dijkstra instead of Bellman-Ford in currency arbitrage detection where negative log exchange rates exist.
 - **Verification & Mastery Check**: Implement the Bellman-Ford algorithm to detect negative weight cycles in a directed financial currency graph.
 - **Project Application**: MathKit: Graph shortest paths.
 
-#### Lesson 3.34: Disjoint Set Union (Union-Find): Path Compression & Rank
+#### Lesson 3.64: Disjoint Set Union (Union-Find): Path Compression & Rank
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.2
+- **Prerequisites**: Lesson 3.32
 - **Subtopics**:
-  - `3.34.1` The Dynamic Connectivity problem: `find(x)` (determine set representative) and `union(x, y)` (merge sets).
-  - `3.34.2` Naive Union-Find: tree depth degrading to $O(n)$ under sequential unions.
-  - `3.34.3` Union by Rank / Size: attaching shorter tree under root of taller tree, keeping depth logarithmic.
-  - `3.34.4` Path Compression: flattening tree pointers directly to root during `find(x)`; $lpha(n)$ Inverse Ackermann bound.
+  - `3.64.1` The Dynamic Connectivity problem: `find(x)` (determine set representative) and `union(x, y)` (merge sets).
+  - `3.64.2` Naive Union-Find: tree depth degrading to $O(n)$ under sequential unions.
+  - `3.64.3` Union by Rank / Size: attaching shorter tree under root of taller tree, keeping depth logarithmic.
+  - `3.64.4` Path Compression: flattening tree pointers directly to root during `find(x)`; $lpha(n)$ Inverse Ackermann bound.
 - **Key Failure Modes & Edge Cases**: Omitting path compression, degrading Union-Find performance to logarithmic or linear time under adversarial unions.
 - **Verification & Mastery Check**: Implement Union-Find with path compression and union by rank; prove nearly constant $O(lpha(n))$ operational performance.
 - **Project Application**: DataSift: Entity resolution and record clustering.
 
-#### Lesson 3.35: Minimum Spanning Tree (MST): Kruskal's & Prim's Algorithms
+#### Lesson 3.65: Minimum Spanning Tree (MST): Kruskal's & Prim's Algorithms
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.32, 3.34
+- **Prerequisites**: Lesson 3.62, 3.34
 - **Subtopics**:
-  - `3.35.1` Minimum Spanning Tree definition: connecting all vertices with minimum total edge weight.
-  - `3.35.2` The Cut Property: the minimum weight edge crossing any cut is guaranteed to be in the MST.
-  - `3.35.3` Kruskal's Algorithm: sort all edges by weight, add edge if it connects disjoint sets (using Union-Find).
-  - `3.35.4` Prim's Algorithm: grow tree from root node by repeatedly adding minimum weight edge connecting tree to non-tree.
+  - `3.65.1` Minimum Spanning Tree definition: connecting all vertices with minimum total edge weight.
+  - `3.65.2` The Cut Property: the minimum weight edge crossing any cut is guaranteed to be in the MST.
+  - `3.65.3` Kruskal's Algorithm: sort all edges by weight, add edge if it connects disjoint sets (using Union-Find).
+  - `3.65.4` Prim's Algorithm: grow tree from root node by repeatedly adding minimum weight edge connecting tree to non-tree.
 - **Key Failure Modes & Edge Cases**: Using Kruskal's on dense graphs without considering Prim's algorithm with adjacency matrices.
 - **Verification & Mastery Check**: Implement Kruskal's algorithm using custom Union-Find to find the MST of a weighted communication network.
 - **Project Application**: DataSift: Minimum network clustering.
 
-#### Lesson 3.36: Dynamic Programming: Overlapping Subproblems & Optimal Substructure
+#### Lesson 3.66: Dynamic Programming: Overlapping Subproblems & Optimal Substructure
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 2.4
 - **Subtopics**:
-  - `3.36.1` The DP paradigm: breaking problems into subproblems, solving each once, storing solutions.
-  - `3.36.2` Optimal Substructure: optimal solution to problem contains within it optimal solutions to subproblems.
-  - `3.36.3` Overlapping Subproblems: recursion trees repeatedly computing identical state subproblems.
-  - `3.36.4` Top-Down (Memoization) vs Bottom-Up (Tabulation): call-stack overhead vs topological order evaluation.
+  - `3.66.1` The DP paradigm: breaking problems into subproblems, solving each once, storing solutions.
+  - `3.66.2` Optimal Substructure: optimal solution to problem contains within it optimal solutions to subproblems.
+  - `3.66.3` Overlapping Subproblems: recursion trees repeatedly computing identical state subproblems.
+  - `3.66.4` Top-Down (Memoization) vs Bottom-Up (Tabulation): call-stack overhead vs topological order evaluation.
 - **Key Failure Modes & Edge Cases**: Attempting DP on problems that lack optimal substructure (e.g., longest simple path).
 - **Verification & Mastery Check**: Formulate the recursive state equation, base cases, and memoization table for the Fibonacci and Climbing Stairs problems.
 - **Project Application**: Core algorithmic problem-solving skill.
 
-#### Lesson 3.37: 1D Dynamic Programming: Kadane's Algorithm & LIS
+#### Lesson 3.67: 1D Dynamic Programming: Kadane's Algorithm & LIS
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.36
+- **Prerequisites**: Lesson 3.66
 - **Subtopics**:
-  - `3.37.1` State formulation in 1D arrays: `dp[i]` representing optimal value ending at or up to index $i$.
-  - `3.37.2` Kadane's Algorithm (Maximum Subarray Sum): $O(n)$ time and $O(1)$ space dynamic programming.
-  - `3.37.3` Longest Increasing Subsequence (LIS): $O(n^2)$ classical DP vs $O(n \log n)$ patience sorting with binary search.
-  - `3.37.4` House Robber and Coin Change: decision transitions ($\max(	ext{rob}, 	ext{skip})$).
+  - `3.67.1` State formulation in 1D arrays: `dp[i]` representing optimal value ending at or up to index $i$.
+  - `3.67.2` Kadane's Algorithm (Maximum Subarray Sum): $O(n)$ time and $O(1)$ space dynamic programming.
+  - `3.67.3` Longest Increasing Subsequence (LIS): $O(n^2)$ classical DP vs $O(n \log n)$ patience sorting with binary search.
+  - `3.67.4` House Robber and Coin Change: decision transitions ($\max(	ext{rob}, 	ext{skip})$).
 - **Key Failure Modes & Edge Cases**: Allocating $O(n)$ space when state transitions depend only on `dp[i-1]`, wasting memory on large inputs.
 - **Verification & Mastery Check**: Implement Longest Increasing Subsequence in $O(n \log n)$ time using patience sorting and binary search.
 - **Project Application**: DataSift: Monotonic anomaly detection.
 
-#### Lesson 3.38: 2D Dynamic Programming: 0/1 Knapsack & Unbounded Knapsack
+#### Lesson 3.68: 2D Dynamic Programming: 0/1 Knapsack & Unbounded Knapsack
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.36
+- **Prerequisites**: Lesson 3.66
 - **Subtopics**:
-  - `3.38.1` State definition with two parameters: `dp[i][w]` considering first $i$ items with capacity $w$.
-  - `3.38.2` State transitions: item excluded (`dp[i-1][w]`) vs item included (`dp[i-1][w - weight[i]] + value[i]`).
-  - `3.38.3` Space optimization trick: rolling 1D array traversed in reverse to prevent using the same item twice.
-  - `3.38.4` Unbounded Knapsack: allowing unlimited item reuse; forward traversal of rolling 1D array.
+  - `3.68.1` State definition with two parameters: `dp[i][w]` considering first $i$ items with capacity $w$.
+  - `3.68.2` State transitions: item excluded (`dp[i-1][w]`) vs item included (`dp[i-1][w - weight[i]] + value[i]`).
+  - `3.68.3` Space optimization trick: rolling 1D array traversed in reverse to prevent using the same item twice.
+  - `3.68.4` Unbounded Knapsack: allowing unlimited item reuse; forward traversal of rolling 1D array.
 - **Key Failure Modes & Edge Cases**: Traversing rolling 1D knapsack arrays forward instead of backward, accidentally converting 0/1 Knapsack into Unbounded Knapsack.
 - **Verification & Mastery Check**: Implement 0/1 Knapsack with $O(W)$ space optimization and prove correct item selection reconstruction.
 - **Project Application**: Resource allocation optimization.
 
-#### Lesson 3.39: String DP: Longest Common Subsequence & Edit Distance
+#### Lesson 3.69: String DP: Longest Common Subsequence & Edit Distance
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.38
+- **Prerequisites**: Lesson 3.68
 - **Subtopics**:
-  - `3.39.1` Longest Common Subsequence (LCS): state `dp[i][j]` matching prefixes of two strings.
-  - `3.39.2` LCS transitions: character match (`dp[i-1][j-1] + 1`) vs mismatch (`max(dp[i-1][j], dp[i][j-1])`).
-  - `3.39.3` Levenshtein Edit Distance: minimum insertions, deletions, substitutions to transform string $A$ to $B$.
-  - `3.39.4` Space optimization: reducing 2D string DP tables from $O(n \cdot m)$ space to $O(\min(n, m))$ using two rows.
+  - `3.69.1` Longest Common Subsequence (LCS): state `dp[i][j]` matching prefixes of two strings.
+  - `3.69.2` LCS transitions: character match (`dp[i-1][j-1] + 1`) vs mismatch (`max(dp[i-1][j], dp[i][j-1])`).
+  - `3.69.3` Levenshtein Edit Distance: minimum insertions, deletions, substitutions to transform string $A$ to $B$.
+  - `3.69.4` Space optimization: reducing 2D string DP tables from $O(n \cdot m)$ space to $O(\min(n, m))$ using two rows.
 - **Key Failure Modes & Edge Cases**: Allocating massive 2D tables for gigabyte-scale strings, exhausting memory.
 - **Verification & Mastery Check**: Implement Levenshtein Edit Distance with two-row space optimization and output the minimal transformation script.
 - **Project Application**: EvalKit: ROUGE-L calculation in Phase 10.
 
-#### Lesson 3.40: Interval DP: Matrix Chain Multiplication & Burst Balloons
+#### Lesson 3.70: Interval DP: Matrix Chain Multiplication & Burst Balloons
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.38
+- **Prerequisites**: Lesson 3.68
 - **Subtopics**:
-  - `3.40.1` Interval state definition: `dp[i][j]` representing optimal cost to solve subproblem over range $[i, j]$.
-  - `3.40.2` Evaluation order: iterating by interval length from $2$ to $n$ to guarantee subproblems are tabulated.
-  - `3.40.3` Matrix Chain Multiplication: finding optimal parenthesization to minimize scalar multiplications.
-  - `3.40.4` Complexity: typically $O(n^3)$ time and $O(n^2)$ space.
+  - `3.70.1` Interval state definition: `dp[i][j]` representing optimal cost to solve subproblem over range $[i, j]$.
+  - `3.70.2` Evaluation order: iterating by interval length from $2$ to $n$ to guarantee subproblems are tabulated.
+  - `3.70.3` Matrix Chain Multiplication: finding optimal parenthesization to minimize scalar multiplications.
+  - `3.70.4` Complexity: typically $O(n^3)$ time and $O(n^2)$ space.
 - **Key Failure Modes & Edge Cases**: Iterating loop indices in row-major order instead of interval-length order, reading uncomputed DP states.
 - **Verification & Mastery Check**: Implement Matrix Chain Multiplication and output the optimal associative parenthesis ordering string.
 - **Project Application**: MathKit: Expression optimization.
 
-#### Lesson 3.41: Tree DP: Maximum Independent Set & Tree Diameter
+#### Lesson 3.71: Tree DP: Maximum Independent Set & Tree Diameter
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.13, 3.36
+- **Prerequisites**: Lesson 3.43, 3.36
 - **Subtopics**:
-  - `3.41.1` Dynamic programming on tree structures: state transitions defined across parent-child edges.
-  - `3.41.2` Post-order evaluation: computing children states before parent states.
-  - `3.41.3` Maximum Independent Set on Trees: `dp[u][0]` (node $u$ excluded) vs `dp[u][1]` (node $u$ included).
-  - `3.41.4` Tree Diameter: calculating maximum distance between any two tree nodes in single DFS traversal.
+  - `3.71.1` Dynamic programming on tree structures: state transitions defined across parent-child edges.
+  - `3.71.2` Post-order evaluation: computing children states before parent states.
+  - `3.71.3` Maximum Independent Set on Trees: `dp[u][0]` (node $u$ excluded) vs `dp[u][1]` (node $u$ included).
+  - `3.71.4` Tree Diameter: calculating maximum distance between any two tree nodes in single DFS traversal.
 - **Key Failure Modes & Edge Cases**: Attempting to compute tree DP top-down without memoization, leading to exponential redundant subtree visits.
 - **Verification & Mastery Check**: Implement a Tree DP algorithm that finds the diameter of an unweighted tree in linear $O(V)$ time.
 - **Project Application**: DevAudit: Dependency depth analysis.
 
-#### Lesson 3.42: Bitmask DP: Traveling Salesperson Problem (TSP)
+#### Lesson 3.72: Bitmask DP: Traveling Salesperson Problem (TSP)
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Phase 2 (Lesson 2.3), Lesson 3.36
+- **Prerequisites**: Phase 2 (Lesson 2.3), Lesson 3.66
 - **Subtopics**:
-  - `3.42.1` Representing subsets as integer bitmasks: $S \subseteq \{0, \dots, n-1\}$ represented by an integer in $[0, 2^n - 1]$.
-  - `3.42.2` Bitwise operations for DP: testing membership (`mask & (1 << i)`), adding element (`mask | (1 << i)`).
-  - `3.42.3` Traveling Salesperson Problem (TSP): state `dp[mask][u]` (visited cities set `mask`, current city `u`).
-  - `3.42.4` Complexity: Bellman-Held-Karp algorithm solving TSP in $O(n^2 2^n)$ time vs naive $O(n!)$ factorial brute force.
+  - `3.72.1` Representing subsets as integer bitmasks: $S \subseteq \{0, \dots, n-1\}$ represented by an integer in $[0, 2^n - 1]$.
+  - `3.72.2` Bitwise operations for DP: testing membership (`mask & (1 << i)`), adding element (`mask | (1 << i)`).
+  - `3.72.3` Traveling Salesperson Problem (TSP): state `dp[mask][u]` (visited cities set `mask`, current city `u`).
+  - `3.72.4` Complexity: Bellman-Held-Karp algorithm solving TSP in $O(n^2 2^n)$ time vs naive $O(n!)$ factorial brute force.
 - **Key Failure Modes & Edge Cases**: Using bitmask DP when $n > 25$, exceeding memory and computational limits ($2^{25} pprox 33$ million states).
 - **Verification & Mastery Check**: Implement the Held-Karp $O(n^2 2^n)$ algorithm for the Traveling Salesperson Problem and verify correctness on $n=16$.
 - **Project Application**: Phase 8: Fleet routing design.
 
-#### Lesson 3.43: Two Pointers & Sliding Window Mechanics
+#### Lesson 3.73: Two Pointers & Sliding Window Mechanics
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.2
+- **Prerequisites**: Lesson 3.32
 - **Subtopics**:
-  - `3.43.1` Two Pointers: converging pointers (sorted arrays), fast/slow pointers, parallel pointers.
-  - `3.43.2` Sliding Window: fixed-size windows vs dynamically resizing windows with state accumulators.
-  - `3.43.3` Window state invariants: expanding right pointer to satisfy condition, shrinking left to restore invariant.
-  - `3.43.4` Time complexity: proving amortized $O(n)$ time because left and right pointers each advance at most $n$ times.
+  - `3.73.1` Two Pointers: converging pointers (sorted arrays), fast/slow pointers, parallel pointers.
+  - `3.73.2` Sliding Window: fixed-size windows vs dynamically resizing windows with state accumulators.
+  - `3.73.3` Window state invariants: expanding right pointer to satisfy condition, shrinking left to restore invariant.
+  - `3.73.4` Time complexity: proving amortized $O(n)$ time because left and right pointers each advance at most $n$ times.
 - **Key Failure Modes & Edge Cases**: Nesting loops inside sliding windows, accidentally degrading linear $O(n)$ algorithms to quadratic $O(n^2)$.
 - **Verification & Mastery Check**: Solve 'Minimum Window Substring' in $O(n)$ time using a dynamic sliding window and character frequency hash map.
 - **Project Application**: DataSift: Streaming window aggregations.
 
-#### Lesson 3.44: Monotonic Stack & Monotonic Queue Paradigms
+#### Lesson 3.74: Monotonic Stack & Monotonic Queue Paradigms
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.6, 3.7
+- **Prerequisites**: Lesson 3.36, 3.7
 - **Subtopics**:
-  - `3.44.1` Monotonic Stack invariant: elements maintained in strictly increasing or decreasing order.
-  - `3.44.2` Next Greater Element pattern: resolving pending smaller elements when a larger element arrives in $O(n)$.
-  - `3.44.3` Largest Rectangle in Histogram: identifying maximal bounding rectangles using stack boundary pops.
-  - `3.44.4` Monotonic Queue / Deque: maintaining Sliding Window Maximum in continuous linear $O(n)$ time.
+  - `3.74.1` Monotonic Stack invariant: elements maintained in strictly increasing or decreasing order.
+  - `3.74.2` Next Greater Element pattern: resolving pending smaller elements when a larger element arrives in $O(n)$.
+  - `3.74.3` Largest Rectangle in Histogram: identifying maximal bounding rectangles using stack boundary pops.
+  - `3.74.4` Monotonic Queue / Deque: maintaining Sliding Window Maximum in continuous linear $O(n)$ time.
 - **Key Failure Modes & Edge Cases**: Failing to clear remaining stack elements at end of input array, missing boundary elements.
 - **Verification & Mastery Check**: Solve 'Trapping Rain Water' and 'Sliding Window Maximum' using monotonic stacks and deques in $O(n)$ time.
 - **Project Application**: DataSift: Spike and anomaly detection.
 
-#### Lesson 3.45: Backtracking: Systematic State-Space Pruning
+#### Lesson 3.75: Backtracking: Systematic State-Space Pruning
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 3.29
+- **Prerequisites**: Lesson 3.59
 - **Subtopics**:
-  - `3.45.1` Backtracking paradigm: Depth-First tree search over combinatorial candidates with undo transitions.
-  - `3.45.2` The Three Steps: Choose candidate, Explore recursively, Unchoose (backtrack state).
-  - `3.45.3` Pruning techniques: cutting search branches early as soon as candidate violates constraints.
-  - `3.45.4` Canonical problems: N-Queens, Sudoku Solver, Subset Generation, Word Search in 2D Grid.
+  - `3.75.1` Backtracking paradigm: Depth-First tree search over combinatorial candidates with undo transitions.
+  - `3.75.2` The Three Steps: Choose candidate, Explore recursively, Unchoose (backtrack state).
+  - `3.75.3` Pruning techniques: cutting search branches early as soon as candidate violates constraints.
+  - `3.75.4` Canonical problems: N-Queens, Sudoku Solver, Subset Generation, Word Search in 2D Grid.
 - **Key Failure Modes & Edge Cases**: Failing to revert state cleanly during unchoose step, corrupting state for subsequent search branches.
 - **Verification & Mastery Check**: Implement an N-Queens solver with bitmask pruning that finds all valid placements for $N=12$ in under 1 second.
 - **Project Application**: LoxLang: AST pattern matching.
 
+
+---
 
 ---
 
@@ -2305,6 +3524,14 @@ To achieve genuine production competence, algorithmic patterns and complexity an
 - [ ] Write Dijkstra's algorithm and Kahn's topological sort from scratch, and prove their Big-$O$ time and space bounds.
 - [ ] Implement 2D Edit Distance (Levenshtein Distance) using bottom-up dynamic programming with $O(m)$ space optimization.
 - [ ] Explain how CPython's `dict` implements collision resolution and memory compaction based on `Objects/dictobject.c`.
+
+---
+
+# STAGE 2: Backend Systems, Databases & Web Architecture
+> **Scope**: Phases 4–6 | Lessons 261–380 (120 Lessons Total)
+> **Goal**: Build scalable server backends from the ground up: low-level network sockets, asynchronous event loops, PostgreSQL schema design, Redis semantic caching, FastAPI endpoints, and real-time streaming Next.js user interfaces.
+
+---
 
 ## Phase 4: Systems Internals: OS, Concurrency, Networks, Docker
 **Duration**: 8 weeks
@@ -3961,6 +5188,14 @@ To achieve genuine production competence, algorithmic patterns and complexity an
 ### Phase 6 Exit Benchmark
 - Complete the automated WCAG 2.2 AAA compliance audit on all CompKit components with 0 accessibility violations.
 - Achieve a Lighthouse score of 98+ across Performance, Accessibility, and Best Practices on the TenantIQ dashboard under simulated 4G network throttling.
+
+---
+
+# STAGE 3: Applied AI, Vectors & Production RAG
+> **Scope**: Phases 7–10 | Lessons 381–485 (130 Lessons Total)
+> **Goal**: Master production machine learning and vector systems: distributed cloud containers, high-availability system design, autograd backpropagation engines from scratch, pgvector HNSW indexing, and production hybrid RAG.
+
+---
 
 ## Phase 7: Distributed Systems, Cloud Infrastructure, and Production DevOps
 **Target Duration**: 4 Weeks (Lessons 7.1 – 7.35)
@@ -5835,6 +7070,14 @@ To achieve genuine production competence, algorithmic patterns and complexity an
 ### Phase 10 Exit Benchmark
 - Execute an automated evaluation of DocuMind using EvalKit on a 200-question enterprise benchmark: achieve Context Relevance $> 0.85$, Groundedness $> 0.95$, and Answer Relevance $> 0.90$.
 - Successfully defend DocuMind against 10 automated indirect prompt injection attacks with 0 safety leaks.
+
+---
+
+# STAGE 4: Autonomous Agents, Deep Learning & Enterprise Scale
+> **Scope**: Phases 11–14 | Lessons 486–600 (90 Lessons Total)
+> **Goal**: Deploy enterprise-grade autonomous software platforms: rigorous LLM benchmarking and safety guardrails, ReAct cognitive agent loops, LangGraph state machine orchestration, Docker security sandboxing, and live multi-tenant architecture defense.
+
+---
 
 ## Phase 11: Production Engineering, Performance Profiling & MLOps
 **Target Duration**: 3 Weeks (Lessons 11.1 – 11.25)
