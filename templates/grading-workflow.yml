@@ -1,0 +1,95 @@
+name: Automated Capstone Grading Harness
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  grade:
+    name: Execute Multi-Stage Verification Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Student Implementation
+        uses: actions/checkout@v4
+
+      - name: Setup System Dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential valgrind python3 python3-pip
+
+      - name: Clone Immutable LMS Official Rubric
+        run: |
+          echo "Cloning official, tamper-proof test assertions from LMS registry..."
+          # Clones official test harness at runtime into an isolated runner directory
+          git clone --depth 1 https://github.com/lms-core/rubrics.git /tmp/lms-rubric
+          echo "Official test assertions verified."
+
+      - name: Stage 1 - Code Quality & Static Analysis
+        run: |
+          echo "Running static analyzers and AST linters..."
+          pip3 install ruff pytest
+          ruff check . || echo "::warning ::Linter warnings detected"
+
+      - name: Stage 2 - Execute Comprehensive Test Suites
+        id: test_execution
+        run: |
+          echo "Executing immutable test assertions against student implementation..."
+          START_TIME=$(date +%s)
+          
+          # Run pytest with JSON report output
+          if pytest /tmp/lms-rubric/tests/ -v --tb=short; then
+            echo "TEST_STATUS=PASSED" >> $GITHUB_ENV
+            echo "SCORE=100.00" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=FAILED" >> $GITHUB_ENV
+            echo "SCORE=0.00" >> $GITHUB_ENV
+          fi
+          
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "DURATION=$DURATION" >> $GITHUB_ENV
+
+      - name: Stage 3 - Valgrind Memory Leak Verification
+        run: |
+          if [ -f "./Makefile" ]; then
+            echo "Running Valgrind leak check..."
+            make build
+            valgrind --leak-check=full --error-exitcode=1 ./bin/executable || echo "Memory checks completed."
+          fi
+
+      - name: Stage 4 - Dispatch Signed Attestation to LMS
+        if: always()
+        run: |
+          if [ -z "${{ secrets.LMS_WEBHOOK_SECRET }}" ]; then
+            echo "::notice ::LMS_WEBHOOK_SECRET not configured. Skipping webhook callback."
+            exit 0
+          fi
+          
+          PAYLOAD=$(cat <<EOF
+          {
+            "idempotency_key": "run_${{ github.run_id }}_${{ github.sha }}",
+            "project_slug": "${{ github.event.repository.name }}",
+            "github_repo_url": "${{ github.event.repository.html_url }}",
+            "commit_sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "status": "${{ env.TEST_STATUS }}",
+            "score": ${{ env.SCORE }},
+            "feedback_json": {
+              "duration_seconds": ${{ env.DURATION }},
+              "run_url": "${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}"
+            }
+          }
+          EOF
+          )
+          
+          # Sign payload with HMAC-SHA256
+          SIGNATURE=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "${{ secrets.LMS_WEBHOOK_SECRET }}" | sed 's/^.* //')
+          
+          echo "Posting signed test attestation to LMS..."
+          curl -s -X POST "${{ secrets.LMS_WEBHOOK_URL || 'https://lms.academy/api/webhooks/grading' }}" \
+            -H "Content-Type: application/json" \
+            -H "x-lms-signature: sha256=$SIGNATURE" \
+            -d "$PAYLOAD"

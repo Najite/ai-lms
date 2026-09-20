@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --surface-0: #010102;
+    --surface-1: #08090a;
+    --surface-2: #0f1012;
+    --surface-3: #16171a;
+    --surface-4: #1e2023;
+
+    --border-base: #23252a;
+    --border-muted: #1b1c20;
+    --border-active: #2e3038;
+    --border-highlight: #3b3e48;
+
+    --text-primary: #f7f8f8;
+    --text-secondary: #8a8f98;
+    --text-tertiary: #565961;
+    --text-quaternary: #383b42;
+
+    --brand-accent: #5e6ad2;
+    --accent-hover: #6f7be8;
+    --accent-muted: #2d3154;
+
+    --status-green: #4cb782;
+    --status-green-border: #1b4332;
+    --status-amber: #e5993e;
+    --status-amber-border: #4a3000;
+    --status-red: #eb5757;
+    --status-red-border: #4a1515;
+    --status-cyan: #56b6c2;
+    --status-cyan-border: #103840;
+  }
+
+  * {
+    border-color: #23252a;
+  }
+
+  body {
+    background-color: #010102;
+    color: #f7f8f8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  code, pre, kbd, samp {
+    font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  ::selection {
+    background-color: rgba(94, 106, 210, 0.35);
+    color: #f7f8f8;
+  }
+
+  /* Thin Linear Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #08090a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #23252a;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2e3038;
+  }
+}
+
+@layer utilities {
+  .bevel-card {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .bevel-btn {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .hairline-border {
+    border: 1px solid #23252a;
+  }
+}

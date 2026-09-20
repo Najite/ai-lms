@@ -1,0 +1,32 @@
+name: Supabase Database Keepalive
+
+on:
+  schedule:
+    # Run every 3 days at 00:00 UTC (Supabase auto-pauses after 7 days of inactivity)
+    - cron: '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    name: Ping Supabase Free Tier Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST Endpoint
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "::notice ::SUPABASE_URL or SUPABASE_ANON_KEY not set yet. Skipping keepalive ping."
+            exit 0
+          fi
+          
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/phases?select=count")
+            
+          echo "Supabase Keepalive Response Status: $HTTP_STATUS"
+          
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Supabase database successfully pinged. Auto-pause prevented."
+          else
+            echo "Warning: Unexpected response status: $HTTP_STATUS"
+          fi
