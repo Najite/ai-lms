@@ -31,6 +31,7 @@ import {
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { supabase } from "@/lib/supabase";
 import { CodeEditor } from "@/components/ui/code-editor";
+import { ExerciseFormatter } from "./exercise-formatter";
 
 interface ExerciseViewProps {
   initialLessonId?: string | null;
@@ -303,113 +304,13 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
 
         {/* Right Column: Problem Description & Interactive Editor */}
         <div className="lg:col-span-8 flex flex-col bg-[#08090a] border border-[#23252a] rounded-xl overflow-hidden shadow-2xl">
-          {/* Header of Active Exercise */}
-          <div className="p-4 bg-[#0f1011] border-b border-[#23252a] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-[#5e6ad2] font-semibold">
-                  {activeExercise.id.toUpperCase()}
-                </span>
-                <span className="text-[#383b42]">•</span>
-                <span
-                  className={cn(
-                    "text-[10px] font-mono px-2 py-0.5 rounded font-semibold",
-                    activeExercise.difficulty === "Easy"
-                      ? "bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30"
-                      : activeExercise.difficulty === "Medium"
-                      ? "bg-[#e5993e]/10 text-[#e5993e] border border-[#e5993e]/30"
-                      : "bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30"
-                  )}
-                >
-                  {activeExercise.difficulty}
-                </span>
-                {isCompleted && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#10b981]/20 text-[#10b981] flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
-                    SOLVED
-                  </span>
-                )}
-                {!isUnlocked && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#565961]/20 text-[#8a8f98] flex items-center gap-1">
-                    <Lock className="w-3 h-3" />
-                    LOCKED
-                  </span>
-                )}
-              </div>
-              <h3 className="text-lg font-semibold text-[#f7f8f8] mt-1">
-                {activeExercise.title}
-              </h3>
-              {activeExercise.leetcodeEquivalent && (
-                <div className="text-[11px] font-mono text-[#8a8f98] mt-0.5">
-                  LeetCode Pattern: <span className="text-[#d0d6e0]">{activeExercise.leetcodeEquivalent}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Parent lesson link */}
-            <div className="flex items-center gap-2">
-              {onNavigateToLesson && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onNavigateToLesson(activeExercise.lessonId)}
-                  className="gap-1.5 font-mono text-xs text-[#8a8f98] hover:text-white"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-[#5e6ad2]" />
-                  <span>View Parent Lesson</span>
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Locked Notice if Not Unlocked */}
-          {!isUnlocked && (
-            <div className="p-4 bg-[#e5993e]/10 border-b border-[#e5993e]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-[#e5993e]">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 shrink-0" />
-                <span>
-                  This challenge is locked. Complete the interactive AST assertions for{" "}
-                  <strong>{lessonsMap[activeExercise.lessonId]?.title || activeExercise.lessonId}</strong> to unlock.
-                </span>
-              </div>
-              {onNavigateToLesson && (
-                <Button
-                  size="xs"
-                  onClick={() => onNavigateToLesson(activeExercise.lessonId)}
-                  className="gap-1 bg-[#e5993e] hover:bg-[#f59e0b] text-black font-semibold shrink-0"
-                >
-                  <span>Go to Lesson</span>
-                  <ArrowRight className="w-3 h-3" />
-                </Button>
-              )}
-            </div>
-          )}
-
-          {/* Split Body: Top Description, Bottom Code Editor */}
-          <div className="p-4 border-b border-[#23252a] bg-[#0b0c0e] max-h-56 overflow-y-auto font-sans text-xs text-[#d0d6e0] space-y-2 leading-relaxed">
-            <div className="whitespace-pre-wrap font-mono text-[11px]">
-              {activeExercise.descriptionMarkdown}
-            </div>
-
-            {/* Hint Section */}
-            {activeExercise.hints.length > 0 && (
-              <div className="pt-2">
-                <button
-                  onClick={() => setShowHint(!showHint)}
-                  className="text-xs font-mono text-[#5e6ad2] hover:underline flex items-center gap-1"
-                >
-                  <HelpCircle className="w-3 h-3" />
-                  <span>{showHint ? "Hide Algorithmic Hint" : "Need a Hint? (Anti-Slop)"}</span>
-                </button>
-                {showHint && (
-                  <ul className="mt-2 space-y-1 pl-4 list-disc text-xs font-mono text-[#8a8f98]">
-                    {activeExercise.hints.map((h, i) => (
-                      <li key={i}>{h}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+          {/* Formatted Exercise Specification Card */}
+          <div className="p-4 border-b border-[#23252a] bg-[#07080a]">
+            <ExerciseFormatter
+              exercise={activeExercise}
+              onNavigateToTheory={onNavigateToLesson ? () => onNavigateToLesson(activeExercise.lessonId) : undefined}
+              showTheoryLink={!!onNavigateToLesson}
+            />
           </div>
 
           {/* Editor Header Bar */}

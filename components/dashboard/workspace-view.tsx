@@ -11,20 +11,22 @@ import {
   FileCode,
   BookOpen,
   HelpCircle,
-  Save,
   Clock,
   Terminal,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   Search,
-  ListFilter,
   Bot,
   Loader2,
   Lock,
   ArrowRight,
   Sparkles,
   Code2,
+  Award,
+  Zap,
+  Check,
+  ExternalLink,
 } from "lucide-react";
 import { getSandboxController } from "@/lib/sandbox/sandbox-controller";
 import { ExecutionResult } from "@/lib/sandbox/types";
@@ -36,8 +38,12 @@ import {
   useCurriculumProgress,
   isLessonUnlocked,
   markLessonCompleted,
+  markExerciseCompleted,
   setLastActiveLessonId,
 } from "@/lib/progress-tracker";
+import { COMPREHENSIVE_EXERCISES_CATALOG, ExerciseItem } from "@/lib/exercises-catalog";
+import { ENRICHED_MODULE_HANDBOOKS } from "@/lib/enriched-handbooks";
+import { ExerciseFormatter } from "./exercise-formatter";
 
 interface WorkspaceLesson {
   id: string;
@@ -47,6 +53,9 @@ interface WorkspaceLesson {
   handbook: string;
   starterCode: string;
   testSuite: string;
+  criteria?: string;
+  failureMode?: string;
+  xpReward?: number;
 }
 
 interface WorkspaceViewProps {
@@ -57,496 +66,568 @@ interface WorkspaceViewProps {
 export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewProps) {
   const [lessons, setLessons] = React.useState<WorkspaceLesson[]>([]);
   const [currentLessonIndex, setCurrentLessonIndex] = React.useState(0);
+  const [activeMode, setActiveMode] = React.useState<"theory" | "exercise">("theory");
+  const [showCheckpointPrompt, setShowCheckpointPrompt] = React.useState(false);
+
+  // Exercise states
   const [code, setCode] = React.useState<string>("");
-  const [activeFile, setActiveFile] = React.useState<"solution.py" | "tests.py">("solution.py");
+  const [activeEditorTab, setActiveEditorTab] = React.useState<"solution" | "tests">("solution");
   const [isRunning, setIsRunning] = React.useState(false);
-  const [isLoadingLessons, setIsLoadingLessons] = React.useState(true);
-  const [result, setResult] = React.useState<ExecutionResult | null>(null);
-  const [statusMessage, setStatusMessage] = React.useState("Ready to verify AST & unit assertions");
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [isSelectorOpen, setIsSelectorOpen] = React.useState(false);
-  const [justCompletedSuccess, setJustCompletedSuccess] = React.useState(false);
+  const [executionResult, setExecutionResult] = React.useState<ExecutionResult | null>(null);
+  const [statusMessage, setStatusMessage] = React.useState<string>("Ready to execute verification.");
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [completedTheorySet, setCompletedTheorySet] = React.useState<Set<string>>(new Set());
 
-  const { completedLessons } = useCurriculumProgress();
+  const { completedLessons, completedExercises } = useCurriculumProgress();
+  const currentLesson = lessons[currentLessonIndex] || null;
 
-  // Fetch real lessons from Supabase (fetch full 500 catalog list of ids/titles, load current lesson)
+  // Find paired exercise from catalog if available
+  const pairedExercise: ExerciseItem | undefined = React.useMemo(() => {
+    if (!currentLesson) return undefined;
+    return COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === currentLesson.id);
+  }, [currentLesson]);
+
+  // Fetch all curriculum nodes from Supabase
   React.useEffect(() => {
     let isMounted = true;
-    async function load() {
-      setIsLoadingLessons(true);
-      
-      // Determine target lesson ID (from prop or URL query param ?lesson=node-x-y)
-      let targetLessonId = initialLessonId;
-      if (!targetLessonId && typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
-        targetLessonId = params.get("lesson");
-      }
+    async function loadLessons() {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("curriculum_nodes")
+          .select("id, slug, phase_id, title, handbook_markdown, starter_code, test_suite, xp_reward")
+          .order("id", { ascending: true })
+          .limit(600);
 
-      // 1. Fetch all 600 lessons for full selector navigation
-      const { data, error } = await supabase
-        .from("curriculum_nodes")
-        .select("id, slug, phase_id, title, starter_code, test_suite, handbook_markdown")
-        .order("id", { ascending: true })
-        .limit(600);
-
-      if (isMounted && data && data.length > 0) {
-        const mapped: WorkspaceLesson[] = data.map((d) => {
-          let starter = "";
-          if (d.starter_code) {
-            if (typeof d.starter_code === "string") starter = d.starter_code;
-            else if (typeof d.starter_code === "object") {
-              starter = (d.starter_code as any)["solution.py"] || JSON.stringify(d.starter_code, null, 2);
-            }
-          }
-          if (!starter) {
-            starter = `# ${d.title}\n\ndef solve():\n    # Implement solution satisfying invariant requirements\n    pass\n`;
-          }
-
-          let test = "";
-          if (d.test_suite) {
-            if (typeof d.test_suite === "string") {
-              test = d.test_suite;
-            } else if (typeof d.test_suite === "object") {
-              test = (d.test_suite as any)["tests.py"] || `# Test Suite for: ${d.title}\nassert True, "Baseline invariant check"\nprint("✓ Automated AST Assertions: PASSED")\n`;
-            }
-          }
-
-          return {
-            id: d.id,
-            slug: d.slug,
-            phase: d.phase_id,
-            title: d.title,
-            handbook: d.handbook_markdown || "",
-            starterCode: starter,
-            testSuite: test,
-          };
-        });
-
-        setLessons(mapped);
-
-        // Find initial index
-        let initialIdx = 0;
-        if (targetLessonId) {
-          const foundIdx = mapped.findIndex(
-            (l) => l.id === targetLessonId || l.slug === targetLessonId
-          );
-          if (foundIdx !== -1) {
-            initialIdx = foundIdx;
-          }
+        if (error) {
+          console.error("Failed to load curriculum nodes from Supabase", error);
         }
 
-        setCurrentLessonIndex(initialIdx);
-        setCode(mapped[initialIdx].starterCode);
-        setIsLoadingLessons(false);
+        let nodesToUse = data;
+        if (!nodesToUse || nodesToUse.length === 0) {
+          // Fallback to sample modules from catalog if DB query returned nothing
+          nodesToUse = COMPREHENSIVE_EXERCISES_CATALOG.slice(0, 10).map((ex) => ({
+            id: ex.lessonId,
+            slug: ex.lessonId,
+            phase_id: "phase-0",
+            title: ex.title,
+            handbook_markdown: `# ${ex.title}\n\n${ex.descriptionMarkdown}`,
+            starter_code: ex.starterCode,
+            test_suite: ex.testSuite,
+            xp_reward: 150,
+          }));
+        } else {
+          // Naturally sort by node index: node-0-1, node-0-2, ... node-0-10
+          const parseNodeRank = (id: string) => {
+            const match = id.match(/node-(\d+)-(\d+)/);
+            if (match) {
+              return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
+            }
+            return 999999;
+          };
+          nodesToUse = [...nodesToUse].sort((a: any, b: any) => parseNodeRank(a.id) - parseNodeRank(b.id));
+        }
+
+        if (isMounted && nodesToUse && nodesToUse.length > 0) {
+          const formatted: WorkspaceLesson[] = nodesToUse.map((d: any) => {
+            let sc = "";
+            let ts = "";
+            if (typeof d.starter_code === "object" && d.starter_code !== null) {
+              sc = d.starter_code["solution.py"] || JSON.stringify(d.starter_code, null, 2);
+            } else if (typeof d.starter_code === "string") {
+              sc = d.starter_code;
+            }
+
+            if (typeof d.test_suite === "object" && d.test_suite !== null) {
+              ts = d.test_suite["tests.py"] || JSON.stringify(d.test_suite, null, 2);
+            } else if (typeof d.test_suite === "string") {
+              ts = d.test_suite;
+            }
+
+            const enriched = ENRICHED_MODULE_HANDBOOKS[d.id];
+            const finalTitle = enriched?.title || d.title;
+            const finalHandbook = enriched?.handbook || d.handbook_markdown || "Handbook content is being synthesized.";
+
+            return {
+              id: d.id,
+              slug: d.slug,
+              phase: d.phase_id,
+              title: finalTitle,
+              handbook: finalHandbook,
+              starterCode: sc || "# Write solution here\npass\n",
+              testSuite: ts || "# Unit test suite\nassert True\n",
+              criteria: undefined,
+              failureMode: undefined,
+              xpReward: d.xp_reward || 150,
+            };
+          });
+
+          setLessons(formatted);
+
+          // Find target lesson index
+          let targetIndex = 0;
+          if (initialLessonId) {
+            const foundIdx = formatted.findIndex((l) => l.id === initialLessonId);
+            if (foundIdx !== -1) targetIndex = foundIdx;
+          }
+          setCurrentLessonIndex(targetIndex);
+
+          // Initialize starter code
+          const initial = formatted[targetIndex];
+          if (initial) {
+            const paired = COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === initial.id);
+            setCode(paired?.starterCode || initial.starterCode);
+          }
+        }
+      } catch (err) {
+        console.error("Curriculum fetch error", err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     }
-    load();
+    loadLessons();
     return () => {
       isMounted = false;
     };
   }, [initialLessonId]);
 
-  const currentLesson = lessons[currentLessonIndex] || {
-    id: "node-0-1",
-    phase: "phase-0",
-    title: "Lesson 0.1: Bits, Bytes, & Number Representations",
-    handbook: "# Loading handbook from Supabase...",
-    starterCode: "# Loading code...",
-    testSuite: "# Loading tests...",
-  };
-
-  const allLessonIds = React.useMemo(() => lessons.map((l) => l.id), [lessons]);
-
-  const handleLessonChange = (idx: number) => {
-    if (idx < 0 || idx >= lessons.length) return;
-    setCurrentLessonIndex(idx);
-    setCode(lessons[idx].starterCode);
-    setResult(null);
-    setJustCompletedSuccess(false);
-    setStatusMessage("Lesson loaded. Verify using Pyodide.");
-    setLastActiveLessonId(lessons[idx].id);
-
-    // Update URL query string without reloading page
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      url.searchParams.set("lesson", lessons[idx].id);
-      window.history.replaceState({}, "", url.toString());
+  // Update starter code when switching lessons
+  const handleSelectLesson = (index: number) => {
+    setCurrentLessonIndex(index);
+    const target = lessons[index];
+    if (target) {
+      const paired = COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === target.id);
+      setCode(paired?.starterCode || target.starterCode);
+      setExecutionResult(null);
+      setActiveMode("theory");
+      setShowCheckpointPrompt(false);
+      setLastActiveLessonId(target.id);
     }
   };
 
+  const handleNextLesson = () => {
+    if (currentLessonIndex + 1 < lessons.length) {
+      handleSelectLesson(currentLessonIndex + 1);
+    }
+  };
+
+  const handlePrevLesson = () => {
+    if (currentLessonIndex > 0) {
+      handleSelectLesson(currentLessonIndex - 1);
+    }
+  };
+
+  // Complete Theory and transition to Exercise
+  const handleCompleteTheory = () => {
+    if (!currentLesson) return;
+    setCompletedTheorySet((prev) => new Set(prev).add(currentLesson.id));
+    setShowCheckpointPrompt(true);
+  };
+
+  const handleProceedToExercise = () => {
+    setShowCheckpointPrompt(false);
+    setActiveMode("exercise");
+  };
+
+  // Run sandbox execution
   const handleRunCode = async () => {
+    if (!currentLesson) return;
     setIsRunning(true);
-    setStatusMessage("Running Pyodide WASM runtime with 5s watchdog...");
+    setStatusMessage("Initializing Pyodide sandbox in isolated Web Worker...");
 
     try {
       const controller = getSandboxController();
+      const testCode = pairedExercise?.testSuite || currentLesson.testSuite;
+
       const res = await controller.execute({
-        id: currentLesson.id,
+        id: `exercise-${currentLesson.id}`,
         language: "python",
-        code: activeFile === "solution.py" ? code : currentLesson.starterCode,
-        testAssertions: currentLesson.testSuite,
+        code: code,
+        testAssertions: testCode,
         timeoutMs: 5000,
       });
 
-      setResult(res);
-      if (res.status === "SUCCESS") {
-        setStatusMessage(`✓ All assertions passed in ${(res.executionDurationMs / 1000).toFixed(3)}s`);
-        setJustCompletedSuccess(true);
+      setExecutionResult(res);
 
-        // Mark current lesson completed
-        await markLessonCompleted(currentLesson.id, activeFile === "solution.py" ? code : undefined);
+      if (res.status === "SUCCESS") {
+        setStatusMessage("✓ All test assertions passed successfully!");
+        markExerciseCompleted(`ex-${currentLesson.id}`);
+        markLessonCompleted(currentLesson.id, code);
+      } else if (res.status === "TIMEOUT") {
+        setStatusMessage("Execution timed out (5,000ms watchdog exceeded).");
       } else {
-        setJustCompletedSuccess(false);
-        setStatusMessage(`✗ Test failed: ${res.errorMessage || "AssertionError"}`);
+        setStatusMessage(res.errorMessage || "Assertions failed. Check test logs.");
       }
     } catch (err: any) {
-      setJustCompletedSuccess(false);
-      setStatusMessage(`Runtime error: ${err.message || "Execution failed"}`);
+      setStatusMessage(`Sandbox execution error: ${err.message}`);
     } finally {
       setIsRunning(false);
     }
   };
 
-  const handleAdvanceToNextLesson = () => {
-    if (currentLessonIndex < lessons.length - 1) {
-      handleLessonChange(currentLessonIndex + 1);
-    }
-  };
+  const isTheoryDone = currentLesson ? completedTheorySet.has(currentLesson.id) : false;
+  const isExerciseDone = currentLesson ? completedLessons.includes(currentLesson.id) : false;
+  const isModuleFullyMastered = isTheoryDone && isExerciseDone;
 
-  const isCurrentCompleted = completedLessons.includes(currentLesson.id);
-  const nextLesson = currentLessonIndex < lessons.length - 1 ? lessons[currentLessonIndex + 1] : null;
-
-  const handleResetCode = () => {
-    setCode(currentLesson.starterCode);
-    setResult(null);
-    setJustCompletedSuccess(false);
-    setStatusMessage("Code reset to initial state.");
-  };
-
-  if (isLoadingLessons) {
+  if (isLoading || !currentLesson) {
     return (
-      <div className="flex items-center justify-center p-32 bg-[#08090a] border border-[#23252a] rounded-xl font-mono text-sm text-[#8a8f98] gap-3">
-        <Loader2 className="w-5 h-5 animate-spin text-[#5e6ad2]" />
-        <span>Loading lesson workspace directly from Supabase database...</span>
+      <div className="flex flex-col items-center justify-center min-h-[450px] p-8 space-y-4">
+        <Loader2 className="w-8 h-8 text-[#5e6ad2] animate-spin" />
+        <span className="text-xs font-mono text-[#8a8f98]">
+          Loading module theory and verification assets...
+        </span>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Top Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-[#08090a] border border-[#23252a]">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#5e6ad2]/10 border border-[#5e6ad2]/30 flex items-center justify-center text-[#5e6ad2] font-mono text-xs font-semibold">
-            {currentLesson.id}
-          </div>
-          <div>
+      {/* Top Module Header & Mode Switcher Bar */}
+      <div className="rounded-xl bg-[#08090a] border border-[#23252a] p-4 shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Module Information & Selector */}
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[#5e6ad2]/15 text-[#5e6ad2] border border-[#5e6ad2]/30 font-semibold">
+                MODULE {currentLessonIndex + 1} OF {lessons.length}
+              </span>
               <span className="text-xs font-mono text-[#8a8f98]">{currentLesson.phase}</span>
-              <span className="text-[#383b42]">•</span>
-              {isCurrentCompleted ? (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">
-                  <CheckCircle2 className="w-3 h-3" />
-                  COMPLETED
-                </span>
-              ) : (
-                <StatusChip status="brand" label="IN PROGRESS" />
-              )}
-              <span className="text-[#383b42]">•</span>
-              <StatusChip status="offline" label="LIVE DATABASE LESSON" />
+              <span className="text-xs font-mono text-[#383b42]">•</span>
+              <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
+                {isExerciseDone ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Exercise Mastered
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3.5 h-3.5 text-[#e5993e]" />
+                    Exercise Pending
+                  </>
+                )}
+              </span>
             </div>
-            <h2 className="text-base font-semibold text-[#f7f8f8] tracking-tight mt-0.5">
+
+            <h2 className="text-lg sm:text-xl font-bold text-[#f7f8f8] tracking-tight">
               {currentLesson.title}
             </h2>
           </div>
-        </div>
 
-        {/* Pager & Quick Selector controls */}
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Quick Lesson Selector Dropdown */}
-          <div className="relative">
+          {/* Dual-Phase Standalone Switcher */}
+          <div className="flex items-center gap-2 bg-[#0f1011] p-1 rounded-lg border border-[#23252a] shrink-0">
             <button
-              onClick={() => setIsSelectorOpen(!isSelectorOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f1011] border border-[#23252a] hover:border-[#5e6ad2]/50 text-xs font-mono text-[#f7f8f8] transition-colors"
+              onClick={() => setActiveMode("theory")}
+              className={cn(
+                "flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] text-xs font-mono font-medium transition-all",
+                activeMode === "theory"
+                  ? "bg-[#16171a] text-white border border-[#2e3038] shadow-sm font-semibold"
+                  : "text-[#8a8f98] hover:text-[#f7f8f8]"
+              )}
             >
-              <ListFilter className="w-3.5 h-3.5 text-[#5e6ad2]" />
-              <span className="hidden sm:inline">Jump to Lesson</span>
-              <span className="text-[#8a8f98]">({currentLessonIndex + 1}/{lessons.length})</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#8a8f98]" />
+              <BookOpen className="w-3.5 h-3.5 text-[#5e6ad2]" />
+              <span>1. Theory Module</span>
+              {isTheoryDone && <Check className="w-3 h-3 text-[#10b981]" />}
             </button>
 
-            {isSelectorOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl bg-[#08090a] border border-[#23252a] p-3 shadow-2xl z-50 animate-fadeIn">
-                <div className="relative mb-2">
-                  <Search className="w-3.5 h-3.5 text-[#8a8f98] absolute left-2.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search 600 lessons by title or phase..."
-                    className="w-full bg-[#0f1011] border border-[#23252a] rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-[#f7f8f8] placeholder-[#565961] focus:outline-none focus:border-[#5e6ad2]"
-                    autoFocus
-                  />
-                </div>
-
-                <div className="max-h-60 overflow-y-auto space-y-1 pr-1">
-                  {lessons
-                    .map((l, idx) => ({ ...l, originalIdx: idx }))
-                    .filter(
-                      (l) =>
-                        !searchQuery ||
-                        l.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        l.phase.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        l.id.toLowerCase().includes(searchQuery.toLowerCase())
-                    )
-                    .slice(0, 40)
-                    .map((l) => {
-                      const completed = completedLessons.includes(l.id);
-                      const unlocked = isLessonUnlocked(l.id, allLessonIds, completedLessons);
-
-                      return (
-                        <div
-                          key={l.id}
-                          onClick={() => {
-                            handleLessonChange(l.originalIdx);
-                            setIsSelectorOpen(false);
-                            setSearchQuery("");
-                          }}
-                          className={cn(
-                            "px-2.5 py-1.5 text-xs font-mono rounded-md cursor-pointer transition-colors flex items-center justify-between gap-2",
-                            l.originalIdx === currentLessonIndex
-                              ? "bg-[#5e6ad2] text-white"
-                              : "hover:bg-[#16171a] text-[#d0d6e0] hover:text-white"
-                          )}
-                        >
-                          <div className="flex items-center gap-2 truncate">
-                            {completed ? (
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981] shrink-0" />
-                            ) : unlocked ? (
-                              <div className="w-2 h-2 rounded-full bg-[#5e6ad2] shrink-0" />
-                            ) : (
-                              <Lock className="w-3 h-3 text-[#565961] shrink-0" />
-                            )}
-                            <span className="truncate">{l.title}</span>
-                          </div>
-                          <span className="text-[10px] text-[#8a8f98] shrink-0 uppercase">{l.phase}</span>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-            )}
+            <button
+              onClick={() => setActiveMode("exercise")}
+              className={cn(
+                "flex items-center gap-2 px-3.5 py-1.5 rounded-[5px] text-xs font-mono font-medium transition-all",
+                activeMode === "exercise"
+                  ? "bg-[#16171a] text-white border border-[#2e3038] shadow-sm font-semibold"
+                  : "text-[#8a8f98] hover:text-[#f7f8f8]"
+              )}
+            >
+              <Code2 className="w-3.5 h-3.5 text-[#10b981]" />
+              <span>2. Module Exercise</span>
+              {isExerciseDone && <Check className="w-3 h-3 text-[#10b981]" />}
+            </button>
           </div>
 
-          <div className="flex items-center gap-1">
+          {/* Module Prev/Next Controls */}
+          <div className="flex items-center gap-1.5 shrink-0">
             <Button
               variant="outline"
-              size="sm"
+              size="xs"
+              onClick={handlePrevLesson}
               disabled={currentLessonIndex === 0}
-              onClick={() => handleLessonChange(currentLessonIndex - 1)}
-              className="p-1.5"
-              title="Previous lesson"
+              className="gap-1 font-mono text-[11px]"
+              title="Previous Module"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span>Prev</span>
             </Button>
             <Button
               variant="outline"
-              size="sm"
-              disabled={currentLessonIndex === lessons.length - 1}
-              onClick={() => handleLessonChange(currentLessonIndex + 1)}
-              className="p-1.5"
-              title="Next lesson"
+              size="xs"
+              onClick={handleNextLesson}
+              disabled={currentLessonIndex + 1 >= lessons.length}
+              className="gap-1 font-mono text-[11px]"
+              title="Next Module"
             >
-              <ChevronRight className="w-4 h-4" />
+              <span>Next</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </Button>
           </div>
-          {onOpenTutor && (
-            <Button variant="outline" size="sm" onClick={onOpenTutor} className="gap-1.5 text-xs font-mono">
-              <Bot className="w-3.5 h-3.5 text-[#5e6ad2]" />
-              <span>Ask Tutor</span>
-            </Button>
-          )}
         </div>
       </div>
 
-      {/* Split Workspace: Left Theory & Tasks, Right Interactive Code Editor */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[620px]">
-        {/* Left Column: Theory, Requirements, and Invariants */}
-        <div className="lg:col-span-5 flex flex-col justify-between bg-[#08090a] border border-[#23252a] rounded-xl p-6 shadow-xl">
-          <div className="space-y-6 overflow-y-auto max-h-[540px] pr-2">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <BookOpen className="w-4 h-4 text-[#5e6ad2]" />
-                <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-[#8a8f98]">
-                  Curriculum Handbook
-                </h4>
-              </div>
-              <div className="bg-[#0b0c0e] p-4 rounded-lg border border-[#23252a]">
-                <HandbookViewer content={currentLesson.handbook} />
+      {/* ========================================================================= */}
+      {/* PHASE 1: STANDALONE THEORY & ARCHITECTURE (NO SPLIT CROWDING)             */}
+      {/* ========================================================================= */}
+      {activeMode === "theory" && (
+        <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+          {/* Main Reading Canvas */}
+          <div className="rounded-xl bg-[#0f1011] border border-[#23252a] p-6 lg:p-10 shadow-xl space-y-6">
+            <HandbookViewer
+              content={currentLesson.handbook}
+            />
+
+            {/* End-of-Module Theory Checkpoint Gate */}
+            <div className="mt-12 pt-8 border-t border-[#23252a] space-y-4">
+              <div className="rounded-lg bg-[#08090a] border border-[#5e6ad2]/30 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-[#5e6ad2]/50" />
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#10b981]" />
+                    <span className="text-xs font-mono text-[#10b981] font-semibold uppercase">
+                      Theory Reading Checkpoint
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-[#f7f8f8]">
+                    Ready to prove your understanding in code?
+                  </h3>
+                  <p className="text-xs text-[#8a8f98] max-w-xl leading-relaxed">
+                    You have reviewed the architectural models and failure invariants. The paired exercise module will verify your implementation with real unit test assertions.
+                  </p>
+                </div>
+
+                <div className="shrink-0 flex flex-col sm:flex-row gap-2.5">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    onClick={handleCompleteTheory}
+                    className="gap-2 font-mono text-xs bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white shadow-lg shadow-[#5e6ad2]/20 whitespace-nowrap"
+                  >
+                    <span>Complete Theory &amp; Launch Exercise</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="pt-4 border-t border-[#23252a] flex items-center justify-between text-xs font-mono text-[#8a8f98]">
-            <span>Telemetry: Live Database Sync</span>
-            <span className="text-[#10b981]">100% Free / Self-Paced</span>
           </div>
         </div>
+      )}
 
-        {/* Right Column: Multi-tab Code Editor & ANSI Terminal Output */}
-        <div className="lg:col-span-7 flex flex-col bg-[#08090a] border border-[#23252a] rounded-xl overflow-hidden shadow-2xl">
-          {/* Editor Header Bar */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f1011] border-b border-[#23252a]">
-            {/* File Tabs */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setActiveFile("solution.py")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded transition-colors",
-                  activeFile === "solution.py"
-                    ? "bg-[#1f2023] text-white border border-[#383b42]"
-                    : "text-[#8a8f98] hover:text-[#f7f8f8]"
-                )}
-              >
-                <FileCode className="w-3.5 h-3.5 text-[#5e6ad2]" />
-                <span>solution.py</span>
-              </button>
-              <button
-                onClick={() => setActiveFile("tests.py")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded transition-colors",
-                  activeFile === "tests.py"
-                    ? "bg-[#1f2023] text-white border border-[#383b42]"
-                    : "text-[#8a8f98] hover:text-[#f7f8f8]"
-                )}
-              >
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
-                <span>tests.py (Read-Only)</span>
-              </button>
-            </div>
-
-            {/* Run and Reset Action Buttons */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleResetCode}
-                disabled={isRunning}
-                className="gap-1.5 font-mono text-xs text-[#8a8f98] hover:text-white"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset</span>
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleRunCode}
-                disabled={isRunning}
-                className="gap-1.5 font-mono text-xs bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white"
-              >
-                <Play className="w-3 h-3 fill-current" />
-                <span>{isRunning ? "Running..." : "Run & Verify (Ctrl+Enter)"}</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Code Input Area with Professional Line Numbers & PEP-8 Smart Indentation */}
-          <div className="relative flex-1 min-h-[300px] flex flex-col">
-            <CodeEditor
-              value={activeFile === "solution.py" ? code : currentLesson.testSuite}
-              readOnly={activeFile === "tests.py"}
-              onChange={(val) => {
-                if (activeFile === "solution.py") setCode(val);
-              }}
-              onRun={handleRunCode}
-              minHeight="320px"
-              language="python"
+      {/* ========================================================================= */}
+      {/* PHASE 2: STANDALONE MODULE PRACTICE EXERCISE IDE                          */}
+      {/* ========================================================================= */}
+      {activeMode === "exercise" && (
+        <div className="space-y-6 animate-fadeIn">
+          {/* Formatted Standalone Exercise Specifications & Test Criteria */}
+          {pairedExercise ? (
+            <ExerciseFormatter
+              exercise={pairedExercise}
+              onNavigateToTheory={() => setActiveMode("theory")}
+              showTheoryLink={true}
             />
-          </div>
-
-          {/* Terminal Output Console */}
-          <div className="border-t border-[#23252a] bg-[#08090a] p-4 space-y-2">
-            <div className="flex items-center justify-between text-xs font-mono text-[#8a8f98]">
-              <div className="flex items-center gap-2">
-                <Terminal className="w-3.5 h-3.5 text-[#5e6ad2]" />
-                <span>ANSI Terminal Console</span>
+          ) : (
+            <div className="rounded-xl bg-[#0b0c0e] border border-[#23252a] p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-[#1f2126] pb-3">
+                <div className="flex items-center gap-2">
+                  <Code2 className="w-4 h-4 text-[#10b981]" />
+                  <h3 className="text-sm font-bold text-[#f7f8f8] font-mono">
+                    Module Practice Challenge: {currentLesson.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setActiveMode("theory")}
+                  className="text-xs font-mono text-[#8a8f98] hover:text-white transition-colors"
+                >
+                  ← Review Theory
+                </button>
               </div>
-              <span className="text-[11px] text-[#565961]">{statusMessage}</span>
+              <p className="text-xs font-mono text-[#d0d6e0] leading-relaxed">
+                <strong>Verification Invariant:</strong>{" "}
+                {currentLesson.criteria ||
+                  "Implement the function adhering strictly to the constraints in the module theory."}
+              </p>
+            </div>
+          )}
+
+          {/* Standalone Full-Width Code Editor & Terminal */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left/Main: Full Height Code Editor */}
+            <div className="lg:col-span-8 rounded-xl bg-[#08090a] border border-[#23252a] overflow-hidden shadow-2xl flex flex-col">
+              {/* Editor Tabs & Run Action */}
+              <div className="flex items-center justify-between px-4 py-2 border-b border-[#1b1c20] bg-[#0f1012]">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setActiveEditorTab("solution")}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1 rounded-[4px] text-xs font-mono transition-colors",
+                      activeEditorTab === "solution"
+                        ? "bg-[#16171a] text-white border border-[#2e3038]"
+                        : "text-[#8a8f98] hover:text-white"
+                    )}
+                  >
+                    <FileCode className="w-3.5 h-3.5 text-[#5e6ad2]" />
+                    <span>solution.py</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveEditorTab("tests")}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1 rounded-[4px] text-xs font-mono transition-colors",
+                      activeEditorTab === "tests"
+                        ? "bg-[#16171a] text-white border border-[#2e3038]"
+                        : "text-[#8a8f98] hover:text-white"
+                    )}
+                  >
+                    <FileCode className="w-3.5 h-3.5 text-[#10b981]" />
+                    <span>tests.py</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="primary"
+                    size="xs"
+                    onClick={handleRunCode}
+                    disabled={isRunning}
+                    className="font-mono text-xs bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white gap-1.5"
+                  >
+                    {isRunning ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Running...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>Run Test Suite</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Editor Body */}
+              <div className="p-2 flex-1 min-h-[350px]">
+                <CodeEditor
+                  value={activeEditorTab === "solution" ? code : pairedExercise?.testSuite || currentLesson.testSuite}
+                  onChange={(val) => {
+                    if (activeEditorTab === "solution") setCode(val);
+                  }}
+                  language="python"
+                  minHeight="360px"
+                  readOnly={activeEditorTab === "tests"}
+                />
+              </div>
             </div>
 
-            <div className="rounded-lg bg-[#010102] border border-[#23252a] p-3 font-mono text-xs text-[#d0d6e0] min-h-[110px] max-h-[160px] overflow-y-auto">
-              {result ? (
-                <div className="space-y-1">
-                  {result.output && (
-                    <div className="whitespace-pre-wrap text-[#8a8f98]">{result.output}</div>
-                  )}
-                  {result.status === "SUCCESS" ? (
-                    <div className="text-[#10b981] font-semibold flex items-center gap-1.5 pt-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>100% Assertions Passed in {(result.executionDurationMs / 1000).toFixed(3)}s</span>
-                    </div>
-                  ) : (
-                    <div className="text-[#ef4444] font-semibold flex items-center gap-1.5 pt-1">
-                      <span>✗ {result.errorMessage || "Assertion failure"}</span>
-                    </div>
-                  )}
+            {/* Right: Live Terminal & Test Results */}
+            <div className="lg:col-span-4 flex flex-col justify-between rounded-xl bg-[#08090a] border border-[#23252a] overflow-hidden shadow-2xl">
+              <div className="p-3 bg-[#0f1012] border-b border-[#1b1c20] flex items-center justify-between text-xs font-mono text-[#8a8f98]">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-[#5e6ad2]" />
+                  <span>TEST RUNNER OUTPUT</span>
                 </div>
-              ) : (
-                <div className="text-[#565961] flex items-center gap-2">
-                  <span className="text-[#5e6ad2]">$</span>
-                  <span>Hit &apos;Run & Verify&apos; to execute the Python solution against the test suite.</span>
+                <span
+                  className={cn(
+                    "text-[10px] px-1.5 py-0.2 rounded border font-semibold",
+                    executionResult?.status === "SUCCESS"
+                      ? "text-[#10b981] bg-[#10b981]/10 border-[#10b981]/30"
+                      : executionResult?.status === "FAILED"
+                      ? "text-[#eb5757] bg-[#eb5757]/10 border-[#eb5757]/30"
+                      : "text-[#8a8f98] bg-[#141516] border-[#23252a]"
+                  )}
+                >
+                  {executionResult ? executionResult.status : "IDLE"}
+                </span>
+              </div>
+
+              <div className="p-4 flex-1 font-mono text-xs text-[#8a8f98] overflow-y-auto max-h-[300px] leading-relaxed space-y-2">
+                <div className="text-[#565961] text-[11px]">{statusMessage}</div>
+                {executionResult?.output && (
+                  <pre className="text-xs text-[#d0d6e0] whitespace-pre-wrap">
+                    {executionResult.output}
+                  </pre>
+                )}
+                {executionResult?.errorMessage && (
+                  <pre className="text-xs text-[#eb5757] whitespace-pre-wrap">
+                    {executionResult.errorMessage}
+                  </pre>
+                )}
+              </div>
+
+              {/* Next Step Action if Passed */}
+              {executionResult?.status === "SUCCESS" && (
+                <div className="p-4 bg-[#10b981]/10 border-t border-[#10b981]/30 space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#10b981] font-semibold">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Module Mastered! (+{currentLesson.xpReward} XP)</span>
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleNextLesson}
+                    className="w-full font-mono text-xs bg-[#10b981] hover:bg-[#10b981]/90 text-black font-semibold gap-1"
+                  >
+                    <span>Proceed to Next Module →</span>
+                  </Button>
                 </div>
               )}
             </div>
-
-            {/* Completion Success Banner & Next Lesson Unlocked Card */}
-            {(justCompletedSuccess || isCurrentCompleted) && nextLesson && (
-              <div className="mt-3 p-3 rounded-lg bg-[#5e6ad2]/10 border border-[#5e6ad2]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-fadeIn">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-md bg-[#10b981]/20 border border-[#10b981]/40 flex items-center justify-center text-[#10b981] shrink-0">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-[#f7f8f8]">
-                        Lesson Completed & Next Unlocked!
-                      </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#10b981]/20 text-[#10b981]">
-                        +XP Earned
-                      </span>
-                    </div>
-                    <p className="text-[11px] font-mono text-[#8a8f98] truncate max-w-md">
-                      Next: <span className="text-[#d0d6e0]">{nextLesson.title}</span>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                  <Button
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        window.location.href = `/dashboard?lesson=${encodeURIComponent(currentLesson.id)}#exercises`;
-                      }
-                    }}
-                    variant="outline"
-                    className="gap-1.5 border-[#10b981]/40 text-[#10b981] hover:bg-[#10b981]/10 font-mono text-xs w-full sm:w-auto"
-                  >
-                    <Code2 className="w-3.5 h-3.5" />
-                    <span>Practice Exercises (4 Drills) →</span>
-                  </Button>
-                  <Button
-                    onClick={handleAdvanceToNextLesson}
-                    className="gap-2 bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white font-mono text-xs shadow-md shadow-[#5e6ad2]/20 w-full sm:w-auto shrink-0"
-                  >
-                    <span>Open Next Lesson</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Checkpoint Modal Prompt */}
+      {showCheckpointPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-lg rounded-xl bg-[#0f1011] border border-[#23252a] p-6 space-y-6 shadow-2xl relative">
+            <div className="w-12 h-12 rounded-full bg-[#5e6ad2]/15 border border-[#5e6ad2]/30 mx-auto flex items-center justify-center text-[#5e6ad2]">
+              <Award className="w-6 h-6" />
+            </div>
+
+            <div className="space-y-2 text-center">
+              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30 font-semibold">
+                THEORY CHECKPOINT VERIFIED
+              </span>
+              <h3 className="text-lg font-bold text-[#f7f8f8]">
+                Module Theory Completed!
+              </h3>
+              <p className="text-xs text-[#8a8f98] leading-relaxed max-w-md mx-auto">
+                You have completed reading the foundational architectural theory for{" "}
+                <strong className="text-white">{currentLesson.title}</strong>.
+                <br /><br />
+                Now, prove your mastery in code by solving the paired exercise module.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+              <Button
+                variant="primary"
+                size="md"
+                onClick={handleProceedToExercise}
+                className="w-full font-mono text-xs bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white gap-2 shadow-lg shadow-[#5e6ad2]/20"
+              >
+                <span>Launch Practice Exercise IDE</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="md"
+                onClick={() => setShowCheckpointPrompt(false)}
+                className="w-full sm:w-auto font-mono text-xs text-[#8a8f98]"
+              >
+                <span>Review More</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

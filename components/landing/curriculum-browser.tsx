@@ -112,7 +112,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">CAPSTONES</span>
-              <span className="text-sm font-semibold text-[#5e6ad2]">22</span>
+              <span className="text-sm font-semibold text-[#5e6ad2]">{phases.length || 15}</span>
             </div>
             <div>
               <span className="text-[#8a8f98] block">PACING</span>

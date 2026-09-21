@@ -3,13 +3,46 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/ui/status-chip";
-import { Play, RotateCcw, CheckCircle2, Terminal, ArrowRight, ShieldCheck, FileCode, Check } from "lucide-react";
+import {
+  Play,
+  RotateCcw,
+  CheckCircle2,
+  Terminal,
+  ArrowRight,
+  ShieldCheck,
+  FileCode,
+  Search,
+  Sparkles,
+  Cpu,
+  Network,
+  Braces,
+  Zap,
+} from "lucide-react";
 import { getSandboxController } from "@/lib/sandbox/sandbox-controller";
 import { ExecutionResult } from "@/lib/sandbox/types";
 import { cn } from "@/lib/utils";
 
-const SAMPLE_FILES = {
-  "solution.py": `def lru_cache_lookup(cache: dict, key: str, order: list, capacity: int):
+interface TopicChallenge {
+  id: string;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge: string;
+  solutionFile: string;
+  testFile: string;
+  solutionCode: string;
+  testCode: string;
+  defaultLogs: string[];
+}
+
+const TOPIC_CHALLENGES: Record<string, TopicChallenge> = {
+  "system-design": {
+    id: "system-design",
+    name: "System Design",
+    icon: Cpu,
+    badge: "Phase 3 // Lesson 116",
+    solutionFile: "lru_cache.py",
+    testFile: "test_lru.py",
+    solutionCode: `def lru_cache_lookup(cache: dict, key: str, order: list, capacity: int):
     """
     O(1) average lookup and O(1) eviction for LRU cache.
     Moves accessed key to the tail of the recent order list.
@@ -22,7 +55,7 @@ const SAMPLE_FILES = {
     order.append(key)
     return cache[key]
 `,
-  "test_lru.py": `# Test Suite: Phase 3 / Lesson 116 / Subtopic 116.2
+    testCode: `# Test Suite: Phase 3 / Lesson 116 / Subtopic 116.2
 cache = {"A": 100, "B": 200, "C": 300}
 order = ["A", "B", "C"]
 
@@ -31,11 +64,141 @@ assert order == ["A", "C", "B"], "Order not updated to MRU"
 assert lru_cache_lookup(cache, "Z", order, 3) == -1, "Cache miss failed"
 print("✓ LRU Eviction & Cache Hit Assertions: 3/3 Passed")
 `,
+    defaultLogs: [
+      "$ pytest tests/test_lru.py -v",
+      "tests/test_lru.py::test_cache_hit PASSED [ 33%]",
+      "tests/test_lru.py::test_order_update PASSED [ 66%]",
+      "tests/test_lru.py::test_cache_miss PASSED [100%]",
+      "",
+      "✓ LRU Eviction & Cache Hit Assertions: 3/3 Passed in 0.014s",
+    ],
+  },
+  "agentic-ai": {
+    id: "agentic-ai",
+    name: "Agentic AI & MCP",
+    icon: Sparkles,
+    badge: "Phase 12 // Lesson 482",
+    solutionFile: "mcp_router.py",
+    testFile: "test_mcp.py",
+    solutionCode: `def route_tool_call(request: dict, registered_tools: dict):
+    """
+    Model Context Protocol (MCP) JSON-RPC dispatcher.
+    Validates params schema and dispatches to registered handler.
+    """
+    method = request.get("method")
+    if method not in registered_tools:
+        return {"error": {"code": -32601, "message": "Method not found"}}
+    
+    handler = registered_tools[method]
+    result = handler(request.get("params", {}))
+    return {"jsonrpc": "2.0", "result": result, "id": request.get("id")}
+`,
+    testCode: `# Test Suite: Phase 12 / Lesson 482 / MCP Dispatcher
+tools = {"db_query": lambda p: f"Found {p.get('table')}"}
+req_valid = {"jsonrpc": "2.0", "method": "db_query", "params": {"table": "users"}, "id": 1}
+req_invalid = {"jsonrpc": "2.0", "method": "unknown_tool", "params": {}, "id": 2}
+
+res1 = route_tool_call(req_valid, tools)
+assert res1["result"] == "Found users", "Tool dispatch failed"
+res2 = route_tool_call(req_invalid, tools)
+assert "error" in res2, "Error handling failed"
+print("✓ MCP JSON-RPC Dispatcher: 2/2 Passed")
+`,
+    defaultLogs: [
+      "$ pytest tests/test_mcp.py -v",
+      "tests/test_mcp.py::test_tool_dispatch PASSED [ 50%]",
+      "tests/test_mcp.py::test_unknown_method_error PASSED [100%]",
+      "",
+      "✓ MCP JSON-RPC Dispatcher: 2/2 Passed in 0.012s",
+    ],
+  },
+  "distributed-raft": {
+    id: "distributed-raft",
+    name: "Raft Consensus",
+    icon: Network,
+    badge: "Phase 5 // Lesson 210",
+    solutionFile: "raft_node.py",
+    testFile: "test_raft.py",
+    solutionCode: `def handle_heartbeat(node_state: dict, leader_term: int, leader_id: str):
+    """
+    Raft Consensus follower heartbeat handler.
+    Updates term and resets election timeout if leader is valid.
+    """
+    if leader_term < node_state["current_term"]:
+        return False  # Reject outdated leader
+    
+    node_state["current_term"] = leader_term
+    node_state["leader_id"] = leader_id
+    node_state["election_timeout_reset"] = True
+    return True
+`,
+    testCode: `# Test Suite: Phase 5 / Lesson 210 / Raft Election
+state = {"current_term": 2, "leader_id": None, "election_timeout_reset": False}
+
+assert handle_heartbeat(state, 1, "node_b") == False, "Did not reject stale term"
+assert handle_heartbeat(state, 3, "node_c") == True, "Valid term rejected"
+assert state["current_term"] == 3 and state["election_timeout_reset"] == True
+print("✓ Raft Heartbeat & Term Guard: 3/3 Passed")
+`,
+    defaultLogs: [
+      "$ pytest tests/test_raft.py -v",
+      "tests/test_raft.py::test_stale_term_rejection PASSED [ 33%]",
+      "tests/test_raft.py::test_leader_adoption PASSED [ 66%]",
+      "tests/test_raft.py::test_election_timeout_reset PASSED [100%]",
+      "",
+      "✓ Raft Heartbeat & Term Guard: 3/3 Passed in 0.018s",
+    ],
+  },
+  "compilers": {
+    id: "compilers",
+    name: "Compilers & AST",
+    icon: Braces,
+    badge: "Phase 1 // Lesson 045",
+    solutionFile: "ast_eval.py",
+    testFile: "test_ast.py",
+    solutionCode: `def evaluate_ast(node: tuple):
+    """
+    Recursive descent AST evaluator for prefix arithmetic trees.
+    Supports binary ops: ('+', left, right), ('*', left, right), or literals.
+    """
+    if isinstance(node, (int, float)):
+        return node
+    
+    op, left, right = node
+    val_l = evaluate_ast(left)
+    val_r = evaluate_ast(right)
+    
+    if op == '+': return val_l + val_r
+    if op == '*': return val_l * val_r
+    raise ValueError(f"Unknown op: {op}")
+`,
+    testCode: `# Test Suite: Phase 1 / Lesson 045 / AST Interpreter
+tree1 = ('+', 10, ('*', 3, 4))   # 10 + (3 * 4) = 22
+tree2 = ('*', ('+', 2, 3), 5)    # (2 + 3) * 5 = 25
+
+assert evaluate_ast(tree1) == 22, "Precedence evaluation failed"
+assert evaluate_ast(tree2) == 25, "Group evaluation failed"
+print("✓ AST Evaluator Assertions: 2/2 Passed")
+`,
+    defaultLogs: [
+      "$ pytest tests/test_ast.py -v",
+      "tests/test_ast.py::test_operator_precedence PASSED [ 50%]",
+      "tests/test_ast.py::test_nested_grouping PASSED [100%]",
+      "",
+      "✓ AST Evaluator Assertions: 2/2 Passed in 0.009s",
+    ],
+  },
 };
 
 export function HeroSplit() {
-  const [activeTab, setActiveTab] = React.useState<"solution.py" | "test_lru.py">("solution.py");
-  const [code, setCode] = React.useState(SAMPLE_FILES["solution.py"]);
+  const [selectedTopicId, setSelectedTopicId] = React.useState<string>("system-design");
+  const currentTopic = TOPIC_CHALLENGES[selectedTopicId];
+
+  const [activeTab, setActiveTab] = React.useState<"solution" | "test">("solution");
+  const [code, setCode] = React.useState<string>(currentTopic.solutionCode);
+  const [testCode, setTestCode] = React.useState<string>(currentTopic.testCode);
+  const [searchIntent, setSearchIntent] = React.useState<string>("");
+
   const [isRunning, setIsRunning] = React.useState(false);
   const [runResult, setRunResult] = React.useState<{
     success: boolean;
@@ -43,29 +206,35 @@ export function HeroSplit() {
     logs: string[];
   } | null>({
     success: true,
-    duration: 16,
-    logs: [
-      "$ pytest tests/test_lru.py -v",
-      "tests/test_lru.py::test_cache_hit PASSED [ 33%]",
-      "tests/test_lru.py::test_order_update PASSED [ 66%]",
-      "tests/test_lru.py::test_cache_miss PASSED [100%]",
-      "",
-      "✓ LRU Eviction & Cache Hit Assertions: 3/3 Passed in 0.016s",
-    ],
+    duration: 14,
+    logs: currentTopic.defaultLogs,
   });
+
+  // When switching topic challenge
+  const handleSelectTopic = (topicId: string) => {
+    setSelectedTopicId(topicId);
+    const target = TOPIC_CHALLENGES[topicId];
+    setCode(target.solutionCode);
+    setTestCode(target.testCode);
+    setActiveTab("solution");
+    setRunResult({
+      success: true,
+      duration: 12,
+      logs: target.defaultLogs,
+    });
+  };
 
   const handleRun = async () => {
     setIsRunning(true);
     const start = performance.now();
 
-    // If active tab is solution, execute with test_lru.py
     try {
       const controller = getSandboxController();
       const res: ExecutionResult = await controller.execute({
-        id: "hero-demo",
+        id: `hero-${selectedTopicId}`,
         language: "python",
-        code: activeTab === "solution.py" ? code : SAMPLE_FILES["solution.py"],
-        testAssertions: activeTab === "test_lru.py" ? code : SAMPLE_FILES["test_lru.py"],
+        code: code,
+        testAssertions: testCode,
         timeoutMs: 5000,
       });
 
@@ -74,12 +243,12 @@ export function HeroSplit() {
         success: res.status === "SUCCESS",
         duration: elapsed,
         logs: [
-          "$ pytest tests/test_lru.py -v",
+          `$ pytest tests/${currentTopic.testFile} -v`,
           ...(res.output ? res.output.split("\n") : []),
           ...(res.errorMessage ? [`FAIL: ${res.errorMessage}`] : []),
           "",
           res.status === "SUCCESS"
-            ? `✓ 3/3 assertions passed in 0.0${elapsed}s`
+            ? `✓ All assertions passed in 0.0${elapsed}s`
             : `✖ Execution failed: ${res.status}`,
         ],
       });
@@ -87,40 +256,80 @@ export function HeroSplit() {
       setRunResult({
         success: false,
         duration: Math.round(performance.now() - start),
-        logs: [`$ pytest tests/test_lru.py`, `Error: ${e.message}`],
+        logs: [`$ pytest tests/${currentTopic.testFile}`, `Error: ${e.message}`],
       });
     } finally {
       setIsRunning(false);
     }
   };
 
-  const handleTabSwitch = (tab: "solution.py" | "test_lru.py") => {
-    setActiveTab(tab);
-    setCode(SAMPLE_FILES[tab]);
-  };
-
   return (
-    <section className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-4 pb-8">
-      {/* Left Column: Codecademy-Style Value Proposition */}
+    <section className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pt-4 pb-8">
+      {/* Left Column: Educative-Inspired Intent & Value Proposition */}
       <div className="lg:col-span-6 space-y-6">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] bg-[#08090a] border border-[#23252a] text-xs text-[#8a8f98] font-mono">
           <span className="w-2 h-2 rounded-full bg-[#4cb782]" />
-          <span>No video lectures. No fluff. Just real engineering.</span>
+          <span>No video lectures. No passive watching. Just runnable code.</span>
         </div>
 
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#f7f8f8] leading-[1.12]">
-            Learn by coding in your browser. <br />
-            <span className="text-[#5e6ad2]">Build on your machine.</span>
+            Mastery isn’t watched. <br />
+            <span className="text-[#5e6ad2]">It’s built in code.</span>
           </h1>
           <p className="text-sm sm:text-base text-[#8a8f98] leading-relaxed max-w-xl">
-            From binary logic and C compilers to distributed consensus (Raft) and transformer architectures.
-            Practice micro-skills instantly with in-browser WASM, then clone and ship 22 production capstones
-            on your local workstation.
+            Hands-on in-browser courses in AI Agents, System Design, Distributed Consensus, and Compilers.
+            Zero environment setups. Code directly in your browser, then ship 22 verifiable capstones to GitHub.
           </p>
         </div>
 
-        {/* Feature Pills (Educative Style) */}
+        {/* Educative Signature: Interactive Learning Intent Search Bar */}
+        <div className="rounded-[6px] border border-[#23252a] bg-[#08090a] p-2 space-y-2.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-[4px] bg-[#0f1012] border border-[#1b1c20]">
+            <Search className="w-4 h-4 text-[#5e6ad2] shrink-0" />
+            <input
+              type="text"
+              value={searchIntent}
+              onChange={(e) => setSearchIntent(e.target.value)}
+              placeholder="What do you want to learn? (e.g. Raft, System Design, MCP...)"
+              className="bg-transparent text-xs text-[#f7f8f8] font-mono placeholder:text-[#565961] outline-none flex-1"
+            />
+            {searchIntent && (
+              <button
+                onClick={() => setSearchIntent("")}
+                className="text-[10px] font-mono text-[#8a8f98] hover:text-[#f7f8f8]"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* Quick-Filter Pills (Educative Style) */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+            <span className="text-[11px] font-mono text-[#565961] mr-1">Try topic:</span>
+            {Object.values(TOPIC_CHALLENGES).map((topic) => {
+              const Icon = topic.icon;
+              const isSelected = selectedTopicId === topic.id;
+              return (
+                <button
+                  key={topic.id}
+                  onClick={() => handleSelectTopic(topic.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-xs font-mono transition-all duration-150 border",
+                    isSelected
+                      ? "bg-[#5e6ad2]/15 border-[#5e6ad2] text-[#f7f8f8] shadow-sm"
+                      : "bg-[#0f1012] border-[#23252a] text-[#8a8f98] hover:text-[#f7f8f8] hover:border-[#3b3e48]"
+                  )}
+                >
+                  <Icon className={cn("w-3.5 h-3.5", isSelected ? "text-[#5e6ad2]" : "text-[#8a8f98]")} />
+                  <span>{topic.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Feature Highlights Grid */}
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
@@ -128,15 +337,15 @@ export function HeroSplit() {
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>Zero Artificial Deadlines</span>
+            <span>2.5x Faster Than Video</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>22 Industry Capstones</span>
+            <span>22 Local Workstation Capstones</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>100% Free & Open ($0)</span>
+            <span>100% Free &amp; Open ($0.00)</span>
           </div>
         </div>
 
@@ -167,57 +376,60 @@ export function HeroSplit() {
         </div>
       </div>
 
-      {/* Right Column: Codecademy + Educative Multi-Tab Interactive Playground */}
+      {/* Right Column: Educative Multi-Tab Interactive Playground */}
       <div className="lg:col-span-6">
-        <div className="rounded-[6px] border border-[#23252a] bg-[#08090a] overflow-hidden shadow-2xl">
-          {/* Editor Header: Tabs & Run Button */}
+        <div className="rounded-[8px] border border-[#23252a] bg-[#08090a] overflow-hidden shadow-2xl">
+          {/* Header with Topic Badge, Tabs & Run Button */}
           <div className="flex items-center justify-between px-3 py-2 border-b border-[#1b1c20] bg-[#0f1012]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
-                onClick={() => handleTabSwitch("solution.py")}
+                onClick={() => setActiveTab("solution")}
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-xs font-mono transition-colors",
-                  activeTab === "solution.py"
+                  activeTab === "solution"
                     ? "bg-[#16171a] text-[#f7f8f8] border border-[#23252a]"
                     : "text-[#8a8f98] hover:text-[#f7f8f8] hover:bg-[#16171a]/50"
                 )}
               >
                 <FileCode className="w-3.5 h-3.5 text-[#5e6ad2]" />
-                <span>solution.py</span>
+                <span>{currentTopic.solutionFile}</span>
               </button>
               <button
-                onClick={() => handleTabSwitch("test_lru.py")}
+                onClick={() => setActiveTab("test")}
                 className={cn(
                   "flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-xs font-mono transition-colors",
-                  activeTab === "test_lru.py"
+                  activeTab === "test"
                     ? "bg-[#16171a] text-[#f7f8f8] border border-[#23252a]"
                     : "text-[#8a8f98] hover:text-[#f7f8f8] hover:bg-[#16171a]/50"
                 )}
               >
                 <FileCode className="w-3.5 h-3.5 text-[#4cb782]" />
-                <span>test_lru.py</span>
+                <span>{currentTopic.testFile}</span>
               </button>
             </div>
 
             <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-block text-[10px] font-mono text-[#8a8f98] px-2 py-0.5 rounded bg-[#16171a] border border-[#23252a]">
+                {currentTopic.badge}
+              </span>
               <Button
                 variant="primary"
                 size="xs"
                 onClick={handleRun}
                 disabled={isRunning}
-                className="font-mono text-[11px]"
+                className="font-mono text-[11px] gap-1"
               >
-                <Play className="w-3 h-3 mr-1 fill-current" />
-                {isRunning ? "Running..." : "Run Code"}
+                <Play className="w-3 h-3 fill-current" />
+                <span>{isRunning ? "Testing..." : "Run Sandbox"}</span>
               </Button>
             </div>
           </div>
 
           {/* Interactive Code Area */}
-          <div className="relative flex min-h-[190px] font-mono text-xs bg-[#010102]">
+          <div className="relative flex min-h-[220px] font-mono text-xs bg-[#010102]">
             {/* Line numbers */}
             <div className="w-10 select-none py-3 text-right pr-2 text-[#383b42] border-r border-[#1b1c20] bg-[#08090a]">
-              {code.split("\n").map((_, i) => (
+              {(activeTab === "solution" ? code : testCode).split("\n").map((_, i) => (
                 <div key={i} className="leading-5">
                   {i + 1}
                 </div>
@@ -226,8 +438,11 @@ export function HeroSplit() {
 
             {/* Code text */}
             <textarea
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
+              value={activeTab === "solution" ? code : testCode}
+              onChange={(e) => {
+                if (activeTab === "solution") setCode(e.target.value);
+                else setTestCode(e.target.value);
+              }}
               spellCheck={false}
               className="flex-1 p-3 bg-transparent text-[#f7f8f8] font-mono text-xs leading-5 outline-none resize-none selection:bg-[#5e6ad2]/30"
               rows={11}
@@ -239,18 +454,18 @@ export function HeroSplit() {
             <div className="flex items-center justify-between px-3 py-1.5 bg-[#0f1012] border-b border-[#1b1c20] text-[10px] font-mono text-[#8a8f98]">
               <div className="flex items-center gap-2">
                 <Terminal className="w-3 h-3 text-[#5e6ad2]" />
-                <span>TERMINAL OUTPUT</span>
+                <span>INTERACTIVE PYODIDE WASM TERMINAL</span>
               </div>
               {runResult && (
                 <span
                   className={cn(
-                    "px-1.5 py-0.2 rounded border text-[10px]",
+                    "px-1.5 py-0.2 rounded border text-[10px] font-mono",
                     runResult.success
                       ? "bg-[#4cb782]/10 text-[#4cb782] border-[#1b4332]"
                       : "bg-[#eb5757]/10 text-[#eb5757] border-[#4a1515]"
                   )}
                 >
-                  {runResult.success ? "TESTS PASSED (3/3)" : "TEST FAILED"}
+                  {runResult.success ? "ASSERTIONS PASSED" : "EXECUTION FAILED"}
                 </span>
               )}
             </div>
@@ -262,6 +477,7 @@ export function HeroSplit() {
                     "whitespace-pre",
                     log.startsWith("$") && "text-[#f7f8f8] font-semibold",
                     log.includes("PASSED") && "text-[#4cb782]",
+                    log.includes("Passed") && "text-[#4cb782]",
                     log.includes("FAIL") && "text-[#eb5757]"
                   )}
                 >

@@ -119,7 +119,28 @@ self.onmessage = async (e) => {
       pyodide.setStdout({ batched: (msg) => stdoutLogs.push(msg) });
       pyodide.setStderr({ batched: (msg) => stdoutLogs.push(msg) });
 
-      await pyodide.runPythonAsync(code);
+      // Write student code to Pyodide virtual file system as solution.py
+      // and register it in sys.modules so `from solution import ...` works seamlessly
+      pyodide.FS.writeFile("/home/pyodide/solution.py", code, { encoding: "utf8" });
+      
+      // Execute solution code to define symbols in both globals and solution module
+      await pyodide.runPythonAsync(`
+import sys
+import importlib
+
+# Ensure current directory is in sys.path
+if "/home/pyodide" not in sys.path:
+    sys.path.insert(0, "/home/pyodide")
+
+# Force reload solution module if previously imported
+if "solution" in sys.modules:
+    importlib.invalidate_caches()
+    importlib.reload(sys.modules["solution"])
+else:
+    import solution
+`);
+
+      // Run tests against the loaded solution
       if (testAssertions) {
         await pyodide.runPythonAsync(testAssertions);
       }

@@ -182,12 +182,23 @@ export async function fetchLiveCurriculum(): Promise<{
       supabase.from("curriculum_phases").select("*").order("order_index", { ascending: true }),
       supabase
         .from("curriculum_nodes")
-        .select("id, slug, phase_id, title, subtitle, xp_reward, starter_code, test_suite, handbook_markdown")
+        .select("id, slug, phase_id, title, subtitle, xp_reward")
         .order("id", { ascending: true }),
     ]);
 
     const dbPhases: DatabasePhase[] = phasesRes.data || [];
-    const allNodes: DatabaseNode[] = nodesRes.data || [];
+    let allNodes: DatabaseNode[] = nodesRes.data || [];
+
+    // Helper to naturally sort nodes by phase and lesson index: "node-0-1", "node-0-2", ... "node-0-10"
+    const parseNodeRank = (id: string) => {
+      const match = id.match(/node-(\d+)-(\d+)/);
+      if (match) {
+        return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
+      }
+      return 999999;
+    };
+
+    allNodes.sort((a, b) => parseNodeRank(a.id) - parseNodeRank(b.id));
 
     const nodesByPhase: Record<string, DatabaseNode[]> = {};
     for (const node of allNodes) {
@@ -195,6 +206,11 @@ export async function fetchLiveCurriculum(): Promise<{
         nodesByPhase[node.phase_id] = [];
       }
       nodesByPhase[node.phase_id].push(node);
+    }
+
+    // Ensure within each phase, nodes are ordered monotonically
+    for (const phaseId in nodesByPhase) {
+      nodesByPhase[phaseId].sort((a, b) => parseNodeRank(a.id) - parseNodeRank(b.id));
     }
 
     const phases = transformDbPhases(dbPhases, nodesByPhase);

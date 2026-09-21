@@ -3,16 +3,19 @@
 import * as React from "react";
 import { Navbar } from "@/components/landing/navbar";
 import { HeroSplit } from "@/components/landing/hero-split";
+import { SocialProof } from "@/components/landing/social-proof";
+import { InteractiveAdvantage } from "@/components/landing/interactive-advantage";
 import { LearningPaths } from "@/components/landing/learning-paths";
 import { CurriculumBrowser } from "@/components/landing/curriculum-browser";
 import { PracticeSandbox } from "@/components/sandbox/practice-sandbox";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { CapstoneSection } from "@/components/landing/capstone-section";
 import { BenchmarkMatrix } from "@/components/landing/benchmark-matrix";
+import { Testimonials } from "@/components/landing/testimonials";
 import { TutorDrawer } from "@/components/tutor/tutor-drawer";
 import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/ui/status-chip";
-import { Terminal, ShieldCheck, Github, BookOpen, Layers, ArrowUpRight, Heart } from "lucide-react";
+import { Terminal, ArrowUpRight, Github } from "lucide-react";
 
 export default function LandingPage() {
   const [isTutorOpen, setIsTutorOpen] = React.useState(false);
@@ -23,48 +26,65 @@ export default function LandingPage() {
       <Navbar onOpenTutor={() => setIsTutorOpen(true)} />
 
       <main className="flex-1">
-        {/* Section 1: Hero Split (Codecademy hands-on + Educative multi-tab playground) */}
-        <section className="relative overflow-hidden border-b border-[#23252a] py-16 lg:py-24">
+        {/* Section 1: Hero Split (Educative interactive intent search + multi-tab live sandbox) */}
+        <section className="relative overflow-hidden py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <HeroSplit />
           </div>
         </section>
 
-        {/* Section 2: Learning Paths (Educative structured tracks) */}
+        {/* Section 2: Developer Validation Strip (Educative social proof) */}
+        <SocialProof />
+
+        {/* Section 3: The Educative Advantage (Text & Sandboxes vs. 40-Hour Video Hell) */}
+        <section id="advantage" className="py-20 border-b border-[#23252a] bg-[#010102]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <InteractiveAdvantage />
+          </div>
+        </section>
+
+        {/* Section 4: Learning Paths (Educative structured tracks) */}
         <section id="learning-paths" className="py-20 border-b border-[#23252a] bg-[#010102]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <LearningPaths />
           </div>
         </section>
 
-        {/* Section 3: Curriculum Browser (15 phases, 600 lessons, 3,000 subtopics) */}
+        {/* Section 5: Curriculum Browser (15 phases, 600 lessons, 3,000 subtopics) */}
         <div id="curriculum-section">
           <CurriculumBrowser />
         </div>
 
-        {/* Section 4: Interactive In-Browser Practice Sandbox (Codecademy instant tests) */}
+        {/* Section 6: Interactive In-Browser Practice Sandbox (Codecademy instant tests) */}
         <PracticeSandbox />
 
-        {/* Section 5: How It Works (The Dual-Loop Pedagogy) */}
+        {/* Section 7: How It Works (The Dual-Loop Pedagogy) */}
         <section className="py-20 border-b border-[#23252a] bg-[#010102]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <HowItWorks />
           </div>
         </section>
 
-        {/* Section 6: Capstone Verification Engine (22 GitHub Projects) */}
+        {/* Section 8: Capstone Verification Engine (22 GitHub Projects) */}
         <div id="capstone-section">
           <CapstoneSection />
         </div>
 
-        {/* Section 7: Rigor & Benchmark Matrix vs Competitors */}
+        {/* Section 9: Rigor & Benchmark Matrix vs Competitors */}
         <section id="benchmarks-section" className="py-20 border-b border-[#23252a] bg-[#010102]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <BenchmarkMatrix />
           </div>
         </section>
 
-        {/* Section 8: Final CTA - Zero Fluff, 100% Free */}
+        {/* Section 10: Developer Testimonials & Outcomes (Educative Social Proof) */}
+        <section className="py-20 border-b border-[#23252a] bg-[#010102]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Testimonials />
+          </div>
+        </section>
+
+        {/* Section 11: Final CTA - Zero Fluff, 100% Free */}
         <section className="py-24 bg-[#08090a] border-b border-[#23252a]">
           <div className="max-w-5xl mx-auto px-4 text-center space-y-6">
             <div className="inline-flex items-center gap-2">
@@ -73,7 +93,7 @@ export default function LandingPage() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#f7f8f8]">
-              Master Computer Science & Distributed Systems
+              Master Computer Science &amp; Distributed Systems
             </h2>
 
             <p className="text-sm text-[#8a8f98] max-w-2xl mx-auto leading-relaxed">
@@ -89,7 +109,7 @@ export default function LandingPage() {
                   className="gap-2 font-mono text-xs w-full sm:w-auto bg-[#5e6ad2] hover:bg-[#6f7cf0]"
                 >
                   <Terminal className="w-4 h-4" />
-                  <span>Launch Student Dashboard & IDE</span>
+                  <span>Launch Student Dashboard &amp; IDE</span>
                 </Button>
               </a>
               <Button
@@ -120,7 +140,7 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-6 text-[#8a8f98]">
             <a href="#curriculum-section" className="hover:text-[#f7f8f8] transition-colors">
-              500 Lessons
+              600 Lessons
             </a>
             <a href="#capstone-section" className="hover:text-[#f7f8f8] transition-colors">
               22 Capstones

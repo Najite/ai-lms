@@ -118,6 +118,33 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       continue;
     }
 
+    // Markdown Images: ![alt](url)
+    const imgMatch = rawLine.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (imgMatch) {
+      const altText = imgMatch[1];
+      const imgSrc = imgMatch[2];
+      elements.push(
+        <figure key={`img-${i}`} className="my-6 rounded-xl border border-[#23252a] bg-[#07080a] p-2 overflow-hidden shadow-2xl">
+          <div className="relative overflow-hidden rounded-lg border border-[#1b1c20] bg-black flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imgSrc}
+              alt={altText || "Diagram Illustration"}
+              className="w-full max-h-[480px] object-contain rounded"
+              loading="lazy"
+            />
+          </div>
+          {altText && (
+            <figcaption className="mt-2.5 px-2 pb-1 text-center text-xs font-mono text-[#8a8f98] flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5e6ad2]" />
+              <span className="text-[#a0a5af] font-medium">Figure:</span> {altText}
+            </figcaption>
+          )}
+        </figure>
+      );
+      continue;
+    }
+
     // Headers
     if (rawLine.startsWith("# ")) {
       elements.push(
