@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ExerciseItem } from "@/lib/exercises-catalog";
+import { formatLabIdentifier } from "@/lib/curriculum-numbering";
 
 interface ExerciseFormatterProps {
   exercise: ExerciseItem;
@@ -249,8 +250,8 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1f2126]">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#16171a] text-[#8a8f98] border border-[#2e3038] font-semibold uppercase">
-              {exercise.id}
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#5e6ad2]/15 text-[#5e6ad2] border border-[#5e6ad2]/30 font-semibold uppercase">
+              {formatLabIdentifier(exercise.lessonId, exercise.orderIndex)}
             </span>
             <span
               className={cn(
@@ -260,8 +261,8 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
             >
               {exercise.difficulty}
             </span>
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#5e6ad2]/10 text-[#707cf0] border border-[#5e6ad2]/30 font-medium">
-              {exercise.tier}
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#16171a] text-[#8a8f98] border border-[#2e3038] font-medium">
+              Tier {exercise.orderIndex}: {exercise.tier}
             </span>
             {exercise.tags && exercise.tags.length > 0 && (
               <span className="text-xs text-[#565961] hidden md:inline">•</span>

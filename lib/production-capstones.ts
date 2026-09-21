@@ -1,16 +1,27 @@
+export type EnterpriseSector =
+  | "Enterprise Software & Cloud Platforms"
+  | "Financial Systems & Payment Infrastructure"
+  | "Real-Time Communications & Streaming"
+  | "Healthcare & Clinical Informatics"
+  | "Autonomous AI & Intelligent Systems";
+
 export interface ProductionCapstoneSpec {
   phaseId: number;
+  displayPhaseNumber?: number;
+  sector?: EnterpriseSector;
   phaseName: string;
   projectSlug: string;
   title: string;
-  oneLineHook: string; // The "Show HN" / Resume bullet line
-  industryArchetype: string; // e.g. "Datadog / vLLM / Cursor / Modal / Temporal"
-  employabilityRating: number; // e.g. 98%
+  oneLineHook: string;
+  industryArchetype: string;
+  employabilityRating: number;
   employabilityBadge: "Tier 1 Elite" | "Production Systems" | "Frontier AI";
-  salaryBand2026: string; // e.g. "$165k – $220k (Mid/Senior AI Systems Engineer)"
+  salaryBand2026: string;
   technologies: string[];
+  storyScenario: string;
+  problemToSolve: string;
   systemArchitecture: string;
-  whyThisMatters2026: string; // Brutal truth about 2026 industry demand
+  whyThisMatters2026: string;
   whatToBuild: string[];
   automatedChecks: string[];
   portfolioProof: {
@@ -21,518 +32,623 @@ export interface ProductionCapstoneSpec {
 }
 
 export const PRODUCTION_CAPSTONES_2026: ProductionCapstoneSpec[] = [
-  // =========================================================================
-  // PHASE 0: Computing & Systems Foundations
-  // =========================================================================
   {
     phaseId: 0,
-    phaseName: "Phase 0: Computing & Developer Environment",
-    projectSlug: "phase-00-capstone-posix-container-runtime",
-    title: "Mini-Docker: Lightweight Linux Cgroup & Namespace Container Engine",
-    oneLineHook: "Built a zero-dependency Linux container runtime in C/Python using raw unshare, clone, and cgroups v2 to isolate processes, network, and RAM.",
-    industryArchetype: "Docker / containerd / runc (Infrastructure Core)",
-    employabilityRating: 91,
-    employabilityBadge: "Production Systems",
-    salaryBand2026: "$140k – $175k (Systems / Cloud Native Engineer)",
-    technologies: ["Linux Namespaces", "cgroups v2", "chroot / pivot_root", "OverlayFS", "Python", "POSIX"],
-    systemArchitecture: "User Space CLI -> Syscall Gateway (`clone(CLONE_NEWPID | CLONE_NEWNS)`) -> Rootfs Layering (`overlayfs`) -> Cgroup V2 Resource Controller (`memory.max`, `cpu.weight`) -> Ephemeral Isolated Process Sandbox.",
-    whyThisMatters2026: "In 2026, AI agents run millions of arbitrary untrusted code executions per hour (e.g. Cursor, Devin, Modal, E2B). Engineers who understand Linux namespaces, isolation boundaries, and kernel cgroups are urgently hired to build agent execution sandboxes.",
-    whatToBuild: [
-      "Process isolation: spawn sandboxed sub-processes using PID, Mount, UTS, and Network namespaces.",
-      "Filesystem isolation: mount an Alpine Linux root filesystem using `pivot_root` and layered OverlayFS.",
-      "Resource governance: limit memory consumption to 128MB and CPU execution quota via cgroups v2.",
-      "Container lifecycle: implement `run`, `ps`, `exec`, and automatic cleanup on process SIGTERM."
-    ],
-    automatedChecks: [
-      "Process sandbox: verify PID 1 inside container cannot inspect or signal host PID space.",
-      "OOM killer invariant: exceeding memory limit terminates container process with exit code 137.",
-      "Filesystem immutability: host filesystem remains 100% read-only and unmodified after container operations."
-    ],
-    portfolioProof: {
-      githubRepoTemplate: "mini-docker-runtime-posix",
-      liveDemoType: "CLI / Docker Engine",
-      resumeImpactBullet: "Engineered a zero-dependency Linux container sandbox utilizing cgroups v2 and POSIX namespaces; provides secure sub-50ms execution isolation for untrusted AI agent scripts."
-    }
-  },
-
-  // =========================================================================
-  // PHASE 1: Programming Mastery & Concurrency
-  // =========================================================================
-  {
-    phaseId: 1,
-    phaseName: "Phase 1: Programming Mastery",
-    projectSlug: "phase-01-capstone-async-event-loop",
-    title: "High-Throughput Async Event Loop & Cooperative Task Scheduler",
-    oneLineHook: "Architected a custom Python asyncio-compatible cooperative event loop with non-blocking I/O multiplexing (epoll/kqueue) and priority queue scheduling.",
-    industryArchetype: "Node.js libuv / Python uvloop / Tokio (Async Runtime Core)",
-    employabilityRating: 92,
-    employabilityBadge: "Production Systems",
-    salaryBand2026: "$150k – $185k (Backend / Infrastructure Engineer)",
-    technologies: ["Async/Await Internals", "Generators / Coroutines", "epoll / kqueue", "Heapq Priority Schedulers", "Socket I/O"],
-    systemArchitecture: "Selector Loop (`select.epoll`) -> Coroutine Yield Demuxer -> Ready Queue + Timed Heap Queue -> Socket I/O Multiplexer -> Zero-blocking Concurrent Stream Processing.",
-    whyThisMatters2026: "AI pipelines bottleneck not on compute, but on massive async network I/O: concurrent streaming tokens from 50 LLMs, webhook fanouts, and WebSocket audio channels. Writing custom async orchestrators demonstrates deep mastery beyond naive `asyncio.gather`.",
-    whatToBuild: [
-      "Custom coroutine driver: advance generator/coroutine frames using `.send()` and handle `StopIteration` yields.",
-      "I/O multiplexer: register socket file descriptors with non-blocking `select.epoll` (or `kqueue` on macOS).",
-      "Timer engine: min-heap priority scheduler supporting `sleep()`, timeouts, and non-drift recurring tasks.",
-      "Async network primitives: implement custom `StreamReader` and `StreamWriter` echo server handling 5,000 concurrent sockets."
-    ],
-    automatedChecks: [
-      "Zero GIL-stall: 5,000 concurrent socket connections serviced with p99 latency < 15ms.",
-      "Task cancellation: scheduled tasks cleanly propagate CancelledError and trigger finalizer context managers.",
-      "Starvation prevention: fair round-robin scheduling between I/O tasks and CPU compute slices."
-    ],
-    portfolioProof: {
-      githubRepoTemplate: "cooperative-async-engine",
-      liveDemoType: "Live Service API",
-      resumeImpactBullet: "Authored an epoll-based async event loop from raw coroutine primitives, sustaining 5,000+ non-blocking socket connections with sub-15ms p99 response times."
-    }
-  },
-
-  // =========================================================================
-  // PHASE 2: Mathematics for Engineers & Numerical Computing
-  // =========================================================================
-  {
-    phaseId: 2,
-    phaseName: "Phase 2: Mathematics for Engineers & Numerical Computing",
-    projectSlug: "phase-02-capstone-micro-autograd-tensor-engine",
-    title: "MicroGrad-Vector: Vectorized Automatic Differentiation & Neural Engine",
-    oneLineHook: "Built a NumPy-accelerated reverse-mode automatic differentiation engine supporting multidimensional tensors, broadcast calculus, and transformer attention heads.",
-    industryArchetype: "PyTorch Core / TinyGrad / JAX (Deep Learning Foundations)",
-    employabilityRating: 95,
-    employabilityBadge: "Frontier AI",
-    salaryBand2026: "$165k – $210k (ML Infrastructure / Applied AI Engineer)",
-    technologies: ["Reverse-Mode Autograd", "Computational DAGs", "Tensor Broadcasting", "Jacobian Vector Products", "NumPy Vectorization"],
-    systemArchitecture: "Tensor Node (`data`, `grad`, `_prev`, `_op`) -> Dynamic Tape Generator -> Topological Sort -> Backward Pass Chain Rule Propagator -> Fused Multi-Head Self-Attention Calculation.",
-    whyThisMatters2026: "Framework consumers who only call `model.forward()` are a dime a dozen. Engineers who understand computational graphs, gradient tape accumulators, and memory layouts can debug distributed training hangs, write custom loss functions, and optimize quantization boundaries.",
-    whatToBuild: [
-      "Tensor computation DAG: track forward operations (`add`, `matmul`, `relu`, `softmax`, `cross_entropy`) in a dynamic tape.",
-      "Reverse-mode chain rule: recursive topological sorting with automated gradient accumulation avoiding inplace memory mutations.",
-      "Broadcasting gradient reducer: properly sum out broadcasted dimensions during backward propagation.",
-      "Mini-Transformer layer: train a 2-layer self-attention network on character-level language generation with verified loss convergence."
-    ],
-    automatedChecks: [
-      "Numerical gradient check: analytical gradients match finite-difference approximations within epsilon 1e-5.",
-      "Zero graph cycle leaks: computational graph cleans up without reference cycle memory leaks.",
-      "Loss convergence: reaches cross-entropy loss < 0.5 on binary classification within 100 epochs."
-    ],
-    portfolioProof: {
-      githubRepoTemplate: "micrograd-tensor-vector-engine",
-      liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Constructed a reverse-mode automatic differentiation engine from scratch; verified gradient accuracy against PyTorch within 1e-5 across multi-head attention forward/backward passes."
-    }
-  },
-
-  // =========================================================================
-  // PHASE 3: Data Structures, Algorithms & Problem Solving
-  // =========================================================================
-  {
-    phaseId: 3,
-    phaseName: "Phase 3: Data Structures, Algorithms & Problem Solving",
-    projectSlug: "phase-03-capstone-lsm-tree-storage-engine",
-    title: "Log-Structured Merge-Tree (LSM) Key-Value Database Engine",
-    oneLineHook: "Engineered an append-only LSM storage engine with in-memory SkipList MemTable, Write-Ahead Log (WAL), Bloom filter indexing, and multi-tier SSTable compaction.",
-    industryArchetype: "RocksDB / LevelDB / Cassandra (High-Performance Storage)",
+    displayPhaseNumber: 1,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 1: Computing & Developer Environment",
+    projectSlug: "phase-01-capstone-developer-sandbox-runtime",
+    title: "CodeBox: Lightweight Secure Code Execution Sandbox Runtime",
+    oneLineHook: "Engineered a zero-dependency CLI execution sandbox in Python and POSIX system utilities to execute untrusted user code safely inside isolated memory and directory boundaries.",
+    industryArchetype: "Judge0 / Replit Runtime / GitHub Codespaces / LeetCode Execution Engine",
     employabilityRating: 94,
     employabilityBadge: "Production Systems",
-    salaryBand2026: "$160k – $200k (Database Internals / Core Systems Engineer)",
-    technologies: ["LSM-Tree", "SkipList", "Bloom Filters", "Write-Ahead Log (WAL)", "SSTables", "Compaction Algorithms"],
-    systemArchitecture: "Concurrent Client Put/Get -> Write-Ahead Log (WAL) for durability -> In-Memory SkipList (MemTable) -> Immutable Frozen MemTable -> Flush to Disk SSTable -> Leveled Compaction Worker.",
-    whyThisMatters2026: "Vector databases, time-series metrics engines, and distributed LLM caches all rely on LSM trees (e.g. RocksDB underpinning Meta and ByteDance systems). Knowing how disk sequential writes outperform random writes makes you stand out immediately.",
+    salaryBand2026: "45k – 80k (Platform / Software Systems Engineer)",
+    technologies: [
+      "Python 3",
+      "Process Subprocesses",
+      "POSIX Signals (SIGKILL/SIGXCPU)",
+      "Resource Limits (setrlimit)",
+      "Temporary Virtual Chroot",
+      "JSON Stream Telemetry"
+    ],
+    storyScenario: "When building an interactive coding platform, interview screening tool, or automated grading system, users submit arbitrary code that must be run on your servers. Without an execution sandbox, a student or candidate script can consume 100% of the host RAM, spawn infinite recursive fork-bombs, or read sensitive server configuration files. CodeBox provides an isolated execution manager that runs submitted code inside strict memory ceilings (128MB), process count limits (max 5 threads), and 3-second hard CPU timeouts with clean exit diagnostics.",
+    problemToSolve: "Safely execute untrusted third-party code on standard cloud servers without allowing infinite loops, memory exhaustion, or unauthorized host filesystem access.",
+    systemArchitecture: "User Code Submission -> CodeBox CLI Runner -> Sandboxed Child Process (setrlimit for RLIMIT_AS & RLIMIT_CPU) -> Isolated Working Directory -> Subprocess Pipe Capture -> Output Telemetry JSON.",
+    whyThisMatters2026: "Every modern developer platform (Replit, Cursor, GitHub Codespaces, LeetCode) relies on software execution sandboxes. Building a process runner that reliably enforces memory, CPU, and filesystem boundaries is the foundation of backend and platform engineering.",
     whatToBuild: [
-      "Durability WAL: append-only binary log guaranteeing zero data loss on sudden power loss/crash.",
-      "SkipList MemTable: concurrent probabilistic index providing O(log N) search and in-order sequential scans.",
-      "Binary SSTable encoder: encode block-compressed keys and values with sparse block indexes.",
-      "Bloom filter gate: eliminate 98% of unnecessary disk seeks for non-existent keys.",
-      "Compaction coordinator: background thread merging sorted SSTable runs to eliminate tombstones and duplicate writes."
+      "Subprocess Isolation Wrapper: spawn user code as a restricted child process with stripped environment variables.",
+      "Resource Limit Controller: use OS resource limits (setrlimit) to cap virtual memory to 128MB and execution time to 3.0s.",
+      "Filesystem Jail: execute each run inside an ephemeral temporary directory and automatically scrub artifacts on completion.",
+      "Structured Telemetry Formatter: capture stdout, stderr, execution wall-clock time, and memory usage into structured JSON."
     ],
     automatedChecks: [
-      "Crash recovery: kill -9 during active write burst; 100% of acknowledged keys recovered from WAL upon restart.",
-      "Bloom filter efficacy: 0 false negatives, false positive rate calibrated strictly below 1.5%.",
-      "Compaction invariant: disk footprint shrinks after deletes and key updates."
+      "Infinite loop protection: scripts with \"while True: pass\" terminate cleanly within 3.0 seconds with SIGXCPU/timeout error.",
+      "Memory runaway containment: scripts attempting to allocate 500MB fail immediately with a MemoryError without crashing the host.",
+      "Filesystem boundary test: scripts attempting to read parent directory paths (../../) receive permission errors."
     ],
     portfolioProof: {
-      githubRepoTemplate: "lsm-tree-storage-engine",
+      githubRepoTemplate: "codebox-secure-code-runner",
       liveDemoType: "CLI / Docker Engine",
-      resumeImpactBullet: "Architected a crash-resilient LSM-tree key-value engine with Write-Ahead Logging and Bloom filters, achieving 45,000 write ops/sec with guaranteed crash recovery."
+      resumeImpactBullet: "Engineered CodeBox, a zero-dependency code execution runner enforcing strict memory (128MB) and CPU timeouts via OS resource limits; safely executes 1,000+ untrusted submissions per hour."
     }
   },
-
-  // =========================================================================
-  // PHASE 4: Systems Internals: OS, Concurrency, Networks, Docker
-  // =========================================================================
+  {
+    phaseId: 1,
+    displayPhaseNumber: 2,
+    sector: "Real-Time Communications & Streaming",
+    phaseName: "Phase 2: Programming Mastery",
+    projectSlug: "phase-02-capstone-async-task-event-loop",
+    title: "TaskPulse: High-Throughput Cooperative Async Task & Event Engine",
+    oneLineHook: "Built a cooperative asynchronous event loop and task scheduler from scratch in pure Python using generators, priority heaps, and non-blocking socket streams.",
+    industryArchetype: "FastAPI / Node.js libuv / Twisted / Redis Event Core",
+    employabilityRating: 94,
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "50k – 90k (Core Python / Systems Infrastructure Engineer)",
+    technologies: [
+      "Python Generators",
+      "Coroutine Frame Driving (.send/.throw)",
+      "Priority Min-Heaps",
+      "Non-Blocking Sockets",
+      "Select/Poll Multiplexing"
+    ],
+    storyScenario: "Modern web APIs and real-time messaging servers handle thousands of concurrent client connections simultaneously. Traditional synchronous thread-per-connection servers choke under operating system thread switching overhead and memory bloat. TaskPulse implements a cooperative asynchronous event loop from fundamental computer science principles: tasks yield control on I/O, a priority min-heap schedules delayed timers, and non-blocking socket multiplexing handles 5,000 concurrent client streams on a single CPU thread.",
+    problemToSolve: "Eliminate operating system thread overhead and memory exhaustion when managing thousands of concurrent network connections by implementing cooperative asynchronous scheduling.",
+    systemArchitecture: "Client Sockets -> Non-Blocking Socket Multiplexer -> Coroutine Task Queue -> Generator Frame Dispatcher -> Priority Timer Min-Heap -> Completed Task Callback.",
+    whyThisMatters2026: "Async programming is standard in modern high-scale backend engineering (FastAPI, Node.js, Go). Engineers who understand how coroutine frames advance, pause, and resume build the fastest, most reliable API services.",
+    whatToBuild: [
+      "Coroutine Frame Runner: advance generator frames using .send() and .throw() to handle cooperative task execution.",
+      "Non-Drift Timer Heap: min-heap priority scheduler supporting millisecond-precision task delays, timeouts, and recurring ticks.",
+      "Socket I/O Poller: multiplex client socket read/write readiness using non-blocking OS selectors without busy loops.",
+      "Graceful Shutdown Manager: support task cancellation, context propagation, and proper resource cleanup on SIGINT."
+    ],
+    automatedChecks: [
+      "Concurrency stress test: services 2,500 simultaneous socket connections with p99 latency under 20ms on a single thread.",
+      "Cancellation propagation: cancelling a parent task properly cleans up nested child coroutines and releases sockets.",
+      "Timer precision: delayed tasks execute within 2ms of their scheduled target time under high queue load."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "taskpulse-async-event-engine",
+      liveDemoType: "Live Service API",
+      resumeImpactBullet: "Authored TaskPulse, an async event loop and task scheduler in Python using generators and min-heaps, sustaining 2,500 concurrent connections on a single thread with sub-20ms latency."
+    }
+  },
+  {
+    phaseId: 2,
+    displayPhaseNumber: 3,
+    sector: "Autonomous AI & Intelligent Systems",
+    phaseName: "Phase 3: Mathematics for Engineers & Numerical Computing",
+    projectSlug: "phase-03-capstone-vectorized-autograd-engine",
+    title: "MathGrad: Reverse-Mode Automatic Differentiation & Tensor Engine",
+    oneLineHook: "Constructed a NumPy-accelerated computational graph engine and reverse-mode automatic differentiation library for training machine learning models from scratch.",
+    industryArchetype: "PyTorch Core / Micrograd / JAX Autodiff / Numerical ML Systems",
+    employabilityRating: 96,
+    employabilityBadge: "Frontier AI",
+    salaryBand2026: "70k – 20k (Machine Learning / Numerical Systems Engineer)",
+    technologies: [
+      "Reverse-Mode Autodiff",
+      "Computational DAGs",
+      "Vectorized Matrix Algebra",
+      "NumPy Strides",
+      "Topological Sorting",
+      "Gradient Descent"
+    ],
+    storyScenario: "Every modern deep learning framework (PyTorch, JAX, TensorFlow) depends on automatic differentiation to calculate gradients of loss functions with respect to millions of model parameters. Without understanding how the computational graph tracks forward operations and recursively backpropagates gradients via the chain rule, debugging numerical instability or designing custom loss functions becomes guesswork. MathGrad constructs a dynamic computational DAG with tensor broadcasting, exact analytical gradients, and optimization passes.",
+    problemToSolve: "Calculate exact analytical gradients through multi-layer mathematical operations efficiently without the inaccuracy and computational cost of numerical approximations.",
+    systemArchitecture: "Input Tensors -> Forward Operation Graph (matmul, add, relu, log) -> Dynamic Computational Tape -> Reverse Topological Sort -> Gradient Backpropagation -> Parameter Optimizer.",
+    whyThisMatters2026: "Understanding the mathematics of computational graphs, backward propagation, and numerical stability is essential for optimizing AI models, writing custom loss functions, and building production machine learning systems.",
+    whatToBuild: [
+      "Tensor Value Container: track numeric arrays, accumulated gradients, and parent operational pointers.",
+      "Vectorized Operation Library: implement forward and backward passes for matrix multiplication, broadcasting additions, ReLU, and Cross-Entropy.",
+      "Topological Graph Traversal: recursively sort nodes in the computational DAG to guarantee proper backward execution order.",
+      "Multi-Layer Model Optimizer: train a multi-layer neural network on non-linear synthetic data using gradient descent."
+    ],
+    automatedChecks: [
+      "Gradient accuracy: analytical gradients match finite-difference numerical benchmarks within 1e-5 across all operations.",
+      "Broadcasting integrity: gradients correctly sum across broadcasted dimensions during backward propagation.",
+      "Convergence test: a 2-layer neural network built with MathGrad converges to > 98% accuracy on a classification dataset."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "mathgrad-tensor-autodiff-engine",
+      liveDemoType: "Interactive Web App",
+      resumeImpactBullet: "Constructed MathGrad, a reverse-mode automatic differentiation engine from scratch; validated analytical gradients against PyTorch within 1e-5 across multidimensional tensor graphs."
+    }
+  },
+  {
+    phaseId: 3,
+    displayPhaseNumber: 4,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 4: Data Structures, Algorithms & Problem Solving",
+    projectSlug: "phase-04-capstone-high-performance-key-value-store",
+    title: "FlashKV: Crash-Resilient Key-Value Storage Engine with Write-Ahead Logging",
+    oneLineHook: "Engineered an append-only, crash-resilient key-value storage engine featuring an in-memory SkipList index, binary Write-Ahead Log (WAL), and fast Bloom filter lookups.",
+    industryArchetype: "RocksDB / LevelDB / Redis Persistence / SQLite Storage Core",
+    employabilityRating: 96,
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "65k – 10k (Backend Infrastructure / Database Systems Engineer)",
+    technologies: [
+      "SkipList Data Structure",
+      "Write-Ahead Log (WAL)",
+      "Bloom Filter",
+      "Binary File I/O",
+      "CRC32 Checksums",
+      "Disk Compaction"
+    ],
+    storyScenario: "Modern applications require database storage engines that can sustain thousands of writes per second without losing data when a server unexpectedly restarts. In-memory hash maps are fast but volatile, while naive file writes corrupt easily under concurrent load. FlashKV implements a Log-Structured storage engine: all incoming writes append sequentially to an on-disk Write-Ahead Log and an in-memory SkipList. Point queries check a Bloom filter to eliminate unnecessary disk reads, and background compaction purges obsolete values.",
+    problemToSolve: "Provide high-speed read and write operations with guaranteed crash recovery, avoiding data corruption and random disk access bottlenecks.",
+    systemArchitecture: "Write Request -> Sequential Append-Only Write-Ahead Log (WAL) -> In-Memory SkipList Index -> Bloom Filter Probe -> Disk Compaction Worker -> Verified Data File.",
+    whyThisMatters2026: "Databases, search indexes, and caching systems all rely on log-structured storage and probabilistic filters. Understanding these algorithms is what separates junior coders from systems engineers who build reliable data platforms.",
+    whatToBuild: [
+      "Concurrent SkipList: implement a probabilistic sorted data structure providing O(log N) inserts, searches, and range scans.",
+      "Binary Write-Ahead Log: write structured binary records with CRC32 checksums before acknowledging client writes.",
+      "Bloom Filter Index: create an in-memory bit array with multiple hash functions to reject queries for non-existent keys in O(1).",
+      "Crash Recovery Routine: read the WAL on startup to replay transactions and reconstruct the active memory index completely."
+    ],
+    automatedChecks: [
+      "Crash resilience: killing the process with SIGKILL during a 10,000-write burst recovers 100% of acknowledged entries upon restart.",
+      "Bloom filter efficiency: false positive rate stays below 2.0% with zero false negatives.",
+      "Range scan correctness: range queries return keys in lexicographical order in O(log N + K) time."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "flashkv-crash-resilient-store",
+      liveDemoType: "CLI / Docker Engine",
+      resumeImpactBullet: "Engineered FlashKV, an append-only storage engine with Write-Ahead Logging and Bloom filters, achieving 40,000 writes/sec and verified 100% crash recovery after unexpected termination."
+    }
+  },
   {
     phaseId: 4,
-    phaseName: "Phase 4: Systems Internals: OS, Concurrency, Networks, Docker",
-    projectSlug: "phase-04-capstone-zero-copy-http-proxy",
-    title: "High-Performance Reverse Proxy & Layer-7 Dynamic Load Balancer",
-    oneLineHook: "Constructed a zero-copy HTTP/1.1 & WebSocket reverse proxy with active health checking, round-robin/least-conn balancing, and connection pooling.",
-    industryArchetype: "Nginx / Envoy / HAProxy (Cloud Networking Tier)",
-    employabilityRating: 93,
+    displayPhaseNumber: 5,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 5: Systems Internals: OS, Concurrency, Networks, Docker",
+    projectSlug: "phase-05-capstone-reverse-proxy-load-balancer",
+    title: "RouteMaster: High-Performance Layer-7 Reverse Proxy & Load Balancer",
+    oneLineHook: "Built a multi-worker Layer-7 reverse proxy in Python and networking primitives with dynamic upstream health checking, round-robin load balancing, and circuit breakers.",
+    industryArchetype: "Nginx / Envoy / Traefik / Cloudflare Edge Router",
+    employabilityRating: 95,
     employabilityBadge: "Production Systems",
-    salaryBand2026: "$155k – $190k (Cloud Networking / SRE / Platform Engineer)",
-    technologies: ["Zero-Copy sendfile", "Socket Splice", "Layer-7 Routing", "Circuit Breakers", "Health Probers", "HTTP Parsing"],
-    systemArchitecture: "Edge Ingress Socket -> HTTP Parser -> Upstream Circuit Breaker & Pool -> Epoll Zero-Copy Proxying (`os.splice`/`sendfile`) -> Upstream Fleet.",
-    whyThisMatters2026: "Every modern AI infrastructure stack routes inference requests through specialized reverse proxies to load-balance vLLM GPU worker nodes, handle streaming SSE connections, and reject prompt injection DDoS attacks.",
+    salaryBand2026: "60k – 95k (DevOps / Systems Engineer / Site Reliability Engineer)",
+    technologies: [
+      "TCP Socket Programming",
+      "HTTP/1.1 Protocol Parsing",
+      "Round-Robin & Least-Connections",
+      "Active Health Checking",
+      "Circuit Breaker Pattern",
+      "Docker Multi-Container"
+    ],
+    storyScenario: "When modern web applications scale, incoming user traffic cannot be handled by a single server instance. Upstream servers can crash, suffer memory leaks, or experience network drops. RouteMaster acts as an intelligent traffic gateway that receives incoming client HTTP requests, balances traffic across a cluster of backend servers using configurable algorithms, and automatically trips circuit breakers to bypass failing instances within 100 milliseconds.",
+    problemToSolve: "Prevent system outages and traffic bottlenecks by evenly distributing client requests across healthy backend servers and isolating failing instances automatically.",
+    systemArchitecture: "Client Traffic -> RouteMaster Listening Socket -> HTTP Header Parser -> Upstream Selector (Least-Connections / Round-Robin) -> Backend Connection Pool -> Response Relay.",
+    whyThisMatters2026: "Every modern cloud platform relies on reverse proxies and load balancers to route traffic and ensure high availability. Building one from scratch gives you a thorough understanding of the networking stack and HTTP protocol.",
     whatToBuild: [
-      "Streaming HTTP/1.1 parser: zero-copy chunked transfer encoding and pipelined request framing.",
-      "Load balancing algorithms: Weighted Round-Robin, Least Connections, and Consistent Hash based on IP or session headers.",
-      "Upstream connection pool: maintain warm HTTP keep-alive socket pools to eliminate TCP handshake latency.",
-      "Health probing & circuit breaking: active background HTTP probes trip circuit breakers on consecutive 5xx errors."
+      "HTTP Stream Parser: read and parse request methods, headers, and content-length without buffering large payloads.",
+      "Load Balancing Algorithms: implement Round-Robin and Least-Connections distribution across upstream pools.",
+      "Active Health Check Worker: background thread periodically probing /health endpoints and tracking latency.",
+      "Circuit Breaker Failover: automatically mark backend servers as down after 3 consecutive failures and redirect traffic."
     ],
     automatedChecks: [
-      "Zero socket leaks: sustains 100,000 proxied requests without file descriptor leaks (`lsof` check).",
-      "Graceful failover: failing an upstream host automatically redirects 100% of traffic to healthy replicas under 50ms.",
-      "SSE streaming transparency: token streams flush chunk-by-chunk without proxy buffering delays."
+      "Zero-downtime failover: dropping an upstream backend causes 100% of new traffic to redirect to healthy replicas within 100ms.",
+      "High-throughput stability: handles 10,000 requests without socket descriptor leaks or memory degradation.",
+      "Streaming transparency: chunked HTTP responses and Server-Sent Events pass through without buffering delays."
     ],
     portfolioProof: {
-      githubRepoTemplate: "l7-reverse-proxy-loadbalancer",
+      githubRepoTemplate: "routemaster-reverse-proxy",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Engineered a low-latency Layer-7 reverse proxy with active circuit breaking and connection pooling, sustaining 20,000 req/sec with sub-5ms routing overhead."
+      resumeImpactBullet: "Built RouteMaster, an intelligent Layer-7 reverse proxy with active health probing and circuit breakers; maintained 99.99% uptime during simulated upstream node outages."
     }
   },
-
-  // =========================================================================
-  // PHASE 5: Backend Systems & API Engineering
-  // =========================================================================
   {
     phaseId: 5,
-    phaseName: "Phase 5: Backend Systems & API Engineering",
-    projectSlug: "phase-05-capstone-distributed-rate-limiter",
-    title: "Multi-Tenant API Gateway with Distributed Sliding Window Rate Limiting",
-    oneLineHook: "Built a production-grade enterprise API gateway with Redis-backed Sliding Window Log rate limiting, HMAC request signing, idempotency keys, and tenant usage metering.",
-    industryArchetype: "Stripe API Infrastructure / Cloudflare Gateway / Kong",
-    employabilityRating: 96,
+    displayPhaseNumber: 6,
+    sector: "Financial Systems & Payment Infrastructure",
+    phaseName: "Phase 6: Backend Systems & API Engineering",
+    projectSlug: "phase-06-capstone-payment-gateway-api",
+    title: "PayFlow: Multi-Tenant Payment API Gateway with Idempotency & Rate Limiting",
+    oneLineHook: "Built a production-grade payment API gateway in FastAPI and PostgreSQL with atomic Redis sliding-window rate limiting, cryptographic HMAC signatures, and 24-hour idempotency keys.",
+    industryArchetype: "Stripe API / Adyen / Plaid / Modern Treasury Gateway",
+    employabilityRating: 97,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$160k – $205k (Senior Backend / API Platform Engineer)",
-    technologies: ["FastAPI", "Redis Lua Scripts", "Sliding Window Counter", "HMAC-SHA256", "Idempotency Keys", "PostgreSQL"],
-    systemArchitecture: "Client API Request -> HMAC Signature Verification -> Redis Atomic Lua Sliding Window Limiter -> Idempotency Cache -> Downstream Service -> Metering & Billing Counter.",
-    whyThisMatters2026: "With AI tokens costing real money per millisecond, every tech company in 2026 requires strict token budgets, tier-based rate limiters, and idempotency guarantees to prevent duplicate charges or runaway billing.",
+    salaryBand2026: "65k – 10k (Senior Backend / API Platform Engineer)",
+    technologies: [
+      "FastAPI (Python)",
+      "PostgreSQL",
+      "Redis Lua Scripts",
+      "Sliding-Window Rate Limiting",
+      "HMAC-SHA256 Signatures",
+      "Idempotency Keys"
+    ],
+    storyScenario: "In digital payment processing, network drops often cause client applications to retry transactions. Without robust idempotency mechanisms, a user tapping Pay Now on a slow connection could be charged multiple times. Abusive traffic from one merchant can also exhaust API resources for all others. PayFlow provides an enterprise API gateway that verifies HMAC request signatures, enforces atomic Redis rate limits per merchant, and locks idempotency keys for 24 hours to guarantee zero duplicate charges.",
+    problemToSolve: "Prevent double-billing from duplicate client retries and protect backend infrastructure from API abuse across multi-tenant payment platforms.",
+    systemArchitecture: "Client Payment Request -> HMAC Signature Guard -> Redis Sliding-Window Rate Limiter -> 24h Idempotency Cache Lock -> Payment Processing Service -> Audit Event Log.",
+    whyThisMatters2026: "Enterprise API engineering requires rock-solid reliability: idempotency, rate limiting, and request verification are the most heavily tested concepts in senior backend engineering interviews.",
     whatToBuild: [
-      "Atomic sliding window limiter: Redis Lua script combining timestamped sorted sets to enforce sub-millisecond precision quotas.",
-      "Idempotency engine: lock request hashes for 24 hours, guaranteeing duplicate network retries return exact identical cached responses.",
-      "HMAC request signing: verify request integrity and replay attack prevention using nonce timestamps.",
-      "Multi-tenant usage metering: stream usage metrics asynchronously to PostgreSQL partitioned tables for billing reconciliation."
+      "Atomic Rate Limiter: write a Redis Lua script implementing sliding-window rate limiting with sub-2ms verification latency.",
+      "24-Hour Idempotency Cache: store hashed payload keys to return identical responses for duplicate client requests.",
+      "HMAC Webhook & Request Signer: verify SHA-256 signatures and timestamp nonces to prevent replay attacks.",
+      "Relational Database Schema: design normalized PostgreSQL tables with foreign keys and indexes for merchants and charges."
     ],
     automatedChecks: [
-      "Concurrency race test: 50 concurrent requests fired at a 10-req quota allow exactly 10 requests through and return 429 to 40.",
-      "Idempotent replay: sending the same payment payload with same Idempotency-Key returns cached response without duplicate side-effects.",
-      "Sub-2ms overhead: Redis rate-limit verification adds < 2ms to total request duration."
+      "Duplicate charge prevention: sending 50 concurrent requests with the identical idempotency key executes the charge exactly once.",
+      "Rate limit enforcement: sending 15 requests on a 10-req/min quota returns exactly ten 200s and five 429 Too Many Requests.",
+      "Signature verification: tampering with any character in the payload causes immediate 401 Unauthorized rejection."
     ],
     portfolioProof: {
-      githubRepoTemplate: "enterprise-api-gateway-limiter",
+      githubRepoTemplate: "payflow-payment-api-gateway",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Developed an enterprise API gateway featuring atomic Redis Lua sliding-window rate limiters and idempotency guards, mitigating duplicate billing and burst traffic at 15,000 QPS."
+      resumeImpactBullet: "Engineered PayFlow, a payment API gateway with atomic Redis sliding-window rate limiting and idempotency locks, guaranteeing zero duplicate transactions across 10,000 QPS."
     }
   },
-
-  // =========================================================================
-  // PHASE 6: Full-Stack Frontend Engineering & Real-Time Next.js
-  // =========================================================================
   {
     phaseId: 6,
-    phaseName: "Phase 6: Full-Stack Frontend Engineering, Browser Internals, and Modern React/Next.js",
-    projectSlug: "phase-06-capstone-realtime-ai-workspace",
-    title: "Real-Time AI Collaborative Canvas & Multi-Stream Streaming IDE",
-    oneLineHook: "Created an ultra-high density real-time collaborative workspace with Server-Sent Events (SSE) token demuxing, virtualized diff rendering, and local-first offline state.",
-    industryArchetype: "Cursor / Linear / v0.dev / Figma (Modern AI Frontend)",
+    displayPhaseNumber: 7,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 7: Full-Stack Frontend Engineering, Browser Internals, and Modern React/Next.js",
+    projectSlug: "phase-07-capstone-collaborative-workspace-canvas",
+    title: "BoardSync: Real-Time Collaborative Workspace with Live Streaming & Optimistic UI",
+    oneLineHook: "Built a high-performance interactive collaborative workspace in Next.js 15 featuring Server-Sent Events (SSE) streaming, optimistic UI updates, and an HTML5 60 FPS canvas.",
+    industryArchetype: "Miro / Figma / Linear / Notion Live Collaboration",
     employabilityRating: 97,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$155k – $200k (Full-Stack / Frontend Systems Engineer)",
-    technologies: ["Next.js 15 App Router", "React Server Components", "Server-Sent Events (SSE)", "CRDT Offline Sync", "TailwindCSS", "Monaco Editor"],
-    systemArchitecture: "RSC Server Shell -> Client SSE Event Stream -> In-Memory Token Buffer -> Delta-Patch Syntax Highlighter -> Virtualized 60fps Terminal & Editor Canvas.",
-    whyThisMatters2026: "The 2026 job market rejects generic portfolio sites and generic to-do apps with a passion. Employers want frontends that handle high-velocity streaming, interactive code diffs, low-latency optimistic UI, and zero-flicker re-renders.",
+    salaryBand2026: "60k – 05k (Full-Stack / Frontend Systems Engineer)",
+    technologies: [
+      "Next.js 15 (App Router)",
+      "React Server Components",
+      "Server-Sent Events (SSE)",
+      "HTML5 Canvas API",
+      "Optimistic UI State",
+      "TailwindCSS"
+    ],
+    storyScenario: "Modern remote teams rely on visual collaborative tools (like Figma, Miro, and Linear) where changes made by one team member must appear instantly for everyone else without page reloads or UI lag. Building these applications requires mastering browser rendering lifecycles, avoiding unnecessary React re-renders, and managing optimistic updates that make the UI feel instantaneous even on high-latency networks. BoardSync provides a 60 FPS collaborative workspace with live event streaming and instant local state updates.",
+    problemToSolve: "Deliver a fluid, responsive collaborative workspace that synchronizes state across users in real time without screen flicker, frame drops, or layout shifts.",
+    systemArchitecture: "Next.js 15 App Shell -> Live SSE Event Stream -> Optimistic State Store -> Reconciliation Engine -> 60 FPS HTML5 Canvas Renderer.",
+    whyThisMatters2026: "Companies value frontend engineers who understand browser rendering pipelines, WebSockets/SSE streaming, and how to build responsive interfaces that stay buttery smooth under rapid user interaction.",
     whatToBuild: [
-      "Multi-stream token receiver: demux parallel SSE streams (model reasoning trace, code diffs, terminal stdout).",
-      "Non-destructive line-targeted diff viewer: visual side-by-side patch applicator with accept/reject hunk controls.",
-      "Optimistic UI state machine: instant local mutations with rollback on server validation failure.",
-      "Sub-16ms render loop: virtualized list handling 100,000 lines of log telemetry at stable 60 FPS without memory bloat."
+      "Streaming Event Receiver: consume Server-Sent Events to stream live user cursors and workspace updates in real time.",
+      "Optimistic State Updates: update the client UI immediately upon user action and reconcile with server confirmation in background.",
+      "Interactive 60 FPS Canvas: render elements, shapes, and annotations using the HTML5 Canvas API without React DOM bloat.",
+      "Virtualized Feed: render extensive project revision histories smoothly using DOM node recycling."
     ],
     automatedChecks: [
-      "60fps scroll benchmark: zero dropped animation frames during high-throughput SSE token streaming.",
-      "Lighthouse metrics: 98+ Performance score, 0.00 CLS (Cumulative Layout Shift).",
-      "Network disconnect recovery: seamlessly reconnects SSE stream with last-event-id without losing conversational context."
+      "Frame rate consistency: maintains 60 FPS during continuous user dragging and incoming streaming updates.",
+      "Zero Layout Shift: scores 0.00 Cumulative Layout Shift (CLS) on Google Lighthouse audits.",
+      "Reconnect recovery: automatically re-establishes SSE streaming with Last-Event-ID on network interruption without state loss."
     ],
     portfolioProof: {
-      githubRepoTemplate: "nextjs-ai-streaming-workspace",
+      githubRepoTemplate: "boardsync-collaborative-workspace",
       liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Built a high-performance streaming AI workspace in Next.js 15 supporting parallel SSE streams and virtualized code diffing, maintaining 60 FPS under continuous token generation."
+      resumeImpactBullet: "Developed BoardSync, a real-time collaborative workspace in Next.js 15 with Server-Sent Events and HTML5 Canvas, sustaining 60 FPS under continuous multi-user synchronization."
     }
   },
-
-  // =========================================================================
-  // PHASE 7: Distributed Systems, Cloud Infrastructure & DevOps
-  // =========================================================================
   {
     phaseId: 7,
-    phaseName: "Phase 7: Distributed Systems, Cloud Infrastructure, and Production DevOps",
-    projectSlug: "phase-07-capstone-raft-consensus-cluster",
-    title: "Distributed Raft Consensus KV Cluster with Automated Leader Election",
-    oneLineHook: "Implemented the Raft distributed consensus protocol from scratch with leader election, log replication, heartbeat leases, and network partition recovery.",
-    industryArchetype: "etcd / CockroachDB / Consul / Kafka KRaft (Distributed Core)",
+    displayPhaseNumber: 8,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 8: Distributed Systems, Cloud Infrastructure, and Production DevOps",
+    projectSlug: "phase-08-capstone-distributed-consensus-cluster",
+    title: "QuorumCore: Distributed Fault-Tolerant Consensus Cluster (Raft Protocol)",
+    oneLineHook: "Implemented the Raft distributed consensus protocol from scratch in Python across a 5-node cluster with leader elections, log replication, and partition resilience.",
+    industryArchetype: "etcd / HashiCorp Consul / CockroachDB Core / Apache ZooKeeper",
     employabilityRating: 98,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$175k – $230k (Staff / Distributed Systems Engineer)",
-    technologies: ["Raft Protocol", "RPC Messaging", "Leader Election", "Log Compaction", "Network Partition Healing", "Docker Compose"],
-    systemArchitecture: "Cluster Node Fleet (Follower/Candidate/Leader) -> Heartbeat Lease Timer -> RequestVote RPC -> AppendEntries RPC -> Commit Index Advancement -> State Machine Application.",
-    whyThisMatters2026: "Anyone can deploy a managed database. Being able to explain and write consensus, split-brain resolution, and quorum quashing proves you are in the top 5% of systems engineers worldwide.",
+    salaryBand2026: "75k – 30k (Staff / Distributed Systems Engineer)",
+    technologies: [
+      "Raft Protocol",
+      "RPC Communication",
+      "Leader Election Timers",
+      "Log Replication Quorum",
+      "Split-Brain Prevention",
+      "Docker Compose"
+    ],
+    storyScenario: "When software runs across multiple servers in a cloud cluster, individual machines can crash or network cables can fail at any time. If two servers both believe they are the leader and accept conflicting user commands, the database suffers catastrophic data divergence (split-brain). QuorumCore implements the gold-standard Raft consensus algorithm: cluster nodes elect a single leader via randomized election timeouts and replicate state changes to a quorum (N/2 + 1) of nodes before committing.",
+    problemToSolve: "Maintain strict data consistency and high availability across a cluster of distributed servers, even when individual nodes crash or network partitions isolate parts of the cluster.",
+    systemArchitecture: "Cluster Nodes (Follower -> Candidate -> Leader) -> Randomized Election Timers -> RequestVote RPC -> AppendEntries RPC -> Quorum Commit Index -> State Machine.",
+    whyThisMatters2026: "Distributed consensus is the bedrock of Kubernetes (etcd), cloud databases (CockroachDB), and distributed storage. Building Raft proves you can master and debug complex distributed systems.",
     whatToBuild: [
-      "Leader election state machine: randomized election timeouts preventing split votes, candidate state transitions, and term voting.",
-      "Log replication pipeline: leader broadcasts `AppendEntries` RPCs; commits state once quorum ($N/2 + 1$) acknowledges.",
-      "Safety invariant enforcement: election restriction guaranteeing only candidates with up-to-date logs can become leaders.",
-      "Chaos partition test: simulate split-brain network partition; verify that isolated minority cannot commit writes and re-converges cleanly upon partition heal."
+      "Leader Election State Machine: randomized election timeouts (150-300ms), candidate term tracking, and vote tallying.",
+      "Log Replication Pipeline: replicate AppendEntries RPCs across nodes and advance the commit index upon quorum acknowledgment.",
+      "Safety Invariant Enforcer: guarantee that only candidates with up-to-date log records can ever win an election.",
+      "Partition Simulator: demonstrate that an isolated minority cannot commit writes and re-converges cleanly when the partition heals."
     ],
     automatedChecks: [
-      "Leader election under 300ms: cleanly elects a leader when primary node is killed (`kill -9`).",
-      "Linearizable read/write consistency: zero split-brain write collisions during Jepsen-style network partition simulations.",
-      "Log convergence: uncommitted log entries on partitioned nodes are correctly overwritten by elected cluster leader."
+      "Fast leader election: cluster elects a new stable leader in under 300ms following the crash of the active leader.",
+      "Split-brain immunity: during a simulated 3-2 network partition, the minority 2 nodes reject write requests.",
+      "Log convergence: uncommitted logs on rejoined nodes are cleanly overwritten and synchronized with the elected leader."
     ],
     portfolioProof: {
-      githubRepoTemplate: "raft-consensus-distributed-cluster",
+      githubRepoTemplate: "quorumcore-raft-consensus-cluster",
       liveDemoType: "Distributed Cluster",
-      resumeImpactBullet: "Implemented the Raft consensus algorithm from scratch across a 5-node cluster, achieving sub-300ms leader election and proven linearizability under simulated network partitions."
+      resumeImpactBullet: "Implemented QuorumCore, a 5-node Raft consensus cluster from scratch; achieved sub-300ms leader election and proven linearizability under simulated network partitions."
     }
   },
-
-  // =========================================================================
-  // PHASE 8: Systems Design & High-Availability Architectures
-  // =========================================================================
   {
     phaseId: 8,
-    phaseName: "Phase 8: Systems Design, High-Availability Architectures & Interview Mastery",
-    projectSlug: "phase-08-capstone-distributed-event-sourcing",
-    title: "Global Event-Sourced Ledger Engine with CQRS & Outbox Pattern",
-    oneLineHook: "Designed a financial-grade event-sourced audit ledger using CQRS, Kafka event streaming, the Transactional Outbox pattern, and idempotent projection workers.",
-    industryArchetype: "Brex / Square / Stripe Ledger / Adyen (Financial Systems)",
-    employabilityRating: 97,
+    displayPhaseNumber: 9,
+    sector: "Financial Systems & Payment Infrastructure",
+    phaseName: "Phase 9: Systems Design, High-Availability Architectures & Interview Mastery",
+    projectSlug: "phase-09-capstone-event-sourced-banking-ledger",
+    title: "VaultStream: Event-Sourced Banking Ledger with CQRS & Transactional Outbox",
+    oneLineHook: "Designed and implemented an event-sourced core banking ledger using CQRS, Kafka message streaming, and the Transactional Outbox pattern for complete financial auditability.",
+    industryArchetype: "Brex / Square / Stripe Ledger / Adyen Financial Core",
+    employabilityRating: 98,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$170k – $220k (Systems Architect / Senior Backend Engineer)",
-    technologies: ["Event Sourcing", "CQRS", "Transactional Outbox", "PostgreSQL CDC", "Apache Kafka", "Redis Cache"],
-    systemArchitecture: "Write Command -> PostgreSQL Append-Only Event Table + Outbox -> Debezium / CDC Poller -> Kafka Topic -> Materialized CQRS Projections -> Read-Optimized Views.",
-    whyThisMatters2026: "Traditional CRUD models fail in complex enterprise environments. Event sourcing provides immutable audit trails, time-travel debugging, and guaranteed zero double-spend anomalies in high-value transactions.",
+    salaryBand2026: "75k – 25k (Principal Architect / Senior Systems Engineer)",
+    technologies: [
+      "Event Sourcing",
+      "CQRS Pattern",
+      "Transactional Outbox",
+      "Apache Kafka",
+      "PostgreSQL",
+      "Redis Caching"
+    ],
+    storyScenario: "In commercial banking and fintech, database designs that update account balance columns in-place are dangerous: an update statement erases historical transitions and makes forensic auditing impossible after a bug or fraud incident. VaultStream implements Event Sourcing: every transaction (deposit, withdrawal, transfer) is recorded as an immutable event. The Transactional Outbox pattern guarantees that events publish to Kafka reliably, while background workers project the events into read-optimized account tables.",
+    problemToSolve: "Eliminate balance discrepancy risks and provide a 100% immutable, tamper-evident audit trail for financial accounts under high concurrent transaction volume.",
+    systemArchitecture: "Write Command -> Append-Only Event Table + Outbox Table -> Change Data Capture Worker -> Kafka Message Bus -> CQRS Consumer -> Read-Optimized Account Balance View.",
+    whyThisMatters2026: "Event sourcing and CQRS are standard architectural patterns in banking, logistics, and large-scale enterprise systems where auditability, reliability, and clear separation of concerns are non-negotiable.",
     whatToBuild: [
-      "Append-only event store: immutable state transitions with optimistic concurrency version checking.",
-      "Transactional outbox publisher: dual-write prevention guaranteeing every committed database transaction publishes an event to Kafka.",
-      "CQRS read projections: asynchronous consumers projecting raw events into denormalized fast-read PostgreSQL views.",
-      "Time-travel state reconstruction: replay an account's event stream from inception to any timestamp to verify historical balances."
+      "Immutable Event Store: append-only PostgreSQL table with optimistic concurrency control to prevent conflicting account edits.",
+      "Transactional Outbox Worker: guarantee message delivery to Kafka within the same database transaction as the event write.",
+      "Asynchronous CQRS Projections: background consumer building queryable account balance summaries from event streams.",
+      "Time-Travel Rebuilder: replay account events from inception to reconstruct the exact balance at any past date and time."
     ],
     automatedChecks: [
-      "Zero double-spend: simultaneous concurrent withdrawal attempts fail with OptimisticLockException.",
-      "At-least-once with idempotent replay: re-processing the same Kafka event stream 100 times produces identical balance states.",
-      "Audit trail completeness: 100% of state changes correlate to an immutable, cryptographically signed event ID."
+      "Zero double-spend guarantee: concurrent withdrawal attempts against the same balance trigger optimistic lock exceptions.",
+      "Idempotent projection: replaying the entire Kafka event stream produces identical balance projections without deviation.",
+      "Audit completeness: every account state change links to an immutable signed event record with timestamps."
     ],
     portfolioProof: {
-      githubRepoTemplate: "event-sourced-ledger-cqrs",
+      githubRepoTemplate: "vaultstream-event-sourced-ledger",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Architected a high-concurrency event-sourced ledger using CQRS and the Transactional Outbox pattern, ensuring zero data discrepancies across distributed read projections."
+      resumeImpactBullet: "Architected VaultStream, an event-sourced banking ledger using CQRS and the Transactional Outbox pattern; eliminated balance discrepancies across 20,000 transactions/sec."
     }
   },
-
-  // =========================================================================
-  // PHASE 9: Deep Learning Math & Core Neural Architectures
-  // =========================================================================
   {
     phaseId: 9,
-    phaseName: "Phase 9: Mathematics of Deep Learning, Autograd & Core Neural Architectures",
-    projectSlug: "phase-09-capstone-transformer-from-scratch",
-    title: "Production Transformer Architecture with FlashAttention & RoPE",
-    oneLineHook: "Implemented a decoder-only LLM architecture (Llama/Mistral style) in PyTorch from mathematical foundations, featuring Rotary Positional Embeddings (RoPE), SwiGLU, and FlashAttention.",
-    industryArchetype: "Mistral AI / Anthropic / Meta Llama (Foundation Model Engineering)",
+    displayPhaseNumber: 10,
+    sector: "Autonomous AI & Intelligent Systems",
+    phaseName: "Phase 10: Mathematics of Deep Learning, Autograd & Core Neural Architectures",
+    projectSlug: "phase-10-capstone-neural-transformer-from-scratch",
+    title: "NanoLlama: Decoder-Only Transformer Language Model from Scratch",
+    oneLineHook: "Built a modern decoder-only transformer architecture in PyTorch from mathematical principles, featuring Rotary Positional Embeddings (RoPE), SwiGLU activations, and KV-caching.",
+    industryArchetype: "Mistral AI / Anthropic / Meta Llama / Hugging Face Core",
     employabilityRating: 98,
     employabilityBadge: "Frontier AI",
-    salaryBand2026: "$180k – $240k (Foundation Model Engineer / AI Systems Scientist)",
-    technologies: ["PyTorch", "Rotary Embeddings (RoPE)", "SwiGLU Activations", "RMSNorm", "FlashAttention", "KV-Cache"],
-    systemArchitecture: "Token IDs -> Embedding Layer -> N Transformer Decoder Blocks [RMSNorm -> Multi-Head Self-Attention with RoPE & FlashAttention -> SwiGLU FFN] -> RMSNorm -> LM Head.",
-    whyThisMatters2026: "In 2026, standard vanilla Transformers with Absolute Positional Embeddings and GELU are obsolete. Candidates who know RoPE complex rotation math, SwiGLU gating, and KV cache layout are hired to train and fine-tune proprietary LLMs.",
+    salaryBand2026: "80k – 40k (Foundation Model / AI Systems Engineer)",
+    technologies: [
+      "PyTorch",
+      "Rotary Embeddings (RoPE)",
+      "SwiGLU Activations",
+      "RMSNorm",
+      "KV-Cache Memory",
+      "Autoregressive Generation"
+    ],
+    storyScenario: "Engineers who only call third-party AI APIs often struggle when models hallucinate, run out of GPU memory, or produce unexpected outputs. Understanding how language models work at the token, matrix, and attention level is what sets deep learning engineers apart. NanoLlama implements a modern decoder-only transformer architecture from first principles using Rotary Positional Embeddings (RoPE), SwiGLU gating, and an inference KV-cache, enabling verifiable local training and token generation.",
+    problemToSolve: "Build a parameter-efficient, modern transformer language model from mathematical foundations and optimize autoregressive token generation with KV-caching.",
+    systemArchitecture: "Input Tokens -> Token Embedding Layer -> Transformer Decoder Blocks (RMSNorm -> Multi-Head Attention with RoPE -> SwiGLU FFN) -> RMSNorm -> Linear LM Head -> Autoregressive Sampler.",
+    whyThisMatters2026: "Understanding modern transformer internals—RoPE rotations, SwiGLU feed-forward networks, and KV cache memory—is essential for training, adapting, and optimizing local foundation models.",
     whatToBuild: [
-      "Rotary Positional Embeddings (RoPE): complex vector rotation preserving relative token distances without learnable positional bias.",
-      "SwiGLU feed-forward network: gating mechanism ($x \\cdot \\sigma(W x) \\cdot V x$) providing superior gradient flow over standard GELU.",
-      "RMSNorm: parameter-efficient root-mean-square normalization replacing LayerNorm without computing mean variance.",
-      "Inference KV-Cache: rolling tensor cache storing previous Key and Value tensors for $O(1)$ token generation."
+      "Rotary Positional Embeddings (RoPE): implement complex vector rotations encoding relative token positions without learned parameters.",
+      "SwiGLU Feed-Forward Network: dual-weight gating mechanism providing superior gradient flow compared to standard GELU.",
+      "RMSNorm Layer: parameter-efficient normalization eliminating mean calculations while stabilizing deep layer training.",
+      "Autoregressive KV-Cache: rolling key/value tensor cache enabling O(1) step computation during sequential token generation."
     ],
     automatedChecks: [
-      "Perplexity verification: trains on TinyStories/WikiText and exhibits monotonically decreasing validation loss.",
-      "KV-cache parity: autoregressive generation with KV-cache produces identical output logits as full forward pass.",
-      "Weight transfer check: successfully load pre-trained Llama-3B weights and generate coherent English tokens."
+      "Perplexity validation: demonstrates monotonically decreasing cross-entropy loss during training on sample text datasets.",
+      "KV-cache output parity: cached autoregressive generation outputs match full forward pass predictions exactly.",
+      "Weight transfer compatibility: loads open-weights (e.g. Llama-style checkpoints) and generates coherent tokens."
     ],
     portfolioProof: {
-      githubRepoTemplate: "transformer-rope-swiglu-scratch",
+      githubRepoTemplate: "nanollama-transformer-from-scratch",
       liveDemoType: "CLI / Docker Engine",
-      resumeImpactBullet: "Built a modern decoder-only transformer architecture with RoPE, SwiGLU, and KV-caching; loaded Llama weights to achieve verified autoregressive token generation."
+      resumeImpactBullet: "Built NanoLlama, a modern decoder-only transformer architecture with RoPE, SwiGLU, and KV-caching; verified output parity against open-weights for autoregressive token generation."
     }
   },
-
-  // =========================================================================
-  // PHASE 10: Generative AI, RAG & Vector Systems
-  // =========================================================================
   {
     phaseId: 10,
-    phaseName: "Phase 10: Generative AI, Retrieval-Augmented Generation (RAG) & Vector Systems",
-    projectSlug: "phase-10-capstone-enterprise-hybrid-rag-engine",
-    title: "Production Multi-Tenant Hybrid RAG Engine with Cross-Encoder Re-Ranking",
-    oneLineHook: "Architected an enterprise RAG pipeline combining dense vector embeddings (HNSW) with sparse BM25 keyword search, Reciprocal Rank Fusion, and Cross-Encoder re-ranking.",
-    industryArchetype: "Cohere / Pinecone / Perplexity Enterprise (AI Search & Retrieval)",
+    displayPhaseNumber: 11,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 11: Generative AI, Retrieval-Augmented Generation (RAG) & Vector Systems",
+    projectSlug: "phase-11-capstone-enterprise-hybrid-rag-engine",
+    title: "DocuMind: Enterprise Hybrid RAG Engine with Dense & Sparse Search",
+    oneLineHook: "Architected an enterprise RAG knowledge engine combining dense vector embeddings (HNSW) with sparse BM25 keyword search, Reciprocal Rank Fusion, and Cross-Encoder re-ranking.",
+    industryArchetype: "Perplexity Enterprise / Pinecone / Cohere / Notion Q&A Engine",
     employabilityRating: 99,
     employabilityBadge: "Frontier AI",
-    salaryBand2026: "$175k – $225k (Senior AI/RAG Solutions Engineer)",
-    technologies: ["pgvector (HNSW)", "BM25 Sparse Retrieval", "Reciprocal Rank Fusion (RRF)", "BAAI bge-reranker", "LangChain/LlamaIndex", "Semantic Caching"],
-    systemArchitecture: "User Query -> Query Rewriter & Multi-Query Expander -> Parallel [Dense HNSW Search + Sparse BM25 Search] -> Reciprocal Rank Fusion (RRF) -> Cross-Encoder Re-Ranker -> Context-Grounded LLM Stream.",
-    whyThisMatters2026: "Basic naive RAG (OpenAI embedding + Chroma + prompt stuffing) is dead. Companies need production RAG that eliminates hallucination, respects multi-tenant document permissions, and uses hybrid keyword+semantic fusion with re-ranking.",
+    salaryBand2026: "75k – 25k (Senior AI / RAG Solutions Engineer)",
+    technologies: [
+      "pgvector (PostgreSQL HNSW)",
+      "BM25 Keyword Search",
+      "Reciprocal Rank Fusion (RRF)",
+      "Cross-Encoder Re-Ranking",
+      "Semantic Caching",
+      "Row-Level Security (RLS)"
+    ],
+    storyScenario: "When companies connect LLMs to their internal documents (contracts, product specs, policies), naive vector search frequently fails: it misses specific acronyms, product SKUs, and exact numerical values. Keyword search alone misses conceptual synonyms. DocuMind implements production-grade hybrid retrieval: dense vector search and sparse BM25 run in parallel, fused via Reciprocal Rank Fusion and re-ranked with a Cross-Encoder, with strict Row-Level Security ensuring users only see authorized data.",
+    problemToSolve: "Eliminate hallucinations and retrieval omissions in enterprise document Q&A by combining semantic understanding with exact keyword precision and multi-tenant security.",
+    systemArchitecture: "User Query -> Parallel Retrieval (Dense pgvector HNSW + Sparse BM25) -> Reciprocal Rank Fusion (RRF) -> Cross-Encoder Re-Ranker -> Context-Grounded LLM Stream.",
+    whyThisMatters2026: "Enterprises have moved past naive vector-only RAG. Production systems require hybrid search, rank fusion, cross-encoder re-ranking, and tenant isolation to deliver trusted, zero-hallucination answers.",
     whatToBuild: [
-      "Dual-stream hybrid index: execute vector cosine similarity on pgvector and full-text BM25 in a single PostgreSQL query.",
-      "Reciprocal Rank Fusion (RRF): combine top-50 results from dense and sparse streams without score normalization distortion.",
-      "Cross-Encoder re-ranker: score top-20 candidates down to the top-4 most semantically relevant chunks with `bge-reranker-large`.",
-      "Hallucination verification gate: automated Ragas/G-Eval check verifying that 100% of facts in answer exist in retrieved context."
+      "Dual-Index Engine: execute dense cosine similarity and sparse BM25 queries within a single PostgreSQL query.",
+      "Reciprocal Rank Fusion: merge top results from dense and sparse streams without score distortion.",
+      "Cross-Encoder Re-Ranker: re-score top candidate chunks using a deep cross-encoder to select high-relevance context.",
+      "Tenant Isolation & Hallucination Guard: enforce PostgreSQL Row-Level Security and verify fact grounding in retrieved context."
     ],
     automatedChecks: [
-      "Context precision > 0.90: evaluated on synthetic enterprise QA benchmark datasets.",
-      "Sub-150ms retrieval latency: end-to-end hybrid retrieval and re-ranking finishes within 150ms.",
-      "Row-level security isolation: tenant A queries never retrieve documents belonging to tenant B under any adversarial prompt injection."
+      "Context precision benchmark: achieves > 0.90 context precision on clinical and technical QA evaluation sets.",
+      "Sub-150ms retrieval latency: end-to-end hybrid retrieval and re-ranking completes within 150ms.",
+      "Row-Level Security guarantee: tenant queries never return documents outside their assigned authorization boundary."
     ],
     portfolioProof: {
-      githubRepoTemplate: "enterprise-hybrid-rag-engine",
+      githubRepoTemplate: "documind-hybrid-rag-engine",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Deployed an enterprise hybrid RAG engine pairing pgvector HNSW with BM25 and Cross-Encoder re-ranking, boosting retrieval precision to 94% with sub-150ms p95 latency."
+      resumeImpactBullet: "Deployed DocuMind, an enterprise hybrid RAG engine pairing pgvector HNSW with BM25 and Cross-Encoder re-ranking, boosting retrieval precision to 94% with sub-150ms p95 latency."
     }
   },
-
-  // =========================================================================
-  // PHASE 11: Production Engineering, Performance Profiling & MLOps
-  // =========================================================================
   {
     phaseId: 11,
-    phaseName: "Phase 11: Production Engineering, Performance Profiling & MLOps",
-    projectSlug: "phase-11-capstone-llm-inference-serving-cluster",
-    title: "High-Throughput PagedAttention GPU Inference Engine & Continuous Batching",
-    oneLineHook: "Constructed an LLM inference server featuring PagedAttention KV-cache memory management, continuous dynamic batching, and speculative decoding.",
-    industryArchetype: "vLLM / TensorRT-LLM / Fireworks.ai / Together AI (Inference Tier)",
+    displayPhaseNumber: 12,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 12: Production Engineering, Performance Profiling & MLOps",
+    projectSlug: "phase-12-capstone-llm-inference-serving-engine",
+    title: "BatchServe: High-Throughput LLM Inference Server with Continuous Batching",
+    oneLineHook: "Constructed a high-throughput LLM inference server featuring PagedAttention KV-cache memory management, continuous dynamic batching, and Prometheus performance metrics.",
+    industryArchetype: "vLLM / TensorRT-LLM / Together AI / Fireworks.ai Serving",
     employabilityRating: 99,
     employabilityBadge: "Frontier AI",
-    salaryBand2026: "$190k – $260k (MLOps / AI Systems / Performance Engineer)",
-    technologies: ["PagedAttention", "Continuous Dynamic Batching", "Speculative Decoding", "CUDA / PyTorch", "Prometheus Metrics", "Triton Server"],
-    systemArchitecture: "Client Request Stream -> Request Priority Queue -> Continuous Batch Scheduler -> Non-Contiguous PagedAttention KV-Cache -> Tensor Parallel Inference -> SSE Token Streamer.",
-    whyThisMatters2026: "The biggest bottleneck for AI startups in 2026 is GPU cost. Engineers who can maximize token throughput per dollar using PagedAttention, continuous batching, and draft model speculative decoding command the highest salaries in tech.",
+    salaryBand2026: "90k – 60k (MLOps / AI Systems / Performance Engineer)",
+    technologies: [
+      "PagedAttention Memory Model",
+      "Continuous Dynamic Batching",
+      "Virtual Memory Paging",
+      "PyTorch / Python",
+      "Prometheus Telemetry",
+      "Server-Sent Events (SSE)"
+    ],
+    storyScenario: "Deploying large language models across thousands of concurrent users is notoriously expensive because GPUs quickly run out of memory. Standard inference setups allocate large contiguous memory buffers for each request based on maximum possible output length, wasting up to 70% of GPU memory. BatchServe implements PagedAttention: KV cache memory is allocated dynamically in non-contiguous physical blocks with virtual paging, multiplying concurrent request capacity by 4x on the same hardware.",
+    problemToSolve: "Eliminate GPU memory fragmentation and maximize inference throughput per server during concurrent request bursts.",
+    systemArchitecture: "Incoming Request Stream -> Priority Queue -> Continuous Batch Scheduler -> PagedAttention Non-Contiguous Memory -> Model Forward Pass -> SSE Streamer.",
+    whyThisMatters2026: "GPU compute is the single largest operational cost for AI infrastructure. Engineers who can optimize memory management and continuous batching are among the most sought-after systems specialists.",
     whatToBuild: [
-      "PagedAttention KV-cache allocator: allocate non-contiguous memory blocks in GPU VRAM to eliminate 60% memory fragmentation waste.",
-      "Continuous batch scheduler: insert new prompts into running generation batches on every decode tick without waiting for sequence completion.",
-      "Speculative decoding pipeline: utilize a lightweight draft model to speculate 4 tokens verified in 1 forward pass of target model.",
-      "Production telemetry: export Time-To-First-Token (TTFT), Inter-Token Latency (ITL), and GPU KV-cache usage to Prometheus."
+      "PagedAttention Allocator: manage non-contiguous GPU memory blocks to eliminate internal memory fragmentation.",
+      "Continuous Batching Scheduler: insert incoming requests into active decoding iterations on every generation step.",
+      "Dynamic Request Queue: prioritize requests and manage preemption under high GPU memory utilization.",
+      "Production Telemetry Dashboard: export Time-To-First-Token (TTFT) and Inter-Token Latency (ITL) to Prometheus."
     ],
     automatedChecks: [
-      "4x throughput improvement: delivers 4x higher token throughput compared to naive sequential HuggingFace pipeline.",
-      "Zero VRAM memory leaks: sustained 24-hour load test exhibits flat GPU memory utilization.",
-      "TTFT p95 < 200ms: prompt prefill finishes within 200ms under 50 concurrent active sessions."
+      "4x throughput multiplier: sustains 4x higher token generation throughput than sequential baseline serving.",
+      "Zero VRAM memory leaks: continuous 24-hour stress tests maintain stable GPU memory utilization.",
+      "Sub-200ms TTFT: prompt prefill completes within 200ms under 50 concurrent active streaming sessions."
     ],
     portfolioProof: {
-      githubRepoTemplate: "paged-attention-inference-server",
+      githubRepoTemplate: "batchserve-continuous-batching-engine",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Constructed a continuous-batching inference server with PagedAttention KV-memory management, multiplying GPU serving throughput by 4.2x while cutting TTFT to 180ms."
+      resumeImpactBullet: "Constructed BatchServe, a continuous-batching inference server with PagedAttention KV-memory management, multiplying GPU serving throughput by 4.2x while cutting TTFT to 180ms."
     }
   },
-
-  // =========================================================================
-  // PHASE 12: Autonomous AI Agents & Multi-Agent Systems
-  // =========================================================================
   {
     phaseId: 12,
-    phaseName: "Phase 12: Autonomous AI Agents, Multi-Agent Systems & Tool Orchestration",
-    projectSlug: "phase-12-capstone-autonomous-software-engineer",
-    title: "CodeAgent: Autonomous Multi-Agent Software Engineer with Docker Sandboxes",
-    oneLineHook: "Engineered an autonomous multi-agent engineering team (Planner, Coder, Reviewer, Tester) with LangGraph state graphs, hardened Docker sandboxes, and AST diff patching.",
-    industryArchetype: "Cognition Devin / Factory / Cursor Agent / SWE-Bench Leaderboard",
+    displayPhaseNumber: 13,
+    sector: "Autonomous AI & Intelligent Systems",
+    phaseName: "Phase 13: Autonomous AI Agents, Multi-Agent Systems & Tool Orchestration",
+    projectSlug: "phase-13-capstone-autonomous-coding-agent",
+    title: "CodeCraft: Autonomous Multi-Agent Software Engineer with Docker Sandboxes",
+    oneLineHook: "Engineered an autonomous multi-agent engineering system (Planner, Coder, Reviewer, Tester) with LangGraph state graphs, Docker sandboxes, and AST diff patching.",
+    industryArchetype: "Cognition Devin / Factory / Cursor Agent / SWE-Bench Framework",
     employabilityRating: 100,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$185k – $250k (Senior AI Agent Architect / Applied AI Lead)",
-    technologies: ["LangGraph", "Docker gVisor Sandbox", "AST Patching (Tree-sitter)", "Human-in-the-Loop", "Async Postgres Saver", "Git Automation"],
-    systemArchitecture: "GitHub Issue Ingestion -> Planner Agent (DAG decomposition) -> Researcher (RAG over codebase) -> Coder (AST patch generator) -> Docker Sandbox (Pytest validation loop) -> Human Review Gate -> Pull Request.",
-    whyThisMatters2026: "This is the flagship definition of an AI-Native Software Engineer in 2026. Companies are replacing rigid scripts with autonomous multi-agent systems that ingest Jira/GitHub issues, write tests, fix bugs in sandboxes, and submit PRs.",
+    salaryBand2026: "85k – 50k (Senior AI Agent Architect / Applied AI Lead)",
+    technologies: [
+      "LangGraph",
+      "Docker Execution Sandbox",
+      "Tree-sitter AST Patching",
+      "Human-in-the-Loop",
+      "PostgreSQL Checkpointing",
+      "Git CLI Automation"
+    ],
+    storyScenario: "Engineering teams spend hundreds of hours per quarter triaging dependency updates, fixing minor bug reports, and writing boilerplate regression tests. Static scripts cannot reason about unfamiliar codebases or recover from failing unit tests. CodeCraft builds an autonomous multi-agent engineering team: a Planner decomposes issues, a Researcher explores symbols using Tree-sitter ASTs, a Coder drafts patches, and a Tester executes Pytest inside an isolated Docker sandbox until all tests pass.",
+    problemToSolve: "Automate end-to-end repository issue resolution while isolating code execution safely within secured ephemeral sandboxes.",
+    systemArchitecture: "Issue Intake -> Planner Agent (DAG decomposition) -> Tree-sitter AST Search -> Coder Agent -> Docker Sandbox (Pytest validation loop) -> Reviewer -> Verified Pull Request.",
+    whyThisMatters2026: "Autonomous agent architectures that can navigate repositories, execute commands safely in sandboxes, and iteratively fix test failures define the frontier of software engineering in 2026.",
     whatToBuild: [
-      "LangGraph cyclical state machine: orchestrate Planner, Coder, and QA Reviewer with persistent state checkpoints in PostgreSQL.",
-      "Ephemeral Docker sandbox: execute arbitrary Python/Bash commands in an isolated gVisor container with strict timeout quotas.",
-      "Tree-sitter AST symbol search: locate function definitions, references, and dependencies across multi-file repositories.",
-      "Autonomous test-driven repair: agent inspects test failure stack traces, formulates hypothesis, edits code, and verifies test passes."
+      "LangGraph Cyclical State Machine: coordinate Planner, Coder, and Reviewer with state persistence in PostgreSQL.",
+      "Ephemeral Docker Sandbox: execute arbitrary test scripts safely inside an isolated container with timeout limits.",
+      "Tree-sitter AST Symbol Navigator: index function definitions, call sites, and import trees across multi-file codebases.",
+      "Iterative Repair Loop: inspect error stack traces, formulate hypotheses, edit code, and re-run tests until green."
     ],
     automatedChecks: [
-      "SWE-bench mini validation: autonomously resolves and opens verified PRs on real open-source bugs with zero human edits.",
-      "Sandbox breakout containment: blocks malicious prompt injection attempts to access host network or environment variables.",
-      "Human-in-the-Loop gate: pauses execution graph at critical deployment milestones and resumes seamlessly upon user approval."
+      "Autonomous issue resolution: cleanly resolves real open-source bug benchmarks and opens verified pull requests.",
+      "Sandbox breakout containment: blocks unauthorized access attempts to host network or environment variables.",
+      "Human-in-the-loop checkpointing: supports pausing execution at critical milestones and resuming seamlessly upon user review."
     ],
     portfolioProof: {
-      githubRepoTemplate: "codeagent-autonomous-swe",
+      githubRepoTemplate: "codecraft-autonomous-coding-agent",
       liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Engineered CodeAgent, an autonomous multi-agent SWE system using LangGraph and Docker sandboxes that navigates AST symbols, fixes repository bugs, and opens verified PRs."
+      resumeImpactBullet: "Engineered CodeCraft, an autonomous multi-agent software engineering system using LangGraph and Docker sandboxes that navigates AST symbols, fixes repository bugs, and opens verified PRs."
     }
   },
-
-  // =========================================================================
-  // PHASE 13: Specialized Production Tracks
-  // =========================================================================
   {
     phaseId: 13,
-    phaseName: "Phase 13: Specialized Production Tracks",
-    projectSlug: "phase-13-capstone-frontier-triton-fsdp-ebpf",
-    title: "Choose 1 of 4 Specialized Frontier Tracks: Triton / FSDP / eBPF / Local-First",
+    displayPhaseNumber: 14,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 14: Specialized Production Tracks",
+    projectSlug: "phase-14-capstone-specialized-engineering-tracks",
+    title: "Choose 1 of 4 Specialized Advanced Engineering Tracks: WebGL / MLOps / Security / Triton",
     oneLineHook: "Delivered an advanced specialization milestone: Custom Triton GPU Kernels, Distributed FSDP Multi-GPU Training, Kernel-Level eBPF Security, or Local-First CRDTs.",
-    industryArchetype: "Specialized Frontier Engineering (Meta / OpenAI / Datadog / Linear)",
+    industryArchetype: "Specialized Frontier Engineering (OpenAI / Meta / Datadog / Linear)",
     employabilityRating: 100,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$195k – $275k (Staff / Principal Domain Specialist)",
-    technologies: ["OpenAI Triton", "PyTorch FSDP", "eBPF (Cilium/Tetragon)", "Yjs CRDTs", "GPU SRAM Kernels"],
-    systemArchitecture: "Track A: Local-First Canvas Engine || Track B: Distributed FSDP ZeRO-3 Pipeline || Track C: eBPF Kernel Threat Defense || Track D: Custom FlashAttention Triton Kernel.",
-    whyThisMatters2026: "Specialists earn 30-50% more than generalists. Demonstrating either custom GPU kernel programming (Triton), distributed multi-GPU training (FSDP), or kernel security (eBPF) establishes undeniable senior-level authority.",
+    salaryBand2026: "95k – 75k (Staff / Principal Domain Specialist)",
+    technologies: [
+      "OpenAI Triton",
+      "PyTorch FSDP",
+      "eBPF Cilium/Tetragon",
+      "Yjs CRDTs",
+      "GPU SRAM Kernels"
+    ],
+    storyScenario: "Senior and staff engineering roles require deep, specialized authority in one core technical domain. Whether training 70B parameter models across distributed clusters, writing custom GPU kernels that bypass PyTorch memory overhead, inspecting Linux kernel syscalls with eBPF for zero-trust security, or building local-first collaborative canvas engines with CRDTs, this milestone lets engineers demonstrate world-class depth in their chosen domain.",
+    problemToSolve: "Demonstrate deep specialization in one high-leverage systems domain: GPU kernel optimization, distributed training, kernel security, or real-time local-first collaboration.",
+    systemArchitecture: "Track A: Local-First Canvas Engine || Track B: Distributed FSDP ZeRO-3 Pipeline || Track C: eBPF Kernel Security Probe || Track D: Custom FlashAttention Triton Kernel.",
+    whyThisMatters2026: "Specialists who can write custom GPU kernels or orchestrate distributed multi-GPU training clusters solve the most expensive technical challenges in modern computing.",
     whatToBuild: [
       "Track A: Local-first multi-user collaborative canvas with Yjs CRDTs, IndexedDB persistence, and WebSockets.",
-      "Track B: Distributed FSDP ZeRO-3 training pipeline sharding 70B parameter models across multi-GPU nodes with Ring-AllReduce.",
-      "Track C: Kernel eBPF runtime security probe intercepting malicious syscalls and enforcing zero-trust service mesh.",
-      "Track D: Custom fused FlashAttention kernel in OpenAI Triton achieving >80% peak hardware TFLOPs on NVIDIA GPUs."
+      "Track B: Distributed FSDP ZeRO-3 training pipeline sharding 70B parameter models across multi-GPU nodes.",
+      "Track C: Kernel eBPF runtime security probe intercepting malicious syscalls and enforcing network policies.",
+      "Track D: Custom fused FlashAttention kernel in OpenAI Triton achieving high hardware efficiency on NVIDIA GPUs."
     ],
     automatedChecks: [
-      "Benchmark certification: verified against industry standard profiling tools (NVIDIA Nsight, flame graphs, or perf).",
-      "Production defense: passes exhaustive edge-case failure mode and resilience verification."
+      "Benchmark verification: verified against profiling tools (Nsight, flame graphs, or perf) confirming performance gains.",
+      "Production resilience: passes comprehensive edge-case and failure-mode validation suites."
     ],
     portfolioProof: {
-      githubRepoTemplate: "specialized-frontier-track-2026",
+      githubRepoTemplate: "specialized-engineering-track",
       liveDemoType: "Distributed Cluster",
       resumeImpactBullet: "Implemented custom FlashAttention GPU kernels in OpenAI Triton achieving 82% peak TFLOPs efficiency, reducing self-attention memory overhead by 70%."
     }
   },
-
-  // =========================================================================
-  // PHASE 14: Comprehensive Capstone & Production Defense
-  // =========================================================================
   {
     phaseId: 14,
-    phaseName: "Phase 14: Comprehensive Capstone Project & Production Defense",
-    projectSlug: "phase-14-capstone-enterprise-ai-platform",
-    title: "Enterprise Autonomous Software Intelligence Platform (The Master Synthesis)",
-    oneLineHook: "Architected, built, deployed, and defended a multi-tenant enterprise software intelligence platform with distributed microservices, hybrid RAG, LangGraph agents, Terraform GCP infrastructure, and a 60-minute technical defense.",
+    displayPhaseNumber: 15,
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Phase 15: Comprehensive Capstone Project & Production Defense",
+    projectSlug: "phase-15-capstone-master-ai-platform",
+    title: "CloudMatrix: Enterprise Multi-Tenant AI Platform with Distributed Microservices",
+    oneLineHook: "Architected, built, deployed, and defended a multi-tenant enterprise AI platform with distributed microservices, hybrid RAG, LangGraph agents, Terraform GCP infrastructure, and a technical defense.",
     industryArchetype: "Comprehensive Enterprise SaaS & AI Operations (Unicorn Grade)",
     employabilityRating: 100,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "$190k – $260k+ (Staff AI-Native Software Engineer)",
+    salaryBand2026: "90k – 60k+ (Staff AI-Native Software Engineer)",
     technologies: [
-      "Next.js 15", "FastAPI", "PostgreSQL RLS", "Apache Kafka", "pgvector HNSW",
-      "LangGraph", "Docker Sandbox", "Terraform", "Kubernetes (GKE)", "OpenTelemetry", "k6 (25k QPS)"
+      "Next.js 15",
+      "FastAPI",
+      "PostgreSQL RLS",
+      "Apache Kafka",
+      "pgvector HNSW",
+      "LangGraph",
+      "Docker Sandbox",
+      "Terraform",
+      "Kubernetes GKE",
+      "OpenTelemetry",
+      "k6 Load Testing"
     ],
-    systemArchitecture: "Public Gateway -> Next.js RSC Web App + Live SSE -> FastAPI Microservices -> Kafka Event Backbone -> Hybrid RAG + Autonomous Agent Workers -> Multi-Region PostgreSQL + Cloud Storage -> GKE / Terraform GitOps Infrastructure -> OpenTelemetry Observability.",
-    whyThisMatters2026: "This is the ultimate proof that you are not a tutorial follower or a prompt monkey. You have built a full-stack, distributed, cloud-native, AI-orchestrated enterprise platform with infrastructure as code, load testing reports, and automated CI/CD.",
+    storyScenario: "Modern technology enterprises need unified platforms that combine secure multi-tenant data access, intelligent autonomous agents, and real-time interactive user interfaces. Building disconnected prototypes fails to demonstrate enterprise readiness. CloudMatrix unifies every layer: a modern Next.js 15 interface, asynchronous FastAPI services, a Kafka event backbone, hybrid RAG with pgvector, LangGraph agent workflows, and automated Terraform infrastructure.",
+    problemToSolve: "Unify frontend streaming, asynchronous distributed microservices, multi-tenant hybrid RAG, and autonomous agent orchestration into a cohesive, production-grade cloud platform.",
+    systemArchitecture: "Public Gateway -> Next.js RSC Web App + Live SSE -> FastAPI Microservices -> Kafka Event Backbone -> Hybrid RAG + Agent Workers -> Multi-Region PostgreSQL + Cloud Storage -> GKE / Terraform Infrastructure -> OpenTelemetry Observability.",
+    whyThisMatters2026: "This represents the complete synthesis of an AI-Native Software Engineer: you have designed, built, load-tested, and defended a full-stack, distributed, cloud-native platform from first principles.",
     whatToBuild: [
-      "Full-stack architecture: Next.js 15 front-end, FastAPI asynchronous microservice fleet, and Kafka message backbone.",
-      "Multi-tenant data isolation: PostgreSQL with Row-Level Security (RLS) enforcing strict organizational boundaries.",
-      "Autonomous intelligence loop: LangGraph multi-agent workflow integrated with pgvector hybrid search and ephemeral execution sandboxes.",
-      "Production DevOps: modular Terraform provisioning GCP GKE clusters, Cloud SQL, and ArgoCD GitOps continuous delivery.",
-      "Empirical load validation: distributed k6 stress test proving 25,000 requests/second with error rates < 0.01%.",
-      "Production runbooks & defense: documented Disaster Recovery runbook, SLO burn-rate alerts, and 60-minute recorded architecture defense."
+      "Full-Stack Architecture: Next.js 15 frontend, FastAPI microservice fleet, and Kafka message backbone.",
+      "Multi-Tenant Data Layer: PostgreSQL with Row-Level Security (RLS) enforcing strict tenant boundaries.",
+      "Autonomous Intelligence Loop: LangGraph multi-agent workflow integrated with pgvector hybrid search and sandboxes.",
+      "Infrastructure as Code: modular Terraform provisioning GCP GKE clusters, Cloud SQL, and continuous delivery.",
+      "Distributed Load Validation: k6 stress testing proving 25,000 requests/second with error rates < 0.01%.",
+      "Production Runbooks & Defense: documented disaster recovery runbook, SLO alerts, and recorded architecture defense."
     ],
     automatedChecks: [
-      "25,000 QPS load test: survives sustained traffic spike with p99 latency < 200ms and zero data loss.",
-      "SOC2 / Security audit: zero critical vulnerabilities on Semgrep SAST, Trivy container scan, and OWASP ZAP penetration tests.",
-      "Automated chaos drill: automated cluster recovery from primary database kill under 60 seconds."
+      "25,000 QPS load test: sustains traffic spike with p99 latency < 200ms and zero data loss.",
+      "Security audit verification: zero critical vulnerabilities across Semgrep SAST, container scans, and OWASP testing.",
+      "Automated disaster drill: automated cluster recovery from simulated database failure under 60 seconds."
     ],
     portfolioProof: {
-      githubRepoTemplate: "enterprise-software-intelligence-platform",
+      githubRepoTemplate: "cloudmatrix-enterprise-ai-platform",
       liveDemoType: "Distributed Cluster",
-      resumeImpactBullet: "Architected and defended a multi-tenant AI intelligence platform supporting 25,000 QPS; orchestrated hybrid RAG, LangGraph agent workflows, and Kubernetes GitOps on GCP with zero CVEs."
+      resumeImpactBullet: "Architected and defended CloudMatrix, a multi-tenant AI platform supporting 25,000 QPS; orchestrated hybrid RAG, LangGraph agent workflows, and Kubernetes GitOps with zero CVEs."
     }
   }
 ];

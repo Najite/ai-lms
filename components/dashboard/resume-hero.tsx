@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
+import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
 
 interface ResumeHeroProps {
   onResumeWorkspace: (lessonId?: string) => void;
@@ -90,9 +91,9 @@ export function ResumeHero({
           <div className="flex flex-wrap items-center gap-2">
             <StatusChip status="brand" label="CONTINUE LEARNING" />
             <span className="text-xs font-mono text-[#8a8f98]">
-              {activeLesson?.phase_id || "phase-0"}
+              {activeLesson ? formatPhaseTitle(activeLesson.phase_id) : "Phase 1"}
             </span>
-            <span className="text-xs font-mono text-[#383b42]">•</span>
+            <span className="text-[#383b42]">•</span>
             <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Verified in Supabase Database
@@ -100,7 +101,11 @@ export function ResumeHero({
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-bold text-[#f7f8f8] tracking-tight">
-            {isLoading ? "Loading next lesson from database..." : activeLesson?.title || "Lesson 0.1: Bits, Bytes, & Number Representations"}
+            {isLoading
+              ? "Loading next lesson from database..."
+              : activeLesson
+              ? parseLessonCoordinates(activeLesson.id, activeLesson.title).displayTitle
+              : "Lesson 1.1: Bits, Bytes, & Number Representations"}
           </h2>
 
           <p className="text-sm text-[#8a8f98] max-w-2xl leading-relaxed">

@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { formatPhaseTitle, parseLessonCoordinates } from "@/lib/curriculum-numbering";
 
 export interface DatabasePhase {
   id: string;
@@ -99,16 +100,24 @@ export function transformDbPhases(
   nodesByPhase: Record<string, DatabaseNode[]>
 ): PhaseViewModel[] {
   return dbPhases.map((p) => {
-    const phaseNum = p.order_index;
-    const nodes = nodesByPhase[p.id] || [];
+    const rawPhaseNum = p.order_index;
+    const displayPhaseNum = rawPhaseNum + 1;
+    const rawNodes = nodesByPhase[p.id] || [];
+    const nodes = rawNodes.map((n) => {
+      const coords = parseLessonCoordinates(n.id, n.title);
+      return {
+        ...n,
+        title: coords.displayTitle,
+      };
+    });
     const lessonsCount = nodes.length;
 
     // Extract subtopics or use realistic 5 per lesson
     const subtopicsCount = lessonsCount * 5;
 
-    // Special handling for Phase 13 standalone tracks
+    // Special handling for Phase 13 standalone tracks (Phase 14 in 1-based)
     let tracks: StandaloneTrack[] | undefined = undefined;
-    if (phaseNum === 13) {
+    if (rawPhaseNum === 13) {
       tracks = (["A", "B", "C", "D"] as const).map((trackCode) => {
         const def = SPECIALIZED_TRACK_DEFINITIONS[trackCode];
         const trackNodes = nodes.filter((n) => n.title.includes(`Track ${trackCode}`));
@@ -131,13 +140,13 @@ export function transformDbPhases(
     );
     const capstoneTitle = capstoneNode
       ? capstoneNode.title
-      : phaseNum === 13
+      : rawPhaseNum === 13
       ? "Choose 1 of 4 Standalone Specialization Capstones"
-      : `Phase ${phaseNum} Synthesis Capstone Project`;
+      : `Phase ${displayPhaseNum} Synthesis Capstone Project`;
 
     // Extract key topics from lesson titles
     const keyTopics =
-      phaseNum === 13
+      rawPhaseNum === 13
         ? [
             "Track A: Enterprise Product Engineering",
             "Track B: MLOps & Distributed Training (FSDP)",
@@ -150,21 +159,21 @@ export function transformDbPhases(
           });
 
     return {
-      id: phaseNum,
+      id: displayPhaseNum,
       phaseId: p.id,
-      slug: `phase-${String(phaseNum).padStart(2, "0")}`,
-      title: p.title,
-      category: getCategoryForPhase(phaseNum),
+      slug: `phase-${String(displayPhaseNum).padStart(2, "0")}`,
+      title: formatPhaseTitle(rawPhaseNum, p.title),
+      category: getCategoryForPhase(rawPhaseNum),
       lessonsCount,
       subtopicsCount,
-      capstonesCount: phaseNum === 13 ? 4 : 1,
+      capstonesCount: rawPhaseNum === 13 ? 4 : 1,
       capstoneTitle,
       description:
-        phaseNum === 13
+        rawPhaseNum === 13
           ? "Four completely independent, standalone engineering tracks designed for advanced career specialization. Select any single track or master all four in parallel."
           : p.description,
       keyTopics: keyTopics.length > 0 ? keyTopics : ["Core Foundations", "Verification Suite", "Architectural Invariants"],
-      isSpecializedPhase: phaseNum === 13,
+      isSpecializedPhase: rawPhaseNum === 13,
       tracks,
     };
   });

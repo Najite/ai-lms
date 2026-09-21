@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
+import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
 
 interface ContinueLearningQueueProps {
   onResumeLesson: (lessonId: string) => void;
@@ -91,11 +92,15 @@ export function ContinueLearningQueue({
                 <Play className="w-3.5 h-3.5 fill-current" />
                 ACTIVE LESSON
               </span>
-              <span className="text-[#8a8f98]">{activeLesson?.phase_id || "phase-0"}</span>
+              <span className="text-[#8a8f98]">
+                {activeLesson ? formatPhaseTitle(activeLesson.phase_id) : "Phase 1"}
+              </span>
             </div>
 
             <h4 className="text-base font-bold text-[#f7f8f8] group-hover:text-white transition-colors line-clamp-2">
-              {activeLesson?.title || "Lesson 0.1: Bits, Bytes, & Number Representations"}
+              {activeLesson
+                ? parseLessonCoordinates(activeLesson.id, activeLesson.title).displayTitle
+                : "Lesson 1.1: Bits, Bytes, & Number Representations"}
             </h4>
 
             <p className="text-xs text-[#8a8f98] line-clamp-2 leading-relaxed">

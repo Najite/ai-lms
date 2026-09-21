@@ -43,6 +43,7 @@ import {
 } from "@/lib/progress-tracker";
 import { COMPREHENSIVE_EXERCISES_CATALOG, ExerciseItem } from "@/lib/exercises-catalog";
 import { ENRICHED_MODULE_HANDBOOKS } from "@/lib/enriched-handbooks";
+import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
 import { ExerciseFormatter } from "./exercise-formatter";
 
 interface WorkspaceLesson {
@@ -145,13 +146,16 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
             }
 
             const enriched = ENRICHED_MODULE_HANDBOOKS[d.id];
-            const finalTitle = enriched?.title || d.title;
+            const rawTitle = enriched?.title || d.title;
+            const coords = parseLessonCoordinates(d.id, rawTitle);
+            const finalTitle = coords.displayTitle;
+            const finalPhase = formatPhaseTitle(d.phase_id);
             const finalHandbook = enriched?.handbook || d.handbook_markdown || "Handbook content is being synthesized.";
 
             return {
               id: d.id,
               slug: d.slug,
-              phase: d.phase_id,
+              phase: finalPhase,
               title: finalTitle,
               handbook: finalHandbook,
               starterCode: sc || "# Write solution here\npass\n",

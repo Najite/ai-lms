@@ -264,5 +264,168 @@ print("Landed smoothly!")
 
 Click **Complete Theory & Launch Exercise** below to practice writing a clean, simple loop!
 `
+  },
+  "node-0-4": {
+    title: "Lesson 0.4: Functions & Modularity — Building Reusable Tools",
+    handbook: `# Lesson 0.4: Functions & Modularity — Building Reusable Tools
+
+> **Phase**: Phase 0 — First Steps in Programming  
+> **Prerequisites**: Lessons 0.1, 0.2 & 0.3  
+> **What You Will Learn**: How to bundle instructions into reusable machines called functions so you never repeat yourself.  
+
+---
+
+## 🏭 1. What Is a Function? (The Processing Machine)
+
+Imagine you work in a bakery. Every time an order comes in, you don't build a new oven from scratch. You already have an oven machine! You simply:
+1. Feed in the ingredients (**Input Parameters**).
+2. The oven follows its preset steps (**Function Body**).
+3. Out comes a warm loaf of bread (**Return Value**).
+
+In programming, a **function** is exactly that: a self-contained, labeled machine that takes input, does a specific task, and returns the result.
+
+![How Functions Work: Inputs, Steps, and Output Return Values](/diagrams/functions_machines_diagram.jpg)
+
+### Why Functions Make You a Better Engineer
+- **Reusability**: Write code once, use it thousands of times.
+- **Organization**: Break a massive program into tiny, manageable tools.
+- **Bug Prevention**: When a calculation needs fixing, you fix it in one place, not in 50 different files.
+
+---
+
+## 🛠️ 2. Writing a Function in Python
+
+Here is how simple defining a function is:
+
+\`\`\`python
+# Step 1: Define the function using 'def'
+def calculate_fuel(distance_km: float) -> float:
+    # 1 km needs 0.08 liters of fuel
+    liters_needed = distance_km * 0.08
+    return round(liters_needed, 2)
+
+# Step 2: Call the function anytime you need it!
+trip_a = calculate_fuel(120.0)
+trip_b = calculate_fuel(450.5)
+
+print(f"Trip A needs {trip_a}L, Trip B needs {trip_b}L")
+\`\`\`
+
+---
+
+## 🎯 3. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to build your first modular function!
+`
+  },
+  "node-0-5": {
+    title: "Lesson 0.5: Collections & Arrays — Organizing Items in Lists",
+    handbook: `# Lesson 0.5: Collections & Arrays — Organizing Items in Lists
+
+> **Phase**: Phase 0 — First Steps in Programming  
+> **Prerequisites**: Lessons 0.1 to 0.4  
+> **What You Will Learn**: How to store multiple related items in a single ordered list, access items by index, and filter data.  
+
+---
+
+## 🗄️ 1. What Is a List? (The Numbered Locker System)
+
+Instead of creating 50 separate variables like \`user1\`, \`user2\`, \`user3\`..., computers group related items into a single container called a **List** (or **Array**).
+
+Think of a list as a **row of numbered storage lockers**:
+- Every locker has an **index number** marking its exact position.
+- In programming, counting almost always starts at **0** (zero-based indexing)!
+- Locker \`0\` holds the first item, Locker \`1\` holds the second item, and so on.
+
+![How Lists Work: Indexed Elements Starting at Position Zero](/diagrams/lists_arrays_diagram.jpg)
+
+---
+
+## 🔢 2. Common List Operations in Python
+
+### Creating and Accessing Elements
+\`\`\`python
+# Storing server names in a list
+servers = ["alpha", "beta", "gamma", "delta"]
+
+# Accessing by position (Index 0 is the first!)
+print("Primary server:", servers[0])  # prints: alpha
+print("Backup server:", servers[1])   # prints: beta
+\`\`\`
+
+### Adding and Filtering
+\`\`\`python
+# Adding a new server to the end:
+servers.append("epsilon")
+
+# Filtering items using a simple loop:
+scores = [45, 88, 92, 59, 100]
+high_scores = []
+
+for score in scores:
+    if score >= 80:
+        high_scores.append(score)
+
+print("High scores:", high_scores) # [88, 92, 100]
+\`\`\`
+
+---
+
+## 🎯 3. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to filter and transform lists like a pro!
+`
+  },
+  "node-0-6": {
+    title: "Lesson 0.6: Dictionaries & Hash Maps — Ultra-Fast Lookups",
+    handbook: `# Lesson 0.6: Dictionaries & Hash Maps — Ultra-Fast Lookups
+
+> **Phase**: Phase 0 — First Steps in Programming  
+> **Prerequisites**: Lessons 0.1 to 0.5  
+> **What You Will Learn**: How hash maps allow instant O(1) data lookups using unique keys, and why they power modern databases and caches.  
+
+---
+
+## 📖 1. What Is a Dictionary / Hash Map? (The Contact List)
+
+When you look up a contact in your phone, you don't scroll through 2,000 phone numbers one by one to see which belongs to your best friend. Instead, you search their **name**, and their phone number immediately pops up!
+
+A **Dictionary** (or **Hash Map**) pairs a unique **Key** with a **Value**:
+- **Key**: The unique identifier (like a user email, ID, or setting name).
+- **Value**: The data linked to that key (like user profile, token, or score).
+
+![Understanding Hash Maps and Dictionaries: Key to Value Mapping](/diagrams/hashmap_dictionary_diagram.jpg)
+
+### Why Engineers Love Hash Maps
+Searching through an unsorted list of 10 million items takes 10 million comparisons.  
+Searching a Hash Map takes **1 single step** ($O(1)$ constant time), whether you have 10 items or 10 billion items!
+
+---
+
+## ⚡ 2. How to Use Dictionaries in Python
+
+\`\`\`python
+# Creating a user session dictionary
+user_session = {
+    "user_id": "usr_9481",
+    "name": "Sarah Chen",
+    "role": "systems_architect",
+    "active": True
+}
+
+# Instant lookup by key
+print("User Name:", user_session["name"])
+print("Role:", user_session["role"])
+
+# Adding a new key-value pair
+user_session["last_login"] = "2026-09-21"
+\`\`\`
+
+---
+
+## 🎯 3. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to build a high-performance frequency map and simulated cache!
+`
   }
 };

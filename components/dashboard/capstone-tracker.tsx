@@ -26,6 +26,7 @@ import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { PRODUCTION_CAPSTONES_2026, ProductionCapstoneSpec } from "@/lib/production-capstones";
+import { formatPhaseTitle } from "@/lib/curriculum-numbering";
 
 export interface CapstoneProject extends ProductionCapstoneSpec {
   id: string;
@@ -66,6 +67,7 @@ export function CapstoneTracker() {
         const items: CapstoneProject[] = phases.map((p) => {
           const pNodes = nodes.filter((n) => n.phase_id === p.id);
           const spec = PRODUCTION_CAPSTONES_2026.find((s) => s.phaseId === p.order_index) || PRODUCTION_CAPSTONES_2026[0];
+          const displayPhaseNum = p.order_index + 1;
 
           // Check real completion status based on database lesson IDs
           const completedInPhase = pNodes.filter((n) => completedLessons.includes(n.id)).length;
@@ -78,9 +80,10 @@ export function CapstoneTracker() {
 
           return {
             ...spec,
-            id: `cap-${String(p.order_index).padStart(2, "0")}`,
+            id: `cap-${String(displayPhaseNum).padStart(2, "0")}`,
             phaseId: p.order_index,
-            phaseName: p.title,
+            displayPhaseNumber: displayPhaseNum,
+            phaseName: formatPhaseTitle(p.order_index, p.title),
             status,
             repoUrl: undefined,
             lastScore: status === "VERIFIED" ? 100 : undefined,
@@ -219,10 +222,15 @@ export function CapstoneTracker() {
                 )}
               >
                 <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[10px] font-mono text-[#5e6ad2] font-semibold">
-                      PHASE {String(cap.phaseId).padStart(2, "0")}
+                      PHASE {String(cap.displayPhaseNumber || cap.phaseId + 1).padStart(2, "0")}
                     </span>
+                    {cap.sector && (
+                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">
+                        {cap.sector}
+                      </span>
+                    )}
                     <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#5e6ad2]/10 text-[#7b87f5] border border-[#5e6ad2]/30">
                       {cap.employabilityBadge}
                     </span>
@@ -279,8 +287,16 @@ export function CapstoneTracker() {
                     <span className="text-xs font-mono text-[#8a8f98]">
                       {selectedCapstone.phaseName}
                     </span>
+                    {selectedCapstone.sector && (
+                      <>
+                        <span className="text-[#383b42]">•</span>
+                        <span className="text-xs font-mono text-[#10b981] font-semibold bg-[#10b981]/10 px-2 py-0.5 rounded border border-[#10b981]/30">
+                          {selectedCapstone.sector}
+                        </span>
+                      </>
+                    )}
                     <span className="text-[#383b42]">•</span>
-                    <span className="text-xs font-mono text-[#10b981] font-semibold">
+                    <span className="text-xs font-mono text-[#5e6ad2] font-semibold">
                       {selectedCapstone.employabilityRating}% Employability Match
                     </span>
                   </div>
@@ -303,6 +319,32 @@ export function CapstoneTracker() {
                 </span>
               </div>
 
+              {/* Enterprise Story & Scenario */}
+              {selectedCapstone.storyScenario && (
+                <div className="p-4 rounded-lg bg-[#0b0c0e] border border-[#1f2126] space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#5e6ad2] uppercase tracking-wider font-semibold">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>The Story & Enterprise Scenario</span>
+                  </div>
+                  <p className="text-xs text-[#d0d6e0] leading-relaxed font-sans">
+                    {selectedCapstone.storyScenario}
+                  </p>
+                </div>
+              )}
+
+              {/* Problem to Solve */}
+              {selectedCapstone.problemToSolve && (
+                <div className="p-4 rounded-lg bg-[#0d0e11] border border-[#23252a] space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#f59e0b] uppercase tracking-wider font-semibold">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>The Engineering Problem to Solve</span>
+                  </div>
+                  <p className="text-xs text-[#d0d6e0] leading-relaxed font-sans">
+                    {selectedCapstone.problemToSolve}
+                  </p>
+                </div>
+              )}
+
               {/* 2026 Industry Reality Check & Salary Band */}
               <div className="p-4 rounded-lg bg-[#0d0e11] border border-[#23252a] space-y-2">
                 <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-mono">
@@ -315,7 +357,7 @@ export function CapstoneTracker() {
                   </span>
                 </div>
                 <p className="text-xs text-[#d0d6e0] leading-relaxed font-sans">
-                  <strong>Why This Wins in 2026:</strong> {selectedCapstone.whyThisMatters2026}
+                  <strong>Engineering Rationale:</strong> {selectedCapstone.whyThisMatters2026}
                 </p>
               </div>
 
@@ -436,21 +478,55 @@ export function CapstoneTracker() {
                 {feedback && (
                   <div
                     className={cn(
-                      "p-3 rounded border font-mono text-xs",
+                      "p-3.5 rounded-lg border font-mono text-xs space-y-2.5",
                       feedback.success
                         ? "bg-[#10b981]/10 border-[#10b981]/30 text-[#10b981]"
                         : "bg-[#ef4444]/10 border-[#ef4444]/30 text-[#ef4444]"
                     )}
                   >
-                    <div className="flex items-center gap-2 font-semibold">
-                      {feedback.success ? (
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                      ) : (
-                        <AlertTriangle className="w-3.5 h-3.5" />
+                    <div className="flex items-center justify-between gap-2 font-semibold">
+                      <div className="flex items-center gap-2">
+                        {feedback.success ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : (
+                          <AlertTriangle className="w-4 h-4" />
+                        )}
+                        <span>{feedback.message}</span>
+                      </div>
+                      {feedback.details?.overallScore !== undefined && (
+                        <span className="text-[11px] px-2 py-0.5 rounded bg-black/40 border border-current">
+                          Score: {feedback.details.overallScore}/100
+                        </span>
                       )}
-                      <span>{feedback.message}</span>
                     </div>
-                    {feedback.details && (
+
+                    {/* Multi-point Grading Rubric Scorecard */}
+                    {feedback.details?.checks && feedback.details.checks.length > 0 && (
+                      <div className="pt-2 border-t border-current/20 space-y-1.5 text-[11px]">
+                        <div className="text-[#8a8f98] uppercase tracking-wider font-bold">
+                          Automated CI Grading Scorecard:
+                        </div>
+                        <div className="grid grid-cols-1 gap-1.5">
+                          {feedback.details.checks.map((chk: any, idx: number) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between p-2 rounded bg-black/30 border border-white/5"
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className={chk.passed ? "text-[#10b981]" : "text-[#eb5757]"}>
+                                  {chk.passed ? "✓" : "✗"}
+                                </span>
+                                <span className="text-[#f7f8f8]">{chk.name}</span>
+                                <span className="text-[#8a8f98] text-[10px]">({chk.details})</span>
+                              </div>
+                              <span className="text-[#d0d6e0] font-semibold">{chk.score} pts</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {feedback.details && !feedback.details.checks && (
                       <div className="mt-2 text-[11px] text-[#8a8f98] space-y-0.5">
                         <div>Repository: {feedback.details.repo}</div>
                         <div>Stars: {feedback.details.stars}</div>
