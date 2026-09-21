@@ -652,3 +652,537 @@ export const PRODUCTION_CAPSTONES_2026: ProductionCapstoneSpec[] = [
     }
   }
 ];
+
+export interface ComprehensiveEnterpriseCapstoneSpec {
+  id: string;
+  orderIndex: number;
+  slug: string;
+  title: string;
+  oneLineHook: string;
+  sector: EnterpriseSector;
+  industryArchetype: string;
+  employabilityRating: number;
+  salaryBand2026: string;
+  frontendStack: string[];
+  backendStack: string[];
+  aiStack: string[];
+  storyScenario: string;
+  problemToSolve: string;
+  systemArchitecture: string;
+  whyThisMatters2026: string;
+  deliverables: {
+    frontend: string[];
+    backend: string[];
+    aiPipeline: string[];
+    devOps: string[];
+  };
+  automatedChecks: string[];
+  portfolioProof: {
+    githubRepoTemplate: string;
+    liveDemoType: "Full-Stack Web Platform";
+    resumeImpactBullet: string;
+  };
+}
+
+export const COMPREHENSIVE_ENTERPRISE_CAPSTONES: ComprehensiveEnterpriseCapstoneSpec[] = [
+  {
+    id: "grand-01",
+    orderIndex: 1,
+    slug: "omnipulse-customer-intelligence",
+    title: "OmniPulse: Enterprise Customer Intelligence & AI Churn Copilot",
+    oneLineHook: "Full-stack AI customer analytics platform with virtualized 60 FPS data grids, FastAPI multi-tenant backend, hybrid RAG documentation search, and autonomous churn prediction agents.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Gainsight / Mixpanel / Datadog / HubSpot AI Operations",
+    employabilityRating: 99,
+    salaryBand2026: "$165k – $220k (Senior Full-Stack AI Engineer)",
+    frontendStack: ["Next.js 15 App Router", "React Server Components", "TanStack Virtual Grids", "Recharts / Canvas 2D", "TailwindCSS"],
+    backendStack: ["FastAPI (Python 3.12)", "PostgreSQL with Row-Level Security", "Redis Sliding-Window Rate Limiting", "Celery Task Queue"],
+    aiStack: ["pgvector HNSW Dense Embeddings", "BM25 Sparse Keyword Fusion", "Claude / GPT-4o Streaming", "LangGraph Churn Reasoning Loop"],
+    storyScenario: "Enterprise SaaS companies with thousands of accounts struggle to detect silent churn before contracts renew. Traditional analytics show static graphs after customers already disengage. OmniPulse continuously monitors multi-tenant usage streams, calculates real-time customer health scores via background workers, and empowers account managers with an AI copilot that synthesizes support tickets, usage drops, and CRM notes into automated retention playbooks.",
+    problemToSolve: "Ingest and analyze millions of customer usage events in real time without UI lag, while generating auditable, fact-grounded retention recommendations without hallucinations.",
+    systemArchitecture: "Next.js 15 Client -> Virtualized 60 FPS Grid -> FastAPI Gateway (JWT + Redis Rate Limiter) -> PostgreSQL RLS (Multi-Tenant) + pgvector -> LangGraph Agent (Event Analysis + Hybrid RAG) -> SSE Live Streamer.",
+    whyThisMatters2026: "Combines modern high-density web frontend engineering with multi-tenant relational schemas and practical LLM agent workflows that solve immediate enterprise revenue retention problems.",
+    deliverables: {
+      frontend: [
+        "Virtualized 60 FPS data grid handling 50,000 customer records with zero DOM lag.",
+        "SSE streaming copilot chat with Markdown tables and token-by-token rendering.",
+        "Real-time health score telemetry cards with optimistic filter updates and zero layout shift."
+      ],
+      backend: [
+        "FastAPI multi-tenant REST API enforcing PostgreSQL Row-Level Security per customer tenant.",
+        "Redis sliding-window rate limiters preventing noisy-neighbor API abuse.",
+        "Async task workers processing usage event queues with exponential backoff."
+      ],
+      aiPipeline: [
+        "Hybrid RAG combining pgvector HNSW with BM25 sparse keyword ranking for policy retrieval.",
+        "LangGraph multi-step agent decomposing customer risk indicators and proposing mitigation actions.",
+        "Structured JSON schema output validation guaranteeing valid action payloads every time."
+      ],
+      devOps: [
+        "Docker Compose containing Next.js, FastAPI, PostgreSQL (pgvector extension), and Redis.",
+        "GitHub Actions CI pipeline running Vitest frontend tests and Pytest backend invariants.",
+        "Automated database migration scripts with rollback capability."
+      ]
+    },
+    automatedChecks: [
+      "Tenant isolation: tenant A queries cannot retrieve any events belonging to tenant B under any condition.",
+      "Rendering performance: grid scrolling maintains 60 FPS during continuous 100-event per second live updates.",
+      "Idempotent event processing: submitting identical telemetry event IDs twice increments count exactly once."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "omnipulse-enterprise-intelligence",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Architected OmniPulse, an enterprise customer intelligence platform in Next.js 15 and FastAPI; integrated hybrid pgvector RAG and LangGraph agents with PostgreSQL RLS across 50,000 accounts."
+    }
+  },
+  {
+    id: "grand-02",
+    orderIndex: 2,
+    slug: "cogniflow-sprint-agent",
+    title: "CogniFlow: Autonomous Engineering Sprint Manager & AI Issue Resolution Agent",
+    oneLineHook: "Keyboard-driven Linear-grade sprint manager with optimistic state sync, WebSockets, and a multi-agent code investigation and pull request generation system.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Linear / GitHub Copilot Workspace / Cognition Devin / Jira Cloud",
+    employabilityRating: 100,
+    salaryBand2026: "$175k – $235k (Principal Product / AI Systems Architect)",
+    frontendStack: ["Next.js 15", "Radix UI Primitives", "Command Palette (Cmd+K)", "Optimistic Mutations", "TailwindCSS"],
+    backendStack: ["Node.js / TypeScript", "PostgreSQL", "WebSocket Gateway", "Docker Sandbox Execution Pool"],
+    aiStack: ["Tree-sitter AST Parser", "LangGraph Cyclical State Graph", "Multi-Agent Team (Planner, Coder, Reviewer)", "Anthropic Claude API"],
+    storyScenario: "Engineering teams spend significant sprint velocity triaging vague bug reports and reproducing errors manually. CogniFlow provides an ultra-snappy keyboard-first issue tracker. When an engineer flags an issue for autonomous triage, CogniFlow spawns an isolated Docker worker, parses the repository AST to locate affected functions, drafts a reproduction test, fixes the code, and submits a verified pull request for human review.",
+    problemToSolve: "Eliminate manual bug triage friction while guaranteeing that AI-generated patches execute and pass unit tests safely inside isolated sandboxes before human review.",
+    systemArchitecture: "Linear UI Shell -> WebSocket Connection Pool -> Issue Orchestrator -> Tree-sitter Code Indexer -> LangGraph Multi-Agent Engine -> Ephemeral Docker Test Sandbox -> GitHub PR Hook.",
+    whyThisMatters2026: "Represents the vanguard of AI-native engineering tools: combining keyboard-first ultra-dense UI with real autonomous multi-agent systems that test and verify their own code.",
+    deliverables: {
+      frontend: [
+        "Ultra-fast keyboard-first issue management interface with instant Cmd+K command palette.",
+        "Optimistic UI updates with automatic rollback on network failure.",
+        "Live multi-agent execution inspector showing real-time agent thoughts, AST diffs, and terminal outputs."
+      ],
+      backend: [
+        "Real-time WebSocket event broadcaster synchronizing issue state across all connected engineers.",
+        "Ephemeral Docker container supervisor managing safe execution of test suites with resource limits.",
+        "GitHub App OAuth integration handling repository cloning, branch creation, and PR automation."
+      ],
+      aiPipeline: [
+        "Tree-sitter symbol graph extracting functions, classes, and call hierarchies from repository trees.",
+        "Cyclical LangGraph supervisor coordinating Planner, Coder, and Tester agents across iterations.",
+        "Self-correcting unit test loop iteratively inspecting Pytest error traces to refine code patches."
+      ],
+      devOps: [
+        "Multi-stage Dockerfile packaging development sandbox with locked toolchains.",
+        "Automated integration tests checking sandbox security boundaries.",
+        "Kubernetes Helm charts ready for horizontal worker pod scaling."
+      ]
+    },
+    automatedChecks: [
+      "Zero-latency UI: local optimistic mutations update state in under 16ms before server acknowledgment.",
+      "Sandbox security: agent execution cannot escape container network boundaries or access host environment secrets.",
+      "Self-repair convergence: agent resolves benchmark bug and achieves green test suite within 3 iterations."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "cogniflow-sprint-agent-platform",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Engineered CogniFlow, a keyboard-driven sprint manager with LangGraph multi-agent sandboxes in Next.js 15; automated issue triage and verified PR creation with sub-16ms UI responsiveness."
+    }
+  },
+  {
+    id: "grand-03",
+    orderIndex: 3,
+    slug: "docushield-compliance-auditor",
+    title: "DocuShield: Enterprise Regulatory Compliance & Automated Audit Verification Suite",
+    oneLineHook: "Enterprise compliance platform featuring multi-page PDF canvas inspection, interactive bounding-box citations, tamper-evident SHA-256 hash ledgers, and hybrid RAG search.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Vanta / Ironclad / Harvey AI / Big 4 Automated Audit Platforms",
+    employabilityRating: 98,
+    salaryBand2026: "$160k – $215k (Senior Enterprise Solutions Engineer)",
+    frontendStack: ["Next.js 15", "PDF.js / Canvas 2D", "Interactive Bounding Box Annotations", "Split-Screen Diff View", "TailwindCSS"],
+    backendStack: ["Python FastAPI", "PostgreSQL", "S3-Compatible Object Storage (MinIO)", "Apache Kafka Event Bus"],
+    aiStack: ["Dense Document Embeddings (pgvector)", "Reciprocal Rank Fusion (RRF)", "Cross-Encoder Re-Ranking", "Cryptographic Audit Chain (SHA-256)"],
+    storyScenario: "Enterprises undergoing SOC2, HIPAA, and ISO27001 audits must review thousands of pages of vendor contracts and policy PDFs against strict legal checklists. Human review takes months and misses fine-print exclusions. DocuShield ingests complex multi-column documents, extracts precise clauses with optical bounding boxes, links claims to exact PDF coordinates, and signs every verification to an immutable hash ledger.",
+    problemToSolve: "Prevent compliance hallucinations by anchoring every audit determination to visual, pixel-accurate bounding box citations in original vendor documents backed by cryptographic integrity proofs.",
+    systemArchitecture: "Document Upload -> OCR Layout Parser -> MinIO Storage -> pgvector Chunking -> Hybrid Search + Cross-Encoder -> Next.js PDF Canvas Viewer with Coordinate Bounding Boxes -> Immutable Hash Ledger.",
+    whyThisMatters2026: "Enterprise legal and compliance teams demand absolute zero-hallucination guarantees. Demonstrates verifiable AI with visual citations and cryptographic audit trails.",
+    deliverables: {
+      frontend: [
+        "Interactive PDF viewer rendering vector bounding boxes over cited policy clauses with zero coordinate drift.",
+        "Split-screen comparison tool showing side-by-side contract diffs and compliance status badges.",
+        "Audit trail inspector allowing auditors to download cryptographically signed verification reports."
+      ],
+      backend: [
+        "Document ingestion worker splitting large PDFs into semantic chunks with bounding box coordinate metadata.",
+        "S3-compatible object storage handling secure multi-tenant PDF file uploads and retrieval.",
+        "Cryptographic SHA-256 audit ledger linking every AI extraction to a tamper-evident hash block."
+      ],
+      aiPipeline: [
+        "Hybrid dense and sparse search combining pgvector HNSW embeddings with BM25 keyword matching.",
+        "Cross-Encoder re-ranker evaluating top-20 retrieved clauses for legal precision.",
+        "Strict verification harness enforcing: if not found in cited context, explicitly return NOT_FOUND."
+      ],
+      devOps: [
+        "MinIO local S3 emulation container for seamless local development without cloud credentials.",
+        "Automated tests validating coordinate projection math across different display DPIs.",
+        "Terraform scripts provisioning cloud storage buckets and encrypted PostgreSQL instances."
+      ]
+    },
+    automatedChecks: [
+      "Citation grounding: 100% of generated compliance summaries contain verifiable page numbers and bounding-box coordinates.",
+      "Tamper detection: altering a verified audit record in the database triggers cryptographic hash mismatch alerts.",
+      "Zero-hallucination guard: queries for non-existent policy clauses return confirmed 0 matches, never synthetic text."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "docushield-compliance-auditor",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Built DocuShield, an automated compliance auditing platform in Next.js 15; combined PDF canvas bounding-box citations with pgvector hybrid RAG and SHA-256 tamper-evident ledgers."
+    }
+  },
+  {
+    id: "grand-04",
+    orderIndex: 4,
+    slug: "mediscribe-clinical-charting-copilot",
+    title: "MediScribe: Real-Time Clinical Decision Support & AI Charting Copilot",
+    oneLineHook: "HIPAA-aligned web application for physicians with low-latency streaming medical note generation, structured FHIR JSON extraction, and real-time drug contraindication detection.",
+    sector: "Healthcare & Clinical Informatics",
+    industryArchetype: "Epic Systems / Nuance DAX / Ambience Healthcare / Abridge",
+    employabilityRating: 100,
+    salaryBand2026: "$170k – $230k (Clinical AI Systems / Healthcare Tech Lead)",
+    frontendStack: ["Next.js 15", "Web Audio API / MediaRecorder", "WebSocket Streaming Display", "Rich Clinical Text Editor", "TailwindCSS"],
+    backendStack: ["FastAPI (Python)", "PostgreSQL", "Redis Event Cache", "Celery Worker Fleet"],
+    aiStack: ["Streaming Speech-to-Text", "Local LLM Inference (Mistral-7B)", "Pydantic FHIR Schema Extraction", "Drug Interaction Detection Engine"],
+    storyScenario: "Physicians spend hours each evening typing clinical notes and entering billing codes into EHR systems, leading to severe burnout. Fatigued clinicians also miss rare drug interactions across complex patient histories. MediScribe streams physician-patient conversation audio over WebSockets, generates clinical SOAP notes in real time, extracts structured FHIR JSON records, and proactively highlights medication contraindications against patient allergy profiles.",
+    problemToSolve: "Transform spoken conversational audio into clean, structured, standardized clinical documentation while enforcing HIPAA compliance and zero medical hallucination.",
+    systemArchitecture: "Web Audio Stream -> WebSocket Gateway -> Audio Buffer -> Streaming STT -> LLM SOAP Summarizer -> Pydantic FHIR Parser -> Drug Contraindication Check -> React Editor.",
+    whyThisMatters2026: "Healthcare AI demands real-time streaming, strict privacy handling, structured FHIR validation, and life-critical safety checks — the highest-stakes engineering environment possible.",
+    deliverables: {
+      frontend: [
+        "In-browser audio capture with real-time waveform visualization and zero audio frame drops.",
+        "Interactive SOAP note editor with streaming word-by-word insertion and instant undo/redo history.",
+        "Prominent contraindication warning banner with severity indicators and drug reference documentation links."
+      ],
+      backend: [
+        "WebSocket audio streaming gateway handling PCM audio buffers with backpressure management.",
+        "HIPAA data scrubber redacting Social Security numbers and contact details before AI processing.",
+        "REST API serving standardized FHIR Patient, Condition, and MedicationStatement resources."
+      ],
+      aiPipeline: [
+        "Streaming transcription pipeline generating synchronized timestamps for each spoken phrase.",
+        "Deterministic Pydantic validation extracting diagnosis codes (ICD-10) and prescription dosages.",
+        "Algorithmic drug interaction engine cross-referencing proposed medications against active patient allergy profiles."
+      ],
+      devOps: [
+        "Zero-leakage local container environment ensuring patient audio never touches unauthorized external servers.",
+        "Comprehensive mock patient dataset (synthea-based) for end-to-end integration testing.",
+        "k6 load test simulating 50 simultaneous consultations without audio packet degradation."
+      ]
+    },
+    automatedChecks: [
+      "HIPAA redaction: PII including SSNs, phone numbers, and home addresses is scrubbed with 100% precision before inference.",
+      "FHIR validation: 100% of extracted patient charts validate against the official HL7 FHIR R4 JSON schema.",
+      "Drug safety trigger: prescribing penicillin to a penicillin-allergic mock patient triggers a blocking clinical warning."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "mediscribe-clinical-decision-support",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Built MediScribe, a HIPAA-compliant clinical charting copilot in Next.js 15 and FastAPI; automated streaming SOAP note generation and FHIR JSON extraction with validated drug interaction screening."
+    }
+  },
+  {
+    id: "grand-05",
+    orderIndex: 5,
+    slug: "ledgermind-fraud-detection-hub",
+    title: "LedgerMind: High-Volume Financial Ledger & AI Fraud Investigation Suite",
+    oneLineHook: "Double-entry financial ledger platform with event-driven CQRS streaming, sub-second transaction reconciliation, and interactive graph-based AI fraud investigation.",
+    sector: "Financial Systems & Payment Infrastructure",
+    industryArchetype: "Stripe Radar / Unit / Modern Treasury / Brex Financial Systems",
+    employabilityRating: 99,
+    salaryBand2026: "$170k – $225k (Fintech Systems Architect / Senior Backend Engineer)",
+    frontendStack: ["Next.js 15", "Force-Directed Graph (D3 / Canvas 2D)", "High-Density Transaction Grids", "Real-Time Ticker", "TailwindCSS"],
+    backendStack: ["Python FastAPI", "PostgreSQL (Double-Entry Ledger)", "Apache Kafka Event Bus", "Redis Cluster"],
+    aiStack: ["Isolation Forest Anomaly Detection", "Transaction Risk Scoring Agent", "Graph Ring Detection Algorithm", "Automated SAR Report Generator"],
+    storyScenario: "Fintechs processing billions in card transactions face two major challenges: ensuring mathematical ledger balance and intercepting fraudulent money laundering rings before funds settle. LedgerMind implements an immutable double-entry ledger with Kafka event sourcing, an AI investigation engine that detects anomalous payment rings in real time, visualizes transaction flows on an interactive force-directed graph, and drafts complete regulatory Suspicious Activity Reports.",
+    problemToSolve: "Prevent financial ledger drift and double-spending while detecting coordinated multi-account fraud rings in real time without false-positive customer lockouts.",
+    systemArchitecture: "Payment Ingest -> Atomic Double-Entry Ledger (PostgreSQL) -> Outbox Pattern -> Kafka Topic -> Real-Time Fraud Evaluator -> D3 Graph Visualizer -> SAR Compliance Agent.",
+    whyThisMatters2026: "Fintech demands absolute mathematical precision combined with high-throughput real-time fraud detection. Shows how to unite double-entry accounting with streaming event architectures and graph AI.",
+    deliverables: {
+      frontend: [
+        "Real-time transaction streaming ticker with sub-second visual updates for incoming payment events.",
+        "Interactive D3 / Canvas 2D fraud graph showing relationships between accounts, IP addresses, and cards.",
+        "One-click SAR workbench allowing compliance officers to review and file suspicious activity cases."
+      ],
+      backend: [
+        "Strict double-entry schema with database constraints ensuring debits exactly equal credits at all times.",
+        "Idempotent payment pipeline with Redis distributed locks preventing concurrent race conditions.",
+        "Kafka change data capture streaming every confirmed transaction to downstream analytics consumers."
+      ],
+      aiPipeline: [
+        "Multi-factor fraud scoring combining velocity checks, geolocation anomalies, and isolation forest models.",
+        "Automated SAR generation agent compiling chronological transaction evidence into regulatory narratives.",
+        "False-positive feedback loop allowing compliance officers to recalibrate anomaly thresholds with one click."
+      ],
+      devOps: [
+        "Chaos engineering script simulating sudden database disconnects during heavy transaction bursts.",
+        "Kafka cluster and PostgreSQL initialized via automated Docker Compose with seed transaction data.",
+        "End-to-end ledger balance verification checking zero discrepancy across 1,000,000 test transactions."
+      ]
+    },
+    automatedChecks: [
+      "Ledger invariant: SUM of all debits minus SUM of all credits equals zero across all accounts at every point in time.",
+      "Concurrency race test: 100 simultaneous withdrawals against a shared balance allow exactly the available amount.",
+      "Fraud ring detection: synthetic circular payments across 4 accounts correctly flag with risk score above 90."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "ledgermind-fraud-detection-hub",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Architected LedgerMind, a double-entry banking ledger and fraud detection hub in Next.js 15 and Kafka; processed 15,000 tx/sec with guaranteed mathematical balance and D3 graph fraud visualizers."
+    }
+  },
+  {
+    id: "grand-06",
+    orderIndex: 6,
+    slug: "tensorstudio-llm-evaluation-platform",
+    title: "TensorStudio: Collaborative LLM Evaluation Playground & Prompt Version Studio",
+    oneLineHook: "Enterprise multi-model LLM studio with side-by-side streaming comparisons, automated benchmark evaluations, token cost dashboards, and version-controlled prompt registries.",
+    sector: "Autonomous AI & Intelligent Systems",
+    industryArchetype: "Weights & Biases / LangSmith / Humanloop / Vellum AI",
+    employabilityRating: 98,
+    salaryBand2026: "$165k – $220k (AI Tooling / MLOps Platform Engineer)",
+    frontendStack: ["Next.js 15", "Split-Screen Multi-Model Canvas", "Streaming Token Diff Viewer", "Latency Cost Heatmaps", "TailwindCSS"],
+    backendStack: ["FastAPI", "PostgreSQL", "Redis Pub/Sub", "DuckDB Analytics Engine"],
+    aiStack: ["Multi-Model Unified Gateway (OpenAI, Anthropic, Local Ollama)", "Automated LLM-as-a-Judge Harness", "Semantic Similarity Scorer (BERTScore)", "Prompt Version Diff Engine"],
+    storyScenario: "Engineering teams building generative AI features struggle to test prompt modifications systematically. Changing a system prompt or switching model versions frequently breaks edge cases or increases latency and token costs unpredictably. TensorStudio provides a collaborative web-based prompt engineering studio where developers compare streaming responses side-by-side across multiple models, execute automated test suites, and track latency and token expenditure over time.",
+    problemToSolve: "Prevent silent prompt regressions and uncontrollable LLM API cost spikes by providing systematic automated evaluation, token profiling, and side-by-side model benchmarking.",
+    systemArchitecture: "Client Browser -> Next.js Multi-Stream Playground -> Gateway Router -> Model Dispatcher (Claude / GPT / Ollama) -> Stream Demuxer -> Continuous Eval Worker -> PostgreSQL Prompt Version Store.",
+    whyThisMatters2026: "Every company deploying generative AI needs automated evaluation and prompt engineering infrastructure. Building this demonstrates deep expertise in modern AI tooling and production LLM systems.",
+    deliverables: {
+      frontend: [
+        "Side-by-side multi-model comparison view streaming up to 4 models simultaneously with synchronized scrolling.",
+        "Token diff inspector highlighting textual discrepancies between prompt iterations with color-coded diffing.",
+        "Interactive cost and latency dashboard detailing token consumption per team member and environment."
+      ],
+      backend: [
+        "Unified streaming proxy translating OpenAI, Anthropic, and Ollama protocols into standard SSE streams.",
+        "Prompt template registry with Git-like semantic versioning including commit hashes, tags, and author metadata.",
+        "Async batch evaluation runner executing regression test suites across hundreds of prompt examples."
+      ],
+      aiPipeline: [
+        "Automated LLM-as-a-Judge evaluation framework scoring outputs for factual accuracy, tone, and conciseness.",
+        "Semantic similarity scoring comparing model responses against golden reference datasets using embedding distances.",
+        "Automated cost optimization advisor suggesting smaller model alternatives when quality scores match."
+      ],
+      devOps: [
+        "Mock LLM endpoint container allowing zero-cost local automated testing without live API keys.",
+        "Vitest component test suite verifying streaming parser resilience under network throttling simulation.",
+        "Docker Compose with pre-configured analytics databases and seed evaluation datasets included."
+      ]
+    },
+    automatedChecks: [
+      "Synchronous streaming: multi-stream receiver renders tokens from 4 parallel models without UI freezing or drops.",
+      "Regression detection: introducing an intentional error in a prompt test suite correctly trips the CI failure flag.",
+      "Token accounting precision: calculated token costs match provider billing specifications within 0.1% accuracy."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "tensorstudio-prompt-eval-hub",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Built TensorStudio, an enterprise LLM evaluation studio in Next.js 15 and FastAPI; enabled parallel multi-model streaming, automated LLM-as-a-Judge benchmarking, and version-controlled prompt registries."
+    }
+  },
+  {
+    id: "grand-07",
+    orderIndex: 7,
+    slug: "cloudsentinel-observability-agent",
+    title: "CloudSentinel: Distributed Observability Platform & Autonomous Incident Agent",
+    oneLineHook: "Real-time cloud observability platform with distributed tracing, interactive service topology maps, live log streaming, and an autonomous AI root-cause remediation agent.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Datadog / Dynatrace / PagerDuty / Sentry Enterprise",
+    employabilityRating: 100,
+    salaryBand2026: "$175k – $240k (Staff SRE / Distributed Observability Engineer)",
+    frontendStack: ["Next.js 15", "Interactive Service Map (React Flow / Canvas)", "High-Density Virtualized Log Streamer", "Flame Graph Profiler", "TailwindCSS"],
+    backendStack: ["Go / Python FastAPI", "OpenTelemetry Collector", "TimescaleDB / PostgreSQL", "Redis Streams"],
+    aiStack: ["Log Anomaly Clustering (DBSCAN)", "Causal Root-Cause Graph Reasoning", "Autonomous Safe-Remediation Agent", "Automated Post-Mortem Incident Generator"],
+    storyScenario: "During major production outages, on-call engineers are inundated with thousands of alerts across microservices, databases, and message queues. Finding the true root cause amidst the noise takes precious minutes while customers suffer downtime. CloudSentinel ingests OpenTelemetry metrics, traces, and logs, builds an interactive real-time service dependency graph, identifies root-cause anomalies, and proposes safe human-reviewed mitigation runbooks.",
+    problemToSolve: "Slash Mean-Time-To-Resolution during cloud outages by automatically correlating distributed traces, logs, and metrics into an actionable root-cause diagnosis with safe remediation runbooks.",
+    systemArchitecture: "OpenTelemetry Agents -> Collector Gateway -> Redis Stream Ingest -> TimescaleDB Storage -> Topology Graph Builder -> Root-Cause AI Agent -> Next.js Incident Command Center.",
+    whyThisMatters2026: "Observability is a core pillar of modern software engineering. Shows mastery over OpenTelemetry, high-volume time-series data, distributed tracing, and responsible autonomous operations.",
+    deliverables: {
+      frontend: [
+        "Interactive service dependency map visualizing request flow, error rates, and p99 latencies across all nodes.",
+        "Virtualized live log console streaming thousands of lines per second with regex filtering and zero UI stutter.",
+        "Incident war-room interface displaying real-time AI hypothesis trees and one-click remediation options."
+      ],
+      backend: [
+        "OpenTelemetry-compatible ingest endpoint receiving OTLP trace spans and metric telemetry.",
+        "Time-series schema optimized for high-throughput write bursts and sliding-window aggregations.",
+        "Role-based execution engine running pre-approved safe remediation actions with mandatory confirmation checks."
+      ],
+      aiPipeline: [
+        "Log clustering model grouping unstructured error messages into distinct incident signatures.",
+        "Graph traversal algorithm tracing error cascades backward through service dependencies to pinpoint origins.",
+        "Automated post-mortem generator drafting markdown summaries with incident timelines and root-cause evidence."
+      ],
+      devOps: [
+        "Synthetic microservices chaos generator simulating CPU spikes, memory leaks, and network partitions.",
+        "Prometheus and Grafana exporter configurations ensuring standard metric compatibility.",
+        "Kubernetes manifests ready for Minikube or Kind local cluster demonstration."
+      ]
+    },
+    automatedChecks: [
+      "Stream performance: logs stream at 5,000 lines per second without browser tab memory leakage or frame freezing.",
+      "Root-cause accuracy: synthetic outage injected into upstream auth service correctly isolates auth as primary cause.",
+      "Safe execution guard: destructive remediation actions are blocked from auto-execution without valid human approval."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "cloudsentinel-observability-agent",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Engineered CloudSentinel, a distributed observability platform in Next.js 15 with OpenTelemetry and TimescaleDB; automated root-cause isolation and incident runbooks across microservice topologies."
+    }
+  },
+  {
+    id: "grand-08",
+    orderIndex: 8,
+    slug: "talentai-interview-platform",
+    title: "TalentAI: Real-Time Collaborative Technical Interview & AI Code Review Platform",
+    oneLineHook: "Live collaborative coding interview workspace with synchronized Monaco editor, WebRTC video calling, sandboxed test execution, and objective rubric-based AI evaluation.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "CoderPad / HackerRank / Karat / CodeSignal Platform",
+    employabilityRating: 98,
+    salaryBand2026: "$160k – $215k (Full-Stack / Collaborative Web Engineer)",
+    frontendStack: ["Next.js 15", "Monaco Code Editor (VS Code Engine)", "WebRTC Video and Audio P2P", "In-Browser Terminal Emulator", "TailwindCSS"],
+    backendStack: ["Node.js TypeScript", "WebSocket Operational Transform Gateway", "Docker Execution Sandbox Pool", "PostgreSQL"],
+    aiStack: ["Real-Time Big-O Complexity Analyzer (AST-based)", "Objective Rubric Scorer (Anti-Bias)", "Hidden Test Case Generator", "Automated Interview Synthesis Report"],
+    storyScenario: "Technical interviews suffer from candidate anxiety, interviewer biases, and clumsy screen-sharing setups. TalentAI provides an interview workspace built on Monaco where candidate and interviewer code simultaneously with shared cursors and presence, communicate via low-latency WebRTC, and execute test cases safely inside isolated Docker containers. An objective AI copilot assesses code structure, calculates Big-O complexity, and generates an unbiased rubric evaluation.",
+    problemToSolve: "Provide a seamless lag-free collaborative coding environment that safely runs untrusted candidate code and evaluates problem-solving ability with objective, rubric-grounded criteria.",
+    systemArchitecture: "WebRTC Mesh (Audio/Video) + WebSocket OT Server (Monaco Sync) -> Sandboxed Docker Execution Pool -> Big-O Static Analyzer -> Objective AI Rubric Engine -> PostgreSQL Session Store.",
+    whyThisMatters2026: "Synchronizing multi-user code editors, handling WebRTC peer connections, and isolating untrusted code execution is a hallmark challenge for senior full-stack engineers.",
+    deliverables: {
+      frontend: [
+        "Shared Monaco editor with live multi-user cursors, syntax highlighting, and code auto-formatting.",
+        "Integrated WebRTC peer-to-peer audio and video streaming panel with device selection and mute controls.",
+        "Interactive terminal console displaying test case results with Pass, Fail, Error, and Timeout statuses."
+      ],
+      backend: [
+        "Operational Transform WebSocket server ensuring conflict-free code synchronization across editors.",
+        "Sandboxed code runner pool executing Python, TypeScript, and Go scripts with 3-second hard timeouts.",
+        "Interview session recorder saving chronological code snapshots for post-interview review and replay."
+      ],
+      aiPipeline: [
+        "Static code analyzer estimating runtime and space complexity from parsed AST structures.",
+        "Edge-case test generator crafting tricky input boundaries including empty arrays and maximum integer values.",
+        "Unbiased rubric evaluator scoring candidates strictly on problem decomposition, code clarity, and test coverage."
+      ],
+      devOps: [
+        "Secure container profile restricting sandbox network access and filesystem write permissions.",
+        "Automated stress script running 20 concurrent interview sessions with active WebRTC signals.",
+        "GitHub Actions testing suite checking code sync convergence under simulated 200ms network latency."
+      ]
+    },
+    automatedChecks: [
+      "Editor sync convergence: concurrent edits from two remote clients converge to identical text without lost characters.",
+      "Sandbox security: candidate scripts attempting unauthorized system calls are cleanly blocked at the container level.",
+      "Execution timeout: infinite loop submissions terminate cleanly within 3.0 seconds with informative error output."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "talentai-interview-platform",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Developed TalentAI, a real-time collaborative technical interview platform in Next.js 15 with Monaco editor sync, WebRTC video, Docker sandboxes, and objective AI evaluation rubrics."
+    }
+  },
+  {
+    id: "grand-09",
+    orderIndex: 9,
+    slug: "devstudio-architecture-canvas",
+    title: "DevStudio: AI-Native Cloud Architecture Visualizer & Terraform Code Generator",
+    oneLineHook: "Infinite 60 FPS visual canvas for designing distributed cloud architectures with real-time multi-user CRDT sync, automated verified Terraform generation, and cloud cost estimation.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Eraser.io / Brainboard / IcePanel / Figma Systems Design",
+    employabilityRating: 99,
+    salaryBand2026: "$170k – $225k (Senior Frontend Systems / Cloud Architect)",
+    frontendStack: ["Next.js 15", "HTML5 Canvas / WebGL 2D Engine", "Yjs CRDT Real-Time Collaboration", "Draggable Component Palette", "TailwindCSS"],
+    backendStack: ["Python FastAPI", "PostgreSQL", "WebSocket Room Server", "Terraform Validator Engine"],
+    aiStack: ["Architecture-to-Terraform Generator", "Cloud Cost Estimation Engine (Infracost)", "Security Vulnerability Checker", "Diagram Understanding LLM"],
+    storyScenario: "Engineering teams design system architectures on whiteboards or static drawing tools, but translating visual diagrams into production Terraform code takes weeks and introduces security misconfigurations. DevStudio bridges this divide with an infinite 60 FPS collaborative canvas: engineers drag-and-drop cloud components, and DevStudio generates verified, production-ready Terraform code with real-time cloud cost estimates and automated security reviews.",
+    problemToSolve: "Eliminate the disconnect between high-level system architecture diagrams and production infrastructure code, preventing costly cloud misconfigurations and security vulnerabilities.",
+    systemArchitecture: "WebGL Canvas (Infinite Zoom) -> Yjs CRDT Sync Provider -> Graph Topology Serializer -> AI Infrastructure Generator -> Terraform AST Parser -> AWS/GCP Cost Engine -> Live Code Preview.",
+    whyThisMatters2026: "Combines bleeding-edge web graphics with local-first CRDT collaboration, infrastructure-as-code automation, and generative AI — covering the full breadth of modern full-stack engineering.",
+    deliverables: {
+      frontend: [
+        "Infinite zoom-and-pan canvas rendering hundreds of cloud infrastructure components at a rock-solid 60 FPS.",
+        "Local-first collaborative editing using Yjs CRDTs allowing multiple engineers to draw simultaneously.",
+        "Live dual-pane view showing the interactive diagram on the left and generated Terraform HCL code on the right."
+      ],
+      backend: [
+        "WebSocket room server routing delta CRDT updates between collaborators with minimal bandwidth overhead.",
+        "Graph topology validator ensuring valid connections and preventing insecure configurations like direct public database access.",
+        "Terraform validation runner verifying generated HCL syntax in the background using a sandboxed terraform CLI."
+      ],
+      aiPipeline: [
+        "Topology-to-Code generator transforming interconnected node diagrams into clean, modular Terraform module files.",
+        "Cloud cost estimation engine calculating projected monthly spend based on selected instance types and traffic.",
+        "Automated architecture security reviewer flagging unencrypted storage buckets and open public network policies."
+      ],
+      devOps: [
+        "Pre-built component libraries for AWS, GCP, and Azure standard cloud architecture patterns.",
+        "Automated visual regression tests checking canvas element placement accuracy across viewport sizes.",
+        "Docker Compose setup provisioning the collaborative room server and Terraform validation harness."
+      ]
+    },
+    automatedChecks: [
+      "Canvas rendering: maintains 60 FPS during continuous zooming and panning with 250 connected component nodes.",
+      "CRDT convergence: offline changes from two clients merge without data loss when network reconnects.",
+      "Terraform validity: generated HCL code passes terraform validate with zero syntax or schema errors."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "devstudio-architecture-canvas",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Architected DevStudio, a 60 FPS collaborative cloud architecture canvas in Next.js 15 and Yjs CRDTs; automated verified Terraform generation and real-time cloud cost estimation from visual diagrams."
+    }
+  },
+  {
+    id: "grand-10",
+    orderIndex: 10,
+    slug: "apexsupport-autonomous-operations",
+    title: "ApexSupport: Enterprise Autonomous Customer Support Hub & Self-Healing Agent",
+    oneLineHook: "Mission-critical enterprise support platform with real-time streaming ticketing, automated API tool-execution agents, hybrid RAG knowledge search, and human-in-the-loop escalation.",
+    sector: "Enterprise Software & Cloud Platforms",
+    industryArchetype: "Zendesk Enterprise / Intercom Fin / Sierra AI / Decagon Operations",
+    employabilityRating: 100,
+    salaryBand2026: "$175k – $235k (Enterprise AI Architect / Lead Systems Engineer)",
+    frontendStack: ["Next.js 15", "Real-Time Ticket Command Center", "Live Customer Timeline", "Split-Screen Action Approval Panel", "TailwindCSS"],
+    backendStack: ["Python FastAPI", "PostgreSQL Multi-Tenant RLS", "Apache Kafka Event Bus", "Redis Distributed Cache"],
+    aiStack: ["Multi-Step Tool Execution Agent (Refunds, Resets, Status Checks)", "pgvector Hybrid RAG Knowledge Base", "Sentiment and Urgency Classifier", "Human-in-the-Loop Safety Gate"],
+    storyScenario: "Enterprise B2B software companies handle tens of thousands of support tickets monthly. Simple chatbots give robotic answers and cannot take real actions, while human agents are overwhelmed by routine tasks like password resets and invoice lookups. ApexSupport provides an autonomous support hub: an AI agent searches internal documentation, investigates account status via authorized API tools, and resolves the issue or prepares a verified action payload for human agent approval.",
+    problemToSolve: "Automate complex enterprise customer support operations through safe, verified tool execution while preventing unauthorized data access or erroneous account actions from reaching customers.",
+    systemArchitecture: "Customer Omnichannel Intake -> Kafka Event Stream -> Supervisor Agent -> Tool Dispatcher (Mock Stripe, Auth0, CRM APIs) -> Human-in-the-Loop Gate -> PostgreSQL Audit Store -> SSE Live UI.",
+    whyThisMatters2026: "The ultimate enterprise AI challenge: allowing AI agents to take real actions in external APIs while strictly guaranteeing safety, auditability, and seamless human escalation when needed.",
+    deliverables: {
+      frontend: [
+        "Command-center ticket inbox with live real-time filtering, urgency badges, and customer sentiment indicators.",
+        "Split-screen ticket view displaying conversation history, customer timeline, and proposed AI action previews.",
+        "One-click action approval modal allowing human support leads to inspect and authorize external API tool calls."
+      ],
+      backend: [
+        "Secure tool execution gateway connecting to simulated external services including Stripe, Auth0, and Shipping APIs.",
+        "Kafka-powered event streaming bus handling ticket routing, agent assignments, and real-time metric tracking.",
+        "Audit log database recording every prompt, tool execution, and human approval with full non-repudiation."
+      ],
+      aiPipeline: [
+        "Multi-step tool-use agent with strict Pydantic schemas validating every API action argument before dispatch.",
+        "Hybrid RAG search across product knowledge bases with semantic relevance thresholding.",
+        "Sentiment and escalation classifier detecting high-risk churn signals and routing to human leads immediately."
+      ],
+      devOps: [
+        "Mock external services container for realistic zero-risk local integration testing without live API keys.",
+        "Automated security fuzzing suite testing agent defense against prompt injection attack vectors.",
+        "Production Docker deployment with environment variable isolation and centralized secret management."
+      ]
+    },
+    automatedChecks: [
+      "Prompt injection defense: adversary inputs attempting to force unauthorized refunds fail validation without exception.",
+      "Tool schema invariant: 100% of generated API tool arguments validate strictly against Pydantic models before dispatch.",
+      "Human-in-the-loop guarantee: actions above defined thresholds such as large refunds are blocked from auto-execution."
+    ],
+    portfolioProof: {
+      githubRepoTemplate: "apexsupport-autonomous-operations",
+      liveDemoType: "Full-Stack Web Platform",
+      resumeImpactBullet: "Engineered ApexSupport, an enterprise support hub in Next.js 15 and FastAPI; orchestrated tool-execution AI agents with Kafka streaming and human-in-the-loop safeguards across 100k monthly tickets."
+    }
+  }
+];
