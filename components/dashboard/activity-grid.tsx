@@ -53,10 +53,10 @@ const RECENT_VERIFICATIONS = [
   },
   {
     id: "run-946",
-    lesson: "Phase 01 // Capstone 01: Custom Malloc Allocator",
+    lesson: "Phase 00 // Capstone 01: PromptCLI AI Workbench",
     type: "GitHub Actions CI",
-    assertions: "Valgrind: 0 Leaks / 100% Benchmarks",
-    duration: "42s",
+    assertions: "Pytest: 12/12 Passed / 100% Coverage",
+    duration: "4.2s",
     time: "3 days ago",
     status: "SUCCESS",
   },

@@ -1,0 +1,13 @@
+INSERT INTO curriculum_nodes (id, slug, phase_id, order_index, title, subtitle, cs_foundation, ai_convergence, xp_reward, level_required, position_x, position_y, handbook_markdown, starter_code, test_suite, defense_prompts) VALUES
+('node-0-1', 'phase-00-lesson-01-variables-data-types-the-interpreter', 'module-1', 1, 'Lesson 1.1: Variables, Data Types & The Interpreter', 'Prerequisites: None', 'Prerequisites: None | Subtopics: 4 items', 'Systems project application', 100, 1, 60.0, 50.0, '# Lesson 0.1: Variables, Data Types & The Interpreter
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: None
+- **Subtopics**:
+  - `0.1.1` What is physical computer memory: RAM as numbered storage boxes.
+  - `0.1.2` Variables as named sticky notes: assigning integers, floats, strings, and booleans.
+  - `0.1.3` How Python''s interpreter runs code line-by-line in real time.
+  - `0.1.4` Dynamic types: checking variable types with type() and changing types safely.
+- **Key Failure Modes & Edge Cases**: Mixing incompatible data types (like adding text to a number), which triggers a TypeError.
+- **Verification & Mastery Check**: Write a script that creates variables for an AI model''s name, version, and cost, and print their types.
+- **Project Application**: PromptCLI: Storing user prompt settings and configurations.', '{"solution.py": "# Phase 0 // Lesson 0.1: Variables, Data Types & The Interpreter\n\ndef solve():\n    \"\"\"\n    Verification: Write a script that creates variables for an AI model''s name, version, and cost, and print their typ\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "0.1", "subtopics_count": 4, "verification_criteria": "Write a script that creates variables for an AI model''s name, version, and cost, and print their types.", "subtopics": ["0.1.1 What is physical computer memory: RAM as numbered storage boxes.", "0.1.2 Variables as named sticky notes: assigning integers, floats, strings, and booleans.", "0.1.3 How Python''s interpreter runs code line-by-line in real time.", "0.1.4 Dynamic types: checking variable types with type() and changing types safely."]}'::jsonb, '["Explain how this implementation prevents: Mixing incompatible data types (like adding text to a number), which triggers a TypeError.", "How does Variables, Data Types & The Interpreter scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb);

@@ -53,46 +53,17 @@ export interface PhaseViewModel {
   tracks?: StandaloneTrack[];
 }
 
-// Assign clean category based on phase number
+// Assign clean category based on module order_index (0 to 13)
 export function getCategoryForPhase(phaseNum: number): PhaseViewModel["category"] {
-  if (phaseNum === 13) return "Specializations";
-  if ([0, 1, 4, 11].includes(phaseNum)) return "Systems";
-  if ([2, 3, 8].includes(phaseNum)) return "Algorithms";
-  if ([5, 7].includes(phaseNum)) return "Distributed";
-  if ([9, 10, 12].includes(phaseNum)) return "AI/ML";
-  return "Full-Stack"; // 6, 14
+  if ([0, 1].includes(phaseNum)) return "Systems";      // Python Foundations, Craftsmanship & OOP
+  if ([2, 3, 4].includes(phaseNum)) return "Algorithms"; // Discrete Math, Linear Algebra, DSA
+  if ([5, 6].includes(phaseNum)) return "Distributed";   // Web Protocols/ASGI, PostgreSQL Internals
+  if ([7].includes(phaseNum)) return "Full-Stack";       // Modern Frontend & Next.js
+  if ([8, 9].includes(phaseNum)) return "Distributed";   // System Design, Distributed Consensus
+  if ([10, 11, 12].includes(phaseNum)) return "AI/ML";   // Vector RAG, Profiling/Evals, AI Agents
+  if ([13].includes(phaseNum)) return "Specializations"; // Advanced Infra & Capstone Defense
+  return "Systems";
 }
-
-const SPECIALIZED_TRACK_DEFINITIONS: Record<"A" | "B" | "C" | "D", { title: string; domain: string; description: string; badge: string; capstone: string }> = {
-  A: {
-    title: "Track A: Enterprise Product Engineering",
-    domain: "Micro-Frontends, Local-First Sync, Canvas 2D/WebGL & Wasm",
-    description: "Standalone deep dive into high-performance web applications, module federation, CRDTs (Yjs), and multi-tenant SaaS billing engines.",
-    badge: "Product Specialist",
-    capstone: "Enterprise Local-First Collaborative Application with Canvas Engine",
-  },
-  B: {
-    title: "Track B: High-Throughput MLOps & Distributed Training",
-    domain: "AllReduce, FSDP ZeRO-3, vLLM / TensorRT-LLM, Ray & Feast",
-    description: "Standalone specialization in large-scale multi-GPU training clusters, optimizer sharding, custom inference runtimes, and real-time feature stores.",
-    badge: "MLOps Specialist",
-    capstone: "Distributed FSDP Training Pipeline with vLLM PagedAttention Cluster",
-  },
-  C: {
-    title: "Track C: Systems Security & Cloud Infrastructure Hardening",
-    domain: "eBPF (Cilium/Tetragon), mTLS (SPIFFE), HSM Key Management & DevSecOps",
-    description: "Standalone specialization in kernel-level security telemetry, zero-trust infrastructure, envelope encryption, and automated adversary red-teaming.",
-    badge: "Security Specialist",
-    capstone: "Kernel eBPF Threat Monitoring & Zero-Trust Service Mesh Defense",
-  },
-  D: {
-    title: "Track D: Frontier AI Research & Custom Kernel Engineering",
-    domain: "DPO / RLHF, Mixture of Experts (MoE), State Space Models & Triton Kernels",
-    description: "Standalone specialization in cutting-edge alignment science, sparse MoE routing, Mamba architectures, and GPU kernel programming with OpenAI Triton.",
-    badge: "AI Research Specialist",
-    capstone: "Sparse MoE Transformer with Custom Triton FP8 Kernels & DPO Alignment",
-  },
-};
 
 // Map database phases and nodes into UI view models
 export function transformDbPhases(
@@ -115,66 +86,33 @@ export function transformDbPhases(
     // Extract subtopics or use realistic 5 per lesson
     const subtopicsCount = lessonsCount * 5;
 
-    // Special handling for Phase 13 standalone tracks (Phase 14 in 1-based)
-    let tracks: StandaloneTrack[] | undefined = undefined;
-    if (rawPhaseNum === 13) {
-      tracks = (["A", "B", "C", "D"] as const).map((trackCode) => {
-        const def = SPECIALIZED_TRACK_DEFINITIONS[trackCode];
-        const trackNodes = nodes.filter((n) => n.title.includes(`Track ${trackCode}`));
-        return {
-          trackId: `track-${trackCode.toLowerCase()}`,
-          trackCode,
-          title: def.title,
-          domain: def.domain,
-          description: def.description,
-          badge: def.badge,
-          nodes: trackNodes,
-          capstoneTitle: def.capstone,
-        };
-      });
-    }
-
     // Find capstone project if any
     const capstoneNode = nodes.find(
       (n) => n.title.toLowerCase().includes("capstone") || n.title.toLowerCase().includes("project")
     );
     const capstoneTitle = capstoneNode
       ? capstoneNode.title
-      : rawPhaseNum === 13
-      ? "Choose 1 of 4 Standalone Specialization Capstones"
-      : `Phase ${displayPhaseNum} Synthesis Capstone Project`;
+      : `Module ${displayPhaseNum} Synthesis Capstone Project`;
 
     // Extract key topics from lesson titles
-    const keyTopics =
-      rawPhaseNum === 13
-        ? [
-            "Track A: Enterprise Product Engineering",
-            "Track B: MLOps & Distributed Training (FSDP)",
-            "Track C: Systems Security & eBPF Observability",
-            "Track D: Frontier AI Research & Triton Kernels",
-          ]
-        : nodes.slice(0, 5).map((n) => {
-            const parts = n.title.split(":");
-            return parts.length > 1 ? parts[1].trim() : n.title;
-          });
+    const keyTopics = nodes.slice(0, 5).map((n) => {
+      const parts = n.title.split(":");
+      return parts.length > 1 ? parts[1].trim() : n.title;
+    });
 
     return {
       id: displayPhaseNum,
       phaseId: p.id,
-      slug: `phase-${String(displayPhaseNum).padStart(2, "0")}`,
+      slug: p.id.startsWith("module-") ? p.id : `module-${displayPhaseNum}`,
       title: formatPhaseTitle(rawPhaseNum, p.title),
       category: getCategoryForPhase(rawPhaseNum),
       lessonsCount,
       subtopicsCount,
-      capstonesCount: rawPhaseNum === 13 ? 4 : 1,
+      capstonesCount: 1,
       capstoneTitle,
-      description:
-        rawPhaseNum === 13
-          ? "Four completely independent, standalone engineering tracks designed for advanced career specialization. Select any single track or master all four in parallel."
-          : p.description,
+      description: p.description,
       keyTopics: keyTopics.length > 0 ? keyTopics : ["Core Foundations", "Verification Suite", "Architectural Invariants"],
-      isSpecializedPhase: rawPhaseNum === 13,
-      tracks,
+      isSpecializedPhase: false,
     };
   });
 }
@@ -191,23 +129,24 @@ export async function fetchLiveCurriculum(): Promise<{
       supabase.from("curriculum_phases").select("*").order("order_index", { ascending: true }),
       supabase
         .from("curriculum_nodes")
-        .select("id, slug, phase_id, title, subtitle, xp_reward")
-        .order("id", { ascending: true }),
+        .select("id, slug, phase_id, title, subtitle, xp_reward, order_index")
+        .order("order_index", { ascending: true }),
     ]);
 
     const dbPhases: DatabasePhase[] = phasesRes.data || [];
     let allNodes: DatabaseNode[] = nodesRes.data || [];
 
-    // Helper to naturally sort nodes by phase and lesson index: "node-0-1", "node-0-2", ... "node-0-10"
-    const parseNodeRank = (id: string) => {
-      const match = id.match(/node-(\d+)-(\d+)/);
-      if (match) {
-        return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
-      }
-      return 999999;
+    const phaseOrderMap = new Map<string, number>();
+    dbPhases.forEach((p) => phaseOrderMap.set(p.id, p.order_index));
+
+    // Order nodes strictly by phase order_index first, then node order_index
+    const parseNodeRank = (n: any) => {
+      const pRank = phaseOrderMap.get(n.phase_id) ?? 999;
+      const order = typeof n.order_index === "number" ? n.order_index : 99999;
+      return pRank * 100000 + order;
     };
 
-    allNodes.sort((a, b) => parseNodeRank(a.id) - parseNodeRank(b.id));
+    allNodes.sort((a, b) => parseNodeRank(a) - parseNodeRank(b));
 
     const nodesByPhase: Record<string, DatabaseNode[]> = {};
     for (const node of allNodes) {
@@ -219,7 +158,7 @@ export async function fetchLiveCurriculum(): Promise<{
 
     // Ensure within each phase, nodes are ordered monotonically
     for (const phaseId in nodesByPhase) {
-      nodesByPhase[phaseId].sort((a, b) => parseNodeRank(a.id) - parseNodeRank(b.id));
+      nodesByPhase[phaseId].sort((a, b) => parseNodeRank(a) - parseNodeRank(b));
     }
 
     const phases = transformDbPhases(dbPhases, nodesByPhase);

@@ -165,41 +165,53 @@ export async function markLessonCompleted(
 }
 
 /**
- * Determine if a lesson is unlocked.
+ * Determine if a lesson is unlocked with O(1) average time complexity.
  * Rule:
  * 1. The first lesson (node-0-1 or index 0) is always unlocked.
  * 2. Any completed lesson is unlocked.
- * 3. A lesson is unlocked if the immediately preceding lesson in the sequential curriculum is completed.
- * 4. For specialized tracks (Phase 13), the first lesson of each track (A, B, C, D) is unlocked.
+ * 3. The first lesson of each module is unlocked.
+ * 4. A lesson is unlocked if the immediately preceding lesson in the sequential curriculum is completed.
  */
+const FIRST_LESSON_IDS = new Set([
+  "node-0-1",  // Module 1: Python Foundations
+  "node-1-1",  // Module 2: Software Craftsmanship & OOP
+  "node-2-1",  // Module 3: Discrete Mathematics
+  "node-9-1",  // Module 4: Linear Algebra & Autograd
+  "node-3-1",  // Module 5: Data Structures & Algorithms
+  "node-4-1",  // Module 6: Web Protocols & ASGI
+  "node-5-1",  // Module 7: PostgreSQL Internals
+  "node-6-1",  // Module 8: Modern Frontend Engineering
+  "node-8-1",  // Module 9: System Design & Scalability
+  "node-7-1",  // Module 10: Distributed Systems & Consensus
+  "node-10-1", // Module 11: Production RAG & Vector Search
+  "node-11-1", // Module 12: Performance Profiling & AI Observability
+  "node-12-1", // Module 13: Autonomous AI Agents
+  "node-13-1", // Module 14: Advanced Infrastructure & Capstones
+]);
+
 export function isLessonUnlocked(
   lessonId: string,
   allLessonIds: string[],
-  completedLessons: string[]
+  completedLessons: string[] | Set<string>,
+  lessonIndexMap?: Map<string, number>
 ): boolean {
   if (!lessonId) return false;
-  const completedSet = new Set(completedLessons);
+  const completedSet = completedLessons instanceof Set ? completedLessons : new Set(completedLessons);
 
   // Already completed is always unlocked
   if (completedSet.has(lessonId)) return true;
 
-  // First lesson in curriculum is always unlocked
-  if (allLessonIds.length > 0 && (lessonId === allLessonIds[0] || lessonId === "node-0-1")) {
+  // First lesson of each module is unlocked
+  if (FIRST_LESSON_IDS.has(lessonId)) {
     return true;
   }
 
-  // Specialized Phase 13 track starters (Track A: node-13-1, Track B: node-13-11, Track C: node-13-21, Track D: node-13-31)
-  if (["node-13-1", "node-13-11", "node-13-21", "node-13-31"].includes(lessonId)) {
-    return true;
-  }
+  // Fast index resolution: O(1) if Map provided, O(N) fallback if array lookup
+  const currentIndex = lessonIndexMap ? (lessonIndexMap.get(lessonId) ?? -1) : allLessonIds.indexOf(lessonId);
 
-  // Check sequential index
-  const currentIndex = allLessonIds.indexOf(lessonId);
-  if (currentIndex > 0) {
+  if (currentIndex > 0 && currentIndex < allLessonIds.length) {
     const prevLessonId = allLessonIds[currentIndex - 1];
-    if (completedSet.has(prevLessonId)) {
-      return true;
-    }
+    return completedSet.has(prevLessonId);
   }
 
   return false;

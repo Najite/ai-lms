@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 export function CapstoneSection() {
   const [repoUrl, setRepoUrl] = React.useState("torvalds/linux");
-  const [selectedPhase, setSelectedPhase] = React.useState("1");
+  const [selectedPhase, setSelectedPhase] = React.useState("0");
   const [isVerifying, setIsVerifying] = React.useState(false);
   const [verificationResult, setVerificationResult] = React.useState<{
     success: boolean;
@@ -80,7 +80,7 @@ export function CapstoneSection() {
           <div className="lg:col-span-6 space-y-6">
             <div className="flex items-center gap-2">
               <StatusChip status="brand" label="TAMPER-PROOF VERIFICATION" />
-              <span className="text-xs font-mono text-[#8a8f98]">22 Industry Capstones</span>
+              <span className="text-xs font-mono text-[#8a8f98]">18 Industry Capstones</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-semibold text-[#f7f8f8] tracking-tight">
@@ -88,7 +88,7 @@ export function CapstoneSection() {
             </h2>
 
             <p className="text-base text-[#8a8f98] leading-relaxed">
-              Unlike traditional platforms that grade on simplistic multiple-choice quizzes, every phase concludes with
+              Unlike traditional platforms that grade on simplistic multiple-choice quizzes, every module concludes with
               a production-grade capstone project developed in your own GitHub repository.
             </p>
 
@@ -145,19 +145,27 @@ export function CapstoneSection() {
               <form onSubmit={handleVerify} className="space-y-4">
                 <div>
                   <label className="block text-xs font-mono text-[#8a8f98] mb-1.5">
-                    SELECT PHASE CAPSTONE
+                    SELECT MODULE CAPSTONE
                   </label>
                   <select
                     value={selectedPhase}
                     onChange={(e) => setSelectedPhase(e.target.value)}
                     className="w-full bg-[#0f1011] border border-[#23252a] rounded-md px-3 py-2 text-xs text-[#f7f8f8] font-mono focus:outline-none focus:border-[#5e6ad2]"
                   >
-                    <option value="1">Phase 01: Custom Virtual Memory Allocator</option>
-                    <option value="2">Phase 02: Lock-Free Ring Buffer & SPSC Queue</option>
-                    <option value="3">Phase 03: B-Tree Indexed Storage Engine</option>
-                    <option value="5">Phase 05: Preemptive Microkernel Scheduler</option>
-                    <option value="9">Phase 09: Raft Consensus Cluster</option>
-                    <option value="14">Phase 14: HNSW Vector Database</option>
+                    <option value="0">Module 01: PromptCLI Interactive AI Workbench</option>
+                    <option value="1">Module 02: TaskPulse High-Throughput Async Engine</option>
+                    <option value="2">Module 03: LogicProof Theorem & Inference Engine</option>
+                    <option value="3">Module 04: MathGrad Reverse-Mode Autodiff Engine</option>
+                    <option value="4">Module 05: AlgoSift In-Memory Search & Indexing Engine</option>
+                    <option value="5">Module 06: NetGate High-Performance ASGI Proxy</option>
+                    <option value="6">Module 07: FlashKV Crash-Resilient Key-Value Store</option>
+                    <option value="7">Module 08: BoardSync Real-Time Collaborative Canvas</option>
+                    <option value="8">Module 09: SystemScale Global Rate Limiting Cluster</option>
+                    <option value="9">Module 10: RaftLite Distributed Consensus Cluster</option>
+                    <option value="10">Module 11: DocuMind Enterprise Hybrid RAG Engine</option>
+                    <option value="11">Module 12: ProfilerX Distributed AI Telemetry Pipeline</option>
+                    <option value="12">Module 13: CodeCraft Autonomous Multi-Agent Engineer</option>
+                    <option value="13">Module 14: CloudOps Multi-Tenant Enterprise Platform</option>
                   </select>
                 </div>
 
@@ -171,7 +179,7 @@ export function CapstoneSection() {
                       type="text"
                       value={repoUrl}
                       onChange={(e) => setRepoUrl(e.target.value)}
-                      placeholder="e.g. your-github-user/custom-malloc"
+                      placeholder="e.g. your-github-user/promptcli-ai-workbench"
                       className="w-full bg-[#0f1011] border border-[#23252a] rounded-md pl-9 pr-3 py-2 text-xs font-mono text-[#f7f8f8] placeholder-[#565961] focus:outline-none focus:border-[#5e6ad2]"
                     />
                   </div>

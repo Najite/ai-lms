@@ -14,7 +14,7 @@ export function Testimonials() {
       quote:
         "The Raft consensus and WAL logging lessons gave me more practical depth than 3 different paid video bootcamps combined. Being able to write the state machine in the browser and then clone the local capstone repo was the exact bridge I needed.",
       badge: "Verified Student",
-      highlight: "Raft Consensus // Phase 5",
+      highlight: "Raft Consensus // Module 8",
     },
     {
       name: "Elena R.",
@@ -24,17 +24,17 @@ export function Testimonials() {
       quote:
         "I was tired of superficial 'call OpenAI API' tutorials. This curriculum actually has you implement self-attention matrices from scratch, calculate KV cache memory footprints, and build cyclic LangGraph architectures. Pure engineering rigor.",
       badge: "Verified Student",
-      highlight: "Transformers & vLLM // Phase 10",
+      highlight: "Transformers & vLLM // Module 7",
     },
     {
       name: "David K.",
       role: "Backend Architect",
       company: "High-Frequency FinTech",
-      outcome: "Mastered Linux epoll & Socket Architecture",
+      outcome: "Mastered Web Architecture & ASGI",
       quote:
-        "The text-first format with live browser sandboxes is unbeatable. No 20-minute video intro, no rambling. Just the mechanical reality of kernel event loops, memory alignment, and cache-conscious data structures.",
+        "The text-first format with live browser sandboxes is unbeatable. No 20-minute video intro, no rambling. Just the mechanical reality of ASGI event loops, connection pooling, and high-performance API engineering.",
       badge: "Verified Student",
-      highlight: "Kernel epoll // Phase 4",
+      highlight: "HTTP/2 & ASGI // Module 5",
     },
   ];
 

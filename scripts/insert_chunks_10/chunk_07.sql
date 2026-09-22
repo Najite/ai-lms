@@ -1,0 +1,122 @@
+INSERT INTO curriculum_nodes (id, slug, phase_id, order_index, title, subtitle, cs_foundation, ai_convergence, xp_reward, level_required, position_x, position_y, handbook_markdown, starter_code, test_suite, defense_prompts) VALUES
+('node-1-11', 'phase-01-lesson-11-containers-protocol-len-and-getitem', 'module-2', 11, 'Lesson 2.11: Containers Protocol: __len__ and __getitem__', 'Prerequisites: Lesson 1.9', 'Prerequisites: Lesson 1.9 | Subtopics: 4 items', 'Systems project application', 120, 2, 370.0, 550.0, '# Lesson 1.11: Containers Protocol: __len__ and __getitem__
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.9
+- **Subtopics**:
+  - `1.11.1` Creating custom collections: making your classes behave like native Python lists or dicts.
+  - `1.11.2` Supporting len(): implementing __len__ to return the item count.
+  - `1.11.3` Supporting indexing: implementing __getitem__ to allow square bracket access obj[key] or obj[index].
+  - `1.11.4` Iteration for free: how Python automatically loops over objects that implement __getitem__.
+- **Key Failure Modes & Edge Cases**: Returning negative numbers or non-integers from __len__, triggering TypeError.
+- **Verification & Mastery Check**: Build a MessageHistory class that supports len(history) and indexing history[0] to get messages.
+- **Project Application**: SchemaAgent: Custom collection containers.', '{"solution.py": "# Phase 1 // Lesson 1.11: Containers Protocol: __len__ and __getitem__\n\ndef solve():\n    \"\"\"\n    Verification: Build a MessageHistory class that supports len(history) and indexing history[0] to get messages.\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.11", "subtopics_count": 4, "verification_criteria": "Build a MessageHistory class that supports len(history) and indexing history[0] to get messages.", "subtopics": ["1.11.1 Creating custom collections: making your classes behave like native Python lists or dicts.", "1.11.2 Supporting len(): implementing __len__ to return the item count.", "1.11.3 Supporting indexing: implementing __getitem__ to allow square bracket access obj[key] or obj[index].", "1.11.4 Iteration for free: how Python automatically loops over objects that implement __getitem__."]}'::jsonb, '["Explain how this implementation prevents: Returning negative numbers or non-integers from __len__, triggering TypeError.", "How does Containers Protocol: __len__ and __getitem__ scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-12', 'phase-01-lesson-12-context-managers-enter-and-exit', 'module-2', 12, 'Lesson 2.12: Context Managers: __enter__ and __exit__', 'Prerequisites: Lesson 1.2, Phase 0 (Lesson 0.15)', 'Prerequisites: Lesson 1.2, Phase 0 (Lesson 0.15) | Subtopics: 4 items', 'Systems project application', 120, 2, 250.0, 600.0, '# Lesson 1.12: Context Managers: __enter__ and __exit__
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2, Phase 0 (Lesson 0.15)
+- **Subtopics**:
+  - `1.12.1` Resource safety: managing setup and teardown automatically with the with statement.
+  - `1.12.2` The context manager protocol: implementing __enter__ and __exit__.
+  - `1.12.3` Exception handling in __exit__: inspecting errors and deciding whether to suppress them.
+  - `1.12.4` Writing lightweight context managers with the @contextmanager decorator from contextlib.
+- **Key Failure Modes & Edge Cases**: Unconditionally returning True from __exit__, which silently swallows catastrophic syntax errors.
+- **Verification & Mastery Check**: Write a Timer context manager that measures and prints the exact execution time of any code block.
+- **Project Application**: SchemaAgent: Automated latency profiling context.', '{"solution.py": "# Phase 1 // Lesson 1.12: Context Managers: __enter__ and __exit__\n\ndef solve():\n    \"\"\"\n    Verification: Write a Timer context manager that measures and prints the exact execution time of any code block.\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.12", "subtopics_count": 4, "verification_criteria": "Write a Timer context manager that measures and prints the exact execution time of any code block.", "subtopics": ["1.12.1 Resource safety: managing setup and teardown automatically with the with statement.", "1.12.2 The context manager protocol: implementing __enter__ and __exit__.", "1.12.3 Exception handling in __exit__: inspecting errors and deciding whether to suppress them.", "1.12.4 Writing lightweight context managers with the @contextmanager decorator from contextlib."]}'::jsonb, '["Explain how this implementation prevents: Unconditionally returning True from __exit__, which silently swallows catastrophic syntax errors.", "How does Context Managers: __enter__ and __exit__ scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-13', 'phase-01-lesson-13-iterators-protocol-iter-and-next', 'module-2', 13, 'Lesson 2.13: Iterators Protocol: __iter__ and __next__', 'Prerequisites: Lesson 1.11', 'Prerequisites: Lesson 1.11 | Subtopics: 4 items', 'Systems project application', 120, 2, 310.0, 650.0, '# Lesson 1.13: Iterators Protocol: __iter__ and __next__
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.11
+- **Subtopics**:
+  - `1.13.1` How iteration works behind the scenes: the Iterator design pattern in Python.
+  - `1.13.2` The __iter__ method: returning an iterator object.
+  - `1.13.3` The __next__ method: producing the next item or raising StopIteration when finished.
+  - `1.13.4` Building custom stream iterators that process endless streams of incoming AI tokens.
+- **Key Failure Modes & Edge Cases**: Forgetting to raise StopIteration, causing for loops over your custom object to run forever.
+- **Verification & Mastery Check**: Build a TokenStream class that yields words from a response one-by-one with simulated delays.
+- **Project Application**: SchemaAgent: Simulated token streaming iterator.', '{"solution.py": "# Phase 1 // Lesson 1.13: Iterators Protocol: __iter__ and __next__\n\ndef solve():\n    \"\"\"\n    Verification: Build a TokenStream class that yields words from a response one-by-one with simulated delays.\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.13", "subtopics_count": 4, "verification_criteria": "Build a TokenStream class that yields words from a response one-by-one with simulated delays.", "subtopics": ["1.13.1 How iteration works behind the scenes: the Iterator design pattern in Python.", "1.13.2 The __iter__ method: returning an iterator object.", "1.13.3 The __next__ method: producing the next item or raising StopIteration when finished.", "1.13.4 Building custom stream iterators that process endless streams of incoming AI tokens."]}'::jsonb, '["Explain how this implementation prevents: Forgetting to raise StopIteration, causing for loops over your custom object to run forever.", "How does Iterators Protocol: __iter__ and __next__ scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-14', 'phase-01-lesson-14-generators-the-yield-keyword', 'module-2', 14, 'Lesson 2.14: Generators & The yield Keyword', 'Prerequisites: Lesson 1.13', 'Prerequisites: Lesson 1.13 | Subtopics: 4 items', 'Systems project application', 120, 2, 370.0, 700.0, '# Lesson 1.14: Generators & The yield Keyword
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.13
+- **Subtopics**:
+  - `1.14.1` Lightweight stream producers: writing generator functions using the yield keyword.
+  - `1.14.2` Memory efficiency: why generators use zero extra memory even when yielding billions of items.
+  - `1.14.3` Generator state preservation: pausing function execution and resuming seamlessly on next().
+  - `1.14.4` Generator expressions: writing single-line memory-efficient streaming pipelines.
+- **Key Failure Modes & Edge Cases**: Treating a generator like a reusable list; once consumed, a generator is empty and cannot be re-run!
+- **Verification & Mastery Check**: Write a generator function stream_chunks(text, chunk_size) that yields fixed-size text segments.
+- **Project Application**: SchemaAgent: Memory-bounded document chunking.', '{"solution.py": "# Phase 1 // Lesson 1.14: Generators & The yield Keyword\n\ndef solve():\n    \"\"\"\n    Verification: Write a generator function stream_chunks(text, chunk_size) that yields fixed-size text segments.\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.14", "subtopics_count": 4, "verification_criteria": "Write a generator function stream_chunks(text, chunk_size) that yields fixed-size text segments.", "subtopics": ["1.14.1 Lightweight stream producers: writing generator functions using the yield keyword.", "1.14.2 Memory efficiency: why generators use zero extra memory even when yielding billions of items.", "1.14.3 Generator state preservation: pausing function execution and resuming seamlessly on next().", "1.14.4 Generator expressions: writing single-line memory-efficient streaming pipelines."]}'::jsonb, '["Explain how this implementation prevents: Treating a generator like a reusable list; once consumed, a generator is empty and cannot be re-run!", "How does Generators & The yield Keyword scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-15', 'phase-01-lesson-15-decorators-function-wrapping-wraps', 'module-2', 15, 'Lesson 2.15: Decorators: Function Wrapping & Wraps', 'Prerequisites: Lesson 1.2, Phase 0 (Lesson 0.8)', 'Prerequisites: Lesson 1.2, Phase 0 (Lesson 0.8) | Subtopics: 4 items', 'Systems project application', 120, 2, 250.0, 750.0, '# Lesson 1.15: Decorators: Function Wrapping & Wraps
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.2, Phase 0 (Lesson 0.8)
+- **Subtopics**:
+  - `1.15.1` Decorators as function wrappers: augmenting function behavior without modifying original code.
+  - `1.15.2` Higher-order functions: functions that accept functions as arguments and return new functions.
+  - `1.15.3` Preserving metadata: using @functools.wraps to protect the original function name and docstring.
+  - `1.15.4` Practical use cases: automated logging, timing, authentication checks, and input sanitization.
+- **Key Failure Modes & Edge Cases**: Forgetting @functools.wraps, causing decorated functions to lose their name and breaking debugging tools.
+- **Verification & Mastery Check**: Write a @log_call decorator that prints the function name, arguments, and return value for every invocation.
+- **Project Application**: SchemaAgent: Observability logging wrappers.', '{"solution.py": "# Phase 1 // Lesson 1.15: Decorators: Function Wrapping & Wraps\n\ndef solve():\n    \"\"\"\n    Verification: Write a @log_call decorator that prints the function name, arguments, and return value for every inv\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.15", "subtopics_count": 4, "verification_criteria": "Write a @log_call decorator that prints the function name, arguments, and return value for every invocation.", "subtopics": ["1.15.1 Decorators as function wrappers: augmenting function behavior without modifying original code.", "1.15.2 Higher-order functions: functions that accept functions as arguments and return new functions.", "1.15.3 Preserving metadata: using @functools.wraps to protect the original function name and docstring.", "1.15.4 Practical use cases: automated logging, timing, authentication checks, and input sanitization."]}'::jsonb, '["Explain how this implementation prevents: Forgetting @functools.wraps, causing decorated functions to lose their name and breaking debugging tools.", "How does Decorators: Function Wrapping & Wraps scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-16', 'phase-01-lesson-16-decorators-with-arguments', 'module-2', 16, 'Lesson 2.16: Decorators with Arguments', 'Prerequisites: Lesson 1.15', 'Prerequisites: Lesson 1.15 | Subtopics: 4 items', 'Systems project application', 120, 2, 310.0, 800.0, '# Lesson 1.16: Decorators with Arguments
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.15
+- **Subtopics**:
+  - `1.16.1` Configurable decorators: writing decorators that take options (like @retry(max_attempts=3)).
+  - `1.16.2` The three-tier closure structure: outer function for arguments, middle for wrapper, inner for execution.
+  - `1.16.3` Building production-grade retry decorators with exponential backoff for flaky AI API endpoints.
+  - `1.16.4` Clean error handling inside decorator closures.
+- **Key Failure Modes & Edge Cases**: Getting confused by the 3 nested function levels, mixing up where arguments are received.
+- **Verification & Mastery Check**: Write a @retry(times=3) decorator that catches network exceptions and retries the function up to 3 times.
+- **Project Application**: SchemaAgent: Production API retry decorator.', '{"solution.py": "# Phase 1 // Lesson 1.16: Decorators with Arguments\n\ndef solve():\n    \"\"\"\n    Verification: Write a @retry(times=3) decorator that catches network exceptions and retries the function up to 3 t\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.16", "subtopics_count": 4, "verification_criteria": "Write a @retry(times=3) decorator that catches network exceptions and retries the function up to 3 times.", "subtopics": ["1.16.1 Configurable decorators: writing decorators that take options (like @retry(max_attempts=3)).", "1.16.2 The three-tier closure structure: outer function for arguments, middle for wrapper, inner for execution.", "1.16.3 Building production-grade retry decorators with exponential backoff for flaky AI API endpoints.", "1.16.4 Clean error handling inside decorator closures."]}'::jsonb, '["Explain how this implementation prevents: Getting confused by the 3 nested function levels, mixing up where arguments are received.", "How does Decorators with Arguments scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-17', 'phase-01-lesson-17-unit-testing-fundamentals-with-pytest', 'module-2', 17, 'Lesson 2.17: Unit Testing Fundamentals with pytest', 'Prerequisites: Phase 0 (Lesson 0.17)', 'Prerequisites: Phase 0 (Lesson 0.17) | Subtopics: 4 items', 'Systems project application', 120, 2, 370.0, 850.0, '# Lesson 1.17: Unit Testing Fundamentals with pytest
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Phase 0 (Lesson 0.17)
+- **Subtopics**:
+  - `1.17.1` Why automated testing is mandatory for professional software engineers: preventing regressions.
+  - `1.17.2` Writing tests with pytest: simple assert statements without boilerplate.
+  - `1.17.3` Structuring test files: naming conventions (test_*.py and test_* functions).
+  - `1.17.4` Running tests: using the pytest command in the terminal and reading test failure reports.
+- **Key Failure Modes & Edge Cases**: Writing tests that pass blindly without asserting any real condition, giving false confidence.
+- **Verification & Mastery Check**: Write a comprehensive test suite for a PromptFormatter function covering valid inputs and edge cases.
+- **Project Application**: SchemaAgent: Unit test suites.', '{"solution.py": "# Phase 1 // Lesson 1.17: Unit Testing Fundamentals with pytest\n\ndef solve():\n    \"\"\"\n    Verification: Write a comprehensive test suite for a PromptFormatter function covering valid inputs and edge cases\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.17", "subtopics_count": 4, "verification_criteria": "Write a comprehensive test suite for a PromptFormatter function covering valid inputs and edge cases.", "subtopics": ["1.17.1 Why automated testing is mandatory for professional software engineers: preventing regressions.", "1.17.2 Writing tests with pytest: simple assert statements without boilerplate.", "1.17.3 Structuring test files: naming conventions (test_*.py and test_* functions).", "1.17.4 Running tests: using the pytest command in the terminal and reading test failure reports."]}'::jsonb, '["Explain how this implementation prevents: Writing tests that pass blindly without asserting any real condition, giving false confidence.", "How does Unit Testing Fundamentals with pytest scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-18', 'phase-01-lesson-18-pytest-fixtures-setup-teardown', 'module-2', 18, 'Lesson 2.18: pytest Fixtures: Setup & Teardown', 'Prerequisites: Lesson 1.17', 'Prerequisites: Lesson 1.17 | Subtopics: 4 items', 'Systems project application', 120, 2, 250.0, 900.0, '# Lesson 1.18: pytest Fixtures: Setup & Teardown
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.18.1` Test fixtures: preparing test data, mock connections, and clean state using @pytest.fixture.
+  - `1.18.2` Dependency injection: passing fixtures cleanly into test functions as named arguments.
+  - `1.18.3` Fixture scopes: function, module, and session scopes for optimizing test execution speed.
+  - `1.18.4` Teardown with yield: automatically cleaning up temporary files after test execution.
+- **Key Failure Modes & Edge Cases**: Sharing mutable state across tests via module-scoped fixtures, causing tests to fail when run in random order.
+- **Verification & Mastery Check**: Create a sample_agent fixture that initializes a fresh agent instance for each unit test.
+- **Project Application**: SchemaAgent: Test fixture harness.', '{"solution.py": "# Phase 1 // Lesson 1.18: pytest Fixtures: Setup & Teardown\n\ndef solve():\n    \"\"\"\n    Verification: Create a sample_agent fixture that initializes a fresh agent instance for each unit test.\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.18", "subtopics_count": 4, "verification_criteria": "Create a sample_agent fixture that initializes a fresh agent instance for each unit test.", "subtopics": ["1.18.1 Test fixtures: preparing test data, mock connections, and clean state using @pytest.fixture.", "1.18.2 Dependency injection: passing fixtures cleanly into test functions as named arguments.", "1.18.3 Fixture scopes: function, module, and session scopes for optimizing test execution speed.", "1.18.4 Teardown with yield: automatically cleaning up temporary files after test execution."]}'::jsonb, '["Explain how this implementation prevents: Sharing mutable state across tests via module-scoped fixtures, causing tests to fail when run in random order.", "How does pytest Fixtures: Setup & Teardown scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-19', 'phase-01-lesson-19-parameterized-tests-in-pytest', 'module-2', 19, 'Lesson 2.19: Parameterized Tests in pytest', 'Prerequisites: Lesson 1.17', 'Prerequisites: Lesson 1.17 | Subtopics: 4 items', 'Systems project application', 120, 2, 310.0, 950.0, '# Lesson 1.19: Parameterized Tests in pytest
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.19.1` Testing multiple inputs efficiently: using @pytest.mark.parametrize.
+  - `1.19.2` Eliminating duplicate test code: running one test function across dozens of input/output pairs.
+  - `1.19.3` Edge case sweeps: testing empty strings, special characters, huge inputs, and negative numbers.
+  - `1.19.4` Readable test reports: giving descriptive IDs to parameterized test cases.
+- **Key Failure Modes & Edge Cases**: Writing 10 copy-pasted test functions that could be expressed in a single 5-line parameterized test.
+- **Verification & Mastery Check**: Parametrize a prompt validation test across 6 different inputs (valid prompts, empty text, whitespace, null).
+- **Project Application**: SchemaAgent: Automated input boundary testing.', '{"solution.py": "# Phase 1 // Lesson 1.19: Parameterized Tests in pytest\n\ndef solve():\n    \"\"\"\n    Verification: Parametrize a prompt validation test across 6 different inputs (valid prompts, empty text, whitespac\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.19", "subtopics_count": 4, "verification_criteria": "Parametrize a prompt validation test across 6 different inputs (valid prompts, empty text, whitespace, null).", "subtopics": ["1.19.1 Testing multiple inputs efficiently: using @pytest.mark.parametrize.", "1.19.2 Eliminating duplicate test code: running one test function across dozens of input/output pairs.", "1.19.3 Edge case sweeps: testing empty strings, special characters, huge inputs, and negative numbers.", "1.19.4 Readable test reports: giving descriptive IDs to parameterized test cases."]}'::jsonb, '["Explain how this implementation prevents: Writing 10 copy-pasted test functions that could be expressed in a single 5-line parameterized test.", "How does Parameterized Tests in pytest scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb),
+('node-1-20', 'phase-01-lesson-20-mocking-test-isolation-with-unittest-mock', 'module-2', 20, 'Lesson 2.20: Mocking & Test Isolation with unittest.mock', 'Prerequisites: Lesson 1.17', 'Prerequisites: Lesson 1.17 | Subtopics: 4 items', 'Systems project application', 120, 2, 370.0, 1000.0, '# Lesson 1.20: Mocking & Test Isolation with unittest.mock
+
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 1.17
+- **Subtopics**:
+  - `1.20.1` Why we mock external services: avoiding slow, expensive, and flaky real network API calls during tests.
+  - `1.20.2` The Mock object: simulating external dependencies and verifying they were called correctly.
+  - `1.20.3` Patching with patch(): temporarily swapping real API functions with mock objects during tests.
+  - `1.20.4` Asserting mock behavior: assert_called_once(), assert_called_with(), and mock return values.
+- **Key Failure Modes & Edge Cases**: Patching the wrong import path (patching where the object is defined instead of where it is imported).
+- **Verification & Mastery Check**: Write a test that patches an OpenAI API call, returns a fake JSON response, and verifies agent processing.
+- **Project Application**: SchemaAgent: Offline API test simulation.', '{"solution.py": "# Phase 1 // Lesson 1.20: Mocking & Test Isolation with unittest.mock\n\ndef solve():\n    \"\"\"\n    Verification: Write a test that patches an OpenAI API call, returns a fake JSON response, and verifies agent proce\n    \"\"\"\n    pass\n"}'::jsonb, '{"lesson": "1.20", "subtopics_count": 4, "verification_criteria": "Write a test that patches an OpenAI API call, returns a fake JSON response, and verifies agent processing.", "subtopics": ["1.20.1 Why we mock external services: avoiding slow, expensive, and flaky real network API calls during tests.", "1.20.2 The Mock object: simulating external dependencies and verifying they were called correctly.", "1.20.3 Patching with patch(): temporarily swapping real API functions with mock objects during tests.", "1.20.4 Asserting mock behavior: assert_called_once(), assert_called_with(), and mock return values."]}'::jsonb, '["Explain how this implementation prevents: Patching the wrong import path (patching where the object is defined instead of where it is imported).", "How does Mocking & Test Isolation with unittest.mock scale under memory and concurrency constraints?", "Defend the architectural tradeoffs of this design in production."]'::jsonb)
+ON CONFLICT (id) DO UPDATE SET slug = EXCLUDED.slug, phase_id = EXCLUDED.phase_id, order_index = EXCLUDED.order_index, title = EXCLUDED.title, subtitle = EXCLUDED.subtitle, cs_foundation = EXCLUDED.cs_foundation, ai_convergence = EXCLUDED.ai_convergence, xp_reward = EXCLUDED.xp_reward, level_required = EXCLUDED.level_required, position_x = EXCLUDED.position_x, position_y = EXCLUDED.position_y, handbook_markdown = EXCLUDED.handbook_markdown, starter_code = EXCLUDED.starter_code, test_suite = EXCLUDED.test_suite, defense_prompts = EXCLUDED.defense_prompts;

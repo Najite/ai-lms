@@ -41,10 +41,7 @@ import {
   markExerciseCompleted,
   setLastActiveLessonId,
 } from "@/lib/progress-tracker";
-import { COMPREHENSIVE_EXERCISES_CATALOG, ExerciseItem } from "@/lib/exercises-catalog";
-import { ENRICHED_MODULE_HANDBOOKS } from "@/lib/enriched-handbooks";
 import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
-import { ExerciseFormatter } from "./exercise-formatter";
 
 interface WorkspaceLesson {
   id: string;
@@ -82,13 +79,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
   const { completedLessons, completedExercises } = useCurriculumProgress();
   const currentLesson = lessons[currentLessonIndex] || null;
 
-  // Find paired exercise from catalog if available
-  const pairedExercise: ExerciseItem | undefined = React.useMemo(() => {
-    if (!currentLesson) return undefined;
-    return COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === currentLesson.id);
-  }, [currentLesson]);
-
-  // Fetch all curriculum nodes from Supabase
+  // Fetch all curriculum nodes directly from Supabase (Zero mock fallbacks)
   React.useEffect(() => {
     let isMounted = true;
     async function loadLessons() {
@@ -98,41 +89,31 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
           .from("curriculum_nodes")
           .select("id, slug, phase_id, title, handbook_markdown, starter_code, test_suite, xp_reward")
           .order("id", { ascending: true })
-          .limit(600);
+          .limit(1000);
 
         if (error) {
           console.error("Failed to load curriculum nodes from Supabase", error);
         }
 
-        let nodesToUse = data;
-        if (!nodesToUse || nodesToUse.length === 0) {
-          // Fallback to sample modules from catalog if DB query returned nothing
-          nodesToUse = COMPREHENSIVE_EXERCISES_CATALOG.slice(0, 10).map((ex) => ({
-            id: ex.lessonId,
-            slug: ex.lessonId,
-            phase_id: "phase-0",
-            title: ex.title,
-            handbook_markdown: `# ${ex.title}\n\n${ex.descriptionMarkdown}`,
-            starter_code: ex.starterCode,
-            test_suite: ex.testSuite,
-            xp_reward: 150,
-          }));
-        } else {
-          // Naturally sort by node index: node-0-1, node-0-2, ... node-0-10
-          const parseNodeRank = (id: string) => {
-            const match = id.match(/node-(\d+)-(\d+)/);
-            if (match) {
-              return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
-            }
-            return 999999;
-          };
-          nodesToUse = [...nodesToUse].sort((a: any, b: any) => parseNodeRank(a.id) - parseNodeRank(b.id));
-        }
+        let nodesToUse = data || [];
+
+        // Naturally sort by node index: node-0-1, node-0-2, ... node-0-10, node-1-1...
+        const parseNodeRank = (id: string) => {
+          const match = id.match(/node-(\d+)-(\d+)/);
+          if (match) {
+            return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
+          }
+          return 999999;
+        };
+        nodesToUse = [...nodesToUse].sort((a: any, b: any) => parseNodeRank(a.id) - parseNodeRank(b.id));
 
         if (isMounted && nodesToUse && nodesToUse.length > 0) {
           const formatted: WorkspaceLesson[] = nodesToUse.map((d: any) => {
             let sc = "";
             let ts = "";
+            let criteria: string | undefined = undefined;
+            let failureMode: string | undefined = undefined;
+
             if (typeof d.starter_code === "object" && d.starter_code !== null) {
               sc = d.starter_code["solution.py"] || JSON.stringify(d.starter_code, null, 2);
             } else if (typeof d.starter_code === "string") {
@@ -141,16 +122,16 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
 
             if (typeof d.test_suite === "object" && d.test_suite !== null) {
               ts = d.test_suite["tests.py"] || JSON.stringify(d.test_suite, null, 2);
+              criteria = d.test_suite["verification_criteria"];
+              failureMode = d.test_suite["failure_mode"];
             } else if (typeof d.test_suite === "string") {
               ts = d.test_suite;
             }
 
-            const enriched = ENRICHED_MODULE_HANDBOOKS[d.id];
-            const rawTitle = enriched?.title || d.title;
-            const coords = parseLessonCoordinates(d.id, rawTitle);
+            const coords = parseLessonCoordinates(d.id, d.title);
             const finalTitle = coords.displayTitle;
             const finalPhase = formatPhaseTitle(d.phase_id);
-            const finalHandbook = enriched?.handbook || d.handbook_markdown || "Handbook content is being synthesized.";
+            const finalHandbook = d.handbook_markdown || "Handbook content is being synthesized.";
 
             return {
               id: d.id,
@@ -160,8 +141,8 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               handbook: finalHandbook,
               starterCode: sc || "# Write solution here\npass\n",
               testSuite: ts || "# Unit test suite\nassert True\n",
-              criteria: undefined,
-              failureMode: undefined,
+              criteria,
+              failureMode,
               xpReward: d.xp_reward || 150,
             };
           });
@@ -176,11 +157,10 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
           }
           setCurrentLessonIndex(targetIndex);
 
-          // Initialize starter code
+          // Initialize starter code directly from database node
           const initial = formatted[targetIndex];
           if (initial) {
-            const paired = COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === initial.id);
-            setCode(paired?.starterCode || initial.starterCode);
+            setCode(initial.starterCode);
           }
         }
       } catch (err) {
@@ -200,8 +180,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
     setCurrentLessonIndex(index);
     const target = lessons[index];
     if (target) {
-      const paired = COMPREHENSIVE_EXERCISES_CATALOG.find((e) => e.lessonId === target.id);
-      setCode(paired?.starterCode || target.starterCode);
+      setCode(target.starterCode);
       setExecutionResult(null);
       setActiveMode("theory");
       setShowCheckpointPrompt(false);
@@ -241,7 +220,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
 
     try {
       const controller = getSandboxController();
-      const testCode = pairedExercise?.testSuite || currentLesson.testSuite;
+      const testCode = currentLesson.testSuite;
 
       const res = await controller.execute({
         id: `exercise-${currentLesson.id}`,
@@ -430,35 +409,44 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
       {activeMode === "exercise" && (
         <div className="space-y-6 animate-fadeIn">
           {/* Formatted Standalone Exercise Specifications & Test Criteria */}
-          {pairedExercise ? (
-            <ExerciseFormatter
-              exercise={pairedExercise}
-              onNavigateToTheory={() => setActiveMode("theory")}
-              showTheoryLink={true}
-            />
-          ) : (
-            <div className="rounded-xl bg-[#0b0c0e] border border-[#23252a] p-5 space-y-3">
-              <div className="flex items-center justify-between border-b border-[#1f2126] pb-3">
-                <div className="flex items-center gap-2">
-                  <Code2 className="w-4 h-4 text-[#10b981]" />
-                  <h3 className="text-sm font-bold text-[#f7f8f8] font-mono">
-                    Module Practice Challenge: {currentLesson.title}
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setActiveMode("theory")}
-                  className="text-xs font-mono text-[#8a8f98] hover:text-white transition-colors"
-                >
-                  ← Review Theory
-                </button>
+          <div className="rounded-xl bg-[#0b0c0e] border border-[#23252a] p-5 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between border-b border-[#1f2126] pb-3">
+              <div className="flex items-center gap-2">
+                <Code2 className="w-4 h-4 text-[#10b981]" />
+                <h3 className="text-sm font-bold text-[#f7f8f8] font-mono">
+                  Verification Lab: {currentLesson.title}
+                </h3>
               </div>
-              <p className="text-xs font-mono text-[#d0d6e0] leading-relaxed">
-                <strong>Verification Invariant:</strong>{" "}
-                {currentLesson.criteria ||
-                  "Implement the function adhering strictly to the constraints in the module theory."}
-              </p>
+              <button
+                onClick={() => setActiveMode("theory")}
+                className="text-xs font-mono text-[#8a8f98] hover:text-white transition-colors"
+              >
+                ← Review Theory
+              </button>
             </div>
-          )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="p-3.5 rounded-lg bg-[#111215] border border-[#23252a] space-y-1.5">
+                <span className="text-[#10b981] font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  VERIFICATION CRITERIA
+                </span>
+                <p className="text-[#d0d6e0] leading-relaxed">
+                  {currentLesson.criteria ||
+                    "Implement the complete solution in solution.py adhering strictly to the lesson requirements."}
+                </p>
+              </div>
+              <div className="p-3.5 rounded-lg bg-[#111215] border border-[#23252a] space-y-1.5">
+                <span className="text-[#f59e0b] font-semibold flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  KEY FAILURE MODE TO AVOID
+                </span>
+                <p className="text-[#d0d6e0] leading-relaxed">
+                  {currentLesson.failureMode ||
+                    "Verify all edge cases, input boundary conditions, and type constraints."}
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Standalone Full-Width Code Editor & Terminal */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -519,7 +507,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               {/* Editor Body */}
               <div className="p-2 flex-1 min-h-[350px]">
                 <CodeEditor
-                  value={activeEditorTab === "solution" ? code : pairedExercise?.testSuite || currentLesson.testSuite}
+                  value={activeEditorTab === "solution" ? code : currentLesson.testSuite}
                   onChange={(val) => {
                     if (activeEditorTab === "solution") setCode(val);
                   }}

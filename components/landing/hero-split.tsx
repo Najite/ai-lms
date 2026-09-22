@@ -39,7 +39,7 @@ const TOPIC_CHALLENGES: Record<string, TopicChallenge> = {
     id: "system-design",
     name: "System Design",
     icon: Cpu,
-    badge: "Phase 3 // Lesson 116",
+    badge: "Module 4 // Lesson 4.14",
     solutionFile: "lru_cache.py",
     testFile: "test_lru.py",
     solutionCode: `def lru_cache_lookup(cache: dict, key: str, order: list, capacity: int):
@@ -55,7 +55,7 @@ const TOPIC_CHALLENGES: Record<string, TopicChallenge> = {
     order.append(key)
     return cache[key]
 `,
-    testCode: `# Test Suite: Phase 3 / Lesson 116 / Subtopic 116.2
+    testCode: `# Test Suite: Module 4 / Lesson 4.14 / Subtopic 14.2
 cache = {"A": 100, "B": 200, "C": 300}
 order = ["A", "B", "C"]
 
@@ -77,7 +77,7 @@ print("✓ LRU Eviction & Cache Hit Assertions: 3/3 Passed")
     id: "agentic-ai",
     name: "Agentic AI & MCP",
     icon: Sparkles,
-    badge: "Phase 12 // Lesson 482",
+    badge: "Module 8 // Lesson 8.42",
     solutionFile: "mcp_router.py",
     testFile: "test_mcp.py",
     solutionCode: `def route_tool_call(request: dict, registered_tools: dict):
@@ -93,7 +93,7 @@ print("✓ LRU Eviction & Cache Hit Assertions: 3/3 Passed")
     result = handler(request.get("params", {}))
     return {"jsonrpc": "2.0", "result": result, "id": request.get("id")}
 `,
-    testCode: `# Test Suite: Phase 12 / Lesson 482 / MCP Dispatcher
+    testCode: `# Test Suite: Module 8 / Lesson 8.42 / MCP Dispatcher
 tools = {"db_query": lambda p: f"Found {p.get('table')}"}
 req_valid = {"jsonrpc": "2.0", "method": "db_query", "params": {"table": "users"}, "id": 1}
 req_invalid = {"jsonrpc": "2.0", "method": "unknown_tool", "params": {}, "id": 2}
@@ -116,7 +116,7 @@ print("✓ MCP JSON-RPC Dispatcher: 2/2 Passed")
     id: "distributed-raft",
     name: "Raft Consensus",
     icon: Network,
-    badge: "Phase 5 // Lesson 210",
+    badge: "Module 8 // Lesson 8.8",
     solutionFile: "raft_node.py",
     testFile: "test_raft.py",
     solutionCode: `def handle_heartbeat(node_state: dict, leader_term: int, leader_id: str):
@@ -132,7 +132,7 @@ print("✓ MCP JSON-RPC Dispatcher: 2/2 Passed")
     node_state["election_timeout_reset"] = True
     return True
 `,
-    testCode: `# Test Suite: Phase 5 / Lesson 210 / Raft Election
+    testCode: `# Test Suite: Module 8 / Lesson 8.8 / Raft Election
 state = {"current_term": 2, "leader_id": None, "election_timeout_reset": False}
 
 assert handle_heartbeat(state, 1, "node_b") == False, "Did not reject stale term"
@@ -153,7 +153,7 @@ print("✓ Raft Heartbeat & Term Guard: 3/3 Passed")
     id: "compilers",
     name: "Compilers & AST",
     icon: Braces,
-    badge: "Phase 1 // Lesson 045",
+    badge: "Module 2 // Lesson 2.25",
     solutionFile: "ast_eval.py",
     testFile: "test_ast.py",
     solutionCode: `def evaluate_ast(node: tuple):
@@ -172,7 +172,7 @@ print("✓ Raft Heartbeat & Term Guard: 3/3 Passed")
     if op == '*': return val_l * val_r
     raise ValueError(f"Unknown op: {op}")
 `,
-    testCode: `# Test Suite: Phase 1 / Lesson 045 / AST Interpreter
+    testCode: `# Test Suite: Module 2 / Lesson 2.25 / AST Interpreter
 tree1 = ('+', 10, ('*', 3, 4))   # 10 + (3 * 4) = 22
 tree2 = ('*', ('+', 2, 3), 5)    # (2 + 3) * 5 = 25
 
@@ -279,7 +279,7 @@ export function HeroSplit() {
           </h1>
           <p className="text-sm sm:text-base text-[#8a8f98] leading-relaxed max-w-xl">
             Hands-on in-browser courses in AI Agents, System Design, Distributed Consensus, and Compilers.
-            Zero environment setups. Code directly in your browser, then ship 22 verifiable capstones to GitHub.
+            Zero environment setups. Code directly in your browser, then ship 18 verifiable capstones to GitHub.
           </p>
         </div>
 
@@ -333,7 +333,7 @@ export function HeroSplit() {
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>600 Self-Paced Lessons</span>
+            <span>520 Self-Paced Lessons</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
@@ -341,7 +341,7 @@ export function HeroSplit() {
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>22 Local Workstation Capstones</span>
+            <span>18 Local Workstation Capstones</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
@@ -359,7 +359,7 @@ export function HeroSplit() {
             }}
             className="font-mono text-xs gap-2"
           >
-            <span>Explore 600 Lessons</span>
+            <span>Explore 520 Lessons</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
 

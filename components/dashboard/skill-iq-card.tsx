@@ -37,16 +37,16 @@ export interface SkillScore {
 const INITIAL_SKILLS: SkillScore[] = [
   {
     id: "systems",
-    name: "Linux Memory & POSIX Systems",
-    category: "Low-Level",
+    name: "Python & Pydantic Data Contracts",
+    category: "Foundations",
     score: 218,
     tier: "Expert",
     percentile: 88,
     lastAssessed: "3 days ago",
     gapLesson: {
       id: "node-1-4",
-      title: "Custom Malloc Alignment & Free List Allocator",
-      phase: "Phase 1",
+      title: "Pydantic v2 Guaranteed JSON Schemas & Strict Validation",
+      phase: "Module 2",
     },
   },
   {
@@ -60,7 +60,7 @@ const INITIAL_SKILLS: SkillScore[] = [
     gapLesson: {
       id: "node-5-2",
       title: "WAL Recovery, ARIES Invariants & Slotted Pages",
-      phase: "Phase 5",
+      phase: "Module 5",
     },
   },
   {
@@ -74,7 +74,7 @@ const INITIAL_SKILLS: SkillScore[] = [
     gapLesson: {
       id: "node-3-6",
       title: "SkipList Probabilistic Indexing & Lock-Free Reads",
-      phase: "Phase 3",
+      phase: "Module 4",
     },
   },
   {
@@ -88,7 +88,7 @@ const INITIAL_SKILLS: SkillScore[] = [
     gapLesson: {
       id: "node-10-1",
       title: "Scaled Dot-Product Self-Attention from First Principles",
-      phase: "Phase 10",
+      phase: "Module 7",
     },
   },
 ];

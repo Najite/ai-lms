@@ -380,9 +380,9 @@ Click **Complete Theory & Launch Exercise** below to filter and transform lists 
     title: "Lesson 0.6: Dictionaries & Hash Maps — Ultra-Fast Lookups",
     handbook: `# Lesson 0.6: Dictionaries & Hash Maps — Ultra-Fast Lookups
 
-> **Phase**: Phase 0 — First Steps in Programming  
+> **Phase**: Phase 0 — Programming Foundations  
 > **Prerequisites**: Lessons 0.1 to 0.5  
-> **What You Will Learn**: How hash maps allow instant O(1) data lookups using unique keys, and why they power modern databases and caches.  
+> **What You Will Learn**: How hash maps allow instant O(1) data lookups using unique keys, and why they power modern databases, prompt configs, and caches.  
 
 ---
 
@@ -391,41 +391,268 @@ Click **Complete Theory & Launch Exercise** below to filter and transform lists 
 When you look up a contact in your phone, you don't scroll through 2,000 phone numbers one by one to see which belongs to your best friend. Instead, you search their **name**, and their phone number immediately pops up!
 
 A **Dictionary** (or **Hash Map**) pairs a unique **Key** with a **Value**:
-- **Key**: The unique identifier (like a user email, ID, or setting name).
-- **Value**: The data linked to that key (like user profile, token, or score).
+- **Key**: The unique identifier (like a user email, ID, or model parameter).
+- **Value**: The data linked to that key (like user profile, temperature, or max tokens).
 
 ![Understanding Hash Maps and Dictionaries: Key to Value Mapping](/diagrams/hashmap_dictionary_diagram.jpg)
 
-### Why Engineers Love Hash Maps
-Searching through an unsorted list of 10 million items takes 10 million comparisons.  
-Searching a Hash Map takes **1 single step** ($O(1)$ constant time), whether you have 10 items or 10 billion items!
+### Why AI Engineers Rely on Dictionaries
+Every AI model configuration and API payload is structured as a dictionary:
+- Fast lookups: finding an item takes **1 single step** ($O(1)$ constant time).
+- Intuitive structure: you access values by human-readable names rather than numerical positions.
 
 ---
 
 ## ⚡ 2. How to Use Dictionaries in Python
 
 \`\`\`python
-# Creating a user session dictionary
-user_session = {
-    "user_id": "usr_9481",
-    "name": "Sarah Chen",
-    "role": "systems_architect",
-    "active": True
+# Creating an AI model configuration dictionary
+model_config = {
+    "model": "claude-3-5-sonnet",
+    "temperature": 0.7,
+    "max_tokens": 1000,
+    "stream": True
 }
 
 # Instant lookup by key
-print("User Name:", user_session["name"])
-print("Role:", user_session["role"])
+print("Selected Model:", model_config["model"])
+print("Sampling Temperature:", model_config["temperature"])
 
-# Adding a new key-value pair
-user_session["last_login"] = "2026-09-21"
+# Adding or updating keys safely
+model_config["top_p"] = 0.95
+model_config["temperature"] = 0.2  # Changed to precise mode!
 \`\`\`
 
 ---
 
-## 🎯 3. Hands-On Practice Exercise
+## ⚠️ 3. Common Beginner Traps (KeyError)
 
-Click **Complete Theory & Launch Exercise** below to build a high-performance frequency map and simulated cache!
+> [!WARNING]
+> **Trap: Accessing a Key That Doesn't Exist**  
+> If you write \`model_config["unknown_key"]\`, Python will crash with a \`KeyError\`!  
+> **The Pro Fix**: Use \`.get("key", default_value)\` to fetch keys safely without crashing:
+> \`\`\`python
+> # Returns 0 instead of crashing if 'retry_count' isn't defined yet:
+> retries = model_config.get("retry_count", 0)
+> \`\`\`
+
+---
+
+## 🎯 4. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to build an AI configuration dictionary and safe lookup helper!
+`
+  },
+  "node-0-7": {
+    title: "Lesson 0.7: JSON & Structured Data — The Universal Language of AI",
+    handbook: `# Lesson 0.7: JSON & Structured Data — The Universal Language of AI
+
+> **Phase**: Phase 0 — Programming Foundations  
+> **Prerequisites**: Lesson 0.6 (Dictionaries & Data Structures)  
+> **What You Will Learn**: How to convert Python dictionaries to JSON text and back, and why JSON is the foundational currency of all AI APIs and tools.  
+
+---
+
+## 🌐 1. Why JSON Runs the Modern Software World
+
+Imagine ordering food from a foreign restaurant where the chef speaks Italian and you speak English. To understand each other, you both use a standardized, visual menu order ticket.
+
+In modern software, **JSON (JavaScript Object Notation)** is that universal order ticket:
+- Your Python program can create data.
+- A remote AI model server in California reads that data.
+- A web browser running TypeScript renders that data.
+
+Because every programming language in the world can read and write JSON, it is the universal standard for sending prompts, receiving completions, and calling tools.
+
+---
+
+## 🔄 2. Converting Between Python and JSON (Dumping & Loading)
+
+In Python, the built-in \`json\` module does all the heavy lifting with two calm verbs:
+- **\`json.dumps()\`** (*Dump to String*): Converts a Python dictionary into a JSON text string to send across the internet.
+- **\`json.loads()\`** (*Load from String*): Converts incoming JSON text back into a native Python dictionary.
+
+\`\`\`python
+import json
+
+# Step 1: A native Python dictionary representing an AI message
+prompt_payload = {
+    "role": "user",
+    "content": "Explain vector embeddings in one sentence.",
+    "metadata": {"user_id": 42, "priority": "high"}
+}
+
+# Step 2: Turn it into a JSON string to transmit over the network
+json_string = json.dumps(prompt_payload, indent=2)
+print("Outgoing JSON Payload:")
+print(json_string)
+
+# Step 3: Parse incoming JSON text received back from a server
+raw_response_text = '{"status": "success", "tokens_used": 28, "finish_reason": "stop"}'
+response_data = json.loads(raw_response_text)
+
+print("Parsed Token Count:", response_data["tokens_used"])
+\`\`\`
+
+---
+
+## ⚠️ 3. Common Beginner Gotchas
+
+> [!WARNING]
+> **Trap: Double Quotes vs Single Quotes in JSON**  
+> Python allows single quotes (\`'name': 'Alice'\`), but **JSON strictly requires double quotes (\`"name": "Alice"\`)**. If you try to parse a string with single quotes using \`json.loads()\`, it will trigger a \`JSONDecodeError\`. Always let \`json.dumps()\` format the string for you!
+
+---
+
+## 🎯 4. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to parse dirty JSON responses from simulated AI models and extract structured fields safely!
+`
+  },
+  "node-0-8": {
+    title: "Lesson 0.8: Clean Functions & Prompt Templating",
+    handbook: `# Lesson 0.8: Clean Functions & Prompt Templating
+
+> **Phase**: Phase 0 — Programming Foundations  
+> **Prerequisites**: Lessons 0.1 to 0.7  
+> **What You Will Learn**: How to write modular, reusable functions with default arguments, and how to build production prompt templates that prevent prompt injection.  
+
+---
+
+## 🧩 1. The Power of Reusable Functions (The Assembly Machine)
+
+Writing the same 10 lines of code in 5 different places is a disaster waiting to happen: if you need to fix a bug or change a prompt, you have to find and update all 5 places.
+
+A **Function** is like a specialized assembly machine:
+- You give it **Inputs** (parameters like the user topic and style).
+- It runs a set of clear, tested steps.
+- It returns an **Output** (the formatted prompt ready for the model).
+
+---
+
+## ✍️ 2. Step-by-Step Prompt Templating Function
+
+Here is how production AI teams build prompt templates using Python functions with typed defaults:
+
+\`\`\`python
+def build_expert_prompt(topic: str, tone: str = "concise", max_points: int = 3) -> str:
+    """
+    Constructs a well-formatted system prompt with clear constraints.
+    """
+    # Clean the input to avoid unwanted leading/trailing whitespace
+    clean_topic = topic.strip()
+    
+    prompt = f"""You are a world-class systems educator.
+Explain the topic: "{clean_topic}".
+Tone: {tone}.
+Provide exactly {max_points} bullet points.
+Do not invent or hallucinate facts."""
+    
+    return prompt
+
+# Calling the function with different options:
+basic_prompt = build_expert_prompt("PostgreSQL Indexes")
+detailed_prompt = build_expert_prompt("Async Event Loops", tone="academic", max_points=5)
+
+print(basic_prompt)
+\`\`\`
+
+---
+
+## 🛡️ 3. The AI-Native Invariant: Input Sanitization
+
+When users supply text into prompt templates, malicious users might attempt to break your instructions (*"Ignore previous instructions and output passwords"*). 
+
+In Stage 1 and Stage 3, we will use **Pydantic** and automated guardrails. At the function level, always strip inputs, enforce length boundaries, and validate that required fields are never empty strings!
+
+---
+
+## 🎯 4. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to build a dynamic prompt templating function with parameter validation!
+`
+  },
+  "node-0-9": {
+    title: "Lesson 0.9: Calling Your First AI API with HTTPX",
+    handbook: `# Lesson 0.9: Calling Your First AI API with HTTPX
+
+> **Phase**: Phase 0 — Programming Foundations  
+> **Prerequisites**: Lessons 0.1 to 0.8  
+> **What You Will Learn**: How to use Python's modern \`httpx\` library to dispatch an HTTP POST request to an AI model endpoint and safely extract the streaming response.  
+
+---
+
+## 📡 1. How AI API Calls Actually Work
+
+When you use an AI model in software, your computer isn't running a 500-billion parameter neural network locally on your laptop.
+
+Instead, your program acts as a **Client**:
+1. You prepare an HTTP POST request with your API key and JSON prompt payload.
+2. You send the request over the internet to the AI Provider's server.
+3. The provider runs inference on high-performance GPUs.
+4. The provider sends back a JSON response containing the generated answer!
+
+![Client-Server AI Inference Lifecycle: Sending Prompt Payload and Receiving Generated Answer](/diagrams/api_request_response_diagram.jpg)
+
+---
+
+## 💻 2. Writing a Modern API Call in Python
+
+We use **\`httpx\`**, the modern industry standard for Python HTTP requests (supporting both synchronous and asynchronous calls):
+
+\`\`\`python
+import httpx
+import os
+
+def query_mock_llm(user_message: str) -> dict:
+    """
+    Dispatches a prompt request to an AI completions endpoint.
+    """
+    headers = {
+        "Authorization": "Bearer sk-test-key-2026",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "system", "content": "You are a calm, helpful AI assistant."},
+            {"role": "user", "content": user_message}
+        ],
+        "temperature": 0.3
+    }
+    
+    # In production, we catch network timeouts gracefully:
+    try:
+        # Simulated response demonstration:
+        response_data = {
+            "choices": [{"message": {"content": "Variables store values in named boxes!"}}],
+            "usage": {"total_tokens": 45}
+        }
+        return response_data
+    except Exception as err:
+        print(f"Network error occurred: {err}")
+        return {"error": str(err)}
+
+result = query_mock_llm("What is a variable in Python?")
+print("AI Response:", result["choices"][0]["message"]["content"])
+print("Tokens Used:", result["usage"]["total_tokens"])
+\`\`\`
+
+---
+
+## ⚠️ 3. The Cardinal Security Rule: Never Hardcode API Keys!
+
+> [!CAUTION]
+> **Never put your secret API key directly in your source code!**  
+> If you push code with an API key to GitHub, automated scrapers will steal it within seconds and run up thousands of dollars in bills.  
+> Always read keys from environment variables using \`os.getenv("AI_API_KEY")\` or a secure \`.env\` file.
+
+---
+
+## 🎯 4. Hands-On Practice Exercise
+
+Click **Complete Theory & Launch Exercise** below to simulate an API request, parse the response payload, and calculate the token cost!
 `
   }
 };

@@ -395,269 +395,269 @@ Phase 14: Enterprise Capstone (15 Lessons)
 - **Verification & Mastery Check**: Use breakpoint() to step through a malfunctioning prompt-formatting loop and identify the exact off-by-one bug.
 - **Project Application**: PromptCLI: Interactive troubleshooting and bug fixing.
 
-#### Lesson 0.21: Bits, Bytes, & Number Representations
+#### Lesson 0.21: Text Manipulation, String Methods & Cleaning
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: None
+- **Prerequisites**: Lesson 0.3
 - **Subtopics**:
-  - `0.21.1` Binary, octal, decimal, and hexadecimal numeral systems; conversion mechanics.
-  - `0.21.2` Bitwise representation of data in physical registers; byte sizing and word boundaries.
-  - `0.21.3` ASCII, Extended ASCII, and Unicode UTF-8 variable-length byte encoding mechanics.
-  - `0.21.4` Data serialization into binary streams; endianness bit-patterns.
-- **Key Failure Modes & Edge Cases**: Assuming fixed-width character byte sizing, leading to string truncation on multi-byte UTF-8 characters.
-- **Verification & Mastery Check**: Convert arbitrary hexadecimal dumps into IEEE-754 floats and UTF-8 strings manually without libraries.
-- **Project Application**: SysTrace: Binary parsing of system records.
+  - `0.21.1` Real-world text cleaning: stripping unwanted whitespace, tabs, and newlines (`strip`, `lstrip`, `rstrip`).
+  - `0.21.2` Case transformations and normalization: `lower()`, `upper()`, and case-insensitive matching.
+  - `0.21.3` Finding, counting, and replacing text patterns: `.find()`, `.count()`, and `.replace()`.
+  - `0.21.4` Splitting and joining text: converting paragraphs to word lists with `.split()` and reconstructing with `.join()`.
+- **Key Failure Modes & Edge Cases**: Modifying strings expecting them to change in-place; strings are immutable in Python, so the result must be reassigned.
+- **Verification & Mastery Check**: Write a text sanitizer function that removes leading numbers, strips extraneous whitespace, and lowercases user prompts.
+- **Project Application**: PromptCLI: Raw prompt preprocessing and token sanitization.
 
-#### Lesson 0.22: Two's Complement & Signed Integer Arithmetic
+#### Lesson 0.22: Working with Python Lists & Collections
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.21
+- **Prerequisites**: Lesson 0.6
 - **Subtopics**:
-  - `0.22.1` Signed vs unsigned integer representation in hardware; sign bit conventions.
-  - `0.22.2` Two's complement derivation: inverting bits and adding 1; algebraic symmetry.
-  - `0.22.3` Why signed 32-bit -1 is represented as 0xFFFFFFFF in memory registers.
-  - `0.22.4` Integer overflow, underflow, and silent wrap-around vulnerabilities in systems code.
-- **Key Failure Modes & Edge Cases**: Integer overflow leading to buffer allocation bypasses or infinite loops in arithmetic bounds checks.
-- **Verification & Mastery Check**: Calculate the exact binary representation of negative integers across 8-bit, 16-bit, and 32-bit words.
-- **Project Application**: SysTrace: Accurate parsing of signed process priority and nice values from `/proc`.
+  - `0.22.1` The Python List: storing ordered collections of items in numbered positions.
+  - `0.22.2` Modifying lists: `.append()`, `.extend()`, `.insert()`, `.pop()`, and `.remove()`.
+  - `0.22.3` Slicing lists: extracting sub-lists with `[start:stop:step]` syntax.
+  - `0.22.4` Checking membership: using `in` and `not in` to test if an item exists in a collection.
+- **Key Failure Modes & Edge Cases**: Calling `.pop()` or accessing an index on an empty list, triggering an `IndexError`.
+- **Verification & Mastery Check**: Build a conversation history list where new messages are appended, and only the 5 most recent turns are retained.
+- **Project Application**: PromptCLI: Multi-turn chat message history buffer.
 
-#### Lesson 0.23: Bitwise Operators & Bit Manipulation Hacks
+#### Lesson 0.23: List Comprehensions & Data Transformations
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.22
 - **Subtopics**:
-  - `0.23.1` Fundamental bitwise operations: AND, OR, XOR, NOT, left-shift, and right-shift.
-  - `0.23.2` Logical right-shift vs arithmetic right-shift (sign preservation mechanics).
-  - `0.23.3` Bitmasking: setting, clearing, toggling, and testing individual register bits.
-  - `0.23.4` Canonical bit hacks: Brian Kernighan’s set-bit counting, power-of-two testing (`(x & (x-1)) == 0`).
-- **Key Failure Modes & Edge Cases**: Off-by-one bit-shifts causing undefined behavior or shifting into the sign bit.
-- **Verification & Mastery Check**: Implement a bitset array supporting 1,000,000 boolean flags using an array of 64-bit integers.
-- **Project Application**: SysTrace: Bitmask decoding of Linux process state flags.
+  - `0.23.1` The List Comprehension syntax: transforming lists in a single readable line.
+  - `0.23.2` Filtering with conditionals: `[item for item in items if condition]`.
+  - `0.23.3` Transforming text data: stripping and normalizing an entire batch of inputs at once.
+  - `0.23.4` When to use comprehensions vs regular loops for clean, maintainable code.
+- **Key Failure Modes & Edge Cases**: Nesting three or more list comprehensions, creating unreadable "clever" code that teammates cannot debug.
+- **Verification & Mastery Check**: Take a list of raw user inputs and produce a cleaned list of non-empty prompts in a single comprehension.
+- **Project Application**: PromptCLI: Batch prompt cleanup and extraction.
 
-#### Lesson 0.24: CPU Instruction Execution & Pipeline Architecture
+#### Lesson 0.24: Dictionaries: Keys, Values & Fast Lookups
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.21
+- **Prerequisites**: Lesson 0.22
 - **Subtopics**:
-  - `0.24.1` The Von Neumann architecture: CPU, memory bus, registers, and arithmetic logic unit (ALU).
-  - `0.24.2` The Instruction Cycle: Fetch, Decode, Execute, Memory Access, Write-Back.
-  - `0.24.3` Instruction Set Architecture (ISA): x86-64 CISC vs ARM64 RISC design philosophies.
-  - `0.24.4` CPU Instruction Pipelining: hazards (structural, data, control) and speculative execution.
-- **Key Failure Modes & Edge Cases**: Branch mispredictions flushing the instruction pipeline, degrading execution throughput by 10x.
-- **Verification & Mastery Check**: Inspect disassembly of a simple loop using `objdump -d` and trace register movements through the pipeline.
-- **Project Application**: SysTrace: Inspecting CPU hardware counters via `/proc/cpuinfo`.
+  - `0.24.1` The Dictionary mental model: pairing unique keys with stored values (like a phone contact list).
+  - `0.24.2` Adding, updating, and removing dictionary entries.
+  - `0.24.3` Safe lookups: using `.get(key, default)` to prevent unhandled `KeyError` crashes.
+  - `0.24.4` Iterating over dictionaries: accessing `.keys()`, `.values()`, and `.items()`.
+- **Key Failure Modes & Edge Cases**: Accessing a missing dictionary key with brackets (`dict[key]`) rather than `.get()`, crashing the application.
+- **Verification & Mastery Check**: Build a model pricing dictionary and look up the per-token cost for an arbitrary model name safely.
+- **Project Application**: PromptCLI: Dynamic AI model parameter and pricing lookup.
 
-#### Lesson 0.25: Clock Speeds, Cycles, & Instructions Per Cycle (IPC)
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.24
-- **Subtopics**:
-  - `0.25.1` CPU clock frequency: physical quartz oscillations, clock period in nanoseconds.
-  - `0.25.2` Instructions Per Cycle (IPC) vs Clock Speed: why gigahertz alone does not measure performance.
-  - `0.25.3` Thermal throttling, dynamic voltage and frequency scaling (DVFS), and turbo frequencies.
-  - `0.25.4` Superscalar execution and out-of-order execution engines in modern microprocessors.
-- **Key Failure Modes & Edge Cases**: Benchmarking algorithms without disabling CPU frequency scaling, yielding wildly noisy latency results.
-- **Verification & Mastery Check**: Measure and graph CPU cycle variations under varying thermal loads using hardware monitoring tools.
-- **Project Application**: SysTrace: CPU utilization metrics calculation.
-
-#### Lesson 0.26: CPU Cache Hierarchy (L1, L2, L3) & Cache Lines
+#### Lesson 0.25: Sets & Unique Item Filtering
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.24
 - **Subtopics**:
-  - `0.26.1` Memory latency gap: CPU execution speed vs physical DRAM access latency.
-  - `0.26.2` Cache hierarchy: L1 Data/Instruction (32KB, ~4 cycles), L2 (~512KB, ~14 cycles), L3 Shared (~32MB, ~50 cycles).
-  - `0.26.3` Cache lines: standard 64-byte transfer units between memory and CPU caches.
-  - `0.26.4` Direct-mapped vs Set-Associative caches: cache ways, tags, indexes, and replacement policies.
-- **Key Failure Modes & Edge Cases**: Cache thrashing when two frequently accessed memory blocks map to the same set in a low-associativity cache.
-- **Verification & Mastery Check**: Demonstrate cache line eviction by measuring access times across arrays with varying strides.
-- **Project Application**: SysTrace: Memory access optimization and cache-aware profiling.
+  - `0.25.1` What is a Set: an unordered collection that automatically enforces uniqueness.
+  - `0.25.2` Instant deduplication: turning lists into sets with `set(my_list)`.
+  - `0.25.3` Fast membership testing: why checking `item in my_set` is lightning-fast compared to lists.
+  - `0.25.4` Set operations: union, intersection, and difference between collections.
+- **Key Failure Modes & Edge Cases**: Trying to index into a set with `my_set[0]`; sets are unordered and do not support indexing.
+- **Verification & Mastery Check**: Given a list of 1,000 prompt tags with duplicates, extract the unique tags and find overlapping tags with a whitelist.
+- **Project Application**: PromptCLI: User prompt tag deduplication and stopword filtering.
 
-#### Lesson 0.27: Cache Misses, Locality of Reference, & False Sharing
+#### Lesson 0.26: Reading and Writing Files in Python
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.26.1` The file system mental model: folders, files, relative paths vs absolute paths.
+  - `0.26.2` Opening files safely: the `with open(...) as f:` context manager that closes files automatically.
+  - `0.26.3` Reading files: `.read()`, `.readline()`, and iterating over lines efficiently.
+  - `0.26.4` Writing files: write mode (`"w"`) vs append mode (`"a"`).
+- **Key Failure Modes & Edge Cases**: Using write mode (`"w"`) instead of append mode (`"a"`), accidentally erasing existing file contents.
+- **Verification & Mastery Check**: Write a script that reads a prompt template from a `.txt` file, substitutes the user's name, and appends the result to a log file.
+- **Project Application**: PromptCLI: Local prompt template loading and output logging.
+
+#### Lesson 0.27: JSON Data: Serialization and Parsing
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.24, Lesson 0.26
+- **Subtopics**:
+  - `0.27.1` What is JSON: the universal data format used by modern web apps and AI APIs.
+  - `0.27.2` Parsing JSON text into Python dictionaries using `json.loads()`.
+  - `0.27.3` Serializing Python dictionaries into JSON text using `json.dumps()`.
+  - `0.27.4` Reading and writing `.json` files directly with `json.load()` and `json.dump()`.
+- **Key Failure Modes & Edge Cases**: Passing invalid JSON strings (like single quotes or trailing commas) to `json.loads()`, causing `JSONDecodeError`.
+- **Verification & Mastery Check**: Parse a simulated LLM JSON response string, extract the message content, and save the structured record to `session.json`.
+- **Project Application**: PromptCLI: Configuration management and structured response logging.
+
+#### Lesson 0.28: Error Handling: try, except & Graceful Recovery
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.8
+- **Subtopics**:
+  - `0.28.1` Why programs fail: syntax errors vs runtime exceptions.
+  - `0.28.2` Catching errors with `try` and `except`: keeping your application running when inputs are invalid.
+  - `0.28.3` Specific exception types: `ValueError`, `KeyError`, `FileNotFoundError`, `TypeError`.
+  - `0.28.4` The `finally` and `else` blocks: running cleanup routines reliably.
+- **Key Failure Modes & Edge Cases**: Using a bare `except:` clause without specifying the error type, silently masking fatal bugs.
+- **Verification & Mastery Check**: Write a robust file-reading function that catches `FileNotFoundError` and returns a friendly default prompt without crashing.
+- **Project Application**: PromptCLI: Resilient input parser and configuration loader.
+
+#### Lesson 0.29: Environment Variables & Secrets Management
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.26
 - **Subtopics**:
-  - `0.27.1` Temporal Locality: recently accessed memory is likely to be accessed again soon.
-  - `0.27.2` Spatial Locality: memory physically adjacent to accessed memory will be fetched into the cache line.
-  - `0.27.3` Matrix traversal performance: Row-major vs Column-major memory access in C and Python.
-  - `0.27.4` False Sharing in multi-threaded systems: independent variables on the same 64-byte cache line causing cross-core invalidations.
-- **Key Failure Modes & Edge Cases**: Traversing multi-gigabyte matrices column-first, triggering cache misses on every read and degrading performance by 20x.
-- **Verification & Mastery Check**: Benchmark row-major vs column-major array traversal in C/Python, demonstrating a 10x throughput delta.
-- **Project Application**: Core foundation for NumPy array performance in Phase 2.
+  - `0.29.1` Why hardcoding secrets is dangerous: keeping API keys out of Git repositories.
+  - `0.29.2` Reading environment variables with Python's built-in `os.environ` and `os.getenv()`.
+  - `0.29.3` Using `.env` files locally with `python-dotenv`.
+  - `0.29.4` The `.gitignore` file: preventing secrets and local caches from ever being committed to GitHub.
+- **Key Failure Modes & Edge Cases**: Committing an un-ignored `.env` file to a public repository, exposing production AI API keys.
+- **Verification & Mastery Check**: Configure a script that loads an `OPENAI_API_KEY` from a local `.env` file, printing an error if the key is missing.
+- **Project Application**: PromptCLI: Secure API key configuration manager.
 
-#### Lesson 0.28: RAM Architecture, Memory Bus, & Endianness
+#### Lesson 0.30: Making HTTP GET and POST Requests with HTTPX
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.27, Lesson 0.29
+- **Subtopics**:
+  - `0.30.1` The Client-Server model: how your computer talks to remote API servers across the internet.
+  - `0.30.2` HTTP verbs: GET (fetching data) vs POST (submitting prompts and payloads).
+  - `0.30.3` Sending headers: authentication tokens (`Bearer ...`) and Content-Type (`application/json`).
+  - `0.30.4` Checking status codes: 200 (OK), 400 (Bad Request), 401 (Unauthorized), 429 (Rate Limited), 500 (Server Error).
+- **Key Failure Modes & Edge Cases**: Forgetting to check `.status_code` or call `.raise_for_status()`, leading to subtle bugs on failed requests.
+- **Verification & Mastery Check**: Send an HTTP POST request to a mock JSON endpoint using `httpx` and verify the status code is 200.
+- **Project Application**: PromptCLI: Remote AI inference gateway client.
+
+#### Lesson 0.31: Handling Network Timeouts & Exponential Backoff
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.30
+- **Subtopics**:
+  - `0.31.1` Transient network failures: why remote API calls will inevitably fail in production.
+  - `0.31.2` Setting request timeouts: preventing programs from hanging forever when servers lag.
+  - `0.31.3` The Exponential Backoff algorithm: waiting 1s, 2s, 4s before retrying to prevent overwhelming servers.
+  - `0.31.4` Adding random jitter: avoiding retry storms across distributed clients.
+- **Key Failure Modes & Edge Cases**: Retrying immediately in a tight `while` loop without backoff, getting your IP permanently rate-limited.
+- **Verification & Mastery Check**: Implement a retry loop that retries a failing simulated HTTP request up to 3 times with exponential backoff.
+- **Project Application**: PromptCLI: Automated network retry resilience engine.
+
+#### Lesson 0.32: Parsing XML, Markdown & Unstructured AI Text
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.21
 - **Subtopics**:
-  - `0.28.1` DRAM physical structure: capacitor cells, refresh cycles, rows, columns, banks, and DDR channels.
-  - `0.28.2` Memory bus bandwidth: bus width, transfer rates, dual-channel vs quad-channel architectures.
-  - `0.28.3` Memory Alignment: why unaligned memory accesses cause hardware traps or multi-cycle penalty reads.
-  - `0.28.4` Endianness: Little-Endian (x86, ARM) vs Big-Endian (network byte order); conversion with `htons`/`ntohl`.
-- **Key Failure Modes & Edge Cases**: Network socket data corruption caused by sending host byte order integers over Big-Endian network streams.
-- **Verification & Mastery Check**: Write a C/Python script to detect system endianness and perform raw byte-swapping without standard library functions.
-- **Project Application**: SysTrace: Correct parsing of binary network addresses and raw memory dumps.
+  - `0.32.1` The reality of AI outputs: why models often return markdown code blocks, XML tags, or conversational text.
+  - `0.32.2` Extracting text between XML tags (e.g., `<thought>...</thought>` or `<answer>...</answer>`).
+  - `0.32.3` Stripping markdown code fences: extracting clean JSON from ` ```json ... ``` ` blocks.
+  - `0.32.4` Regular expressions for text extraction: using `re.search()` to isolate structured patterns.
+- **Key Failure Modes & Edge Cases**: Assuming an LLM will return pure JSON without markdown backticks, causing `json.loads()` to crash.
+- **Verification & Mastery Check**: Write a robust extractor that extracts valid JSON from a response string wrapped in conversational filler and markdown fences.
+- **Project Application**: PromptCLI: Response parser and code block extractor.
 
-#### Lesson 0.29: Virtual Memory, MMU, & Page Tables
+#### Lesson 0.33: Command-Line Arguments with Argparse
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.28
+- **Prerequisites**: Lesson 0.8
 - **Subtopics**:
-  - `0.29.1` Why Virtual Memory: process isolation, security boundaries, and abstracting physical RAM addresses.
-  - `0.29.2` Memory Management Unit (MMU): hardware translation of virtual addresses to physical addresses.
-  - `0.29.3` Page Tables: multi-level page table hierarchies (PML4/PML5 in x86-64); Page Directory Pointers and Page Entries.
-  - `0.29.4` Standard 4KB page frames vs HugePages (2MB, 1GB); memory footprint of page table trees.
-- **Key Failure Modes & Edge Cases**: Page table bloat when allocating millions of tiny mappings, consuming gigabytes of un-swappable kernel RAM.
-- **Verification & Mastery Check**: Inspect page table size and virtual address mappings of a running process via `/proc/<pid>/status`.
-- **Project Application**: SysTrace: Virtual memory vs physical RSS reporting.
+  - `0.33.1` Why CLI tools matter: running scripts with flags and options directly from the terminal.
+  - `0.33.2` Python's `argparse` module: defining positional arguments and optional flags (`--model`, `--temp`).
+  - `0.33.3` Type casting and default values: automatically converting string inputs to integers or floats.
+  - `0.33.4` Generating automated help menus: `--help` documentation generated directly from argument descriptions.
+- **Key Failure Modes & Edge Cases**: Failing to provide help descriptions, making command-line tools impossible for teammates to use.
+- **Verification & Mastery Check**: Build a CLI script `prompt_tool.py` that takes `--prompt`, `--temperature`, and `--verbose` flags and prints the settings.
+- **Project Application**: PromptCLI: Terminal CLI argument parsing interface.
 
-#### Lesson 0.30: Translation Lookaside Buffer (TLB) & Page Faults
+#### Lesson 0.34: Packaging Reusable Modules & Python Imports
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.29
+- **Prerequisites**: Lesson 0.8
 - **Subtopics**:
-  - `0.30.1` The Translation Lookaside Buffer (TLB): hardware associative cache for page translations.
-  - `0.30.2` TLB Miss latency penalty: multi-level page table walk in physical RAM.
-  - `0.30.3` Minor Page Fault: virtual memory address mapped to newly allocated physical frame without disk I/O.
-  - `0.30.4` Major Page Fault: page evicted to swap storage or memory-mapped file; synchronous disk block read required.
-- **Key Failure Modes & Edge Cases**: Severe application stutter caused by Major Page Faults during memory pressure when swapping is active.
-- **Verification & Mastery Check**: Write a program that intentionally triggers Minor Page Faults, measuring the overhead using `getrusage`.
-- **Project Application**: SysTrace: Page fault monitoring and system pressure metrics.
+  - `0.34.1` Breaking scripts into modules: separating logic into multiple `.py` files.
+  - `0.34.2` Import statements: `import utils`, `from config import MODEL_NAME`.
+  - `0.34.3` The `if __name__ == "__main__":` idiom: making files both importable modules and executable scripts.
+  - `0.34.4` Creating packages: using folders and `__init__.py` to organize multi-file projects.
+- **Key Failure Modes & Edge Cases**: Circular imports where module A imports module B and module B imports module A, causing import crashes.
+- **Verification & Mastery Check**: Organize a 3-file project (`main.py`, `prompt_templates.py`, `api_client.py`) and successfully run the application.
+- **Project Application**: PromptCLI: Modular codebase architecture.
 
-#### Lesson 0.31: Stack Allocation Dynamics & Stack Overflow Mechanics
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.29
-- **Subtopics**:
-  - `0.31.1` The Process Stack: memory segment growing downward; stack pointer (RSP) and base/frame pointer (RBP).
-  - `0.31.2` Stack frames: local variables, return addresses, saved registers, function arguments.
-  - `0.31.3` Stack allocation speed: moving the stack pointer by $N$ bytes ($O(1)$ assembly instruction).
-  - `0.31.4` Stack Overflow: unbounded recursion or massive local arrays exceeding the OS stack limit (`ulimit -s`).
-- **Key Failure Modes & Edge Cases**: Crashing production services with unrecoverable `SIGSEGV` by declaring multi-megabyte buffers on the stack.
-- **Verification & Mastery Check**: Calculate the exact stack frame size of a recursive function and predict the exact depth that triggers a stack overflow.
-- **Project Application**: LoxLang: Call stack and scope frame allocation in Phase 1.
-
-#### Lesson 0.32: Heap Allocation Dynamics & Memory Fragmentation
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.29
-- **Subtopics**:
-  - `0.32.1` The Process Heap: memory segment growing upward via `brk()` and `sbrk()` syscalls.
-  - `0.32.2` Heap allocators: `malloc`, `free`, `jemalloc`, `tcmalloc`; free lists, bins, and chunk headers.
-  - `0.32.3` Internal Fragmentation: allocated chunk larger than requested payload.
-  - `0.32.4` External Fragmentation: sufficient total free memory exists, but no single contiguous block satisfies allocation.
-- **Key Failure Modes & Edge Cases**: Long-running processes experiencing Out-Of-Memory crashes despite low total memory usage due to heap fragmentation.
-- **Verification & Mastery Check**: Simulate heap fragmentation by executing alternating allocation and deallocation patterns, measuring heap growth.
-- **Project Application**: Foundation for CPython memory analysis in Phase 1.
-
-#### Lesson 0.33: Compilation Toolchain: Preprocessing & Parsing
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.21
-- **Subtopics**:
-  - `0.33.1` Source code to binary executable pipeline overview.
-  - `0.33.2` The C Preprocessor (`cpp`): macro expansion, header file inclusion (`#include`), conditional compilation (`#ifdef`).
-  - `0.33.3` Lexical Analysis: tokenizing source text streams into structured language tokens.
-  - `0.33.4` Syntax Analysis: Abstract Syntax Tree (AST) construction and context-free grammar validation.
-- **Key Failure Modes & Edge Cases**: Macro expansion bugs causing silent logic errors due to missing parentheses in preprocessor definitions.
-- **Verification & Mastery Check**: Run the preprocessor on a C source file using `gcc -E` and analyze the resulting 20,000-line expanded output.
-- **Project Application**: LoxLang: Scanner and recursive descent parser implementation in Phase 1.
-
-#### Lesson 0.34: Compilation Toolchain: Assembly, Object Files, & Linkers
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.33
-- **Subtopics**:
-  - `0.34.1` Intermediate Representation (IR) and code generation: emitting architecture-specific assembly language (`.s`).
-  - `0.34.2` The Assembler (`as`): converting assembly instructions into machine code object files (`.o`).
-  - `0.34.3` Executable and Linkable Format (ELF): Header, `.text`, `.data`, `.rodata`, `.bss`, symbol tables.
-  - `0.34.4` The Linker (`ld`): symbol resolution, address relocation, combining multiple object files into an executable.
-- **Key Failure Modes & Edge Cases**: Linker errors: undefined reference to symbol vs multiple definition of symbol; understanding declaration vs definition.
-- **Verification & Mastery Check**: Inspect an ELF object file using `readelf -S` and identify the byte boundaries of the `.text` and `.data` sections.
-- **Project Application**: SysTrace: Inspecting process memory maps against ELF segments.
-
-#### Lesson 0.35: Dynamic Linking vs Static Linking & Shared Libraries
+#### Lesson 0.35: Virtual Environments & Modern Package Management (uv / pip)
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.34
 - **Subtopics**:
-  - `0.35.1` Static Linking: bundling all library dependencies into a single self-contained binary executable.
-  - `0.35.2` Dynamic Linking: resolving shared objects (`.so`, `.dll`) at runtime via the dynamic loader (`ld.so`).
-  - `0.35.3` Global Offset Table (GOT) and Procedure Linkage Table (PLT): Position Independent Code (PIC).
-  - `0.35.4` Shared library search paths: `LD_LIBRARY_PATH`, `/etc/ld.so.conf`, `rpath`, and security implications.
-- **Key Failure Modes & Edge Cases**: `error while loading shared libraries: cannot open shared object file`: resolving runtime library linkage failures.
-- **Verification & Mastery Check**: Inspect dynamically linked symbols of a system binary using `ldd` and `nm -D`, tracing dynamic resolution.
-- **Project Application**: Docker multi-stage builds: understanding shared library dependencies in distroless containers (Phase 4).
+  - `0.35.1` Why virtual environments exist: preventing dependency version conflicts across projects.
+  - `0.35.2` Creating and activating environments with `python -m venv .venv`.
+  - `0.35.3` Installing dependencies with `pip install` and generating `requirements.txt`.
+  - `0.35.4` Ultra-fast modern package management with `uv`: lightning-fast dependency resolution.
+- **Key Failure Modes & Edge Cases**: Installing packages into the global system Python instead of an active virtual environment.
+- **Verification & Mastery Check**: Create an isolated `.venv`, install `httpx` and `pydantic`, and export a pinned `requirements.txt`.
+- **Project Application**: PromptCLI: Isolated dependency blueprint.
 
-#### Lesson 0.36: CPU Privilege Rings & User/Kernel Space Boundaries
+#### Lesson 0.36: Modern Python Type Hints & Static Typing
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.24
+- **Prerequisites**: Lesson 0.8
 - **Subtopics**:
-  - `0.36.1` Hardware privilege rings: Ring 0 (Kernel Space, full hardware access) vs Ring 3 (User Space, restricted).
-  - `0.36.2` Why hardware protection matters: preventing user processes from corrupting hardware or other processes.
-  - `0.36.3` Trap instructions and CPU state transitions: saving registers, switching stacks, loading kernel entrypoint.
-  - `0.36.4` System call overhead: cost of context switching between Ring 3 and Ring 0 (~100 to ~1500 CPU cycles).
-- **Key Failure Modes & Edge Cases**: Making excessive micro-syscalls inside high-throughput loops, incurring massive context-switching overhead.
-- **Verification & Mastery Check**: Measure the exact CPU cycle cost of an empty system call (`getpid()`) vs a user-space function call.
-- **Project Application**: SysTrace: Monitoring user vs system CPU time distribution.
+  - `0.36.1` Why type hints matter: catching bugs before running code and unlocking superior IDE autocomplete.
+  - `0.36.2` Basic type annotations: `name: str`, `age: int`, `score: float`, `is_active: bool`.
+  - `0.36.3` Container types: `list[str]`, `dict[str, int]`, `tuple[int, int]`.
+  - `0.36.4` Optional and Union types: `str | None` for values that might be missing.
+- **Key Failure Modes & Edge Cases**: Assuming Python enforces types at runtime; type hints are for static analysis and tools like Mypy/IDE, not runtime checks.
+- **Verification & Mastery Check**: Annotate a prompt-formatting function with full parameter and return types, verifying it with `mypy`.
+- **Project Application**: PromptCLI: Type-safe prompt orchestration pipeline.
 
-#### Lesson 0.37: POSIX System Call Mechanics & Software Traps
+#### Lesson 0.37: Introduction to Pydantic: Data Validation from Scratch
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.36
 - **Subtopics**:
-  - `0.37.1` System call invocation mechanics: loading syscall number into `RAX`, parameters into registers, executing `syscall`.
-  - `0.37.2` Kernel System Call Table: mapping syscall numbers to internal kernel C function pointers.
-  - `0.37.3` Return values and error handling: negative return codes, setting `errno`, `strerror()` interpretation.
-  - `0.37.4` Tracing system calls in Linux: using `strace` with timing (`-T`), summary (`-c`), and filtering (`-e trace=...`).
-- **Key Failure Modes & Edge Cases**: Failing to check return values of syscalls, causing cascading failures when file operations return `-1`.
-- **Verification & Mastery Check**: Run `strace -c` on a common CLI utility and produce a profile of the most frequent system calls executed.
-- **Project Application**: SysTrace: Core debugging foundation for process introspection.
+  - `0.37.1` The Pydantic mental model: turning loose dictionaries into guaranteed, validated data models.
+  - `0.37.2` Creating a `BaseModel`: defining fields, default values, and required attributes.
+  - `0.37.3` Automatic type coercion: how Pydantic cleanly converts strings like `"123"` into integers `123`.
+  - `0.37.4` Catching validation errors: inspecting `ValidationError` when data fails to meet schema rules.
+- **Key Failure Modes & Edge Cases**: Passing invalid data into Pydantic models without a `try/except ValidationError` block.
+- **Verification & Mastery Check**: Define an `AIResponse` Pydantic model with fields `content: str`, `tokens: int`, and validate a dirty dictionary against it.
+- **Project Application**: PromptCLI: Structured output validation foundation.
 
-#### Lesson 0.38: Core POSIX Syscalls: File I/O Mechanics
+#### Lesson 0.38: Git Fundamentals: Commits, History & Diffs
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.37
+- **Prerequisites**: Lesson 0.26
 - **Subtopics**:
-  - `0.38.1` `openat()` system call: path resolution, flags (`O_RDONLY`, `O_WRONLY`, `O_CREAT`, `O_TRUNC`, `O_NONBLOCK`).
-  - `0.38.2` `read()` and `write()`: byte streaming, partial reads/writes, buffer boundaries, handling `EINTR` interrupts.
-  - `0.38.3` `close()`: releasing file descriptors, kernel cleanup, file descriptor leak mechanics.
-  - `0.38.4` `lseek()`: manipulating file offsets; sparse files and file holes; append-only mode (`O_APPEND`).
-- **Key Failure Modes & Edge Cases**: Failing to loop over `write()` when writing large buffers, resulting in silent data truncation on partial writes.
-- **Verification & Mastery Check**: Write a file copy utility in pure POSIX C/Python syscalls that handles partial reads, writes, and `EINTR` signals.
-- **Project Application**: NanoHTTP: Raw socket stream reading and writing in Phase 4.
+  - `0.38.1` Why version control is mandatory: time-traveling through project history and safe experimentation.
+  - `0.38.2` The 3 Git states: Working Directory, Staging Area (`git add`), and Repository (`git commit`).
+  - `0.38.3` Writing meaningful commit messages: describing the "why" rather than just the "what".
+  - `0.38.4` Inspecting changes: using `git status`, `git diff`, and `git log --oneline`.
+- **Key Failure Modes & Edge Cases**: Running `git add .` without checking `git status`, accidentally staging sensitive `.env` files.
+- **Verification & Mastery Check**: Initialize a Git repository, stage files, make 3 distinct commits, and view the commit history log.
+- **Project Application**: PromptCLI: Version control initialization.
 
-#### Lesson 0.39: Advanced POSIX Syscalls: Memory & Process Control
-- **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.37
-- **Subtopics**:
-  - `0.39.1` `mmap()` in depth: parameters (length, protection flags, map flags, fd, offset); zero-copy disk mapping.
-  - `0.39.2` `brk()` and `sbrk()`: modifying the heap break pointer directly.
-  - `0.39.3` `clone()` system call: the unified kernel primitive underpinning processes, threads, and Linux containers.
-  - `0.39.4` `execve()`: replacing process image, argument arrays (`argv`), and environment arrays (`envp`).
-- **Key Failure Modes & Edge Cases**: Memory corruption from reading beyond `mmap` boundaries, triggering uncatchable `SIGBUS` signals.
-- **Verification & Mastery Check**: Use `mmap` to inspect and modify an on-disk binary structure without calling `read()` or `write()`.
-- **Project Application**: DataSift and NanoHTTP: Zero-copy file processing.
-
-#### Lesson 0.40: File Descriptors, Standard Streams, & Inode Tables
+#### Lesson 0.39: Git Branching & Merging Workflows
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.38
 - **Subtopics**:
-  - `0.40.1` The File Descriptor table: per-process array of pointers to global open file table entries.
-  - `0.40.2` Standard File Descriptors: 0 (stdin), 1 (stdout), 2 (stderr); redirection mechanics.
-  - `0.40.3` Inodes: filesystem metadata records, permissions, timestamps, block pointers, hard links vs soft links.
-  - `0.40.4` File descriptor limits: soft limits, hard limits (`ulimit -n`), and `EMFILE` (Too many open files) exhaustion.
-- **Key Failure Modes & Edge Cases**: File descriptor leaks in web servers exhausting process limits and rejecting all subsequent client connections.
-- **Verification & Mastery Check**: Inspect the `/proc/<pid>/fd` directory of a running process, identifying all open files, sockets, and pipes.
-- **Project Application**: SysTrace: Tracking open file descriptor counts per PID.
+  - `0.39.1` Why branch: developing new features or prompt experiments in isolation without breaking the main codebase.
+  - `0.39.2` Creating and switching branches: `git branch` and `git switch -c feature-prompt-v2`.
+  - `0.39.3` Merging branches: bringing feature changes cleanly into the `main` branch.
+  - `0.39.4` Resolving merge conflicts calmly: understanding conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`).
+- **Key Failure Modes & Edge Cases**: Panic-deleting code during merge conflicts; conflict markers are simply Git asking you to choose which version to keep.
+- **Verification & Mastery Check**: Create a feature branch, make a change, merge it into main, and cleanly delete the feature branch.
+- **Project Application**: PromptCLI: Feature branch workflow for prompt enhancements.
 
-#### Lesson 0.41: Process Lifecycle, States, & Context Switching
+#### Lesson 0.40: Remote Repositories & GitHub Collaboration
 - **Status**: `[State: Active | Complete Specification | Core]`
-- **Prerequisites**: Lesson 0.37
+- **Prerequisites**: Lesson 0.39
 - **Subtopics**:
-  - `0.41.1` Process Control Block (PCB): task structure in kernel memory, PID, PPID, credentials, scheduling state.
-  - `0.41.2` Linux Process States: TASK_RUNNING (R), TASK_INTERRUPTIBLE (S), TASK_UNINTERRUPTIBLE (D), TASK_ZOMBIE (Z), TASK_STOPPED (T).
-  - `0.41.3` Uninterruptible Sleep (D State): process waiting on hardware I/O; why `kill -9` cannot terminate a D-state process.
-  - `0.41.4` Context Switching: saving CPU register context, switching page tables (TLB flush), loading new task state.
-- **Key Failure Modes & Edge Cases**: Zombie process accumulation exhausting system PID limits when parent processes fail to call `waitpid()`.
-- **Verification & Mastery Check**: Write a script that deliberately spawns an uninterruptible sleep or zombie process and inspects it via `ps`.
-- **Project Application**: SysTrace: Process lifecycle state categorization.
+  - `0.40.1` Local vs Remote: connecting local Git repositories to GitHub with `git remote add origin`.
+  - `0.40.2` Pushing and pulling: `git push -u origin main` and `git pull`.
+  - `0.40.3` Pull Requests (PRs): proposing changes, code review etiquette, and automated CI checks.
+  - `0.40.4` Writing a professional README.md: explaining how to install, configure, and run your project.
+- **Key Failure Modes & Edge Cases**: Pushing directly to `main` without testing, breaking the production deployment for other engineers.
+- **Verification & Mastery Check**: Write a clean, comprehensive `README.md` for a project including installation, configuration, and example usage.
+- **Project Application**: PromptCLI: Open-source project portfolio presentation.
 
-#### Lesson 0.42: The Linux `/proc` Filesystem & Kernel Introspection
+#### Lesson 0.41: Writing Your First Automated Test with Pytest
+- **Status**: `[State: Active | Complete Specification | Core]`
+- **Prerequisites**: Lesson 0.34
+- **Subtopics**:
+  - `0.41.1` The Testing mindset: why manual testing does not scale and automated tests guarantee reliability.
+  - `0.41.2` The `pytest` framework: writing test functions named `test_*` and using plain Python `assert`.
+  - `0.41.3` Running test suites: executing `pytest` from the terminal and interpreting green/red results.
+  - `0.41.4` Testing edge cases: empty strings, extreme numbers, and unexpected inputs.
+- **Key Failure Modes & Edge Cases**: Writing tests that test nothing (missing `assert`), giving false confidence in broken code.
+- **Verification & Mastery Check**: Write a test suite with 4 distinct assertions testing a prompt sanitization function against normal and edge-case inputs.
+- **Project Application**: PromptCLI: Automated regression test suite.
+
+#### Lesson 0.42: Test Fixtures & Mocking External APIs
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: Lesson 0.41
 - **Subtopics**:
-  - `0.42.1` Virtual filesystems: `/proc` as a window into real-time kernel data structures; zero disk storage.
-  - `0.42.2` Global system metrics: `/proc/cpuinfo`, `/proc/meminfo`, `/proc/stat`, `/proc/loadavg`.
-  - `0.42.3` Per-process introspection: `/proc/<pid>/status`, `/proc/<pid>/maps`, `/proc/<pid>/cmdline`, `/proc/<pid>/stat`.
-  - `0.42.4` Parsing `/proc/<pid>/maps`: memory region start/end, permissions (rwxp), offsets, devices, inodes, pathnames.
-- **Key Failure Modes & Edge Cases**: Parsing `/proc` files with static character index assumptions rather than dynamic whitespace splitting.
-- **Verification & Mastery Check**: Write a script to calculate total Resident Set Size (RSS) across all processes by parsing `/proc/*/status`.
-- **Project Application**: Core mechanism of the `SysTrace` Phase 0 Project.
+  - `0.42.1` Why we don't call real AI APIs in unit tests: cost, latency, and unpredictable outputs.
+  - `0.42.2` Pytest fixtures: reusing setup objects and mock configurations across multiple test cases.
+  - `0.42.3` Mocking HTTP requests: using `unittest.mock` or `pytest-mock` to simulate API responses.
+  - `0.42.4` Testing failure modes: verifying that your application handles 500 errors and timeouts without crashing.
+- **Key Failure Modes & Edge Cases**: Allowing unit tests to make live internet calls, causing test suites to fail when internet drops or API balances run out.
+- **Verification & Mastery Check**: Write an automated test that mocks an AI API response and verifies that your parser extracts the answer correctly.
+- **Project Application**: PromptCLI: Mocked API test coverage.
 
 #### Lesson 0.43: Linux Terminal Architecture, Shells, & Environment
 - **Status**: `[State: Active | Complete Specification | Core]`

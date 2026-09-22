@@ -30,54 +30,54 @@ interface TrackDefinition {
 
 const TRACK_DEFS: TrackDefinition[] = [
   {
-    id: "systems",
-    name: "Low-Level & Systems Programming",
-    category: "Low-Level",
-    phasePrefixes: ["phase-0", "phase-1", "phase-4"],
-    totalLessons: 115,
-    capstone: "SysTrace Custom Malloc / Free Allocator",
-    description: "Linux system calls, kernel epoll event loops, memory management, and compilers.",
+    id: "foundations",
+    name: "Programming Foundations & Software Craftsmanship",
+    category: "Foundations",
+    phasePrefixes: ["node-0-", "node-1-"],
+    totalLessons: 100,
+    capstone: "PromptCLI & TaskPulse Async Engine",
+    description: "Python 3.12 syntax, PyObject memory model, closures, decorators, dunder protocols, Pydantic v2 validation, and pytest suites (Modules 1 & 2).",
     icon: Terminal,
   },
   {
-    id: "algorithms",
-    name: "Applied Mathematics & Algorithms",
-    category: "Algorithms",
-    phasePrefixes: ["phase-2", "phase-3", "phase-8"],
-    totalLessons: 105,
-    capstone: "DataSift LSM-Tree & SkipList Storage",
-    description: "Matrix decomposition, auto-differentiation, cache-conscious data structures, and capacity estimation.",
+    id: "math-algorithms",
+    name: "Discrete Mathematics, Linear Algebra & Core Algorithms",
+    category: "Math & Algorithms",
+    phasePrefixes: ["node-2-", "node-9-", "node-3-"],
+    totalLessons: 115,
+    capstone: "MathGrad Autodiff & AlgoSift Engine",
+    description: "Discrete logic, linear algebra, reverse-mode autodiff, two pointers, balanced search trees, graph algorithms, and DP (Modules 3, 4 & 5).",
     icon: Cpu,
   },
   {
-    id: "distributed",
-    name: "Distributed Systems & Infrastructure",
-    category: "Infrastructure",
-    phasePrefixes: ["phase-5", "phase-7"],
-    totalLessons: 80,
-    capstone: "Raft Consensus Key-Value Cluster",
-    description: "Raft consensus, WAL logging, distributed locking, PostgreSQL MVCC internals, and chaos engineering.",
+    id: "web-systems",
+    name: "Web Protocols, Database Systems & High-Level Architecture",
+    category: "Backend & Systems",
+    phasePrefixes: ["node-4-", "node-5-", "node-8-", "node-7-"],
+    totalLessons: 140,
+    capstone: "PayFlow Payment Gateway & RaftLite Cluster",
+    description: "HTTP/2, HTTP/3, FastAPI ASGI services, PostgreSQL internals (MVCC, WAL), System Design scalability, and Raft consensus (Modules 6, 7, 9 & 10).",
     icon: Network,
   },
   {
-    id: "ai-systems",
-    name: "AI, Deep Learning & Autonomous Agents",
-    category: "AI/ML",
-    phasePrefixes: ["phase-9", "phase-10", "phase-11", "phase-12"],
-    totalLessons: 125,
-    capstone: "TransformerLab Autograd & MCP Agent",
-    description: "Autograd from scratch, self-attention, HNSW vector search, vLLM optimizations, and cyclic agent graphs.",
-    icon: Sparkles,
+    id: "frontend-platforms",
+    name: "Modern Frontend Engineering & Interactive Platforms",
+    category: "Frontend & Canvas",
+    phasePrefixes: ["node-6-"],
+    totalLessons: 40,
+    capstone: "BoardSync Collaborative Canvas Workspace",
+    description: "DOM tree, modern CSS, Next.js App Router, React Server Components (RSC), Zustand state management, and Stripe Elements (Module 8).",
+    icon: Layers,
   },
   {
-    id: "fullstack",
-    name: "Full-Stack Architecture & Grand Synthesis",
-    category: "Full-Stack",
-    phasePrefixes: ["phase-6", "phase-13", "phase-14"],
-    totalLessons: 75,
-    capstone: "TenantIQ Multi-Tenant Platform",
-    description: "Next.js 14 App Router, multi-tenant RLS, WCAG AAA accessibility, and the capstone enterprise platform synthesis.",
-    icon: Layers,
+    id: "ai-agents-defense",
+    name: "Production RAG, Observability & Autonomous AI Agents",
+    category: "AI & Distributed Systems",
+    phasePrefixes: ["node-10-", "node-11-", "node-12-", "node-13-", "node-14-"],
+    totalLessons: 125,
+    capstone: "DocuMind Hybrid RAG & CodeCraft Agent Defense",
+    description: "PostgreSQL pgvector (HNSW), hybrid search, Ragas evals, OpenTelemetry tracing, MCP tools, LangGraph cyclic state, and capstone defense (Modules 11, 12, 13 & 14).",
+    icon: Sparkles,
   },
 ];
 
@@ -113,9 +113,9 @@ export function ProgressMatrix({ onSelectTrack, onResumeLesson }: ProgressMatrix
         {TRACK_DEFS.map((track) => {
           const Icon = track.icon;
 
-          // Count completed lessons that match this track's phase prefixes
+          // Count completed lessons that match this track's node prefixes
           const completedCount = completedLessons.filter((id) =>
-            track.phasePrefixes.some((prefix) => id.includes(prefix))
+            track.phasePrefixes.some((prefix) => id.startsWith(prefix))
           ).length;
 
           const pct = Math.round((completedCount / track.totalLessons) * 100);

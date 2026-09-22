@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const phaseId = searchParams.get("phase_id");
     const search = searchParams.get("search");
-    const limit = parseInt(searchParams.get("limit") || "500", 10);
+    const limit = parseInt(searchParams.get("limit") || "1000", 10);
 
     // 1. Fetch Phases
     const { data: phases, error: phasesError } = await supabase
@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
     // 2. Fetch Nodes
     let query = supabase
       .from("curriculum_nodes")
-      .select("id, slug, phase_id, title, subtitle, xp_reward, starter_code, test_suite, defense_prompts")
-      .order("id", { ascending: true })
+      .select("id, slug, phase_id, order_index, title, subtitle, xp_reward, starter_code, test_suite, defense_prompts")
+      .order("order_index", { ascending: true })
       .limit(limit);
 
     if (phaseId) {

@@ -137,11 +137,11 @@ export function ContinueLearningQueue({
             </div>
 
             <h4 className="text-base font-bold text-[#f7f8f8] group-hover:text-white transition-colors line-clamp-2">
-              SysTrace: Custom Malloc / Free Allocator
+              PromptCLI: Interactive AI Developer Workbench
             </h4>
 
             <p className="text-xs text-[#8a8f98] line-clamp-2 leading-relaxed">
-              Segregated free list memory allocator tested via Valgrind &amp; GitHub Actions CI.
+              Dynamic prompt templating, token budgeting, and exponential backoff retry engine in Python.
             </p>
           </div>
 

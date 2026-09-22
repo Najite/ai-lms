@@ -82,6 +82,7 @@ function PhaseMilestonesTab() {
       if (isMounted) {
         const phases = phasesRes.data || [];
         const nodes = nodesRes.data || [];
+        const completedSet = new Set(completedLessons);
 
         const items: CapstoneProject[] = phases.map((p) => {
           const pNodes = nodes.filter((n) => n.phase_id === p.id);
@@ -91,7 +92,7 @@ function PhaseMilestonesTab() {
           const displayPhaseNum = p.order_index + 1;
 
           const completedInPhase = pNodes.filter((n) =>
-            completedLessons.includes(n.id)
+            completedSet.has(n.id)
           ).length;
           const status: "VERIFIED" | "IN_PROGRESS" | "NOT_STARTED" =
             completedInPhase === pNodes.length && pNodes.length > 0
@@ -208,7 +209,7 @@ function PhaseMilestonesTab() {
               <div className="flex items-center justify-between gap-2 mb-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-[10px] font-mono text-[#5e6ad2] font-semibold">
-                    PHASE {String(cap.displayPhaseNumber || cap.phaseId + 1).padStart(2, "0")}
+                    MODULE {String(cap.displayPhaseNumber || cap.phaseId + 1).padStart(2, "0")}
                   </span>
                   {cap.sector && (
                     <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30">
@@ -934,7 +935,7 @@ export function CapstoneTracker() {
           <div className="flex items-center gap-2 flex-wrap">
             <StatusChip status="brand" label="2026 PRODUCTION PORTFOLIO STANDARDS" />
             <span className="text-xs font-mono text-[#8a8f98]">
-              15 Phase Milestones · 10 Grand Enterprise Capstones
+              14 Module Milestones · 10 Grand Enterprise Capstones
             </span>
             <span className="text-[#383b42]">•</span>
             <span className="text-xs font-mono text-[#10b981]">
@@ -945,7 +946,7 @@ export function CapstoneTracker() {
             Production Engineering Portfolio & Employability Hub
           </h2>
           <p className="text-xs font-mono text-[#8a8f98] mt-1 max-w-3xl leading-relaxed">
-            Phase milestones build core skills progressively. Grand enterprise capstones synthesize the entire curriculum into
+            Module milestones build core skills progressively. Grand enterprise capstones synthesize the entire curriculum into
             deployable, AI-powered, enterprise-grade web platforms that reflect real industry systems.
           </p>
         </div>
@@ -957,7 +958,7 @@ export function CapstoneTracker() {
           </div>
           <div className="px-3 py-2 rounded-lg bg-[#0f1011] border border-[#23252a] text-[#8a8f98] space-y-1">
             <div className="text-[10px] text-[#565961] uppercase tracking-wider">Enterprise Capstones</div>
-            <div className="text-[#f7f8f8] font-bold text-sm">25 Total Projects</div>
+            <div className="text-[#f7f8f8] font-bold text-sm">18 Total Projects</div>
           </div>
         </div>
       </div>
@@ -974,11 +975,11 @@ export function CapstoneTracker() {
           )}
         >
           <Layers className="w-3.5 h-3.5" />
-          Phase Milestones
+          Module Milestones
           <span className={cn(
             "text-[10px] px-1.5 py-0.5 rounded font-bold",
             activeTab === "phase" ? "bg-white/20 text-white" : "bg-[#23252a] text-[#565961]"
-          )}>15</span>
+          )}>8</span>
         </button>
         <button
           onClick={() => setActiveTab("grand")}

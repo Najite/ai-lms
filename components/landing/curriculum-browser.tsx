@@ -36,6 +36,12 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
   const [allLessonIds, setAllLessonIds] = React.useState<string[]>([]);
 
   const { completedLessons, completedCount } = useCurriculumProgress();
+  const completedSet = React.useMemo(() => new Set(completedLessons), [completedLessons]);
+  const lessonIdIndexMap = React.useMemo(() => {
+    const map = new Map<string, number>();
+    allLessonIds.forEach((id, idx) => map.set(id, idx));
+    return map;
+  }, [allLessonIds]);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -64,7 +70,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
     };
   }, []);
 
-  const categories = ["ALL", "Systems", "Algorithms", "Distributed", "AI/ML", "Full-Stack", "Specializations"];
+  const categories = ["ALL", "Systems", "Algorithms", "Distributed", "AI/ML", "Full-Stack"];
 
   const filteredPhases = phases.filter((phase) => {
     const matchesCategory = activeCategory === "ALL" || phase.category === activeCategory;
@@ -99,12 +105,12 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
           {/* Stats quick view */}
           <div className="flex items-center gap-4 p-3 rounded-lg bg-[#08090a] border border-[#23252a] font-mono text-xs">
             <div className="pr-4 border-r border-[#23252a]">
-              <span className="text-[#8a8f98] block">PHASES</span>
-              <span className="text-sm font-semibold text-[#f7f8f8]">{phases.length || 15}</span>
+              <span className="text-[#8a8f98] block">MODULES</span>
+              <span className="text-sm font-semibold text-[#f7f8f8]">{phases.length || 8}</span>
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">LESSONS</span>
-              <span className="text-sm font-semibold text-[#f7f8f8]">{totalLessons || 500}</span>
+              <span className="text-sm font-semibold text-[#f7f8f8]">{totalLessons || 520}</span>
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">COMPLETED</span>
@@ -112,7 +118,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">CAPSTONES</span>
-              <span className="text-sm font-semibold text-[#5e6ad2]">{phases.length || 15}</span>
+              <span className="text-sm font-semibold text-[#5e6ad2]">{phases.length || 8}</span>
             </div>
             <div>
               <span className="text-[#8a8f98] block">PACING</span>
@@ -161,7 +167,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Phase List (Left Column) */}
+            {/* Module List (Left Column) */}
             <div className="lg:col-span-5 space-y-2 max-h-[640px] overflow-y-auto pr-2">
               {filteredPhases.map((phase) => {
                 const isSelected = selectedPhase?.id === phase.id;
@@ -178,7 +184,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-[10px] font-mono text-[#5e6ad2]">
-                        PHASE {String(phase.id).padStart(2, "0")}
+                        MODULE {String(phase.id).padStart(2, "0")}
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#16171a] border border-[#23252a] text-[#8a8f98]">
                         {phase.category}
@@ -213,7 +219,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                     <div className="flex items-center justify-between pb-4 border-b border-[#23252a] mb-6">
                       <div className="flex items-center gap-2">
                         <span className="px-2.5 py-1 text-xs font-mono rounded bg-[#5e6ad2]/10 text-[#5e6ad2] border border-[#5e6ad2]/30">
-                          PHASE {String(selectedPhase.id).padStart(2, "0")} SPECIFICATION
+                          MODULE {String(selectedPhase.id).padStart(2, "0")} SPECIFICATION
                         </span>
                         <span className="text-xs font-mono text-[#8a8f98]">
                           Category: {selectedPhase.category}
@@ -279,8 +285,8 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                                   Track Syllabus ({track.nodes.length} Lessons + Capstone):
                                 </div>
                                 {track.nodes.map((node) => {
-                                  const completed = completedLessons.includes(node.id);
-                                  const unlocked = isLessonUnlocked(node.id, allLessonIds, completedLessons);
+                                  const completed = completedSet.has(node.id);
+                                  const unlocked = isLessonUnlocked(node.id, allLessonIds, completedSet, lessonIdIndexMap);
 
                                   return (
                                     <div
@@ -338,7 +344,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                         </div>
                       </div>
                     ) : (
-                      /* Standard Phase Lessons List */
+                      /* Standard Module Lessons List */
                       <div className="mb-6">
                         <h5 className="text-xs font-mono text-[#8a8f98] mb-3 flex items-center gap-2">
                           <Layers className="w-3.5 h-3.5 text-[#5e6ad2]" />
@@ -346,8 +352,8 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                         </h5>
                         <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
                           {(nodesByPhase[selectedPhase.phaseId] || []).map((node) => {
-                            const completed = completedLessons.includes(node.id);
-                            const unlocked = isLessonUnlocked(node.id, allLessonIds, completedLessons);
+                            const completed = completedSet.has(node.id);
+                            const unlocked = isLessonUnlocked(node.id, allLessonIds, completedSet, lessonIdIndexMap);
 
                             return (
                               <div
@@ -408,7 +414,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                       <div className="flex items-center gap-2 mb-2">
                         <Award className="w-4 h-4 text-[#f59e0b]" />
                         <span className="text-xs font-mono text-[#f59e0b] font-medium uppercase tracking-wider">
-                          Required Phase Capstone
+                          Required Module Capstone
                         </span>
                       </div>
                       <h4 className="text-base font-medium text-[#f7f8f8] mb-1">
@@ -424,7 +430,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                   {/* Action row */}
                   <div className="pt-4 border-t border-[#23252a] flex items-center justify-between">
                     <div className="text-xs font-mono text-[#8a8f98]">
-                      <span>Phase DB ID: </span>
+                      <span>Module DB ID: </span>
                       <span className="text-[#f7f8f8]">{selectedPhase.phaseId}</span>
                     </div>
                     <Button
@@ -441,7 +447,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
                       }}
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>Start Phase {String(selectedPhase.id).padStart(2, "0")} in Workspace →</span>
+                      <span>Start Module {String(selectedPhase.id).padStart(2, "0")} in Workspace →</span>
                     </Button>
                   </div>
                 </div>

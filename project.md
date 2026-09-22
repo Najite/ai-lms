@@ -6,7 +6,9 @@
 
 ## 1. What This Is
 
-A strictly self-paced, AI-augmented Learning Management System for systems software engineering. The platform delivers **600 deep, serialized lessons** (3,000 subtopics), including an accessible beginner programming ramp (Phases 0–3), an interactive in-browser WebAssembly practice sandbox for every lesson, an AI tutor grounded in curriculum materials (RAG via Supabase pgvector), and **22 enterprise capstone projects** executed on the student's local machine (VS Code, Cursor, Neovim) and pushed to GitHub for automated grading.
+A strictly self-paced, AI-augmented Learning Management System engineered to train complete beginners into job-ready **AI-Native Software Engineers**. The platform delivers **600 deep, serialized lessons** (3,000 subtopics), including an accessible beginner programming ramp (Phases 0–3), an interactive in-browser WebAssembly practice sandbox for every lesson, an AI tutor grounded in curriculum materials (RAG via Supabase pgvector), and **22 enterprise capstone projects** executed on the student's local machine (VS Code, Cursor, Neovim) and pushed to GitHub for automated grading.
+
+An **AI-Native Software Engineer** writes production-grade, clean, maintainable software where AI models, structured data contracts, vector search, streaming APIs, and autonomous tool-using agents are first-class architectural primitives.
 
 It has **zero instructor-led sessions** and **zero video streaming overhead**. It is not a generic bootcamp or a superficial video portal. It is an automated, rigorous, first-principles engineering academy designed to be operated with **$0.00/month infrastructure costs**.
 
@@ -314,12 +316,16 @@ All assessments are reproducible, deterministic, and self-paced. Students receiv
 ## 6. Enterprise-Grade Capstone Project System
 
 ### 6.1 What Makes It Enterprise-Grade
-
-The 22 capstone projects require students to build real systems software that mirrors what senior infrastructure teams ship in production:
-- Multi-tenant distributed log engines
-- Raft consensus state machines with network partition testing
-- Custom vector databases with HNSW indexing and WAL durability
-- Bytecode virtual machines and C compiler frontends
+ 
+The 22 capstone projects require students to build real AI-native software products and platforms that mirror what senior engineering teams ship in production:
+- Resilient AI Client SDKs with Pydantic contracts and circuit breakers
+- High-throughput streaming AI reverse proxies and rate limiters (FastAPI / ASGI 3.0 / SSE)
+- Multi-tenant knowledge bases with PostgreSQL, pgvector (HNSW), and hybrid search
+- Reactive AI streaming web applications with Web Workers and zero layout shifts
+- Production RAG pipelines with contextual chunking, ColBERT late interaction, and cross-encoder re-ranking
+- Automated LLM evaluation (evals) and quality regression test harnesses
+- Autonomous coding and developer tools with tool-calling sandboxes and self-healing TDD loops
+- Multi-tenant AI SaaS platforms with workspace isolation, token billing, and agentic workflows
 
 ### 6.2 Capstone Delivery & Automated Verification Framework
 

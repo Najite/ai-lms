@@ -72,20 +72,20 @@ const PRESET_CHANNELS: Channel[] = [
     ],
   },
   {
-    id: "linux-epoll",
-    title: "Low-Level Performance: Sockets, epoll & Memory Allocators",
+    id: "ai-prompt-systems",
+    title: "AI Systems Engineering: Prompts, Tokens & API Resilience",
     description:
-      "Direct systems programming in C and POSIX. Kernel event loops, non-blocking I/O multiplexing, and custom free list allocation.",
-    tag: "Systems Performance",
+      "Python 3.12, dynamic prompt templates, context token budgeting, exponential backoff retries, and Pydantic JSON contracts.",
+    tag: "AI Systems",
     itemsCount: 7,
     estHours: 18,
     completedItems: 4,
     curator: "AI-Native LMS Staff Faculty",
     icon: Terminal,
     items: [
-      { title: "Lesson 1.4: Custom Malloc Alignment & Segregated Free Lists", type: "Lesson", lessonId: "node-1-4" },
-      { title: "Lesson 4.1: Linux epoll Edge-Triggered Socket Architecture", type: "Lesson", lessonId: "node-4-1" },
-      { title: "Capstone 01: SysTrace Custom Malloc / Free Allocator", type: "Capstone" },
+      { title: "Lesson 0.7: JSON & Structured Data — The Universal Language of AI", type: "Lesson", lessonId: "node-0-7" },
+      { title: "Lesson 0.8: Clean Functions & Prompt Templating", type: "Lesson", lessonId: "node-0-8" },
+      { title: "Capstone 01: PromptCLI Interactive AI Developer Workbench", type: "Capstone" },
     ],
   },
 ];
