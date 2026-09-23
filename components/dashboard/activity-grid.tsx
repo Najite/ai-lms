@@ -4,8 +4,8 @@ import * as React from "react";
 import { Terminal, CheckCircle2, Clock, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
-import { supabase } from "@/lib/supabase";
 import { parseLessonCoordinates } from "@/lib/curriculum-numbering";
+import { fetchLiveCurriculum } from "@/lib/db-curriculum";
 
 interface ActivityDay {
   date: string;
@@ -21,11 +21,14 @@ interface VerificationItem {
   status: "PASSED" | "IN_PROGRESS";
 }
 
+interface ActivityGridProps {}
+
 export function ActivityGrid() {
   const { completedLessons, completedCount } = useCurriculumProgress();
   const [recentVerifications, setRecentVerifications] = React.useState<VerificationItem[]>([]);
   const [activityHistory, setActivityHistory] = React.useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = React.useState(true);
+  const reqIdRef = React.useRef(0);
 
   // Load real activity timestamps from localStorage
   React.useEffect(() => {
@@ -72,43 +75,41 @@ export function ActivityGrid() {
 
   React.useEffect(() => {
     let isMounted = true;
+    const reqId = ++reqIdRef.current;
+
     async function loadRecent() {
       setIsLoading(true);
       try {
-        if (completedLessons.length > 0) {
-          // Fetch exact titles of recently completed lessons from Supabase
-          const targetIds = completedLessons.slice(-5);
-          const { data } = await supabase
-            .from("curriculum_nodes")
-            .select("id, title, phase_id, order_index")
-            .in("id", targetIds);
+        const curriculum = await fetchLiveCurriculum();
+        if (!isMounted || reqId !== reqIdRef.current) return;
 
-          if (isMounted && data && data.length > 0) {
-            const mapped: VerificationItem[] = data.map((node, i) => {
+        if (completedLessons.length > 0) {
+          // Fetch exact titles of recently completed lessons from cached nodesMap in O(1)
+          const targetIds = completedLessons.slice(-5);
+          const matchedNodes = targetIds
+            .map((id) => curriculum.nodesMap.get(id))
+            .filter(Boolean) as typeof curriculum.allNodes;
+
+          if (matchedNodes.length > 0) {
+            const mapped: VerificationItem[] = matchedNodes.map((node, i) => {
               const coords = parseLessonCoordinates(node.id, node.title);
               return {
                 id: `run-${node.id}`,
                 lesson: coords.displayTitle,
                 type: "Pyodide WASM AST",
                 assertions: "All AST Invariants Passed",
-                time: i === data.length - 1 ? "Just now" : `${(data.length - i) * 2} hours ago`,
+                time: i === matchedNodes.length - 1 ? "Just now" : `${(matchedNodes.length - i) * 2} hours ago`,
                 status: "PASSED",
               };
             });
             setRecentVerifications(mapped.reverse());
-            setIsLoading(false);
             return;
           }
         }
 
-        // When user has not completed lessons yet, fetch the initial 3 lessons from Supabase
-        const { data: firstNodes } = await supabase
-          .from("curriculum_nodes")
-          .select("id, title, phase_id, order_index")
-          .order("order_index", { ascending: true })
-          .limit(3);
-
-        if (isMounted && firstNodes && firstNodes.length > 0) {
+        // When user has not completed lessons yet, use the initial 3 lessons from curriculum
+        const firstNodes = curriculum.allNodes.slice(0, 3);
+        if (firstNodes.length > 0) {
           const mapped: VerificationItem[] = firstNodes.map((node, i) => {
             const coords = parseLessonCoordinates(node.id, node.title);
             return {
@@ -125,10 +126,14 @@ export function ActivityGrid() {
       } catch (err) {
         console.error("Failed to load verification telemetry", err);
       } finally {
-        if (isMounted) setIsLoading(false);
+        if (isMounted && reqId === reqIdRef.current) {
+          setIsLoading(false);
+        }
       }
     }
+
     loadRecent();
+
     return () => {
       isMounted = false;
     };

@@ -17,6 +17,7 @@ export interface DatabaseNode {
   cs_foundation?: string;
   ai_convergence?: string;
   xp_reward: number;
+  order_index?: number;
   level_required?: number;
   position_x?: number;
   position_y?: number;
@@ -117,65 +118,196 @@ export function transformDbPhases(
   });
 }
 
-// Fetch live curriculum data from Supabase
-export async function fetchLiveCurriculum(): Promise<{
+import { PRODUCTION_CAPSTONES_2026 } from "@/lib/production-capstones";
+
+export interface LiveCurriculumResult {
   phases: PhaseViewModel[];
   allNodes: DatabaseNode[];
+  nodesMap: Map<string, DatabaseNode>;
+  nodeIndexMap: Map<string, number>;
+  nodesByPhase: Record<string, DatabaseNode[]>;
   totalLessons: number;
   totalPhases: number;
-}> {
-  try {
-    const [phasesRes, nodesRes] = await Promise.all([
-      supabase.from("curriculum_phases").select("*").order("order_index", { ascending: true }),
-      supabase
-        .from("curriculum_nodes")
-        .select("id, slug, phase_id, title, subtitle, xp_reward, order_index")
-        .order("order_index", { ascending: true }),
-    ]);
+}
 
-    const dbPhases: DatabasePhase[] = phasesRes.data || [];
-    let allNodes: DatabaseNode[] = nodesRes.data || [];
+// In-memory singleton cache and in-flight promise deduplication
+let memoryCachedCurriculum: LiveCurriculumResult | null = null;
+let inFlightCurriculumPromise: Promise<LiveCurriculumResult> | null = null;
 
-    const phaseOrderMap = new Map<string, number>();
-    dbPhases.forEach((p) => phaseOrderMap.set(p.id, p.order_index));
+/**
+ * Returns the in-memory cached curriculum synchronously if available.
+ * Time complexity: O(1)
+ */
+export function getLiveCurriculumSync(): LiveCurriculumResult | null {
+  return memoryCachedCurriculum;
+}
 
-    // Order nodes strictly by phase order_index first, then node order_index
-    const parseNodeRank = (n: any) => {
-      const pRank = phaseOrderMap.get(n.phase_id) ?? 999;
-      const order = typeof n.order_index === "number" ? n.order_index : 99999;
-      return pRank * 100000 + order;
-    };
-
-    allNodes.sort((a, b) => parseNodeRank(a) - parseNodeRank(b));
-
-    const nodesByPhase: Record<string, DatabaseNode[]> = {};
-    for (const node of allNodes) {
-      if (!nodesByPhase[node.phase_id]) {
-        nodesByPhase[node.phase_id] = [];
-      }
-      nodesByPhase[node.phase_id].push(node);
-    }
-
-    // Ensure within each phase, nodes are ordered monotonically
-    for (const phaseId in nodesByPhase) {
-      nodesByPhase[phaseId].sort((a, b) => parseNodeRank(a) - parseNodeRank(b));
-    }
-
-    const phases = transformDbPhases(dbPhases, nodesByPhase);
-
-    return {
-      phases,
-      allNodes,
-      totalLessons: allNodes.length,
-      totalPhases: phases.length,
-    };
-  } catch (error) {
-    console.error("Failed to fetch live curriculum from Supabase:", error);
-    return {
-      phases: [],
-      allNodes: [],
-      totalLessons: 0,
-      totalPhases: 0,
-    };
+// Fetch live curriculum data from Supabase with in-memory caching and request deduplication
+export async function fetchLiveCurriculum(forceRefresh = false): Promise<LiveCurriculumResult> {
+  if (!forceRefresh && memoryCachedCurriculum) {
+    return memoryCachedCurriculum;
   }
+
+  if (!forceRefresh && inFlightCurriculumPromise) {
+    return inFlightCurriculumPromise;
+  }
+
+  inFlightCurriculumPromise = (async () => {
+    try {
+      const [phasesRes, nodesRes] = await Promise.all([
+        supabase.from("curriculum_phases").select("*").order("order_index", { ascending: true }),
+        supabase
+          .from("curriculum_nodes")
+          .select("id, slug, phase_id, title, subtitle, xp_reward, order_index")
+          .order("order_index", { ascending: true }),
+      ]);
+
+      const dbPhases: DatabasePhase[] = phasesRes.data || [];
+      let allNodes: DatabaseNode[] = nodesRes.data || [];
+
+      const phaseOrderMap = new Map<string, number>();
+      dbPhases.forEach((p) => phaseOrderMap.set(p.id, p.order_index));
+
+      // Order nodes strictly by phase order_index first, then node order_index
+      const parseNodeRank = (n: any) => {
+        const pRank = phaseOrderMap.get(n.phase_id) ?? 999;
+        const order = typeof n.order_index === "number" ? n.order_index : 99999;
+        return pRank * 100000 + order;
+      };
+
+      allNodes.sort((a, b) => parseNodeRank(a) - parseNodeRank(b));
+
+      const nodesMap = new Map<string, DatabaseNode>();
+      const nodeIndexMap = new Map<string, number>();
+      const nodesByPhase: Record<string, DatabaseNode[]> = {};
+
+      allNodes.forEach((node, idx) => {
+        nodesMap.set(node.id, node);
+        nodeIndexMap.set(node.id, idx);
+        if (!nodesByPhase[node.phase_id]) {
+          nodesByPhase[node.phase_id] = [];
+        }
+        nodesByPhase[node.phase_id].push(node);
+      });
+
+      const phases = transformDbPhases(dbPhases, nodesByPhase);
+
+      const result: LiveCurriculumResult = {
+        phases,
+        allNodes,
+        nodesMap,
+        nodeIndexMap,
+        nodesByPhase,
+        totalLessons: allNodes.length,
+        totalPhases: phases.length,
+      };
+
+      memoryCachedCurriculum = result;
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch live curriculum from Supabase:", error);
+      return {
+        phases: [],
+        allNodes: [],
+        nodesMap: new Map(),
+        nodeIndexMap: new Map(),
+        nodesByPhase: {},
+        totalLessons: 0,
+        totalPhases: 0,
+      };
+    } finally {
+      inFlightCurriculumPromise = null;
+    }
+  })();
+
+  return inFlightCurriculumPromise;
+}
+
+export interface ResolvedLearningQueue {
+  activeLesson: DatabaseNode;
+  nextLesson: DatabaseNode;
+  activeCapstone: {
+    id: string;
+    title: string;
+    phaseName: string;
+    oneLineHook: string;
+  };
+}
+
+/**
+ * Resolves active lesson, next lesson, and active capstone with O(1) amortized time complexity.
+ */
+export function resolveLearningQueue(
+  curriculum: LiveCurriculumResult,
+  lastActiveLessonId?: string,
+  completedLessons: string[] = []
+): ResolvedLearningQueue {
+  const { allNodes, nodesMap, nodeIndexMap, phases } = curriculum;
+  const completedSet = new Set(completedLessons);
+
+  // 1. Resolve Active In-Progress Lesson (O(1) lookup if lastActiveLessonId is in Map)
+  let activeNode: DatabaseNode | undefined;
+  if (lastActiveLessonId && nodesMap.has(lastActiveLessonId)) {
+    activeNode = nodesMap.get(lastActiveLessonId);
+  } else {
+    // Single forward pass to find first incomplete lesson
+    activeNode = allNodes.find((n) => !completedSet.has(n.id)) || allNodes[0];
+  }
+
+  if (!activeNode && allNodes.length > 0) {
+    activeNode = allNodes[0];
+  }
+
+  // Canonical fallback if allNodes is empty
+  const fallbackNode: DatabaseNode = {
+    id: "node-0-1",
+    slug: "phase-00-lesson-01-python-basics",
+    phase_id: "module-1",
+    title: "Lesson 1.1: Python Basics & Data Types",
+    subtitle: "Python 3.12 syntax, memory model, and primitive types",
+    xp_reward: 100,
+    order_index: 1,
+  };
+
+  const finalActive = activeNode || fallbackNode;
+
+  // 2. Resolve Next Pedagogical Step (O(1) index lookup)
+  const activeIdx = nodeIndexMap.get(finalActive.id) ?? 0;
+  let nextNode: DatabaseNode | undefined;
+
+  // Scan forward for next uncompleted lesson
+  for (let i = activeIdx + 1; i < allNodes.length; i++) {
+    if (!completedSet.has(allNodes[i].id)) {
+      nextNode = allNodes[i];
+      break;
+    }
+  }
+
+  // Fallback to immediate next node or first incomplete node
+  if (!nextNode) {
+    nextNode =
+      allNodes[Math.min(activeIdx + 1, allNodes.length - 1)] ||
+      allNodes.find((n) => !completedSet.has(n.id) && n.id !== finalActive.id) ||
+      allNodes[1] ||
+      finalActive;
+  }
+
+  // 3. Resolve Relevant Capstone based on active phase (O(1))
+  const activePhase = phases.find((p) => p.phaseId === finalActive.phase_id);
+  const phaseNum = activePhase ? activePhase.id : 1;
+  const matchedCap =
+    PRODUCTION_CAPSTONES_2026.find(
+      (c) => c.displayPhaseNumber === phaseNum || c.phaseId === phaseNum - 1
+    ) || PRODUCTION_CAPSTONES_2026[0];
+
+  return {
+    activeLesson: finalActive,
+    nextLesson: nextNode,
+    activeCapstone: {
+      id: matchedCap.projectSlug,
+      title: matchedCap.title,
+      phaseName: matchedCap.phaseName,
+      oneLineHook: matchedCap.oneLineHook,
+    },
+  };
 }

@@ -9,10 +9,33 @@ import {
   CheckCircle2,
   Sparkles,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import {
+  fetchLiveCurriculum,
+  getLiveCurriculumSync,
+  resolveLearningQueue,
+} from "@/lib/db-curriculum";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
-import { PRODUCTION_CAPSTONES_2026 } from "@/lib/production-capstones";
+
+const CANONICAL_INITIAL_ACTIVE = {
+  id: "node-0-1",
+  title: "Lesson 1.1: Python Basics & Data Types",
+  phase_id: "module-1",
+  xp_reward: 100,
+};
+
+const CANONICAL_INITIAL_NEXT = {
+  id: "node-0-2",
+  title: "Lesson 1.2: Operators & Token Bill Math",
+  phase_id: "module-1",
+};
+
+const CANONICAL_INITIAL_CAPSTONE = {
+  id: "module-01-capstone-promptcli-workbench",
+  title: "PromptCLI: Developer AI Workbench",
+  phaseName: "Module 1 Capstone",
+  oneLineHook: "Dynamic prompt templating, token budgeting, and exponential backoff retry engine in Python.",
+};
 
 interface ContinueLearningQueueProps {
   onResumeLesson: (lessonId: string) => void;
@@ -25,100 +48,79 @@ export function ContinueLearningQueue({
   onViewCapstones,
   onViewSkillIQ,
 }: ContinueLearningQueueProps) {
+  const { lastActiveLessonId, completedLessons } = useCurriculumProgress();
+
+  // Initialize state synchronously using O(1) cache if available, or canonical Lesson 1.1
   const [activeLesson, setActiveLesson] = React.useState<{
     id: string;
     title: string;
     phase_id: string;
-    xp_reward: number;
-  } | null>(null);
+    xp_reward?: number;
+  }>(() => {
+    const cached = getLiveCurriculumSync();
+    if (cached) {
+      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
+      return q.activeLesson;
+    }
+    return CANONICAL_INITIAL_ACTIVE;
+  });
 
   const [nextLesson, setNextLesson] = React.useState<{
     id: string;
     title: string;
     phase_id: string;
-  } | null>(null);
+  }>(() => {
+    const cached = getLiveCurriculumSync();
+    if (cached) {
+      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
+      return q.nextLesson;
+    }
+    return CANONICAL_INITIAL_NEXT;
+  });
 
   const [activeCapstone, setActiveCapstone] = React.useState<{
     id: string;
     title: string;
     phaseName: string;
     oneLineHook: string;
-  } | null>(null);
+  }>(() => {
+    const cached = getLiveCurriculumSync();
+    if (cached) {
+      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
+      return q.activeCapstone;
+    }
+    return CANONICAL_INITIAL_CAPSTONE;
+  });
 
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const requestIdRef = React.useRef(0);
 
-  const { lastActiveLessonId, completedLessons } = useCurriculumProgress();
-
+  // Sync with live curriculum database: O(1) cached lookups with race condition guard
   React.useEffect(() => {
     let isMounted = true;
-    async function load() {
-      setIsLoading(true);
+    const reqId = ++requestIdRef.current;
+
+    async function syncQueue() {
       try {
-        const [phasesRes, nodesRes] = await Promise.all([
-          supabase
-            .from("curriculum_phases")
-            .select("id, title, order_index")
-            .order("order_index", { ascending: true }),
-          supabase
-            .from("curriculum_nodes")
-            .select("id, title, phase_id, xp_reward, order_index")
-            .order("order_index", { ascending: true }),
-        ]);
+        const curriculum = await fetchLiveCurriculum();
+        // Guard against race conditions and unmounted state
+        if (!isMounted || reqId !== requestIdRef.current) return;
 
-        if (isMounted && phasesRes.data && nodesRes.data) {
-          const phases = phasesRes.data;
-          const nodes = nodesRes.data;
-          const completedSet = new Set(completedLessons);
-
-          // Build a phase order lookup map
-          const phaseOrderMap = new Map<string, number>();
-          phases.forEach((p) => phaseOrderMap.set(p.id, p.order_index));
-
-          // Sort nodes globally: phase.order_index ASC, node.order_index ASC
-          const sortedNodes = [...nodes].sort((a, b) => {
-            const pA = phaseOrderMap.get(a.phase_id) ?? 999;
-            const pB = phaseOrderMap.get(b.phase_id) ?? 999;
-            if (pA !== pB) return pA - pB;
-            return (a.order_index || 0) - (b.order_index || 0);
-          });
-
-          // 1. Resolve Active In-Progress Lesson
-          const targeted =
-            sortedNodes.find((n) => n.id === lastActiveLessonId) ||
-            sortedNodes.find((n) => !completedSet.has(n.id)) ||
-            sortedNodes[0];
-          setActiveLesson(targeted);
-
-          // 2. Resolve Next Pedagogical Step
-          const targetIdx = sortedNodes.findIndex((n) => n.id === targeted.id);
-          const subsequent =
-            sortedNodes.slice(targetIdx + 1).find((n) => !completedSet.has(n.id)) ||
-            sortedNodes.find((n) => !completedSet.has(n.id) && n.id !== targeted.id) ||
-            sortedNodes[Math.min(targetIdx + 1, sortedNodes.length - 1)];
-          setNextLesson(subsequent);
-
-          // 3. Resolve Relevant Capstone based on active phase
-          const activePhaseObj = phases.find((p) => p.id === targeted.phase_id);
-          const phaseNum = activePhaseObj ? activePhaseObj.order_index + 1 : 1;
-          const matchedCap =
-            PRODUCTION_CAPSTONES_2026.find(
-              (c) => c.displayPhaseNumber === phaseNum || c.phaseId === phaseNum - 1
-            ) || PRODUCTION_CAPSTONES_2026[0];
-
-          setActiveCapstone({
-            id: matchedCap.projectSlug,
-            title: matchedCap.title,
-            phaseName: matchedCap.phaseName,
-            oneLineHook: matchedCap.oneLineHook,
-          });
-        }
+        const queue = resolveLearningQueue(curriculum, lastActiveLessonId, completedLessons);
+        setActiveLesson(queue.activeLesson);
+        setNextLesson(queue.nextLesson);
+        setActiveCapstone(queue.activeCapstone);
       } catch (err) {
         console.error("Failed to load queue data from Supabase", err);
       } finally {
-        if (isMounted) setIsLoading(false);
+        if (isMounted && reqId === requestIdRef.current) {
+          setIsLoading(false);
+        }
       }
     }
-    load();
+
+    syncQueue();
+
     return () => {
       isMounted = false;
     };
@@ -161,7 +163,7 @@ export function ContinueLearningQueue({
             </div>
 
             <h4 className="text-base font-bold text-[#f7f8f8] group-hover:text-white transition-colors line-clamp-2">
-              {activeLessonCoords ? activeLessonCoords.displayTitle : "Lesson 1.1: Foundations"}
+              {activeLessonCoords ? activeLessonCoords.displayTitle : CANONICAL_INITIAL_ACTIVE.title}
             </h4>
 
             <p className="text-xs text-[#8a8f98] line-clamp-2 leading-relaxed">
@@ -240,7 +242,7 @@ export function ContinueLearningQueue({
             </div>
 
             <h4 className="text-base font-bold text-[#f7f8f8] group-hover:text-white transition-colors line-clamp-2">
-              {nextLessonCoords ? nextLessonCoords.displayTitle : "Next Lesson"}
+              {nextLessonCoords ? nextLessonCoords.displayTitle : CANONICAL_INITIAL_NEXT.title}
             </h4>
 
             <p className="text-xs text-[#8a8f98] line-clamp-2 leading-relaxed">
