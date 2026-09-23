@@ -130,7 +130,7 @@ export default function DashboardPage() {
             >
               <Award className="w-3.5 h-3.5 text-[#5e6ad2]" />
               <span className="text-[#8a8f98]">Progress:</span>
-              <span className="text-[#5e6ad2] font-semibold">{completedLessonsCount} / 500 Modules</span>
+              <span className="text-[#5e6ad2] font-semibold">{completedLessonsCount} / 700 Lessons</span>
             </div>
 
             <Button
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                 onViewSkillIQ={() => handleViewChange("paths")}
               />
 
-              {/* 2. Structured Phase Tracks across 500 database lessons */}
+              {/* 2. Structured Phase Tracks across 700 database lessons */}
               <ProgressMatrix
                 onSelectTrack={() => handleViewChange("curriculum")}
                 onResumeLesson={handleStartLesson}
@@ -239,7 +239,7 @@ export default function DashboardPage() {
               <span className="text-[#383b42]">/</span>
               <span>Zero-to-Job AI Software Engineer Curriculum</span>
               <span className="text-[#383b42]">•</span>
-              <span className="text-[#10b981]">500 Modules // 15 Phases // Real AST Verification</span>
+              <span className="text-[#10b981]">700 Lessons // 14 Modules // Real AST Verification</span>
             </div>
             <div className="text-[11px] text-[#565961]">
               100% Free Permanent License • Real AST Verification

@@ -71,9 +71,9 @@ export function DashboardSidebar({
       ],
     },
     {
-      groupName: "CURRICULUM (500 MODULES)",
+      groupName: "CURRICULUM (700 LESSONS)",
       items: [
-        { id: "curriculum", label: "Curriculum Tree", icon: BookOpen, badge: "15 Phases" },
+        { id: "curriculum", label: "Curriculum Tree", icon: BookOpen, badge: "14 Modules" },
         { id: "paths", label: "Phase Tracks", icon: Compass, badge: "Structured" },
       ],
     },
@@ -82,7 +82,7 @@ export function DashboardSidebar({
       items: [
         { id: "workspace", label: "Modules & Labs", icon: Terminal, badge: "Dual-Phase" },
         { id: "exercises", label: "Hands-on Labs", icon: Code2 },
-        { id: "capstones", label: "Phase Capstones", icon: FolderGit2, badge: "15 Projects" },
+        { id: "capstones", label: "Phase Capstones", icon: FolderGit2, badge: "14 Capstones" },
       ],
     },
   ];
@@ -220,7 +220,7 @@ export function DashboardSidebar({
           {!isCollapsed && (
             <div className="flex-1 text-left truncate">
               <span className="block font-semibold">Architectural Tutor</span>
-              <span className="text-[10px] text-[#8a8f98] block truncate">RAG Grounded in 600 Specs</span>
+              <span className="text-[10px] text-[#8a8f98] block truncate">RAG Grounded in 700 Specs</span>
             </div>
           )}
         </button>
@@ -231,7 +231,7 @@ export function DashboardSidebar({
               <ShieldCheck className="w-3 h-3" />
               Free Permanent Tier
             </span>
-            <span>{completedLessonsCount} / 600</span>
+            <span>{completedLessonsCount} / 700</span>
           </div>
         )}
       </div>

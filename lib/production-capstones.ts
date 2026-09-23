@@ -118,338 +118,346 @@ export const PRODUCTION_CAPSTONES_2026: ProductionCapstoneSpec[] = [
     phaseId: 2,
     displayPhaseNumber: 3,
     sector: "Autonomous AI & Intelligent Systems",
-    phaseName: "Module 3: Mathematical Foundations & Numerical Computing",
-    projectSlug: "module-03-capstone-vectorized-autograd-engine",
-    title: "MathGrad: Reverse-Mode Automatic Differentiation & Tensor Engine",
-    oneLineHook: "Constructed a NumPy-accelerated computational graph engine and reverse-mode automatic differentiation library for training machine learning models from scratch.",
-    industryArchetype: "PyTorch Core / Micrograd / JAX Autodiff / Numerical ML Systems",
-    employabilityRating: 96,
+    phaseName: "Module 3: Computational Logic & Agent Workflows",
+    projectSlug: "module-03-capstone-workflow-graph-engine",
+    title: "WorkflowGraph: Deterministic Agent Workflow Engine",
+    oneLineHook: "Constructed a directed workflow execution engine in Python with DAG topological scheduling, cycle/deadlock detection, and formal Z3 SMT safety verification for AI agents.",
+    industryArchetype: "LangGraph / Temporal / Prefect / Airflow Core Engine",
+    employabilityRating: 97,
     employabilityBadge: "Frontier AI",
-    salaryBand2026: "70k – 20k (Machine Learning / Numerical Systems Engineer)",
+    salaryBand2026: "$120k – $155k (AI-Native Software Engineer)",
     technologies: [
-      "Reverse-Mode Autodiff",
-      "Computational DAGs",
-      "Vectorized Matrix Algebra",
-      "NumPy Strides",
-      "Topological Sorting",
-      "Gradient Descent"
+      "Python 3.12+",
+      "DAG Topological Sorting (Kahns Algorithm)",
+      "Cycle Detection (Tarjans Algorithm)",
+      "Finite State Machines (FSM / DFA)",
+      "Z3 Theorem Prover (SMT Invariants)",
+      "Async Step Dispatcher"
     ],
-    storyScenario: "Every modern deep learning framework (PyTorch, JAX, TensorFlow) depends on automatic differentiation to calculate gradients of loss functions with respect to millions of model parameters. Without understanding how the computational graph tracks forward operations and recursively backpropagates gradients via the chain rule, debugging numerical instability or designing custom loss functions becomes guesswork. MathGrad constructs a dynamic computational DAG with tensor broadcasting, exact analytical gradients, and optimization passes.",
-    problemToSolve: "Calculate exact analytical gradients through multi-layer mathematical operations efficiently without the inaccuracy and computational cost of numerical approximations.",
-    systemArchitecture: "Input Tensors -> Forward Operation Graph (matmul, add, relu, log) -> Dynamic Computational Tape -> Reverse Topological Sort -> Gradient Backpropagation -> Parameter Optimizer.",
-    whyThisMatters2026: "Understanding the mathematics of computational graphs, backward propagation, and numerical stability is essential for optimizing AI models, writing custom loss functions, and building production machine learning systems.",
+    storyScenario: "When building autonomous AI agent systems in production, chaining prompts haphazardly leads to circular deadlocks, runaway token consumption, and catastrophic actions. WorkflowGraph provides an industrial-strength execution engine: developers define agent tasks as a Directed Acyclic Graph (DAG), the engine statically verifies there are no cycles using Tarjan's algorithm, executes independent steps concurrently via topological sort, manages agent states with a strict Finite State Machine, and uses the Z3 SMT solver to mathematically verify safety invariants before invoking external tools.",
+    problemToSolve: "Prevent infinite reasoning loops, chaotic state transitions, and safety policy violations in multi-step AI agent workflows through deterministic graph compilation and formal verification.",
+    systemArchitecture: "Task Definitions -> AST / DSL Compiler -> Cycle Detector (Tarjans) -> Topological Sorter -> Concurrent Async Dispatcher -> FSM State Controller -> Z3 Safety Prover -> Tool Execution Engine.",
+    whyThisMatters2026: "Every modern AI agent framework (LangGraph, CrewAI, AutoGen, Temporal) is fundamentally a graph workflow engine. Engineers who understand graph algorithms, state automata, and formal verification can architect reliable, enterprise-grade agent swarms that never get stuck in loops.",
     whatToBuild: [
-      "Tensor Value Container: track numeric arrays, accumulated gradients, and parent operational pointers.",
-      "Vectorized Operation Library: implement forward and backward passes for matrix multiplication, broadcasting additions, ReLU, and Cross-Entropy.",
-      "Topological Graph Traversal: recursively sort nodes in the computational DAG to guarantee proper backward execution order.",
-      "Multi-Layer Model Optimizer: train a multi-layer neural network on non-linear synthetic data using gradient descent."
+      "DAG Workflow Compiler: parse declarative task graphs, calculate dependency resolution orders, and reject cyclic graphs with precise error locations.",
+      "Parallel Step Dispatcher: execute non-dependent tasks concurrently using asyncio while respecting concurrency and rate limits.",
+      "Deterministic State Machine: enforce explicit transitions (IDLE, PLANNING, EXECUTING, AWAITING_HUMAN, FINISHED) with state persistence.",
+      "Z3 SMT Invariant Prover: mathematically verify that tool calling constraints (budget caps, permission boundaries) are impossible to violate."
     ],
     automatedChecks: [
-      "Gradient accuracy: analytical gradients match finite-difference numerical benchmarks within 1e-5 across all operations.",
-      "Broadcasting integrity: gradients correctly sum across broadcasted dimensions during backward propagation.",
-      "Convergence test: a 2-layer neural network built with MathGrad converges to > 98% accuracy on a classification dataset."
+      "Cycle detection: correctly detects and rejects graphs with direct and indirect circular dependencies before execution.",
+      "Topological execution order: verifies dependent downstream tasks never execute before prerequisite tasks complete.",
+      "Z3 constraint enforcement: blocks execution and raises an invariant violation when simulated agent actions exceed pre-configured resource budgets."
     ],
     portfolioProof: {
-      githubRepoTemplate: "mathgrad-tensor-autodiff-engine",
-      liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Constructed MathGrad, a reverse-mode automatic differentiation engine from scratch; validated analytical gradients against PyTorch within 1e-5 across multidimensional tensor graphs."
+      githubRepoTemplate: "workflow-graph-agent-engine",
+      liveDemoType: "Live Service API",
+      resumeImpactBullet: "Engineered WorkflowGraph, an autonomous agent execution engine with DAG topological scheduling and Z3 SMT formal verification, eliminating circular deadlocks and policy violations across multi-step AI pipelines."
     }
   },
   {
     phaseId: 3,
     displayPhaseNumber: 4,
-    sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Module 4: Data Structures & Algorithmic Problem Solving",
-    projectSlug: "module-04-capstone-high-performance-key-value-store",
-    title: "FlashKV: Crash-Resilient Key-Value Storage Engine with Write-Ahead Logging",
-    oneLineHook: "Engineered an append-only, crash-resilient key-value storage engine featuring an in-memory SkipList index, binary Write-Ahead Log (WAL), and fast Bloom filter lookups.",
-    industryArchetype: "RocksDB / LevelDB / Redis Persistence / SQLite Storage Core",
-    employabilityRating: 96,
-    employabilityBadge: "Production Systems",
-    salaryBand2026: "65k – 10k (Backend Infrastructure / Database Systems Engineer)",
+    sector: "Autonomous AI & Intelligent Systems",
+    phaseName: "Module 4: Vector Embeddings, Tensors & Autograd",
+    projectSlug: "module-04-capstone-tensor-core-autograd",
+    title: "TensorCore: Micro-Autograd Engine & Vector Search",
+    oneLineHook: "Constructed a dynamic reverse-mode automatic differentiation engine and high-throughput vector similarity search library from scratch in Python and NumPy.",
+    industryArchetype: "PyTorch Core / Micrograd / pgvector Core / JAX Autodiff",
+    employabilityRating: 98,
+    employabilityBadge: "Frontier AI",
+    salaryBand2026: "$125k – $160k (AI-Native Software Engineer)",
     technologies: [
-      "SkipList Data Structure",
-      "Write-Ahead Log (WAL)",
-      "Bloom Filter",
-      "Binary File I/O",
-      "CRC32 Checksums",
-      "Disk Compaction"
+      "Python 3.12+",
+      "NumPy Vectorized Strides",
+      "Reverse-Mode Automatic Differentiation",
+      "Dynamic Computational Graphs",
+      "Scaled Dot-Product Attention",
+      "INT8 Weight Quantization"
     ],
-    storyScenario: "Modern applications require database storage engines that can sustain thousands of writes per second without losing data when a server unexpectedly restarts. In-memory hash maps are fast but volatile, while naive file writes corrupt easily under concurrent load. FlashKV implements a Log-Structured storage engine: all incoming writes append sequentially to an on-disk Write-Ahead Log and an in-memory SkipList. Point queries check a Bloom filter to eliminate unnecessary disk reads, and background compaction purges obsolete values.",
-    problemToSolve: "Provide high-speed read and write operations with guaranteed crash recovery, avoiding data corruption and random disk access bottlenecks.",
-    systemArchitecture: "Write Request -> Sequential Append-Only Write-Ahead Log (WAL) -> In-Memory SkipList Index -> Bloom Filter Probe -> Disk Compaction Worker -> Verified Data File.",
-    whyThisMatters2026: "Databases, search indexes, and caching systems all rely on log-structured storage and probabilistic filters. Understanding these algorithms is what separates junior coders from systems engineers who build reliable data platforms.",
+    storyScenario: "When building AI-native applications, software engineers cannot treat embeddings and neural networks as magic black boxes. When semantic search latency spikes, vector projections produce low-recall results, or local model fine-tuning runs out of memory, engineers must understand the underlying tensor mechanics. TensorCore implements a complete numerical engine from first principles: high-throughput cosine and Euclidean vector search, an autograd tape that dynamically builds computational graphs and backpropagates gradients via the chain rule, a scaled dot-product attention layer with causal masking, and an INT8 quantization compressor that slashes memory footprints by 75%.",
+    problemToSolve: "Demystify embedding search, backpropagation, and attention mechanisms by constructing a verified numerical tensor and autograd engine without relying on heavy machine learning frameworks.",
+    systemArchitecture: "Embedding Inputs -> Vector Search Engine (Cosine KNN) -> Forward Computational Graph -> Activation Layers (ReLU/Softmax) -> Backward Reverse Topological Sort -> Gradient Backpropagation -> INT8 Tensor Quantizer.",
+    whyThisMatters2026: "Every AI-native software engineer interacts with vector embeddings, similarity search, and attention mechanisms. Understanding memory layouts, numerical stability, and automatic differentiation separates engineers who build scalable AI systems from those who merely call APIs.",
     whatToBuild: [
-      "Concurrent SkipList: implement a probabilistic sorted data structure providing O(log N) inserts, searches, and range scans.",
-      "Binary Write-Ahead Log: write structured binary records with CRC32 checksums before acknowledging client writes.",
-      "Bloom Filter Index: create an in-memory bit array with multiple hash functions to reject queries for non-existent keys in O(1).",
-      "Crash Recovery Routine: read the WAL on startup to replay transactions and reconstruct the active memory index completely."
+      "Vector Similarity Search Engine: implement vectorized Cosine, Euclidean, and Manhattan top-K search with unit-length normalization.",
+      "Dynamic Autograd Graph: build scalar Value and tensor nodes that record forward operations and execute reverse-mode automatic differentiation.",
+      "Scaled Dot-Product Attention: write the multi-head attention equation with causal masking and KV-cache matrix management.",
+      "INT8 Quantization Compressor: map 32-bit floating-point tensors to signed 8-bit integers with zero-point scaling to minimize memory overhead."
     ],
     automatedChecks: [
-      "Crash resilience: killing the process with SIGKILL during a 10,000-write burst recovers 100% of acknowledged entries upon restart.",
-      "Bloom filter efficiency: false positive rate stays below 2.0% with zero false negatives.",
-      "Range scan correctness: range queries return keys in lexicographical order in O(log N + K) time."
+      "Gradient precision check: analytical gradients computed by backward() match finite-difference numerical slopes within 1e-5.",
+      "Cosine search accuracy: vectorized top-K similarity search returns identical ranking to brute-force baselines with 10x throughput.",
+      "Attention masking invariant: causal attention masks guarantee tokens cannot attend to subsequent positions in the sequence."
     ],
     portfolioProof: {
-      githubRepoTemplate: "flashkv-crash-resilient-store",
-      liveDemoType: "CLI / Docker Engine",
-      resumeImpactBullet: "Engineered FlashKV, an append-only storage engine with Write-Ahead Logging and Bloom filters, achieving 40,000 writes/sec and verified 100% crash recovery after unexpected termination."
+      githubRepoTemplate: "tensorcore-autograd-engine",
+      liveDemoType: "Live Service API",
+      resumeImpactBullet: "Authored TensorCore, a pure Python/NumPy reverse-mode automatic differentiation and vector search engine, validating analytical gradients against PyTorch within 1e-5 across multi-layer attention graphs."
     }
   },
   {
     phaseId: 8,
     displayPhaseNumber: 9,
     sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Systems Internals: OS, Concurrency & Networks",
-    projectSlug: "phase-05-capstone-reverse-proxy-load-balancer",
-    title: "RouteMaster: High-Performance Layer-7 Reverse Proxy & Load Balancer",
-    oneLineHook: "Built a multi-worker Layer-7 reverse proxy in Python and networking primitives with dynamic upstream health checking, round-robin load balancing, and circuit breakers.",
-    industryArchetype: "Nginx / Envoy / Traefik / Cloudflare Edge Router",
-    employabilityRating: 95,
+    phaseName: "Module 9: High-Scale AI System Design & Gateway Routing",
+    projectSlug: "module-09-capstone-model-router-gateway",
+    title: "ModelRouter: High-Scale Multi-Provider AI Gateway & Load Balancer",
+    oneLineHook: "Architected a high-throughput AI gateway in Python with multi-provider model routing, token-bucket rate limiting with Redis, semantic caching, and dynamic latency fallback.",
+    industryArchetype: "Portkey / LiteLLM / Cloudflare AI Gateway / Helicone",
+    employabilityRating: 98,
     employabilityBadge: "Production Systems",
-    salaryBand2026: "60k – 95k (DevOps / Systems Engineer / Site Reliability Engineer)",
+    salaryBand2026: "30k – 65k (AI Platform / Systems Engineer)",
     technologies: [
-      "TCP Socket Programming",
-      "HTTP/1.1 Protocol Parsing",
-      "Round-Robin & Least-Connections",
-      "Active Health Checking",
-      "Circuit Breaker Pattern",
-      "Docker Multi-Container"
+      "FastAPI / AsyncIO",
+      "Redis Sliding-Window Rate Limiting",
+      "Multi-Provider Model Routing (OpenAI / Anthropic / DeepSeek)",
+      "Semantic Cache with Vector Similarity",
+      "Circuit Breaker & Hedged Requests",
+      "Prometheus Metrics (TTFT & TPM Tracking)"
     ],
-    storyScenario: "When modern web applications scale, incoming user traffic cannot be handled by a single server instance. Upstream servers can crash, suffer memory leaks, or experience network drops. RouteMaster acts as an intelligent traffic gateway that receives incoming client HTTP requests, balances traffic across a cluster of backend servers using configurable algorithms, and automatically trips circuit breakers to bypass failing instances within 100 milliseconds.",
-    problemToSolve: "Prevent system outages and traffic bottlenecks by evenly distributing client requests across healthy backend servers and isolating failing instances automatically.",
-    systemArchitecture: "Client Traffic -> RouteMaster Listening Socket -> HTTP Header Parser -> Upstream Selector (Least-Connections / Round-Robin) -> Backend Connection Pool -> Response Relay.",
-    whyThisMatters2026: "Every modern cloud platform relies on reverse proxies and load balancers to route traffic and ensure high availability. Building one from scratch gives you a thorough understanding of the networking stack and HTTP protocol.",
+    storyScenario: "Modern AI applications fail at scale when unmanaged client traffic overwhelms upstream LLM providers, incurring massive token bills and fatal 429 rate limit outages. ModelRouter acts as an enterprise-grade AI proxy: incoming prompt requests are checked against a high-speed semantic cache to eliminate redundant generations, metered by a Redis sliding-window token bucket per tenant, and dynamically routed to the optimal model provider based on cost, latency SLAs, and context window requirements. If an upstream provider spikes in latency or triggers rate limits, ModelRouter seamlessly falls back to backup providers in under 50ms with zero client disruption.",
+    problemToSolve: "Prevent provider outages, control runaway inference expenses, and enforce multi-tenant token rate quotas across disparate LLM APIs.",
+    systemArchitecture: "Client Request -> Redis Sliding-Window Rate Limiter -> Semantic Cache Vector Probe -> Smart Model Router (OpenAI / Anthropic / DeepSeek) -> Circuit Breaker & Retry Pipeline -> Streaming SSE Relay -> Prometheus TTFT/TPM Telemetry.",
+    whyThisMatters2026: "Every company building on foundation models requires an AI gateway to control costs, guarantee reliability, and avoid single-vendor lock-in. Mastering multi-provider routing and distributed token rate-limiting is mandatory for high-scale AI engineering.",
     whatToBuild: [
-      "HTTP Stream Parser: read and parse request methods, headers, and content-length without buffering large payloads.",
-      "Load Balancing Algorithms: implement Round-Robin and Least-Connections distribution across upstream pools.",
-      "Active Health Check Worker: background thread periodically probing /health endpoints and tracking latency.",
-      "Circuit Breaker Failover: automatically mark backend servers as down after 3 consecutive failures and redirect traffic."
+      "Dynamic Multi-Provider Router: route requests between OpenAI, Anthropic, and local open-source models with automatic fallback on 429/529 errors.",
+      "Redis Token-Bucket Rate Limiter: enforce strict per-tenant RPM (requests/min) and TPM (tokens/min) quotas using Lua scripts.",
+      "In-Memory Semantic Cache: compute cosine similarity on incoming prompt embeddings to return cached completions for identical requests within threshold.",
+      "Circuit Breaker & Hedged Request Dispatcher: automatically isolate failing upstream providers and hedge slow requests after 400ms.",
+      "Real-Time Telemetry Exporter: track Time-To-First-Token (TTFT), token throughput, and provider error rates to Prometheus."
     ],
     automatedChecks: [
-      "Zero-downtime failover: dropping an upstream backend causes 100% of new traffic to redirect to healthy replicas within 100ms.",
-      "High-throughput stability: handles 10,000 requests without socket descriptor leaks or memory degradation.",
-      "Streaming transparency: chunked HTTP responses and Server-Sent Events pass through without buffering delays."
+      "Zero-downtime failover: simulated OpenAI 429 rate limits automatically redirect to backup models within 45ms.",
+      "Rate limiter precision: rejects over-quota tenant traffic with HTTP 429 while allowing compliant tenants full throughput.",
+      "Semantic cache hit speed: returns cached prompt responses in under 12ms without incurring upstream API fees.",
+      "10,000 req/sec load stability: handles high concurrency without socket leaks, event-loop blocking, or memory drift."
     ],
     portfolioProof: {
-      githubRepoTemplate: "routemaster-reverse-proxy",
+      githubRepoTemplate: "modelrouter-ai-gateway",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Built RouteMaster, an intelligent Layer-7 reverse proxy with active health probing and circuit breakers; maintained 99.99% uptime during simulated upstream node outages."
+      resumeImpactBullet: "Engineered ModelRouter, a multi-provider AI gateway with Redis sliding-window rate limiting, semantic caching, and automatic fallback; reduced inference costs by 34% and eliminated upstream downtime."
     }
   },
   {
     phaseId: 4,
     displayPhaseNumber: 5,
-    sector: "Financial Systems & Payment Infrastructure",
-    phaseName: "Module 5: Web Architecture, High-Performance APIs & Database Systems",
-    projectSlug: "module-05-capstone-payment-gateway-api",
-    title: "PayFlow: Multi-Tenant Payment API Gateway with Idempotency & Rate Limiting",
-    oneLineHook: "Built a production-grade payment API gateway in FastAPI and PostgreSQL with atomic Redis sliding-window rate limiting, cryptographic HMAC signatures, and 24-hour idempotency keys.",
-    industryArchetype: "Stripe API / Adyen / Plaid / Modern Treasury Gateway",
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Module 5: AI Data Structures & Memory Optimization",
+    projectSlug: "module-05-capstone-semantic-cache-engine",
+    title: "SemanticCache: In-Memory Token Buffer & High-Speed LRU Engine",
+    oneLineHook: "Constructed an in-memory high-throughput response caching engine with O(1) Doubly-Linked LRU eviction, circular ring buffers for SSE tokens, and sliding-window rate limiters.",
+    industryArchetype: "Redis Core / Memcached / Varnish Cache / Cloudflare Workers KV",
     employabilityRating: 97,
-    employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "65k – 10k (Senior Backend / API Platform Engineer)",
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "$115k – $150k (AI-Native Software Engineer)",
     technologies: [
-      "FastAPI (Python)",
-      "PostgreSQL",
-      "Redis Lua Scripts",
-      "Sliding-Window Rate Limiting",
-      "HMAC-SHA256 Signatures",
-      "Idempotency Keys"
+      "Python 3.12+",
+      "Doubly-Linked List with Sentinels",
+      "O(1) LRU & LFU Eviction Policies",
+      "Circular Ring Buffers",
+      "Sliding-Window Token Bucket",
+      "Cache Stampede Mutex Locks"
     ],
-    storyScenario: "In digital payment processing, network drops often cause client applications to retry transactions. Without robust idempotency mechanisms, a user tapping Pay Now on a slow connection could be charged multiple times. Abusive traffic from one merchant can also exhaust API resources for all others. PayFlow provides an enterprise API gateway that verifies HMAC request signatures, enforces atomic Redis rate limits per merchant, and locks idempotency keys for 24 hours to guarantee zero duplicate charges.",
-    problemToSolve: "Prevent double-billing from duplicate client retries and protect backend infrastructure from API abuse across multi-tenant payment platforms.",
-    systemArchitecture: "Client Payment Request -> HMAC Signature Guard -> Redis Sliding-Window Rate Limiter -> 24h Idempotency Cache Lock -> Payment Processing Service -> Audit Event Log.",
-    whyThisMatters2026: "Enterprise API engineering requires rock-solid reliability: idempotency, rate limiting, and request verification are the most heavily tested concepts in senior backend engineering interviews.",
+    storyScenario: "Calling third-party AI APIs repeatedly for duplicate or near-identical prompts wastes thousands of dollars in token billing and adds unacceptable multi-second latency to user interactions. SemanticCache implements an enterprise in-memory storage engine from scratch: an O(1) Doubly-Linked LRU cache with millisecond TTL expiration, a circular ring buffer that prevents memory reallocation while streaming LLM token chunks, mutex locks to stop concurrent cache stampedes when popular keys expire, and a sliding-window token bucket that strictly prevents API quota exhaustion.",
+    problemToSolve: "Eliminate repetitive model billing costs, slash response latency from 2,000ms to 2ms, and protect downstream inference services with bounded-memory caching and token bucket rate limiters.",
+    systemArchitecture: "Client Request -> Sliding-Window Rate Limiter -> Hash Table Lookup -> LRU Doubly-Linked List -> Cache Stampede Mutex -> Upstream LLM Generator -> Circular Ring Buffer -> Cached Response Storage.",
+    whyThisMatters2026: "Every AI-native product depends heavily on intelligent caching and bounded memory buffering. Engineers who master low-level pointer manipulation, eviction policies, and cache stampede protection build the fastest and most cost-efficient AI software.",
     whatToBuild: [
-      "Atomic Rate Limiter: write a Redis Lua script implementing sliding-window rate limiting with sub-2ms verification latency.",
-      "24-Hour Idempotency Cache: store hashed payload keys to return identical responses for duplicate client requests.",
-      "HMAC Webhook & Request Signer: verify SHA-256 signatures and timestamp nonces to prevent replay attacks.",
-      "Relational Database Schema: design normalized PostgreSQL tables with foreign keys and indexes for merchants and charges."
+      "O(1) LRU Cache: implement a custom doubly-linked list with sentinel head/tail nodes and a hash map for constant-time lookup and eviction.",
+      "Bounded Circular Ring Buffer: write a zero-copy fixed-size circular array for buffering streaming LLM token chunks without memory growth.",
+      "Sliding-Window Token Bucket: enforce exact requests-per-minute and tokens-per-minute limits with rolling timestamp tracking.",
+      "Cache Stampede Guard: implement probabilistic early expiration and mutex locks to prevent simultaneous duplicate model invocations."
     ],
     automatedChecks: [
-      "Duplicate charge prevention: sending 50 concurrent requests with the identical idempotency key executes the charge exactly once.",
-      "Rate limit enforcement: sending 15 requests on a 10-req/min quota returns exactly ten 200s and five 429 Too Many Requests.",
-      "Signature verification: tampering with any character in the payload causes immediate 401 Unauthorized rejection."
+      "O(1) latency benchmark: operations complete in sub-millisecond time across 100,000 cached prompt completions.",
+      "Stampede prevention test: 100 concurrent requests for an expired cache key result in exactly one upstream model call.",
+      "Ring buffer integrity: reading and writing 10,000 streaming tokens produces zero data corruption or memory leaks."
     ],
     portfolioProof: {
-      githubRepoTemplate: "payflow-payment-api-gateway",
+      githubRepoTemplate: "semantic-cache-engine",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Engineered PayFlow, a payment API gateway with atomic Redis sliding-window rate limiting and idempotency locks, guaranteeing zero duplicate transactions across 10,000 QPS."
+      resumeImpactBullet: "Engineered SemanticCache, an in-memory caching engine with O(1) LRU eviction and circular streaming buffers, reducing LLM token costs by 42% and slashing p95 latency to under 3ms."
     }
   },
   {
     phaseId: 5,
     displayPhaseNumber: 6,
     sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Module 6: Full-Stack Frontend Engineering & Interactive Platforms",
-    projectSlug: "module-06-capstone-collaborative-workspace-canvas",
-    title: "BoardSync: Real-Time Collaborative Workspace with Live Streaming & Optimistic UI",
-    oneLineHook: "Built a high-performance interactive collaborative workspace in Next.js 15 featuring Server-Sent Events (SSE) streaming, optimistic UI updates, and an HTML5 60 FPS canvas.",
-    industryArchetype: "Miro / Figma / Linear / Notion Live Collaboration",
-    employabilityRating: 97,
-    employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "60k – 05k (Full-Stack / Frontend Systems Engineer)",
+    phaseName: "Module 6: Streaming AI APIs & Web Protocols",
+    projectSlug: "module-06-capstone-stream-gateway-proxy",
+    title: "StreamGateway: High-Throughput Streaming AI Reverse Proxy & Rate Limiter",
+    oneLineHook: "Engineered an asynchronous streaming AI reverse proxy in FastAPI with line-rate Server-Sent Events (SSE), client-disconnect token cancellation, and multi-tenant token-bucket rate limiting.",
+    industryArchetype: "Portkey / LiteLLM / Cloudflare AI Gateway / Helicone",
+    employabilityRating: 98,
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "$120k – $155k (AI-Native Software Engineer)",
     technologies: [
-      "Next.js 15 (App Router)",
-      "React Server Components",
+      "FastAPI (ASGI 3.0)",
+      "Asyncio Non-Blocking Event Loop",
       "Server-Sent Events (SSE)",
-      "HTML5 Canvas API",
-      "Optimistic UI State",
-      "TailwindCSS"
+      "Token Bucket Rate Limiting",
+      "Circuit Breaker Failover",
+      "Prometheus & Distributed Tracing"
     ],
-    storyScenario: "Modern remote teams rely on visual collaborative tools (like Figma, Miro, and Linear) where changes made by one team member must appear instantly for everyone else without page reloads or UI lag. Building these applications requires mastering browser rendering lifecycles, avoiding unnecessary React re-renders, and managing optimistic updates that make the UI feel instantaneous even on high-latency networks. BoardSync provides a 60 FPS collaborative workspace with live event streaming and instant local state updates.",
-    problemToSolve: "Deliver a fluid, responsive collaborative workspace that synchronizes state across users in real time without screen flicker, frame drops, or layout shifts.",
-    systemArchitecture: "Next.js 15 App Shell -> Live SSE Event Stream -> Optimistic State Store -> Reconciliation Engine -> 60 FPS HTML5 Canvas Renderer.",
-    whyThisMatters2026: "Companies value frontend engineers who understand browser rendering pipelines, WebSockets/SSE streaming, and how to build responsive interfaces that stay buttery smooth under rapid user interaction.",
+    storyScenario: "When client applications call AI models, standard HTTP request-response patterns break down. Waiting 15 seconds for a full generation results in client timeouts, frozen user interfaces, and wasted token compute if the user navigates away. StreamGateway implements a production-grade streaming AI proxy: it terminates incoming client connections, streams tokens chunk-by-chunk via Server-Sent Events (SSE), immediately aborts upstream model generation when a client disconnects to prevent GPU token waste, enforces multi-tenant token bucket rate limits, and automatically trips circuit breakers across backup LLM providers during outages.",
+    problemToSolve: "Prevent multi-second client UI freezing, eliminate wasted GPU spend on abandoned generations, and protect inference services with production rate limiting and failovers.",
+    systemArchitecture: "Client Request -> ASGI 3.0 Pipeline -> JWT / API Key Guard -> Multi-Tenant Token Bucket -> Circuit Breaker Router -> Upstream Model Client -> Client Disconnect Monitor -> SSE Chunked Token Stream.",
+    whyThisMatters2026: "Every modern AI product is powered by streaming HTTP and SSE. Engineers who understand ASGI specifications, async event loops, socket lifecycles, and streaming proxies possess the core skill set needed to build and scale production AI backends.",
     whatToBuild: [
-      "Streaming Event Receiver: consume Server-Sent Events to stream live user cursors and workspace updates in real time.",
-      "Optimistic State Updates: update the client UI immediately upon user action and reconcile with server confirmation in background.",
-      "Interactive 60 FPS Canvas: render elements, shapes, and annotations using the HTML5 Canvas API without React DOM bloat.",
-      "Virtualized Feed: render extensive project revision histories smoothly using DOM node recycling."
+      "Real-Time SSE Streaming Engine: format and stream chunked token outputs over HTTP/1.1 and HTTP/2 without buffering delays.",
+      "Client Disconnect Monitor: listen for socket disconnect signals and cancel upstream asyncio tasks instantly to stop wasting tokens.",
+      "Multi-Tenant Token Bucket: implement rolling-window requests-per-minute (RPM) and tokens-per-minute (TPM) enforcement.",
+      "Circuit Breaker Failover: detect consecutive 5xx errors from primary model providers and route active streams to fallback models."
     ],
     automatedChecks: [
-      "Frame rate consistency: maintains 60 FPS during continuous user dragging and incoming streaming updates.",
-      "Zero Layout Shift: scores 0.00 Cumulative Layout Shift (CLS) on Google Lighthouse audits.",
-      "Reconnect recovery: automatically re-establishes SSE streaming with Last-Event-ID on network interruption without state loss."
+      "Immediate cancellation check: disconnecting the client terminates upstream API generation tasks within 50ms.",
+      "Line-rate streaming latency: time-to-first-chunk (TTFC) across the proxy introduces less than 5ms overhead.",
+      "Rate limit compliance: rejects excess tenant requests with RFC 7807 429 Too Many Requests responses and exact Retry-After headers."
     ],
     portfolioProof: {
-      githubRepoTemplate: "boardsync-collaborative-workspace",
-      liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Developed BoardSync, a real-time collaborative workspace in Next.js 15 with Server-Sent Events and HTML5 Canvas, sustaining 60 FPS under continuous multi-user synchronization."
+      githubRepoTemplate: "stream-gateway-ai-proxy",
+      liveDemoType: "Live Service API",
+      resumeImpactBullet: "Engineered StreamGateway, a high-throughput streaming AI reverse proxy in FastAPI, sustaining 5,000 concurrent SSE token streams and eliminating 35% of wasted token spend via instant disconnect cancellation."
     }
   },
   {
     phaseId: 9,
     displayPhaseNumber: 10,
     sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Distributed Systems & Cloud Infrastructure",
-    projectSlug: "phase-08-capstone-distributed-consensus-cluster",
-    title: "QuorumCore: Distributed Fault-Tolerant Consensus Cluster (Raft Protocol)",
-    oneLineHook: "Implemented the Raft distributed consensus protocol from scratch in Python across a 5-node cluster with leader elections, log replication, and partition resilience.",
-    industryArchetype: "etcd / HashiCorp Consul / CockroachDB Core / Apache ZooKeeper",
+    phaseName: "Module 10: Distributed Systems & AI Cluster Consensus",
+    projectSlug: "module-10-capstone-quorum-core-consensus-cluster",
+    title: "QuorumCore: Distributed Raft Consensus & Agent State Cluster",
+    oneLineHook: "Built a fault-tolerant 5-node Raft consensus cluster in Python coordinating distributed AI agent state, leader leases, CRDT document replication, and network partition recovery.",
+    industryArchetype: "etcd / HashiCorp Consul / CockroachDB / Ray Core Cluster",
     employabilityRating: 98,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "75k – 30k (Staff / Distributed Systems Engineer)",
+    salaryBand2026: "35k – 70k (Distributed AI Systems / Staff Engineer)",
     technologies: [
-      "Raft Protocol",
-      "RPC Communication",
-      "Leader Election Timers",
-      "Log Replication Quorum",
-      "Split-Brain Prevention",
-      "Docker Compose"
+      "Raft Consensus Protocol",
+      "gRPC / AsyncIO Socket Mesh",
+      "Distributed Lease Locks for AI Agents",
+      "CRDT Delta State Synchronization",
+      "Fencing Tokens & Split-Brain Defense",
+      "Chaos Injection & Network Partitions"
     ],
-    storyScenario: "When software runs across multiple servers in a cloud cluster, individual machines can crash or network cables can fail at any time. If two servers both believe they are the leader and accept conflicting user commands, the database suffers catastrophic data divergence (split-brain). QuorumCore implements the gold-standard Raft consensus algorithm: cluster nodes elect a single leader via randomized election timeouts and replicate state changes to a quorum (N/2 + 1) of nodes before committing.",
-    problemToSolve: "Maintain strict data consistency and high availability across a cluster of distributed servers, even when individual nodes crash or network partitions isolate parts of the cluster.",
-    systemArchitecture: "Cluster Nodes (Follower -> Candidate -> Leader) -> Randomized Election Timers -> RequestVote RPC -> AppendEntries RPC -> Quorum Commit Index -> State Machine.",
-    whyThisMatters2026: "Distributed consensus is the bedrock of Kubernetes (etcd), cloud databases (CockroachDB), and distributed storage. Building Raft proves you can master and debug complex distributed systems.",
+    storyScenario: "When autonomous AI agent swarms and multi-tenant AI pipelines execute across distributed nodes, concurrent uncoordinated operations lead to race conditions, duplicate tool calls, and catastrophic state divergence. QuorumCore implements the gold-standard Raft distributed consensus protocol: cluster nodes elect a leader via randomized election timers, replicate transactional logs across an N/2 + 1 quorum before committing, issue lease-based distributed locks to coordinate agent tasks without split-brain anomalies, and synchronize collaborative document edits via CRDT deltas across network partitions.",
+    problemToSolve: "Prevent split-brain divergence and duplicate execution in distributed agent swarms while guaranteeing linearizable state updates during network partitions.",
+    systemArchitecture: "Cluster Nodes (Follower -> Candidate -> Leader) -> Randomized Election Timers -> RequestVote RPC -> AppendEntries RPC -> Quorum Commit Index -> Agent Lease Lock Coordinator -> CRDT Delta Replicator.",
+    whyThisMatters2026: "Distributed state machines and consensus are the bedrock of reliable AI orchestration at scale. Proving you can build Raft consensus with lease locking and CRDT sync demonstrates elite systems capability to top-tier engineering organizations.",
     whatToBuild: [
-      "Leader Election State Machine: randomized election timeouts (150-300ms), candidate term tracking, and vote tallying.",
-      "Log Replication Pipeline: replicate AppendEntries RPCs across nodes and advance the commit index upon quorum acknowledgment.",
-      "Safety Invariant Enforcer: guarantee that only candidates with up-to-date log records can ever win an election.",
-      "Partition Simulator: demonstrate that an isolated minority cannot commit writes and re-converges cleanly when the partition heals."
+      "Leader Election State Machine: randomized election timeouts (150-300ms), term monotonic incrementing, and vote tallying across a 5-node cluster.",
+      "Quorum Log Replication Engine: replicate AppendEntries RPCs across nodes, advancing commit indices strictly upon majority quorum confirmation.",
+      "Distributed Agent Lease Lock Manager: issue mutually exclusive task leases with TTLs and monotonic fencing tokens to prevent rogue agent duplicate executions.",
+      "CRDT Delta State Replicator: synchronize concurrent text edits between human users and autonomous AI agents using conflict-free state merging.",
+      "Network Partition Chaos Simulator: systematically partition nodes to verify minority write rejection and seamless recovery upon cluster healing."
     ],
     automatedChecks: [
-      "Fast leader election: cluster elects a new stable leader in under 300ms following the crash of the active leader.",
-      "Split-brain immunity: during a simulated 3-2 network partition, the minority 2 nodes reject write requests.",
-      "Log convergence: uncommitted logs on rejoined nodes are cleanly overwritten and synchronized with the elected leader."
+      "Sub-250ms leader election: cluster elects a new stable leader within 250ms following the sudden crash of the active leader.",
+      "Split-brain immunity: during a simulated 3-node vs 2-node partition, minority nodes reject writes and isolate safely.",
+      "Linearizable lock acquisition: concurrent agent lock requests grant exactly one leaseholder with zero race conditions.",
+      "Log healing and convergence: partitioned nodes seamlessly reconcile and synchronize state machines without data loss upon rejoining."
     ],
     portfolioProof: {
-      githubRepoTemplate: "quorumcore-raft-consensus-cluster",
+      githubRepoTemplate: "quorumcore-raft-agent-cluster",
       liveDemoType: "Distributed Cluster",
-      resumeImpactBullet: "Implemented QuorumCore, a 5-node Raft consensus cluster from scratch; achieved sub-300ms leader election and proven linearizability under simulated network partitions."
+      resumeImpactBullet: "Engineered QuorumCore, a 5-node Raft consensus cluster in Python with lease locking and CRDT synchronization; achieved sub-250ms leader failover and guaranteed linearizability during network partitions."
     }
   },
   {
     phaseId: 10,
     displayPhaseNumber: 11,
-    sector: "Financial Systems & Payment Infrastructure",
-    phaseName: "High-Availability Systems & Event Sourcing",
-    projectSlug: "phase-09-capstone-event-sourced-banking-ledger",
-    title: "VaultStream: Event-Sourced Banking Ledger with CQRS & Transactional Outbox",
-    oneLineHook: "Designed and implemented an event-sourced core banking ledger using CQRS, Kafka message streaming, and the Transactional Outbox pattern for complete financial auditability.",
-    industryArchetype: "Brex / Square / Stripe Ledger / Adyen Financial Core",
-    employabilityRating: 98,
-    employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "75k – 25k (Principal Architect / Senior Systems Engineer)",
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Module 11: Production RAG & Hybrid Retrieval Engines",
+    projectSlug: "module-11-capstone-docu-search-hybrid-rag",
+    title: "DocuSearch: Enterprise Hybrid RAG & Knowledge Retrieval Platform",
+    oneLineHook: "Built an enterprise hybrid RAG engine combining AST document parsing, dense pgvector HNSW search, sparse BM25, cross-encoder re-ranking, and self-corrective citation evaluation.",
+    industryArchetype: "Perplexity / Glean / Cohere Coral / Notion AI Search",
+    employabilityRating: 99,
+    employabilityBadge: "Frontier AI",
+    salaryBand2026: "35k – 70k (AI / RAG Systems Engineer)",
     technologies: [
-      "Event Sourcing",
-      "CQRS Pattern",
-      "Transactional Outbox",
-      "Apache Kafka",
-      "PostgreSQL",
-      "Redis Caching"
+      "PostgreSQL & pgvector (HNSW Indexing)",
+      "Okapi BM25 Lexical Search",
+      "Reciprocal Rank Fusion (RRF)",
+      "Cross-Encoder Re-Ranking Models",
+      "Self-RAG & Corrective RAG (CRAG)",
+      "FastAPI & AsyncIO Document Ingestion"
     ],
-    storyScenario: "In commercial banking and fintech, database designs that update account balance columns in-place are dangerous: an update statement erases historical transitions and makes forensic auditing impossible after a bug or fraud incident. VaultStream implements Event Sourcing: every transaction (deposit, withdrawal, transfer) is recorded as an immutable event. The Transactional Outbox pattern guarantees that events publish to Kafka reliably, while background workers project the events into read-optimized account tables.",
-    problemToSolve: "Eliminate balance discrepancy risks and provide a 100% immutable, tamper-evident audit trail for financial accounts under high concurrent transaction volume.",
-    systemArchitecture: "Write Command -> Append-Only Event Table + Outbox Table -> Change Data Capture Worker -> Kafka Message Bus -> CQRS Consumer -> Read-Optimized Account Balance View.",
-    whyThisMatters2026: "Event sourcing and CQRS are standard architectural patterns in banking, logistics, and large-scale enterprise systems where auditability, reliability, and clear separation of concerns are non-negotiable.",
+    storyScenario: "Generic RAG prototypes fail in enterprise production: they choke on messy multi-page PDFs, retrieve irrelevant paragraphs due to semantic drift, hallucinate answers when documents lack context, and deliver unverified claims. DocuSearch implements an industrial-grade retrieval system: documents are parsed into hierarchical markdown and AST chunks with prefix headers, indexed into PostgreSQL pgvector via HNSW alongside BM25 inverted indices, fused using Reciprocal Rank Fusion, refined through a neural cross-encoder, and evaluated by an adaptive reflection agent that verifies exact source citations before generation.",
+    problemToSolve: "Eliminate retrieval hallucinations, ensure multi-tenant enterprise data isolation, and achieve sub-100ms hybrid search across millions of technical document chunks.",
+    systemArchitecture: "Raw PDF/Doc Ingestion -> AST Hierarchical Chunker -> pgvector HNSW + BM25 Sparse Index -> Reciprocal Rank Fusion -> Cross-Encoder Re-Ranker -> CRAG Verification Agent -> Grounded Citations Generator.",
+    whyThisMatters2026: "RAG is the primary gateway through which enterprises deploy foundation models to production. Engineering hybrid retrieval with sub-second cross-encoder scoring and verifiable citations is the hallmark of elite AI engineers.",
     whatToBuild: [
-      "Immutable Event Store: append-only PostgreSQL table with optimistic concurrency control to prevent conflicting account edits.",
-      "Transactional Outbox Worker: guarantee message delivery to Kafka within the same database transaction as the event write.",
-      "Asynchronous CQRS Projections: background consumer building queryable account balance summaries from event streams.",
-      "Time-Travel Rebuilder: replay account events from inception to reconstruct the exact balance at any past date and time."
+      "Structure-Aware Ingestion Pipeline: extract tables, markdown hierarchies, and code blocks with contextual prefix headers.",
+      "Hybrid Retrieval Engine: combine PostgreSQL pgvector HNSW dense vectors with BM25 inverted index postings using Reciprocal Rank Fusion.",
+      "Cross-Encoder Re-Ranking Pipeline: re-score top-50 candidate passages with a secondary cross-encoder to eliminate retrieval noise.",
+      "Self-Corrective Retrieval Agent (CRAG): evaluate retrieval confidence dynamically and trigger query reformulation or web fallback if below threshold.",
+      "Inline Attribution & Citation Grounding: output precise character-offset citations mapping every sentence in LLM responses directly to source chunks."
     ],
     automatedChecks: [
-      "Zero double-spend guarantee: concurrent withdrawal attempts against the same balance trigger optimistic lock exceptions.",
-      "Idempotent projection: replaying the entire Kafka event stream produces identical balance projections without deviation.",
-      "Audit completeness: every account state change links to an immutable signed event record with timestamps."
+      "95%+ Retrieval Precision@5: cross-encoder reranking eliminates false-positive context chunks across standardized MTEB benchmarks.",
+      "Sub-120ms P95 query latency: hybrid vector and BM25 search completes within 120ms across 1,000,000 document chunks.",
+      "Zero ungrounded hallucinations: 100% of factual assertions in generated answers contain valid verifiable source citations.",
+      "Idempotent ingestion: re-indexing identical document trees detects SHA-256 hashes and skips redundant embeddings."
     ],
     portfolioProof: {
-      githubRepoTemplate: "vaultstream-event-sourced-ledger",
+      githubRepoTemplate: "docusearch-hybrid-rag-engine",
       liveDemoType: "Live Service API",
-      resumeImpactBullet: "Architected VaultStream, an event-sourced banking ledger using CQRS and the Transactional Outbox pattern; eliminated balance discrepancies across 20,000 transactions/sec."
+      resumeImpactBullet: "Constructed DocuSearch, an enterprise hybrid RAG platform with pgvector HNSW indexing, BM25 Reciprocal Rank Fusion, and cross-encoder reranking; lifted retrieval Precision@5 to 96% and reduced hallucinations by 80%."
     }
   },
   {
     phaseId: 11,
     displayPhaseNumber: 12,
     sector: "Autonomous AI & Intelligent Systems",
-    phaseName: "Deep Learning Foundations & Core Transformer Architectures",
-    projectSlug: "phase-10-capstone-neural-transformer-from-scratch",
-    title: "NanoLlama: Decoder-Only Transformer Language Model from Scratch",
-    oneLineHook: "Built a modern decoder-only transformer architecture in PyTorch from mathematical principles, featuring Rotary Positional Embeddings (RoPE), SwiGLU activations, and KV-caching.",
-    industryArchetype: "Mistral AI / Anthropic / Meta Llama / Hugging Face Core",
-    employabilityRating: 98,
-    employabilityBadge: "Frontier AI",
-    salaryBand2026: "80k – 40k (Foundation Model / AI Systems Engineer)",
+    phaseName: "Module 12: AI Observability, Evals & Performance Profiling",
+    projectSlug: "module-12-capstone-trace-pulse-observability",
+    title: "TracePulse: Full-Stack AI Observability & Quality Platform",
+    oneLineHook: "Architected a comprehensive AI observability and automated evaluation platform featuring OpenTelemetry distributed tracing, TTFT streaming gauges, LLM-as-a-judge rubrics, and regression CI/CD testing.",
+    industryArchetype: "Langfuse / Arize Phoenix / Braintrust / Weights & Biases Weave",
+    employabilityRating: 99,
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "35k – 65k (AI Platform / Systems Reliability Engineer)",
     technologies: [
-      "PyTorch",
-      "Rotary Embeddings (RoPE)",
-      "SwiGLU Activations",
-      "RMSNorm",
-      "KV-Cache Memory",
-      "Autoregressive Generation"
+      "OpenTelemetry (OTLP Trace Collector)",
+      "W3C TraceContext Propagation",
+      "FastAPI & AsyncIO Streaming",
+      "ClickHouse / TimescaleDB for AI Traces",
+      "Ragas / DeepEval Automated Evaluators",
+      "Prometheus Latency & Token Gauges"
     ],
-    storyScenario: "Engineers who only call third-party AI APIs often struggle when models hallucinate, run out of GPU memory, or produce unexpected outputs. Understanding how language models work at the token, matrix, and attention level is what sets deep learning engineers apart. NanoLlama implements a modern decoder-only transformer architecture from first principles using Rotary Positional Embeddings (RoPE), SwiGLU gating, and an inference KV-cache, enabling verifiable local training and token generation.",
-    problemToSolve: "Build a parameter-efficient, modern transformer language model from mathematical foundations and optimize autoregressive token generation with KV-caching.",
-    systemArchitecture: "Input Tokens -> Token Embedding Layer -> Transformer Decoder Blocks (RMSNorm -> Multi-Head Attention with RoPE -> SwiGLU FFN) -> RMSNorm -> Linear LM Head -> Autoregressive Sampler.",
-    whyThisMatters2026: "Understanding modern transformer internals—RoPE rotations, SwiGLU feed-forward networks, and KV cache memory—is essential for training, adapting, and optimizing local foundation models.",
+    storyScenario: "Deploying AI agents and LLM applications to production without deep telemetry leads to silent quality degradation, runaway API bills, and catastrophic hallucination incidents. TracePulse provides full-spectrum observability: every incoming prompt, vector search query, and tool execution is auto-instrumented with OpenTelemetry distributed spans. A real-time telemetry engine tracks Time-to-First-Token (TTFT), Inter-Token Latency (ITL), and per-tenant cost attribution. Concurrently, an asynchronous evaluation engine runs LLM-as-a-judge rubrics and NLI entailment models to detect hallucinations before responses reach end users.",
+    problemToSolve: "Eliminate visibility black holes in multi-step AI chains, stop prompt regressions before deployment, and enforce real-time token cost and latency circuit breakers.",
+    systemArchitecture: "AI Application -> OpenTelemetry Tracer -> OTLP Ingestion Collector -> ClickHouse Spans Store -> Real-Time Streaming TTFT/ITL Gauge -> LLM-as-a-Judge Evaluation Pipeline -> Prompt CI/CD Regression Runner.",
+    whyThisMatters2026: "AI engineering without continuous evals and granular distributed tracing is reckless. Mastering OpenTelemetry span lifecycles, automated evaluation metrics, and streaming telemetry makes candidates indispensable to enterprise AI teams.",
     whatToBuild: [
-      "Rotary Positional Embeddings (RoPE): implement complex vector rotations encoding relative token positions without learned parameters.",
-      "SwiGLU Feed-Forward Network: dual-weight gating mechanism providing superior gradient flow compared to standard GELU.",
-      "RMSNorm Layer: parameter-efficient normalization eliminating mean calculations while stabilizing deep layer training.",
-      "Autoregressive KV-Cache: rolling key/value tensor cache enabling O(1) step computation during sequential token generation."
+      "OpenTelemetry Span Collector: capture distributed trace trees across LLM calls, vector embeddings, and agent tool execution hops.",
+      "Streaming Latency & Cost Gauges: measure sub-millisecond TTFT, ITL jitter, token generation line rates, and per-tenant expenditure.",
+      "Automated LLM-as-a-Judge Evaluator: score context faithfulness, answer relevance, and hallucination rates with position-bias mitigation.",
+      "Prompt CI/CD Regression Runner: execute automated evaluation runs on golden datasets during pull requests to block quality regressions.",
+      "Token Budget Circuit Breakers: automatically terminate runaway recursive agent tool loops exceeding predefined token ceilings."
     ],
     automatedChecks: [
-      "Perplexity validation: demonstrates monotonically decreasing cross-entropy loss during training on sample text datasets.",
-      "KV-cache output parity: cached autoregressive generation outputs match full forward pass predictions exactly.",
-      "Weight transfer compatibility: loads open-weights (e.g. Llama-style checkpoints) and generates coherent tokens."
+      "Zero-overhead tracing: in-process OpenTelemetry context propagation adds less than 3ms overhead to request lifecycles.",
+      "Streaming precision: captures exact Time-To-First-Token (TTFT) and per-token inter-arrival times across 500 concurrent SSE streams.",
+      "Evaluation reliability: LLM-as-a-Judge evaluations achieve >0.85 Cohens Kappa inter-annotator agreement against human-labeled golden sets.",
+      "Circuit breaker trip: automatically halts agent processes when per-request token expenditure breaches threshold."
     ],
     portfolioProof: {
-      githubRepoTemplate: "nanollama-transformer-from-scratch",
-      liveDemoType: "CLI / Docker Engine",
-      resumeImpactBullet: "Built NanoLlama, a modern decoder-only transformer architecture with RoPE, SwiGLU, and KV-caching; verified output parity against open-weights for autoregressive token generation."
+      githubRepoTemplate: "tracepulse-ai-observability",
+      liveDemoType: "Live Service API",
+      resumeImpactBullet: "Engineered TracePulse, a full-stack AI observability platform with OpenTelemetry distributed tracing and automated LLM-as-a-judge evals; caught 100% of prompt regressions and lowered latency by 28%."
     }
   },
   {
     phaseId: 6,
     displayPhaseNumber: 7,
     sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Module 7: Production RAG, Vector Search & AI Observability",
+    phaseName: "Module 7: PostgreSQL & Vector Database Engineering",
     projectSlug: "module-07-capstone-enterprise-hybrid-rag-engine",
-    title: "DocuMind: Enterprise Hybrid RAG Engine with Dense & Sparse Search",
-    oneLineHook: "Architected an enterprise RAG knowledge engine combining dense vector embeddings (HNSW) with sparse BM25 keyword search, Reciprocal Rank Fusion, and Cross-Encoder re-ranking.",
+    title: "DocuMind: Production AI Database & Vector Engine",
+    oneLineHook: "Architected a multi-tenant PostgreSQL and pgvector database engine combining HNSW vector search with BM25 text search, RLS tenant isolation, and in-database task queues.",
     industryArchetype: "Perplexity Enterprise / Pinecone / Cohere / Notion Q&A Engine",
     employabilityRating: 99,
     employabilityBadge: "Frontier AI",
@@ -486,170 +494,132 @@ export const PRODUCTION_CAPSTONES_2026: ProductionCapstoneSpec[] = [
   {
     phaseId: 12,
     displayPhaseNumber: 13,
-    sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Inference Optimization, Profiling & MLOps",
-    projectSlug: "phase-12-capstone-llm-inference-serving-engine",
-    title: "BatchServe: High-Throughput LLM Inference Server with Continuous Batching",
-    oneLineHook: "Constructed a high-throughput LLM inference server featuring PagedAttention KV-cache memory management, continuous dynamic batching, and Prometheus performance metrics.",
-    industryArchetype: "vLLM / TensorRT-LLM / Together AI / Fireworks.ai Serving",
-    employabilityRating: 99,
+    sector: "Autonomous AI & Intelligent Systems",
+    phaseName: "Module 13: Autonomous AI Agents & Durable State Graphs",
+    projectSlug: "module-13-capstone-code-craft-autonomous-agent",
+    title: "CodeCraft: Autonomous Software Engineering Agent Platform",
+    oneLineHook: "Built an autonomous software engineering agent platform featuring LangGraph cyclic state machines, sandboxed container execution, AST diffing, and self-healing test repair.",
+    industryArchetype: "Devin / SWE-agent / Cursor Agent / Claude Code",
+    employabilityRating: 100,
     employabilityBadge: "Frontier AI",
-    salaryBand2026: "90k – 60k (MLOps / AI Systems / Performance Engineer)",
+    salaryBand2026: "40k – 80k (Autonomous Agents / AI Systems Engineer)",
     technologies: [
-      "PagedAttention Memory Model",
-      "Continuous Dynamic Batching",
-      "Virtual Memory Paging",
-      "PyTorch / Python",
-      "Prometheus Telemetry",
-      "Server-Sent Events (SSE)"
+      "LangGraph (Cyclic State Machines)",
+      "ReAct & Plan-and-Solve Loops",
+      "Docker / Container Sandbox Isolation",
+      "AST Parsing & Unified Diffs",
+      "Human-in-the-Loop (HITL) Interruption",
+      "SWE-bench Verification Harness"
     ],
-    storyScenario: "Deploying large language models across thousands of concurrent users is notoriously expensive because GPUs quickly run out of memory. Standard inference setups allocate large contiguous memory buffers for each request based on maximum possible output length, wasting up to 70% of GPU memory. BatchServe implements PagedAttention: KV cache memory is allocated dynamically in non-contiguous physical blocks with virtual paging, multiplying concurrent request capacity by 4x on the same hardware.",
-    problemToSolve: "Eliminate GPU memory fragmentation and maximize inference throughput per server during concurrent request bursts.",
-    systemArchitecture: "Incoming Request Stream -> Priority Queue -> Continuous Batch Scheduler -> PagedAttention Non-Contiguous Memory -> Model Forward Pass -> SSE Streamer.",
-    whyThisMatters2026: "GPU compute is the single largest operational cost for AI infrastructure. Engineers who can optimize memory management and continuous batching are among the most sought-after systems specialists.",
+    storyScenario: "Single-turn coding assistants fail on real-world engineering tasks because software development requires iterative problem decomposition, workspace exploration, tool execution, test failure debugging, and stateful checkpointing. CodeCraft implements an enterprise-grade autonomous software engineer: it parses complex GitHub issues into a structured execution graph, explores the codebase using AST-aware symbol navigation, applies unified diffs in an isolated ephemeral sandbox, executes test suites, and autonomously reflects on stack traces to repair syntax or logic errors before requesting human sign-off.",
+    problemToSolve: "Enable autonomous multi-step software development without destructive command side-effects, infinite execution loops, or catastrophic state loss.",
+    systemArchitecture: "GitHub Issue Webhook -> Planner Node -> ReAct Execution Loop (AST Navigator -> File Search -> Sandbox Terminal) -> Test Runner -> Self-Healing Reflexion Node -> HITL Approval Gate -> Verified Pull Request.",
+    whyThisMatters2026: "Autonomous agents capable of durable multi-step reasoning, secure tool execution, and self-healing test repair represent the frontier of modern software engineering. Building this architecture demonstrates mastery of cutting-edge agentic systems.",
     whatToBuild: [
-      "PagedAttention Allocator: manage non-contiguous GPU memory blocks to eliminate internal memory fragmentation.",
-      "Continuous Batching Scheduler: insert incoming requests into active decoding iterations on every generation step.",
-      "Dynamic Request Queue: prioritize requests and manage preemption under high GPU memory utilization.",
-      "Production Telemetry Dashboard: export Time-To-First-Token (TTFT) and Inter-Token Latency (ITL) to Prometheus."
+      "Durable State Graph Execution Engine: implement cyclic state machines with persistent checkpoint snapshots and time-travel replay.",
+      "Sandboxed Tool Execution Suite: safely execute bash commands, file modifications, and git operations inside isolated container sandboxes with timeouts.",
+      "AST-Aware Code Navigator: search symbols, parse function definitions, and generate precise unified diffs without file corruption.",
+      "Self-Healing Test Repair Loop: capture pytest failure traces and run iterative Reflexion cycles to fix code bugs automatically.",
+      "Human-in-the-Loop Approval Gate: pause execution on critical or destructive actions (schema migrations, deletions) until approved by user."
     ],
     automatedChecks: [
-      "4x throughput multiplier: sustains 4x higher token generation throughput than sequential baseline serving.",
-      "Zero VRAM memory leaks: continuous 24-hour stress tests maintain stable GPU memory utilization.",
-      "Sub-200ms TTFT: prompt prefill completes within 200ms under 50 concurrent active streaming sessions."
+      "SWE-bench test resolution: autonomously resolves complex bug reproduction scripts and passes regression test suites.",
+      "Sandbox containment security: completely blocks destructive host filesystem operations and network exfiltration attempts.",
+      "Zero-loss checkpoint resumption: resumes interrupted agent executions from persistent disk snapshots with zero state drift.",
+      "Deterministic diff generation: produces clean, syntax-valid git diffs that apply cleanly without whitespace corruption."
     ],
     portfolioProof: {
-      githubRepoTemplate: "batchserve-continuous-batching-engine",
-      liveDemoType: "Live Service API",
-      resumeImpactBullet: "Constructed BatchServe, a continuous-batching inference server with PagedAttention KV-memory management, multiplying GPU serving throughput by 4.2x while cutting TTFT to 180ms."
+      githubRepoTemplate: "codecraft-autonomous-coding-agent",
+      liveDemoType: "Interactive Web App",
+      resumeImpactBullet: "Engineered CodeCraft, an autonomous software engineering system with LangGraph cyclic state graphs and container sandboxes; achieved 78% automated bug resolution on internal benchmark test suites."
     }
   },
   {
     phaseId: 7,
     displayPhaseNumber: 8,
-    sector: "Autonomous AI & Intelligent Systems",
-    phaseName: "Module 8: Autonomous Agents, Systems Infrastructure & Production Defense",
-    projectSlug: "module-08-capstone-autonomous-coding-agent",
-    title: "CodeCraft: Autonomous Multi-Agent Software Engineer with Docker Sandboxes",
-    oneLineHook: "Engineered an autonomous multi-agent engineering system (Planner, Coder, Reviewer, Tester) with LangGraph state graphs, Docker sandboxes, and AST diff patching.",
-    industryArchetype: "Cognition Devin / Factory / Cursor Agent / SWE-Bench Framework",
-    employabilityRating: 100,
-    employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "85k – 50k (Senior AI Agent Architect / Applied AI Lead)",
+    sector: "Enterprise Software & Cloud Platforms",
+    phaseName: "Module 8: AI Frontend Architecture & Streaming UI",
+    projectSlug: "module-08-capstone-ai-canvas-workspace",
+    title: "AICanvas: High-Density AI Streaming Workspace",
+    oneLineHook: "Built a high-performance interactive AI workspace in Next.js featuring Web Worker token parsing, 60 FPS HTML5 Canvas vector visualizers, and Generative UI hydration.",
+    industryArchetype: "Claude Artifacts / OpenAI Canvas / v0 / Linear Core UI",
+    employabilityRating: 98,
+    employabilityBadge: "Production Systems",
+    salaryBand2026: "$120k – $155k (AI-Native Software Engineer)",
     technologies: [
-      "LangGraph",
-      "Docker Execution Sandbox",
-      "Tree-sitter AST Patching",
-      "Human-in-the-Loop",
-      "PostgreSQL Checkpointing",
-      "Git CLI Automation"
+      "Next.js 14/15 (App Router)",
+      "Web Workers (Background Token Parsing)",
+      "HTML5 Canvas 2D API",
+      "Server-Sent Events (SSE)",
+      "Generative UI Component Hydration",
+      "TailwindCSS (Linear Obsidian Theme)"
     ],
-    storyScenario: "Engineering teams spend hundreds of hours per quarter triaging dependency updates, fixing minor bug reports, and writing boilerplate regression tests. Static scripts cannot reason about unfamiliar codebases or recover from failing unit tests. CodeCraft builds an autonomous multi-agent engineering team: a Planner decomposes issues, a Researcher explores symbols using Tree-sitter ASTs, a Coder drafts patches, and a Tester executes Pytest inside an isolated Docker sandbox until all tests pass.",
-    problemToSolve: "Automate end-to-end repository issue resolution while isolating code execution safely within secured ephemeral sandboxes.",
-    systemArchitecture: "Issue Intake -> Planner Agent (DAG decomposition) -> Tree-sitter AST Search -> Coder Agent -> Docker Sandbox (Pytest validation loop) -> Reviewer -> Verified Pull Request.",
-    whyThisMatters2026: "Autonomous agent architectures that can navigate repositories, execute commands safely in sandboxes, and iteratively fix test failures define the frontier of software engineering in 2026.",
+    storyScenario: "When building user-facing AI applications, standard web frontends choke under high-frequency token streams. Streaming tokens directly into React state locks the main thread, causing severe layout shifts and dropping frame rates below 15 FPS. AICanvas implements an enterprise-grade AI workspace: token parsing and BPE counting offload to a Web Worker, markdown streams render incrementally without layout jumps, structured tool calls hydrate live Generative UI components, an HTML5 Canvas visualizes 2D document embedding projections at 60 FPS, and a Web Audio visualizer tracks duplex voice latency.",
+    problemToSolve: "Eliminate main-thread rendering freezes during streaming generation, prevent cumulative layout shifts, and build rich multi-modal interactive AI canvases.",
+    systemArchitecture: "SSE Token Stream -> Web Worker Decoder -> Incremental Markdown AST -> Virtualized Message List -> Generative UI Hydration Engine -> 60 FPS HTML5 Canvas Visualizer.",
+    whyThisMatters2026: "Frontend engineering for AI requires deep mastery of browser rendering lifecycles, off-thread worker processing, and real-time streaming architectures. Building high-density, responsive AI interfaces is a hallmark of elite AI-native product engineers.",
     whatToBuild: [
-      "LangGraph Cyclical State Machine: coordinate Planner, Coder, and Reviewer with state persistence in PostgreSQL.",
-      "Ephemeral Docker Sandbox: execute arbitrary test scripts safely inside an isolated container with timeout limits.",
-      "Tree-sitter AST Symbol Navigator: index function definitions, call sites, and import trees across multi-file codebases.",
-      "Iterative Repair Loop: inspect error stack traces, formulate hypotheses, edit code, and re-run tests until green."
+      "Off-Thread Web Worker Stream Decoder: parse raw SSE chunks and compute BPE token counts in background threads without blocking UI frames.",
+      "Incremental Markdown Renderer: build a streaming markdown parser that renders partial tokens and code blocks without screen flicker.",
+      "Generative UI Component Hydration: detect structured model outputs and dynamically instantiate interactive widgets, forms, and charts.",
+      "60 FPS Canvas Embedding Projector: render 2D PCA vector projections with pan, zoom, and clustering directly on HTML5 Canvas."
     ],
     automatedChecks: [
-      "Autonomous issue resolution: cleanly resolves real open-source bug benchmarks and opens verified pull requests.",
-      "Sandbox breakout containment: blocks unauthorized access attempts to host network or environment variables.",
-      "Human-in-the-loop checkpointing: supports pausing execution at critical milestones and resuming seamlessly upon user review."
+      "60 FPS rendering under load: sustains 60 FPS during continuous 80 tokens/sec streaming throughput.",
+      "Zero Cumulative Layout Shift: scores 0.00 CLS during dynamic markdown and code block streaming hydration.",
+      "Web Worker isolation: main thread CPU utilization stays below 15% during heavy streaming token parsing."
     ],
     portfolioProof: {
-      githubRepoTemplate: "codecraft-autonomous-coding-agent",
+      githubRepoTemplate: "ai-canvas-streaming-workspace",
       liveDemoType: "Interactive Web App",
-      resumeImpactBullet: "Engineered CodeCraft, an autonomous multi-agent software engineering system using LangGraph and Docker sandboxes that navigates AST symbols, fixes repository bugs, and opens verified PRs."
+      resumeImpactBullet: "Architected AICanvas, a 60 FPS streaming AI workspace in Next.js with Web Worker offloading and Generative UI hydration, eliminating UI freezes and sustaining 80 tokens/sec line rate."
     }
   },
-  {
+
+    {
     phaseId: 13,
     displayPhaseNumber: 14,
     sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Phase 14: Specialized Production Tracks",
-    projectSlug: "phase-14-capstone-specialized-engineering-tracks",
-    title: "Choose 1 of 4 Specialized Advanced Engineering Tracks: WebGL / MLOps / Security / Triton",
-    oneLineHook: "Delivered an advanced specialization milestone: Custom Triton GPU Kernels, Distributed FSDP Multi-GPU Training, Kernel-Level eBPF Security, or Local-First CRDTs.",
-    industryArchetype: "Specialized Frontier Engineering (OpenAI / Meta / Datadog / Linear)",
-    employabilityRating: 100,
-    employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "95k – 75k (Staff / Principal Domain Specialist)",
-    technologies: [
-      "OpenAI Triton",
-      "PyTorch FSDP",
-      "eBPF Cilium/Tetragon",
-      "Yjs CRDTs",
-      "GPU SRAM Kernels"
-    ],
-    storyScenario: "Senior and staff engineering roles require deep, specialized authority in one core technical domain. Whether training 70B parameter models across distributed clusters, writing custom GPU kernels that bypass PyTorch memory overhead, inspecting Linux kernel syscalls with eBPF for zero-trust security, or building local-first collaborative canvas engines with CRDTs, this milestone lets engineers demonstrate world-class depth in their chosen domain.",
-    problemToSolve: "Demonstrate deep specialization in one high-leverage systems domain: GPU kernel optimization, distributed training, kernel security, or real-time local-first collaboration.",
-    systemArchitecture: "Track A: Local-First Canvas Engine || Track B: Distributed FSDP ZeRO-3 Pipeline || Track C: eBPF Kernel Security Probe || Track D: Custom FlashAttention Triton Kernel.",
-    whyThisMatters2026: "Specialists who can write custom GPU kernels or orchestrate distributed multi-GPU training clusters solve the most expensive technical challenges in modern computing.",
-    whatToBuild: [
-      "Track A: Local-first multi-user collaborative canvas with Yjs CRDTs, IndexedDB persistence, and WebSockets.",
-      "Track B: Distributed FSDP ZeRO-3 training pipeline sharding 70B parameter models across multi-GPU nodes.",
-      "Track C: Kernel eBPF runtime security probe intercepting malicious syscalls and enforcing network policies.",
-      "Track D: Custom fused FlashAttention kernel in OpenAI Triton achieving high hardware efficiency on NVIDIA GPUs."
-    ],
-    automatedChecks: [
-      "Benchmark verification: verified against profiling tools (Nsight, flame graphs, or perf) confirming performance gains.",
-      "Production resilience: passes comprehensive edge-case and failure-mode validation suites."
-    ],
-    portfolioProof: {
-      githubRepoTemplate: "specialized-engineering-track",
-      liveDemoType: "Distributed Cluster",
-      resumeImpactBullet: "Implemented custom FlashAttention GPU kernels in OpenAI Triton achieving 82% peak TFLOPs efficiency, reducing self-attention memory overhead by 70%."
-    }
-  },
-  {
-    phaseId: 14,
-    displayPhaseNumber: 15,
-    sector: "Enterprise Software & Cloud Platforms",
-    phaseName: "Phase 15: Comprehensive Capstone Project & Production Defense",
-    projectSlug: "phase-15-capstone-master-ai-platform",
-    title: "CloudMatrix: Enterprise Multi-Tenant AI Platform with Distributed Microservices",
-    oneLineHook: "Architected, built, deployed, and defended a multi-tenant enterprise AI platform with distributed microservices, hybrid RAG, LangGraph agents, Terraform GCP infrastructure, and a technical defense.",
+    phaseName: "Module 14: Cloud Infrastructure & Enterprise AI Platform",
+    projectSlug: "module-14-capstone-cloud-matrix-enterprise-platform",
+    title: "CloudMatrix: Enterprise Multi-Tenant AI Platform",
+    oneLineHook: "Architected, deployed, and defended a production-grade multi-tenant enterprise AI platform combining Next.js 15 streaming canvas, hybrid RAG with pgvector HNSW, LangGraph autonomous agents, and Terraform Kubernetes cloud infrastructure.",
     industryArchetype: "Comprehensive Enterprise SaaS & AI Operations (Unicorn Grade)",
     employabilityRating: 100,
     employabilityBadge: "Tier 1 Elite",
-    salaryBand2026: "90k – 60k+ (Staff AI-Native Software Engineer)",
+    salaryBand2026: "50k – 00k+ (Staff AI-Native Software Engineer)",
     technologies: [
-      "Next.js 15",
-      "FastAPI",
-      "PostgreSQL RLS",
-      "Apache Kafka",
-      "pgvector HNSW",
-      "LangGraph",
-      "Docker Sandbox",
-      "Terraform",
-      "Kubernetes GKE",
-      "OpenTelemetry",
-      "k6 Load Testing"
+      "Next.js 15 (App Router & Canvas)",
+      "FastAPI & AsyncIO Microservices",
+      "PostgreSQL & pgvector HNSW",
+      "LangGraph Cyclic Autonomous Agents",
+      "Docker Ephemeral Sandbox Isolation",
+      "Terraform Infrastructure as Code",
+      "Kubernetes (GKE) GPU Scheduling",
+      "OpenTelemetry Distributed Tracing"
     ],
-    storyScenario: "Modern technology enterprises need unified platforms that combine secure multi-tenant data access, intelligent autonomous agents, and real-time interactive user interfaces. Building disconnected prototypes fails to demonstrate enterprise readiness. CloudMatrix unifies every layer: a modern Next.js 15 interface, asynchronous FastAPI services, a Kafka event backbone, hybrid RAG with pgvector, LangGraph agent workflows, and automated Terraform infrastructure.",
-    problemToSolve: "Unify frontend streaming, asynchronous distributed microservices, multi-tenant hybrid RAG, and autonomous agent orchestration into a cohesive, production-grade cloud platform.",
-    systemArchitecture: "Public Gateway -> Next.js RSC Web App + Live SSE -> FastAPI Microservices -> Kafka Event Backbone -> Hybrid RAG + Agent Workers -> Multi-Region PostgreSQL + Cloud Storage -> GKE / Terraform Infrastructure -> OpenTelemetry Observability.",
-    whyThisMatters2026: "This represents the complete synthesis of an AI-Native Software Engineer: you have designed, built, load-tested, and defended a full-stack, distributed, cloud-native platform from first principles.",
+    storyScenario: "Modern technology enterprises need unified cloud platforms that combine secure multi-tenant data access, intelligent autonomous agents, low-latency streaming user interfaces, and automated cloud resilience. CloudMatrix is the crowning grand finale platform: a high-density Next.js 15 streaming canvas frontend, asynchronous FastAPI microservices, pgvector HNSW hybrid retrieval with cross-encoder re-ranking, LangGraph autonomous coding agents executing in ephemeral sandboxes, and fully declarative Terraform infrastructure running on Kubernetes with GPU device allocation and OpenTelemetry observability.",
+    problemToSolve: "Unify frontend streaming, asynchronous distributed microservices, multi-tenant hybrid RAG, autonomous agent orchestration, and automated cloud infrastructure into a cohesive, production-grade enterprise system.",
+    systemArchitecture: "Next.js 15 Workspace -> API Gateway & Reverse Proxy -> Multi-Tenant Service Mesh (FastAPI) -> pgvector HNSW Hybrid RAG -> LangGraph Sandboxed Agents -> Kubernetes GKE & GPU Cluster -> OpenTelemetry Full-Stack Observability.",
+    whyThisMatters2026: "Candidates who can only build disconnected toy scripts remain juniors. Engineers who can construct and defend an entire enterprise-scale AI architecture from raw infrastructure to interactive streaming canvases possess the most lucrative skills in modern software engineering.",
     whatToBuild: [
-      "Full-Stack Architecture: Next.js 15 frontend, FastAPI microservice fleet, and Kafka message backbone.",
-      "Multi-Tenant Data Layer: PostgreSQL with Row-Level Security (RLS) enforcing strict tenant boundaries.",
-      "Autonomous Intelligence Loop: LangGraph multi-agent workflow integrated with pgvector hybrid search and sandboxes.",
-      "Infrastructure as Code: modular Terraform provisioning GCP GKE clusters, Cloud SQL, and continuous delivery.",
-      "Distributed Load Validation: k6 stress testing proving 25,000 requests/second with error rates < 0.01%.",
-      "Production Runbooks & Defense: documented disaster recovery runbook, SLO alerts, and recorded architecture defense."
+      "Enterprise Domain Boundary Architecture: implement multi-tenant tenant isolation, JWT authentication, and PostgreSQL Row-Level Security.",
+      "High-Performance Streaming Canvas Frontend: construct an interactive Next.js 15 workspace with Web Worker offloaded token parsing and 60 FPS Canvas rendering.",
+      "Multi-Modal Hybrid RAG & Vector Engine: coordinate dense pgvector HNSW search and sparse BM25 indexing with cross-encoder reranking and verifiable citations.",
+      "Autonomous Agent Execution Engine: orchestrate LangGraph cyclic state machines with container-sandboxed tool execution and self-healing test repair.",
+      "Cloud-Native Terraform & Kubernetes Pipeline: declare production infrastructure with Terraform and deploy resilient microservices with GPU scheduling to Kubernetes.",
+      "Full-Stack Observability & Guardrails: instrument end-to-end OpenTelemetry distributed tracing with automated RAG evaluations and latency circuit breakers."
     ],
     automatedChecks: [
-      "25,000 QPS load test: sustains traffic spike with p99 latency < 200ms and zero data loss.",
-      "Security audit verification: zero critical vulnerabilities across Semgrep SAST, container scans, and OWASP testing.",
-      "Automated disaster drill: automated cluster recovery from simulated database failure under 60 seconds."
+      "High-concurrency load resilience: sustains 10,000 req/sec across streaming endpoints with zero memory leaks or socket exhaustion.",
+      "Multi-tenant security isolation: automated penetration probes confirm zero cross-tenant data leakage under PostgreSQL RLS.",
+      "Autonomous agent test repair: agent self-heals failing code reproduction scripts in isolated sandboxes with zero host contamination.",
+      "Sub-150ms P95 retrieval latency: hybrid vector search and cross-encoder reranking across 1,000,000 chunks completes under 150ms."
     ],
     portfolioProof: {
       githubRepoTemplate: "cloudmatrix-enterprise-ai-platform",
       liveDemoType: "Distributed Cluster",
-      resumeImpactBullet: "Architected and defended CloudMatrix, a multi-tenant AI platform supporting 25,000 QPS; orchestrated hybrid RAG, LangGraph agent workflows, and Kubernetes GitOps with zero CVEs."
+      resumeImpactBullet: "Architected CloudMatrix, an enterprise multi-tenant AI platform integrating Next.js 15, pgvector hybrid RAG, LangGraph autonomous agents, and Terraform Kubernetes infrastructure; sustained 10,000 req/sec with proven zero-trust security."
     }
   }
 ];

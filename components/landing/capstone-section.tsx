@@ -80,7 +80,7 @@ export function CapstoneSection() {
           <div className="lg:col-span-6 space-y-6">
             <div className="flex items-center gap-2">
               <StatusChip status="brand" label="TAMPER-PROOF VERIFICATION" />
-              <span className="text-xs font-mono text-[#8a8f98]">18 Industry Capstones</span>
+              <span className="text-xs font-mono text-[#8a8f98]">14 Industry Capstones</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-semibold text-[#f7f8f8] tracking-tight">
@@ -152,20 +152,20 @@ export function CapstoneSection() {
                     onChange={(e) => setSelectedPhase(e.target.value)}
                     className="w-full bg-[#0f1011] border border-[#23252a] rounded-md px-3 py-2 text-xs text-[#f7f8f8] font-mono focus:outline-none focus:border-[#5e6ad2]"
                   >
-                    <option value="0">Module 01: PromptCLI Interactive AI Workbench</option>
-                    <option value="1">Module 02: TaskPulse High-Throughput Async Engine</option>
-                    <option value="2">Module 03: LogicProof Theorem & Inference Engine</option>
-                    <option value="3">Module 04: MathGrad Reverse-Mode Autodiff Engine</option>
-                    <option value="4">Module 05: AlgoSift In-Memory Search & Indexing Engine</option>
-                    <option value="5">Module 06: NetGate High-Performance ASGI Proxy</option>
-                    <option value="6">Module 07: FlashKV Crash-Resilient Key-Value Store</option>
-                    <option value="7">Module 08: BoardSync Real-Time Collaborative Canvas</option>
-                    <option value="8">Module 09: SystemScale Global Rate Limiting Cluster</option>
-                    <option value="9">Module 10: RaftLite Distributed Consensus Cluster</option>
-                    <option value="10">Module 11: DocuMind Enterprise Hybrid RAG Engine</option>
-                    <option value="11">Module 12: ProfilerX Distributed AI Telemetry Pipeline</option>
-                    <option value="12">Module 13: CodeCraft Autonomous Multi-Agent Engineer</option>
-                    <option value="13">Module 14: CloudOps Multi-Tenant Enterprise Platform</option>
+                    <option value="0">Module 01: PromptCLI — Developer AI Workbench</option>
+                    <option value="1">Module 02: SchemaAgent — Resilient AI Client SDK</option>
+                    <option value="2">Module 03: WorkflowGraph — Deterministic Agent Workflow Engine</option>
+                    <option value="3">Module 04: TensorCore — Micro-Autograd Engine & Vector Search</option>
+                    <option value="4">Module 05: SemanticCache — In-Memory Token Buffer & High-Speed LRU</option>
+                    <option value="5">Module 06: StreamGateway — Streaming AI Reverse Proxy & Rate Limiter</option>
+                    <option value="6">Module 07: DocuMind — Production AI Database & Vector Engine</option>
+                    <option value="7">Module 08: AICanvas — High-Density AI Streaming Workspace</option>
+                    <option value="8">Module 09: ModelRouter — High-Scale Multi-Provider AI Gateway</option>
+                    <option value="9">Module 10: QuorumCore — Distributed Raft Consensus & Agent Cluster</option>
+                    <option value="10">Module 11: DocuSearch — Enterprise Hybrid RAG & Knowledge Platform</option>
+                    <option value="11">Module 12: TracePulse — Full-Stack AI Observability & Quality Platform</option>
+                    <option value="12">Module 13: CodeCraft — Autonomous Software Engineering Agent</option>
+                    <option value="13">Module 14: CloudMatrix — Enterprise Multi-Tenant AI Platform</option>
                   </select>
                 </div>
 

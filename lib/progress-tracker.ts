@@ -4,6 +4,7 @@ import * as React from "react";
 import { supabase } from "./supabase";
 
 const COMPLETED_LESSONS_KEY = "ai_lms_completed_lessons";
+const ACTIVITY_LOG_KEY = "ai_lms_activity_log";
 const COMPLETED_EXERCISES_KEY = "ai_lms_completed_exercises";
 const LAST_ACTIVE_LESSON_KEY = "ai_lms_last_active_lesson";
 const PROGRESS_EVENT = "ai_lms_progress_updated";
@@ -123,6 +124,12 @@ export async function markLessonCompleted(
 
   try {
     localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(updatedList));
+    // Record real timestamp activity
+    const todayStr = new Date().toISOString().split("T")[0];
+    const rawActivity = localStorage.getItem(ACTIVITY_LOG_KEY);
+    const parsedActivity = rawActivity ? JSON.parse(rawActivity) : {};
+    parsedActivity[todayStr] = (parsedActivity[todayStr] || 0) + 1;
+    localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(parsedActivity));
   } catch (err) {
     console.error("Failed to save completed lesson to localStorage", err);
   }
@@ -234,14 +241,65 @@ export function getNextLessonId(
 /**
  * React hook to observe completed lessons and progress events seamlessly.
  */
+
+const VERIFIED_CAPSTONES_KEY = "ai_lms_verified_capstones";
+
+export interface CapstoneSubmissionState {
+  capstoneId: string;
+  repoUrl: string;
+  verifiedAt: string;
+  score: number;
+}
+
+export function getVerifiedCapstones(): Record<string, CapstoneSubmissionState> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(VERIFIED_CAPSTONES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    console.error("Failed to parse verified capstones from localStorage", err);
+    return {};
+  }
+}
+
+export function saveVerifiedCapstone(
+  capstoneId: string,
+  repoUrl: string,
+  score: number = 100
+): Record<string, CapstoneSubmissionState> {
+  if (typeof window === "undefined" || !capstoneId) return {};
+  const current = getVerifiedCapstones();
+  current[capstoneId] = {
+    capstoneId,
+    repoUrl,
+    verifiedAt: new Date().toISOString(),
+    score,
+  };
+  try {
+    localStorage.setItem(VERIFIED_CAPSTONES_KEY, JSON.stringify(current));
+  } catch (err) {
+    console.error("Failed to save verified capstone to localStorage", err);
+  }
+
+  window.dispatchEvent(
+    new CustomEvent(PROGRESS_EVENT, {
+      detail: { verifiedCapstones: current, justVerifiedCapstoneId: capstoneId },
+    })
+  );
+
+  return current;
+}
+
 export function useCurriculumProgress() {
   const [completedLessons, setCompletedLessons] = React.useState<string[]>([]);
   const [completedExercises, setCompletedExercises] = React.useState<string[]>([]);
+  const [verifiedCapstones, setVerifiedCapstones] = React.useState<Record<string, CapstoneSubmissionState>>({});
   const [lastActiveLessonId, setLastActive] = React.useState<string>("node-0-1");
 
   React.useEffect(() => {
     setCompletedLessons(getCompletedLessons());
     setCompletedExercises(getCompletedExercises());
+    setVerifiedCapstones(getVerifiedCapstones());
     setLastActive(getLastActiveLessonId());
 
     const handleProgressUpdate = (e: Event) => {
@@ -251,6 +309,9 @@ export function useCurriculumProgress() {
       }
       if (custom.detail?.completedExercises) {
         setCompletedExercises(custom.detail.completedExercises);
+      }
+      if (custom.detail?.verifiedCapstones) {
+        setVerifiedCapstones(custom.detail.verifiedCapstones);
       }
       if (custom.detail?.lastActiveLessonId) {
         setLastActive(custom.detail.lastActiveLessonId);
@@ -266,11 +327,14 @@ export function useCurriculumProgress() {
   return {
     completedLessons,
     completedExercises,
+    verifiedCapstones,
     lastActiveLessonId,
     completedCount: completedLessons.length,
     completedExercisesCount: completedExercises.length,
+    verifiedCapstonesCount: Object.keys(verifiedCapstones).length,
     markCompleted: markLessonCompleted,
     markExerciseCompleted,
+    saveVerifiedCapstone,
     setLastActive: setLastActiveLessonId,
   };
 }

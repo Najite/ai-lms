@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import { useCurriculumProgress } from "@/lib/progress-tracker";
+import { useCurriculumProgress, saveVerifiedCapstone, getVerifiedCapstones } from "@/lib/progress-tracker";
 import {
   PRODUCTION_CAPSTONES_2026,
   ProductionCapstoneSpec,
@@ -94,8 +94,14 @@ function PhaseMilestonesTab() {
           const completedInPhase = pNodes.filter((n) =>
             completedSet.has(n.id)
           ).length;
+          const capId = `cap-${String(displayPhaseNum).padStart(2, "0")}`;
+          const verifiedMap = getVerifiedCapstones();
+          const verifiedRecord = verifiedMap[capId];
+
           const status: "VERIFIED" | "IN_PROGRESS" | "NOT_STARTED" =
-            completedInPhase === pNodes.length && pNodes.length > 0
+            verifiedRecord
+              ? "VERIFIED"
+              : completedInPhase === pNodes.length && pNodes.length > 0
               ? "VERIFIED"
               : completedInPhase > 0
               ? "IN_PROGRESS"
@@ -103,13 +109,13 @@ function PhaseMilestonesTab() {
 
           return {
             ...spec,
-            id: `cap-${String(displayPhaseNum).padStart(2, "0")}`,
+            id: capId,
             phaseId: p.order_index,
             displayPhaseNumber: displayPhaseNum,
             phaseName: formatPhaseTitle(p.order_index, p.title),
             status,
-            repoUrl: undefined,
-            lastScore: status === "VERIFIED" ? 100 : undefined,
+            repoUrl: verifiedRecord?.repoUrl || undefined,
+            lastScore: verifiedRecord ? verifiedRecord.score : (status === "VERIFIED" ? 100 : undefined),
           };
         });
 
@@ -152,15 +158,16 @@ function PhaseMilestonesTab() {
 
       const data = await res.json();
       if (res.ok) {
+        saveVerifiedCapstone(selectedCapstone.id, repoInput, data.overallScore || 100);
         setFeedback({
           success: true,
-          message: data.message || "Repository verified against grading harness.",
+          message: data.message || "Repository verified against grading harness and saved.",
           details: data.details,
         });
         setCapstones((prev) =>
           prev.map((c) =>
             c.id === selectedCapstone.id
-              ? { ...c, status: "VERIFIED", repoUrl: repoInput, lastScore: 100 }
+              ? { ...c, status: "VERIFIED", repoUrl: repoInput, lastScore: data.overallScore || 100 }
               : c
           )
         );
@@ -611,9 +618,10 @@ function GrandEnterpriseCapstonesTab() {
       });
       const data = await res.json();
       if (res.ok) {
+        saveVerifiedCapstone(selected.id, repoInput, data.overallScore || 100);
         setFeedback({
           success: true,
-          message: data.message || "Repository verified against grading harness.",
+          message: data.message || "Repository verified against grading harness and saved.",
           details: data.details,
         });
       } else {

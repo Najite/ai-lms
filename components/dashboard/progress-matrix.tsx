@@ -31,52 +31,62 @@ interface TrackDefinition {
 const TRACK_DEFS: TrackDefinition[] = [
   {
     id: "foundations",
-    name: "Programming Foundations & Software Craftsmanship",
-    category: "Foundations",
-    phasePrefixes: ["node-0-", "node-1-"],
-    totalLessons: 100,
-    capstone: "PromptCLI & TaskPulse Async Engine",
-    description: "Python 3.12 syntax, PyObject memory model, closures, decorators, dunder protocols, Pydantic v2 validation, and pytest suites (Modules 1 & 2).",
+    name: "Python, AI Software Architecture & Workflows",
+    category: "AI Foundations",
+    phasePrefixes: ["node-0-", "node-1-", "node-2-"],
+    totalLessons: 150,
+    capstone: "PromptCLI, SchemaAgent & WorkflowGraph",
+    description: "Core Python internals, AST parsing, Pydantic v2 data contracts, schema enforcement, and cyclic agent state machines (Modules 1, 2 & 3).",
     icon: Terminal,
   },
   {
-    id: "math-algorithms",
-    name: "Discrete Mathematics, Linear Algebra & Core Algorithms",
-    category: "Math & Algorithms",
-    phasePrefixes: ["node-2-", "node-9-", "node-3-"],
-    totalLessons: 115,
-    capstone: "MathGrad Autodiff & AlgoSift Engine",
-    description: "Discrete logic, linear algebra, reverse-mode autodiff, two pointers, balanced search trees, graph algorithms, and DP (Modules 3, 4 & 5).",
+    id: "tensors-memory",
+    name: "Tensors, Vector Embeddings & Memory Optimization",
+    category: "Math & AI Systems",
+    phasePrefixes: ["node-9-", "node-3-"],
+    totalLessons: 100,
+    capstone: "TensorCore Micro-Autograd & SemanticCache Engine",
+    description: "Computational graphs, reverse-mode autodiff, dense vector spaces, in-memory KV-cache buffers, and high-speed LRU eviction (Modules 4 & 5).",
     icon: Cpu,
   },
   {
-    id: "web-systems",
-    name: "Web Protocols, Database Systems & High-Level Architecture",
-    category: "Backend & Systems",
-    phasePrefixes: ["node-4-", "node-5-", "node-8-", "node-7-"],
-    totalLessons: 140,
-    capstone: "PayFlow Payment Gateway & RaftLite Cluster",
-    description: "HTTP/2, HTTP/3, FastAPI ASGI services, PostgreSQL internals (MVCC, WAL), System Design scalability, and Raft consensus (Modules 6, 7, 9 & 10).",
+    id: "streaming-database",
+    name: "Streaming Web Protocols & PostgreSQL Vector Engineering",
+    category: "Backend & Data",
+    phasePrefixes: ["node-4-", "node-5-"],
+    totalLessons: 100,
+    capstone: "StreamGateway Proxy & DocuMind pgvector Engine",
+    description: "Server-Sent Events chunk multiplexing, WebSockets, backpressure, PostgreSQL pgvector HNSW indexing, and RLS security (Modules 6 & 7).",
     icon: Network,
   },
   {
-    id: "frontend-platforms",
-    name: "Modern Frontend Engineering & Interactive Platforms",
-    category: "Frontend & Canvas",
-    phasePrefixes: ["node-6-"],
-    totalLessons: 40,
-    capstone: "BoardSync Collaborative Canvas Workspace",
-    description: "DOM tree, modern CSS, Next.js App Router, React Server Components (RSC), Zustand state management, and Stripe Elements (Module 8).",
+    id: "frontend-scale",
+    name: "AI Frontend Architecture & High-Scale Gateway Routing",
+    category: "Frontend & Scale",
+    phasePrefixes: ["node-6-", "node-8-"],
+    totalLessons: 100,
+    capstone: "AICanvas Workspace & ModelRouter Multi-Provider Gateway",
+    description: "Next.js streaming canvases, Web Worker token decoding, 60 FPS HTML5 Canvas, multi-provider model routing, and Redis rate limiters (Modules 8 & 9).",
     icon: Layers,
   },
   {
-    id: "ai-agents-defense",
-    name: "Production RAG, Observability & Autonomous AI Agents",
-    category: "AI & Distributed Systems",
+    id: "distributed-consensus",
+    name: "Distributed Systems & AI Cluster Consensus",
+    category: "Distributed Clusters",
+    phasePrefixes: ["node-7-"],
+    totalLessons: 50,
+    capstone: "QuorumCore Distributed Raft & Agent State Cluster",
+    description: "Raft consensus, distributed lease locking for agent swarms, CRDT delta replication, and split-brain partition tolerance (Module 10).",
+    icon: Network,
+  },
+  {
+    id: "rag-observability-agents",
+    name: "Production RAG, AI Observability, Agents & Cloud Platform",
+    category: "Enterprise AI Platforms",
     phasePrefixes: ["node-10-", "node-11-", "node-12-", "node-13-", "node-14-"],
-    totalLessons: 125,
-    capstone: "DocuMind Hybrid RAG & CodeCraft Agent Defense",
-    description: "PostgreSQL pgvector (HNSW), hybrid search, Ragas evals, OpenTelemetry tracing, MCP tools, LangGraph cyclic state, and capstone defense (Modules 11, 12, 13 & 14).",
+    totalLessons: 200,
+    capstone: "DocuSearch, TracePulse, CodeCraft & CloudMatrix Platform",
+    description: "Hybrid RAG (pgvector + BM25), OpenTelemetry tracing, LLM-as-a-judge evals, LangGraph autonomous coding agents, and Terraform Kubernetes cloud infrastructure (Modules 11, 12, 13 & 14).",
     icon: Sparkles,
   },
 ];
@@ -100,12 +110,12 @@ export function ProgressMatrix({ onSelectTrack, onResumeLesson }: ProgressMatrix
             </h3>
           </div>
           <p className="text-xs text-[#8a8f98]">
-            Curated end-to-end technical tracks. Follow a structured progression from foundational theory to verifiable production capstones.
+            Curated end-to-end technical tracks aligned with all 14 curriculum modules. Follow a structured progression from foundations to verifiable production capstones.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <StatusChip status="brand" label="5 PATHS ACTIVE" />
+          <StatusChip status="brand" label="6 PATHS ACTIVE // 700 LESSONS" />
         </div>
       </div>
 
@@ -165,10 +175,10 @@ export function ProgressMatrix({ onSelectTrack, onResumeLesson }: ProgressMatrix
                   <span
                     className={cn(
                       "text-[10px] font-semibold shrink-0",
-                      completedCount > 10 ? "text-[#10b981]" : "text-[#565961]"
+                      completedCount > 5 ? "text-[#10b981]" : "text-[#565961]"
                     )}
                   >
-                    {completedCount > 10 ? "IN PROGRESS" : "NOT STARTED"}
+                    {completedCount > 5 ? "IN PROGRESS" : "NOT STARTED"}
                   </span>
                 </div>
               </div>
