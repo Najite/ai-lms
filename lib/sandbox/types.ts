@@ -14,7 +14,10 @@ export type ExecutionStatus =
   | "SUCCESS"
   | "FAILED"
   | "TIMEOUT"
-  | "SECURITY_VIOLATION";
+  | "SECURITY_VIOLATION"
+  /** The runtime could not execute the code (offline / Pyodide unavailable).
+   *  Callers MUST NOT treat this as a pass. */
+  | "UNVERIFIED";
 
 export interface ExecutionResult {
   id: string;
@@ -24,6 +27,8 @@ export interface ExecutionResult {
   executionDurationMs: number;
   assertionsPassed?: number;
   totalAssertions?: number;
+  /** Which engine actually produced this result. */
+  runtime?: "pyodide" | "unavailable";
 }
 
 export interface WorkerInMessage {
@@ -32,6 +37,6 @@ export interface WorkerInMessage {
 }
 
 export interface WorkerOutMessage {
-  type: "EXECUTION_COMPLETE" | "READY" | "LOG";
+  type: "EXECUTION_COMPLETE" | "READY" | "LOG" | "RUNTIME_UNAVAILABLE";
   payload: ExecutionResult | { message: string };
 }

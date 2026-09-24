@@ -1,6 +1,6 @@
 # AI-Native Software Engineer — Curriculum Specification
 **Version**: 8.0 — The 4-Stage Zero-to-Job-Ready AI-Native Software Engineering Specification
-**Status**: Fully Verified | Zero Hallucinations | 600 Atomic Lessons | 3,000 Trackable Subtopics
+**Status**: Source specification under reconciliation with the live database. The live database currently contains 700 lessons across 14 modules. Content quality and job-readiness require review beyond row-count validation.
 **Target Learner**: Complete Beginner (0 Prior Coding Experience) to Job-Ready AI-Native Software Engineer
 
 > **The AI-Native Software Engineering Contract**: Every single concept, syntax rule, algorithm, database design, and AI model across all 600 lessons is taught using simple, intuitive, everyday language without gatekeeping or unintroduced jargon. Software engineering fundamentals (clean code, memory, databases, APIs) and AI engineering primitives (tokenizers, vectors, RAG, agents) are taught side-by-side from Day 1 so the learner never feels lost or intimidated.
@@ -9,7 +9,7 @@
 
 ## The 4-Stage Learning Architecture (From 0 Experience to AI-Native Software Engineer)
 
-To ensure someone with **0 coding experience** builds unshakeable technical mastery without burning out, the 15 curriculum phases are organized into **4 progressive stages**:
+The repository specification describes a 15-phase, 600-lesson design, while the deployed curriculum currently contains 14 modules and 700 lessons. This mismatch must be resolved before this document can be treated as the sole curriculum contract. The live database is the current runtime source of truth.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -159,7 +159,7 @@ Phase 14: Enterprise Capstone (15 Lessons)
 - **Status**: `[State: Active | Complete Specification | Core]`
 - **Prerequisites**: None
 - **Subtopics**:
-  - `0.1.1` What is physical computer memory: RAM as numbered storage boxes.
+  - `0.1.1` Python values and variables: using relatable names for stored information.
   - `0.1.2` Variables as named sticky notes: assigning integers, floats, strings, and booleans.
   - `0.1.3` How Python's interpreter runs code line-by-line in real time.
   - `0.1.4` Dynamic types: checking variable types with type() and changing types safely.

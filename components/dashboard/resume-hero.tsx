@@ -15,7 +15,8 @@ import {
   Layers,
   Loader2,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
 
@@ -30,55 +31,28 @@ export function ResumeHero({
   onViewCurriculum,
   completedLessonsCount = 0,
 }: ResumeHeroProps) {
-  const [activeLesson, setActiveLesson] = React.useState<{
-    id: string;
-    title: string;
-    phase_id: string;
-    xp_reward: number;
-    handbook_markdown?: string;
-  } | null>(null);
-  const [totalDbLessons, setTotalDbLessons] = React.useState(600);
-  const [isLoading, setIsLoading] = React.useState(true);
-
+  /**
+   * Derived, not fetched: the shared catalog already holds all 700 ordered nodes,
+   * so this component no longer issues its own `limit(600)` query (which silently
+   * truncated the catalog and hardcoded a 600 total).
+   */
+  const { curriculum, isLoading } = useCurriculumCatalog();
   const { lastActiveLessonId, completedLessons } = useCurriculumProgress();
 
-  React.useEffect(() => {
-    let isMounted = true;
-    async function load() {
-      setIsLoading(true);
+  const activeLesson = React.useMemo(() => {
+    if (!curriculum || curriculum.allNodes.length === 0) return null;
+    const nodes = curriculum.allNodes;
+    const completedSet = new Set(completedLessons);
+    const nextUncompleted = nodes.find((n) => !completedSet.has(n.id));
+    return (
+      nodes.find((n) => n.id === lastActiveLessonId) || nextUncompleted || nodes[0]
+    );
+  }, [curriculum, lastActiveLessonId, completedLessons]);
 
-      // Fetch all nodes ordered to find next uncompleted lesson or current active
-      const { data, count } = await supabase
-        .from("curriculum_nodes")
-        .select("id, title, phase_id, xp_reward, handbook_markdown", { count: "exact" })
-        .order("id", { ascending: true })
-        .limit(600);
+  const totalDbLessons = curriculum?.totalLessons ?? CURRICULUM_META.totalLessons;
+  const totalPhases = curriculum?.phases.length ?? CURRICULUM_META.modules;
 
-      if (isMounted) {
-        if (data && data.length > 0) {
-          // Find first uncompleted node or fall back to lastActiveLessonId or first node
-          const completedSet = new Set(completedLessons);
-          const nextUncompleted = data.find((n) => !completedSet.has(n.id));
-          const targeted =
-            data.find((n) => n.id === lastActiveLessonId) ||
-            nextUncompleted ||
-            data[0];
-
-          setActiveLesson(targeted);
-        }
-        if (count) {
-          setTotalDbLessons(count);
-        }
-        setIsLoading(false);
-      }
-    }
-    load();
-    return () => {
-      isMounted = false;
-    };
-  }, [lastActiveLessonId, completedLessons]);
-
-  const percentage = ((completedLessonsCount / (totalDbLessons || 600)) * 100).toFixed(1);
+  const percentage = ((completedLessonsCount / totalDbLessons) * 100).toFixed(1);
 
   return (
     <div className="rounded-xl bg-[#08090a] border border-[#23252a] p-6 lg:p-8 shadow-2xl relative overflow-hidden">
@@ -131,7 +105,7 @@ export function ResumeHero({
               className="gap-2 font-mono text-xs w-full sm:w-auto"
             >
               <BookOpen className="w-4 h-4" />
-              <span>Browse Full 600 Lessons</span>
+              <span>Browse Full {CURRICULUM_META.totalLessons} Lessons</span>
             </Button>
           </div>
         </div>
@@ -158,7 +132,7 @@ export function ResumeHero({
             </div>
             <div className="p-2.5 rounded bg-[#08090a] border border-[#23252a]">
               <span className="text-[#8a8f98] block text-[10px]">PHASES ACTIVE</span>
-              <span className="text-[#5e6ad2] text-base font-semibold">15</span>
+              <span className="text-[#5e6ad2] text-base font-semibold">{totalPhases}</span>
             </div>
           </div>
 

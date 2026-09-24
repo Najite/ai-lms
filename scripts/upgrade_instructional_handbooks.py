@@ -24,27 +24,19 @@ PHASE_0_CURRICULUM_DATA = [
         "lesson_number": 1,
         "title": "Variables, Data Types & The Interpreter",
         "analogy": (
-            "Think of physical computer memory (RAM) as a massive hotel with billions of numbered rooms. "
-            "In low-level machine code, you would have to remember that your user's age is stored in room #0x7ffd9a2b10. "
-            "A variable is simply a human-friendly sticky note stuck to that hotel room door. When you write `age = 25`, "
-            "Python's interpreter allocates an object representing the number 25 in memory and attaches the label `age` to it. "
-            "Unlike compiled languages where a variable is a rigid, fixed-size box, a Python variable is a dynamic pointer—a "
-            "name tag that can be easily peeled off and stuck onto a completely different object (like a string or a list) at runtime."
+            "Think of a variable as a label on a container in a kitchen. The label tells you what is inside, "
+            "and a clear label helps another person use the container correctly. Python lets a name refer to a "
+            "different kind of value later, but we will focus on the behavior first and leave interpreter internals "
+            "for a later systems lesson."
         ),
         "diagram": (
-            "=== PYTHON VARIABLE ASSIGNMENT & REFERENCE MODEL ===\n"
-            "Stack Frame (Names)              Heap Memory (Objects)\n"
-            "+---------------+               +-----------------------------+\n"
-            "|  name: 'age'  | ------------> | PyLongObject                |\n"
-            "+---------------+               |  ob_refcnt: 1               |\n"
-            "                                |  ob_type:   <class 'int'>   |\n"
-            "+---------------+               |  ob_ival:   25              |\n"
-            "|  name: 'name' | ------------> +-----------------------------+\n"
-            "+---------------+               +-----------------------------+\n"
-            "                                | PyUnicodeObject             |\n"
-            "                                |  ob_refcnt: 1               |\n"
-            "                                |  value:     'Ada'           |\n"
-            "                                +-----------------------------+"
+            "=== PYTHON VARIABLES AS LABELED CONTAINERS ===\n"
+            "Names                         Values\n"
+            "+---------------+             +-------------------------+\n"
+            "|  age          | ----------> | 25 (whole number)       |\n"
+            "+---------------+             +-------------------------+\n"
+            "|  name         | ----------> | 'Ada' (text)             |\n"
+            "+---------------+             +-------------------------+"
         ),
         "code_walkthrough": (
             "# 1. Integer variable: Whole numbers used for discrete counts\n"

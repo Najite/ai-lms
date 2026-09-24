@@ -1665,14 +1665,14 @@ export function getExercisesForLesson(lessonId: string): ExerciseItem[] {
  */
 export function isExerciseUnlocked(
   exercise: ExerciseItem,
-  completedLessonIds: string[],
-  completedExerciseIds: string[]
+  completedLessonIds: ReadonlySet<string>,
+  completedExerciseIds: ReadonlySet<string>
 ): boolean {
   // First exercise of node-0-1 is always unlocked for beginner onboarding
   if (exercise.id === "ex-0-1-1") return true;
 
-  // Parent lesson must be completed
-  if (!completedLessonIds.includes(exercise.lessonId)) {
+  // Parent lesson must be completed (O(1); was an O(L) `.includes()` per rendered row)
+  if (!completedLessonIds.has(exercise.lessonId)) {
     return false;
   }
 
@@ -1684,7 +1684,7 @@ export function isExerciseUnlocked(
   // Tiered ladder: if it's orderIndex > 1, previous exercise in the lesson must be completed
   if (exercise.orderIndex > 1) {
     const prevExerciseId = `ex-${exercise.lessonId.replace("node-", "")}-${exercise.orderIndex - 1}`;
-    if (!completedExerciseIds.includes(prevExerciseId)) {
+    if (!completedExerciseIds.has(prevExerciseId)) {
       return false;
     }
   }

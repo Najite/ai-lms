@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { fetchLiveCurriculum, PhaseViewModel, DatabaseNode } from "@/lib/db-curriculum";
+import { PhaseViewModel, DatabaseNode } from "@/lib/db-curriculum";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 import { StatusChip } from "@/components/ui/status-chip";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,55 +22,53 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress, isLessonUnlocked } from "@/lib/progress-tracker";
+import { PRODUCTION_CAPSTONES_2026 } from "@/lib/production-capstones";
 
 interface CurriculumBrowserProps {
   onStartLesson?: (nodeId: string) => void;
 }
 
+/**
+ * Module-level empties. They must be referentially stable: `phases` feeds a
+ * `React.useEffect` dependency array, and a fresh `[]` per render would make the
+ * effect re-fire forever.
+ */
+const EMPTY_PHASES: PhaseViewModel[] = [];
+const EMPTY_IDS: string[] = [];
+const EMPTY_NODES_BY_PHASE: Record<string, DatabaseNode[]> = {};
+
 export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
-  const [phases, setPhases] = React.useState<PhaseViewModel[]>([]);
+  const { curriculum, isLoading } = useCurriculumCatalog();
+
   const [selectedPhase, setSelectedPhase] = React.useState<PhaseViewModel | null>(null);
-  const [nodesByPhase, setNodesByPhase] = React.useState<Record<string, DatabaseNode[]>>({});
-  const [totalLessons, setTotalLessons] = React.useState<number>(0);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [activeCategory, setActiveCategory] = React.useState<string>("ALL");
-  const [allLessonIds, setAllLessonIds] = React.useState<string[]>([]);
 
   const { completedLessons, completedCount } = useCurriculumProgress();
   const completedSet = React.useMemo(() => new Set(completedLessons), [completedLessons]);
+
+  // All derived from the ONE shared catalog snapshot. No local effect, no local
+  // `await`, no spinner on data that is already in localStorage.
+  const phases = curriculum?.phases ?? EMPTY_PHASES;
+  const nodesByPhase = curriculum?.nodesByPhase ?? EMPTY_NODES_BY_PHASE;
+  const totalLessons = curriculum?.totalLessons ?? 0;
+  const allLessonIds = React.useMemo(
+    () => (curriculum ? curriculum.allNodes.map((n) => n.id) : EMPTY_IDS),
+    [curriculum]
+  );
   const lessonIdIndexMap = React.useMemo(() => {
     const map = new Map<string, number>();
     allLessonIds.forEach((id, idx) => map.set(id, idx));
     return map;
   }, [allLessonIds]);
 
+  // Keep a valid selection as the catalog arrives or is revalidated.
   React.useEffect(() => {
-    let isMounted = true;
-    async function load() {
-      setIsLoading(true);
-      const data = await fetchLiveCurriculum();
-      if (isMounted) {
-        setPhases(data.phases);
-        setTotalLessons(data.totalLessons);
-        setAllLessonIds(data.allNodes.map((n) => n.id));
-        if (data.phases.length > 0) {
-          setSelectedPhase(data.phases[0]);
-        }
-        const grouped: Record<string, DatabaseNode[]> = {};
-        for (const n of data.allNodes) {
-          if (!grouped[n.phase_id]) grouped[n.phase_id] = [];
-          grouped[n.phase_id].push(n);
-        }
-        setNodesByPhase(grouped);
-        setIsLoading(false);
-      }
-    }
-    load();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    if (phases.length === 0) return;
+    setSelectedPhase((current) =>
+      current && phases.some((phase) => phase.id === current.id) ? current : phases[0]
+    );
+  }, [phases]);
 
   const categories = ["ALL", "Systems", "Algorithms", "Distributed", "AI/ML", "Full-Stack"];
 
@@ -106,11 +106,11 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
           <div className="flex items-center gap-4 p-3 rounded-lg bg-[#08090a] border border-[#23252a] font-mono text-xs">
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">MODULES</span>
-              <span className="text-sm font-semibold text-[#f7f8f8]">{phases.length || 8}</span>
+              <span className="text-sm font-semibold text-[#f7f8f8]">{phases.length || CURRICULUM_META.modules}</span>
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">LESSONS</span>
-              <span className="text-sm font-semibold text-[#f7f8f8]">{totalLessons || 520}</span>
+              <span className="text-sm font-semibold text-[#f7f8f8]">{totalLessons || CURRICULUM_META.totalLessons}</span>
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">COMPLETED</span>
@@ -118,7 +118,7 @@ export function CurriculumBrowser({ onStartLesson }: CurriculumBrowserProps) {
             </div>
             <div className="pr-4 border-r border-[#23252a]">
               <span className="text-[#8a8f98] block">CAPSTONES</span>
-              <span className="text-sm font-semibold text-[#5e6ad2]">{phases.length || 8}</span>
+              <span className="text-sm font-semibold text-[#5e6ad2]">{PRODUCTION_CAPSTONES_2026.length || CURRICULUM_META.totalCapstones}</span>
             </div>
             <div>
               <span className="text-[#8a8f98] block">PACING</span>

@@ -10,10 +10,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import {
-  fetchLiveCurriculum,
-  getLiveCurriculumSync,
   resolveLearningQueue,
 } from "@/lib/db-curriculum";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
 
@@ -49,82 +48,30 @@ export function ContinueLearningQueue({
   onViewSkillIQ,
 }: ContinueLearningQueueProps) {
   const { lastActiveLessonId, completedLessons } = useCurriculumProgress();
+  const { curriculum } = useCurriculumCatalog();
 
-  // Initialize state synchronously using O(1) cache if available, or canonical Lesson 1.1
-  const [activeLesson, setActiveLesson] = React.useState<{
-    id: string;
-    title: string;
-    phase_id: string;
-    xp_reward?: number;
-  }>(() => {
-    const cached = getLiveCurriculumSync();
-    if (cached) {
-      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
-      return q.activeLesson;
-    }
-    return CANONICAL_INITIAL_ACTIVE;
-  });
+  /**
+   * The queue is a pure function of (catalog, lastActive, completed). Deriving it
+   * removes three state setters, an effect, a request-id ref and an `await` — and
+   * with the shared store subscription it now also updates when ANY sibling mount
+   * invalidates the catalog, instead of only when this component re-ran its own
+   * effect. Canonical 1.1/1.2 values are the catalog-null fallback.
+   */
+  const queue = React.useMemo(
+    () =>
+      curriculum
+        ? resolveLearningQueue(curriculum, lastActiveLessonId, completedLessons)
+        : {
+            activeLesson: CANONICAL_INITIAL_ACTIVE,
+            nextLesson: CANONICAL_INITIAL_NEXT,
+            activeCapstone: CANONICAL_INITIAL_CAPSTONE,
+          },
+    [curriculum, lastActiveLessonId, completedLessons]
+  );
 
-  const [nextLesson, setNextLesson] = React.useState<{
-    id: string;
-    title: string;
-    phase_id: string;
-  }>(() => {
-    const cached = getLiveCurriculumSync();
-    if (cached) {
-      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
-      return q.nextLesson;
-    }
-    return CANONICAL_INITIAL_NEXT;
-  });
-
-  const [activeCapstone, setActiveCapstone] = React.useState<{
-    id: string;
-    title: string;
-    phaseName: string;
-    oneLineHook: string;
-  }>(() => {
-    const cached = getLiveCurriculumSync();
-    if (cached) {
-      const q = resolveLearningQueue(cached, lastActiveLessonId, completedLessons);
-      return q.activeCapstone;
-    }
-    return CANONICAL_INITIAL_CAPSTONE;
-  });
-
-  const [isLoading, setIsLoading] = React.useState(false);
-  const requestIdRef = React.useRef(0);
-
-  // Sync with live curriculum database: O(1) cached lookups with race condition guard
-  React.useEffect(() => {
-    let isMounted = true;
-    const reqId = ++requestIdRef.current;
-
-    async function syncQueue() {
-      try {
-        const curriculum = await fetchLiveCurriculum();
-        // Guard against race conditions and unmounted state
-        if (!isMounted || reqId !== requestIdRef.current) return;
-
-        const queue = resolveLearningQueue(curriculum, lastActiveLessonId, completedLessons);
-        setActiveLesson(queue.activeLesson);
-        setNextLesson(queue.nextLesson);
-        setActiveCapstone(queue.activeCapstone);
-      } catch (err) {
-        console.error("Failed to load queue data from Supabase", err);
-      } finally {
-        if (isMounted && reqId === requestIdRef.current) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    syncQueue();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [lastActiveLessonId, completedLessons]);
+  const activeLesson = queue.activeLesson;
+  const nextLesson = queue.nextLesson;
+  const activeCapstone = queue.activeCapstone;
 
   const activeLessonCoords = activeLesson
     ? parseLessonCoordinates(activeLesson.id, activeLesson.title)

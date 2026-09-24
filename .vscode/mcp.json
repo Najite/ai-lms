@@ -1,0 +1,11 @@
+{
+	"servers": {
+		"supabase": {
+			"command": "/bin/bash",
+			"args": [
+				"-lc",
+				"set -a; source \"/home/gamp/Documents/lms/.env.local\"; set +a; exec npx -y @supabase/mcp-server-supabase@latest --access-token \"$SUPABASE_ACCESS_TOKEN\" --project-ref lfsyndffrfwvdfzjsagl"
+			]
+		}
+	}
+}

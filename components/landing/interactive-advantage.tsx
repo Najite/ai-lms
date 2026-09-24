@@ -22,8 +22,8 @@ export function InteractiveAdvantage() {
       sub: "Runnable code checks every micro-lesson",
     },
     {
-      value: "600",
-      label: "Production-Grade Lessons",
+      value: "700",
+      label: "Verified Lessons",
       sub: "From x86 registers to Raft & vLLM",
     },
   ];

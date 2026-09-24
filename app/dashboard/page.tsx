@@ -27,6 +27,9 @@ import {
   Layers,
   ChevronRight,
 } from "lucide-react";
+import { NetworkStatusIndicator } from "@/components/ui/network-status-indicator";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = React.useState<DashboardView>("overview");
@@ -35,6 +38,12 @@ export default function DashboardPage() {
 
   const { completedCount } = useCurriculumProgress();
   const completedLessonsCount = completedCount;
+
+  // Totals come from the shared catalog, never from a literal. This file used to
+  // print "520 Lessons" in the header and footer against a 700-lesson database.
+  const { curriculum } = useCurriculumCatalog();
+  const totalLessons = curriculum?.totalLessons || CURRICULUM_META.totalLessons;
+  const totalModules = curriculum?.totalPhases || CURRICULUM_META.modules;
 
   // Sync with URL hash and query params
   React.useEffect(() => {
@@ -98,6 +107,7 @@ export default function DashboardPage() {
         onViewChange={handleViewChange}
         onOpenTutor={() => setIsTutorOpen(true)}
         completedLessonsCount={completedLessonsCount}
+        totalLessons={totalLessons}
       />
 
       {/* Main Content Area */}
@@ -113,6 +123,9 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Live Network Status Indicator */}
+            <NetworkStatusIndicator />
+
             {/* Real Curriculum Progress Chip */}
             <div
               onClick={() => handleViewChange("curriculum")}
@@ -130,7 +143,7 @@ export default function DashboardPage() {
             >
               <Award className="w-3.5 h-3.5 text-[#5e6ad2]" />
               <span className="text-[#8a8f98]">Progress:</span>
-              <span className="text-[#5e6ad2] font-semibold">{completedLessonsCount} / 700 Lessons</span>
+              <span className="text-[#5e6ad2] font-semibold">{completedLessonsCount} / {totalLessons} Lessons</span>
             </div>
 
             <Button
@@ -239,7 +252,7 @@ export default function DashboardPage() {
               <span className="text-[#383b42]">/</span>
               <span>Zero-to-Job AI Software Engineer Curriculum</span>
               <span className="text-[#383b42]">•</span>
-              <span className="text-[#10b981]">700 Lessons // 14 Modules // Real AST Verification</span>
+              <span className="text-[#10b981]">{totalLessons} Lessons // {totalModules} Modules // Real AST Verification</span>
             </div>
             <div className="text-[11px] text-[#565961]">
               100% Free Permanent License • Real AST Verification

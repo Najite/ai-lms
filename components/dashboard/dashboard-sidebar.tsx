@@ -22,6 +22,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 
 export type DashboardView =
   | "overview"
@@ -40,6 +41,8 @@ interface DashboardSidebarProps {
   onViewChange: (view: DashboardView) => void;
   onOpenTutor: () => void;
   completedLessonsCount: number;
+  /** Live lesson total from the shared catalog. Never hardcode this. */
+  totalLessons: number;
 }
 
 interface NavItem {
@@ -60,6 +63,7 @@ export function DashboardSidebar({
   onViewChange,
   onOpenTutor,
   completedLessonsCount,
+  totalLessons,
 }: DashboardSidebarProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
@@ -71,9 +75,9 @@ export function DashboardSidebar({
       ],
     },
     {
-      groupName: "CURRICULUM (700 LESSONS)",
+      groupName: `CURRICULUM (${totalLessons} LESSONS)`,
       items: [
-        { id: "curriculum", label: "Curriculum Tree", icon: BookOpen, badge: "14 Modules" },
+        { id: "curriculum", label: "Curriculum Tree", icon: BookOpen, badge: `${Math.max(1, totalLessons / 50)} Modules` },
         { id: "paths", label: "Phase Tracks", icon: Compass, badge: "Structured" },
       ],
     },
@@ -82,7 +86,7 @@ export function DashboardSidebar({
       items: [
         { id: "workspace", label: "Modules & Labs", icon: Terminal, badge: "Dual-Phase" },
         { id: "exercises", label: "Hands-on Labs", icon: Code2 },
-        { id: "capstones", label: "Phase Capstones", icon: FolderGit2, badge: "14 Capstones" },
+        { id: "capstones", label: "Phase Capstones", icon: FolderGit2, badge: `${CURRICULUM_META.totalCapstones} Capstones` },
       ],
     },
   ];
@@ -220,7 +224,7 @@ export function DashboardSidebar({
           {!isCollapsed && (
             <div className="flex-1 text-left truncate">
               <span className="block font-semibold">Architectural Tutor</span>
-              <span className="text-[10px] text-[#8a8f98] block truncate">RAG Grounded in 700 Specs</span>
+              <span className="text-[10px] text-[#8a8f98] block truncate">Grounded in {totalLessons} Lesson Specs</span>
             </div>
           )}
         </button>
@@ -231,7 +235,7 @@ export function DashboardSidebar({
               <ShieldCheck className="w-3 h-3" />
               Free Permanent Tier
             </span>
-            <span>{completedLessonsCount} / 700</span>
+            <span>{completedLessonsCount} / {totalLessons}</span>
           </div>
         )}
       </div>

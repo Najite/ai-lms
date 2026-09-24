@@ -28,7 +28,7 @@ import {
   Server,
   Code2,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress, saveVerifiedCapstone, getVerifiedCapstones } from "@/lib/progress-tracker";
 import {
@@ -46,92 +46,91 @@ export interface CapstoneProject extends ProductionCapstoneSpec {
   lastScore?: number;
 }
 
+/** Stable module-level empties: identity must not change between renders or the
+ *  derived `useMemo`s above would recompute on every paint. */
+const EMPTY_CAPSTONES: CapstoneProject[] = [];
+const EMPTY_OVERRIDE: Partial<CapstoneProject> = {};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PHASE MILESTONE TAB
 // ─────────────────────────────────────────────────────────────────────────────
 function PhaseMilestonesTab() {
-  const [capstones, setCapstones] = React.useState<CapstoneProject[]>([]);
   const [selectedCapstone, setSelectedCapstone] =
     React.useState<CapstoneProject | null>(null);
   const [repoInput, setRepoInput] = React.useState("");
   const [isVerifying, setIsVerifying] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [feedback, setFeedback] = React.useState<{
     success: boolean;
     message: string;
     details?: any;
   } | null>(null);
+  /**
+   * Verification results are user actions, so they live in their own state and
+   * are merged OVER the derived list. This keeps `capstones` a pure function of
+   * (catalog, progress) without ever letting a revalidation wipe a just-verified
+   * repository URL.
+   */
+  const [overrides, setOverrides] = React.useState<Record<string, Partial<CapstoneProject>>>({});
 
+  const { curriculum, isLoading } = useCurriculumCatalog();
   const { completedLessons } = useCurriculumProgress();
 
+  const baseCapstones = React.useMemo(() => {
+    if (!curriculum) return EMPTY_CAPSTONES;
+
+    const phases = curriculum.phases;
+    const completedSet = new Set(completedLessons);
+
+    return phases.map((p, idx): CapstoneProject => {
+      const pNodes = curriculum.nodesByPhase[p.phaseId] || [];
+      const spec =
+        PRODUCTION_CAPSTONES_2026.find((s) => s.phaseId === idx || s.displayPhaseNumber === p.id) ||
+        PRODUCTION_CAPSTONES_2026[0];
+      const displayPhaseNum = p.id;
+
+      const completedInPhase = pNodes.filter((n) => completedSet.has(n.id)).length;
+      const capId = `cap-${String(displayPhaseNum).padStart(2, "0")}`;
+      const verifiedMap = getVerifiedCapstones();
+      const verifiedRecord = verifiedMap[capId];
+
+      const status: "VERIFIED" | "IN_PROGRESS" | "NOT_STARTED" = verifiedRecord
+        ? "VERIFIED"
+        : completedInPhase === pNodes.length && pNodes.length > 0
+        ? "VERIFIED"
+        : completedInPhase > 0
+        ? "IN_PROGRESS"
+        : "NOT_STARTED";
+
+      return {
+        ...spec,
+        id: capId,
+        phaseId: p.id - 1,
+        displayPhaseNumber: displayPhaseNum,
+        phaseName: p.title,
+        status,
+        repoUrl: verifiedRecord?.repoUrl || undefined,
+        lastScore: verifiedRecord
+          ? verifiedRecord.score
+          : status === "VERIFIED"
+          ? 100
+          : undefined,
+      };
+    });
+  }, [curriculum, completedLessons]);
+
+  const capstones = React.useMemo(
+    () => baseCapstones.map((c) => ({ ...c, ...(overrides[c.id] ?? EMPTY_OVERRIDE) })),
+    [baseCapstones, overrides]
+  );
+
+  // Keep a valid selection as the list recomputes, without clobbering the user's
+  // choice on every progress change (the old effect reset selection to items[0]).
   React.useEffect(() => {
-    let isMounted = true;
-    async function load() {
-      setIsLoading(true);
-      const [phasesRes, nodesRes] = await Promise.all([
-        supabase
-          .from("curriculum_phases")
-          .select("*")
-          .order("order_index", { ascending: true }),
-        supabase
-          .from("curriculum_nodes")
-          .select("id, title, slug, phase_id, xp_reward")
-          .order("id", { ascending: true }),
-      ]);
-
-      if (isMounted) {
-        const phases = phasesRes.data || [];
-        const nodes = nodesRes.data || [];
-        const completedSet = new Set(completedLessons);
-
-        const items: CapstoneProject[] = phases.map((p) => {
-          const pNodes = nodes.filter((n) => n.phase_id === p.id);
-          const spec =
-            PRODUCTION_CAPSTONES_2026.find((s) => s.phaseId === p.order_index) ||
-            PRODUCTION_CAPSTONES_2026[0];
-          const displayPhaseNum = p.order_index + 1;
-
-          const completedInPhase = pNodes.filter((n) =>
-            completedSet.has(n.id)
-          ).length;
-          const capId = `cap-${String(displayPhaseNum).padStart(2, "0")}`;
-          const verifiedMap = getVerifiedCapstones();
-          const verifiedRecord = verifiedMap[capId];
-
-          const status: "VERIFIED" | "IN_PROGRESS" | "NOT_STARTED" =
-            verifiedRecord
-              ? "VERIFIED"
-              : completedInPhase === pNodes.length && pNodes.length > 0
-              ? "VERIFIED"
-              : completedInPhase > 0
-              ? "IN_PROGRESS"
-              : "NOT_STARTED";
-
-          return {
-            ...spec,
-            id: capId,
-            phaseId: p.order_index,
-            displayPhaseNumber: displayPhaseNum,
-            phaseName: formatPhaseTitle(p.order_index, p.title),
-            status,
-            repoUrl: verifiedRecord?.repoUrl || undefined,
-            lastScore: verifiedRecord ? verifiedRecord.score : (status === "VERIFIED" ? 100 : undefined),
-          };
-        });
-
-        setCapstones(items);
-        if (items.length > 0) {
-          setSelectedCapstone(items[0]);
-          setRepoInput(items[0].repoUrl || "");
-        }
-        setIsLoading(false);
-      }
-    }
-    load();
-    return () => {
-      isMounted = false;
-    };
-  }, [completedLessons]);
+    setSelectedCapstone((current) => {
+      if (!current) return capstones[0] ?? null;
+      return capstones.find((c) => c.id === current.id) ?? capstones[0] ?? null;
+    });
+  }, [capstones]);
 
   const handleSelectCapstone = (cap: CapstoneProject) => {
     setSelectedCapstone(cap);
@@ -164,13 +163,14 @@ function PhaseMilestonesTab() {
           message: data.message || "Repository verified against grading harness and saved.",
           details: data.details,
         });
-        setCapstones((prev) =>
-          prev.map((c) =>
-            c.id === selectedCapstone.id
-              ? { ...c, status: "VERIFIED", repoUrl: repoInput, lastScore: data.overallScore || 100 }
-              : c
-          )
-        );
+        setOverrides((prev) => ({
+          ...prev,
+          [selectedCapstone.id]: {
+            status: "VERIFIED",
+            repoUrl: repoInput,
+            lastScore: data.overallScore || 100,
+          },
+        }));
       } else {
         setFeedback({
           success: false,
@@ -966,7 +966,9 @@ export function CapstoneTracker() {
           </div>
           <div className="px-3 py-2 rounded-lg bg-[#0f1011] border border-[#23252a] text-[#8a8f98] space-y-1">
             <div className="text-[10px] text-[#565961] uppercase tracking-wider">Enterprise Capstones</div>
-            <div className="text-[#f7f8f8] font-bold text-sm">18 Total Projects</div>
+            <div className="text-[#f7f8f8] font-bold text-sm">
+              {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} Total Projects
+            </div>
           </div>
         </div>
       </div>

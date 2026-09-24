@@ -23,24 +23,21 @@ M1_LESSONS = [
         "subtitle": "Module 1 Python Foundations | Lesson 1 of 50",
         "xp": 100,
         "analogy": (
-            "Think of computer memory (RAM) as an immense warehouse of numbered storage bins. In raw assembly code, "
-            "you would need to manually record that an AI model name is at memory offset 0x7ffd9a2b10. In Python, a variable "
-            "is simply a human-readable sticky label affixed to that object in heap memory. When you assign `model_name = 'gpt-4o'`, "
-            "the Python interpreter instantiates a `PyUnicodeObject` in memory and binds the name `model_name` to it. "
-            "Because Python uses dynamic typing, you can re-bind that label to an integer or float at any moment without "
-            "recompiling, though disciplined engineers maintain strict type predictability."
+            "Think of a variable as a label on a container in a kitchen. The label tells you what is inside: "
+            "`model_name` can label a container holding text, while `max_tokens` can label one holding a whole number. "
+            "Python lets you replace what a label points to, but clear names help people understand the program. "
+            "We will learn the behavior first and leave interpreter internals for a later systems lesson."
         ),
         "diagram": (
-            "=== PYTHON VARIABLE ASSIGNMENT & POINTER MODEL ===\n"
-            "Stack Frame (Symbol Table)           Heap Memory (Object Allocation)\n"
-            "+---------------------+             +---------------------------------+\n"
-            "| model_name (ptr)    | ----------> | PyUnicodeObject ('gpt-4o')      |\n"
-            "+---------------------+             | ob_refcnt: 1 | type: <str>      |\n"
-            "+---------------------+             +---------------------------------+\n"
-            "| max_tokens (ptr)    | ----------> +---------------------------------+\n"
-            "+---------------------+             | PyLongObject (4096)             |\n"
-            "                                    | ob_refcnt: 1 | type: <int>      |\n"
-            "                                    +---------------------------------+"
+            "=== PYTHON VARIABLES AS LABELED CONTAINERS ===\n"
+            "Names                              Values\n"
+            "+---------------------+             +-----------------------------+\n"
+            "| model_name          | ----------> | 'gpt-4o' (text)             |\n"
+            "+---------------------+             +-----------------------------+\n"
+            "| max_tokens          | ----------> | 4096 (whole number)         |\n"
+            "+---------------------+             +-----------------------------+\n"
+            "| is_available        | ----------> | True (yes/no value)         |\n"
+            "+---------------------+             +-----------------------------+"
         ),
         "walkthrough": (
             "# 1. Primitive Python Data Types\n"
@@ -59,7 +56,7 @@ M1_LESSONS = [
         ),
         "failure_mode": "Implicit type coercion assumptions (e.g. attempting 'Tokens: ' + 100 instead of str(100)), causing TypeError.",
         "subtopics": [
-            "1.1.1 RAM architecture and heap object allocation model in CPython",
+            "1.1.1 Python values and variables: names that help us use stored information",
             "1.1.2 Primitive types: int, float, str, and bool definitions",
             "1.1.3 Variable naming conventions (PEP 8 snake_case) and assignment mechanics",
             "1.1.4 Dynamic typing vs static typing and runtime type introspection via type()"

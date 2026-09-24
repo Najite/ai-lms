@@ -45,7 +45,7 @@ export function TutorDrawer({ isOpen, onClose }: TutorDrawerProps) {
     {
       role: "assistant",
       content:
-        "Welcome to the AI-Native LMS Architectural Tutor. I am grounded in the 600 lessons, 22 capstones, and 3,000 subtopics across our curriculum. Ask any computer science or systems engineering question.",
+        "Welcome to the AI-Native LMS Tutor. I am grounded in the 14 verified curriculum modules and 700 lessons in the live database. Ask about a concept, a lesson, or a systems problem.",
     },
   ]);
   const [isLoading, setIsLoading] = React.useState(false);

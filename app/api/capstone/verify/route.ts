@@ -9,8 +9,51 @@ interface VerificationCheckResult {
   details: string;
 }
 
+const MAX_GITHUB_REQUESTS_PER_MINUTE = 12;
+const GITHUB_TIMEOUT_MS = 8000;
+const requestBuckets = new Map<string, { windowStartedAt: number; count: number }>();
+
+function getClientKey(req: NextRequest): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+}
+
+function allowRequest(key: string): boolean {
+  const now = Date.now();
+  const current = requestBuckets.get(key);
+  if (!current || now - current.windowStartedAt >= 60_000) {
+    requestBuckets.set(key, { windowStartedAt: now, count: 1 });
+    return true;
+  }
+  if (current.count >= MAX_GITHUB_REQUESTS_PER_MINUTE) return false;
+  current.count += 1;
+  return true;
+}
+
+async function fetchGitHub(url: string): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), GITHUB_TIMEOUT_MS);
+  try {
+    return await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "AI-Native-LMS-Capstone-Grader-2026",
+        Accept: "application/vnd.github.v3+json",
+      },
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    if (!allowRequest(getClientKey(req))) {
+      return NextResponse.json(
+        { error: "Too many verification requests. Retry after one minute." },
+        { status: 429, headers: { "Retry-After": "60" } }
+      );
+    }
+
     const body = await req.json();
     const { repoUrl, phaseId } = body;
 
@@ -27,7 +70,7 @@ export async function POST(req: NextRequest) {
       .replace(/\/$/, "");
     const parts = cleanPath.split("/");
 
-    if (parts.length < 2) {
+    if (parts.length !== 2 || parts.some((part: string) => !/^[A-Za-z0-9_.-]{1,100}$/.test(part))) {
       return NextResponse.json(
         {
           error: "Invalid repository format. Please provide 'owner/repo' or a full public GitHub URL.",
@@ -40,12 +83,7 @@ export async function POST(req: NextRequest) {
     const targetPhase = parseInt(phaseId, 10) || 0;
 
     // 1. Fetch Repository Metadata
-    const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-      headers: {
-        "User-Agent": "AI-Native-LMS-Capstone-Grader-2026",
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
+    const repoRes = await fetchGitHub(`https://api.github.com/repos/${owner}/${repo}`);
 
     if (!repoRes.ok) {
       if (repoRes.status === 404) {
@@ -56,29 +94,34 @@ export async function POST(req: NextRequest) {
           { status: 404 }
         );
       }
-      if (repoRes.status === 403) {
-        // Fallback for GitHub API rate limits
-        return NextResponse.json({
-          verified: true,
-          overallScore: 88,
-          status: "PASSED_WITH_LOCAL_HARNESS",
-          message: `GitHub API rate-limited; verified repository '${owner}/${repo}' against local evaluation harness.`,
-          details: {
-            repo: `${owner}/${repo}`,
-            stars: 0,
-            defaultBranch: "main",
-            commitCount: "Verified",
-            ciWorkflowFound: true,
-            testsDetected: true,
-            checks: [
-              { name: "Repository Public & Accessible", passed: true, score: 25, details: "Verified public access on GitHub" },
-              { name: "Architectural Specification & README", passed: true, score: 25, details: "Architecture and ADRs documented" },
-              { name: "Test Suite Invariants (pytest / vitest)", passed: true, score: 25, details: "Unit & integration tests detected" },
-              { name: "Automated CI Workflow (.github/workflows)", passed: true, score: 25, details: "Continuous integration harness configured" },
-            ]
-          }
-        });
+      if (repoRes.status === 403 || repoRes.status === 429) {
+        // FAIL CLOSED. The previous revision returned `verified: true, overallScore: 88`
+        // from here, awarding a passing capstone grade purely because GitHub rate-limited
+        // us. A repository that was never read can only ever be unverified.
+        return NextResponse.json(
+          {
+            verified: false,
+            overallScore: 0,
+            status: "VERIFICATION_UNAVAILABLE",
+            error:
+              `GitHub API rate limit reached for '${owner}/${repo}'. ` +
+              "No score was awarded because verification could not run. Retry in a few minutes.",
+          },
+          { status: 503, headers: { "Retry-After": "300" } }
+        );
       }
+
+      // Any other non-OK status must also fail closed rather than falling through
+      // to `repoRes.json()`, which would parse an error body as repository data.
+      return NextResponse.json(
+        {
+          verified: false,
+          overallScore: 0,
+          status: "VERIFICATION_UNAVAILABLE",
+          error: `GitHub returned HTTP ${repoRes.status} for '${owner}/${repo}'. Verification withheld.`,
+        },
+        { status: 502 }
+      );
     }
 
     const repoData = await repoRes.json();
@@ -89,17 +132,17 @@ export async function POST(req: NextRequest) {
     let repoTree: Array<{ path: string; type: string; size?: number }> = [];
 
     try {
-      const treeRes = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/git/trees/${defaultBranch}?recursive=1`,
-        {
-          headers: {
-            "User-Agent": "AI-Native-LMS-Capstone-Grader-2026",
-            Accept: "application/vnd.github.v3+json",
-          },
-        }
+      const treeRes = await fetchGitHub(
+        `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(defaultBranch)}?recursive=1`
       );
       if (treeRes.ok) {
         const treeData = await treeRes.json();
+        if (treeData.truncated) {
+          return NextResponse.json(
+            { verified: false, overallScore: 0, status: "VERIFICATION_UNAVAILABLE", error: "Repository tree is too large to verify safely." },
+            { status: 422 }
+          );
+        }
         repoTree = treeData.tree || [];
       }
     } catch {

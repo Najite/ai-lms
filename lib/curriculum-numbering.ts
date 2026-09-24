@@ -41,20 +41,20 @@ const PREFIX_MODULE_MAP: Record<number, { moduleNum: number; offset: number }> =
 export function parseLessonCoordinates(nodeId: string, originalTitle?: string): FormattedLessonNumber {
   let moduleNum = 1;
   let lessonIdx = 1;
-
   let matched = false;
-  // First check if the title has a canonical "Lesson X.Y" (where X is 1..8)
-  if (originalTitle) {
-    const titleMatch = originalTitle.match(/Lesson\s+(\d+)\.(\d+)/i);
-    if (titleMatch) {
-      moduleNum = parseInt(titleMatch[1], 10);
-      lessonIdx = parseInt(titleMatch[2], 10);
-      matched = true;
-    }
-  }
 
-  // Fallback to nodeId prefix mapping if title was not matched
-  if (!matched && nodeId) {
+  // AUTHORITY: the node id.
+  //
+  // PREFIX_MODULE_MAP was verified against all 700 live `curriculum_nodes` rows:
+  // node-0..node-12 hold 50 lessons each, node-13 holds 1-20 and node-14 holds
+  // 1-30 (both inside module 14), and every module's `order_index` runs 1-50.
+  // Deriving the number from the id is therefore exact for the whole catalog.
+  //
+  // The title regex below is only a fallback for ids outside the map. It used to
+  // run first, which let exactly one stale title corrupt its own numbering:
+  // `node-3-22` is titled "Lesson 2.22" but lives in module 5, so the app showed
+  // it under Module 2 while unlocking it against its module-5 neighbours.
+  if (nodeId) {
     const nodeMatch = nodeId.match(/node-(\d+)-(\d+)/);
     if (nodeMatch) {
       const prefix = parseInt(nodeMatch[1], 10);
@@ -63,7 +63,18 @@ export function parseLessonCoordinates(nodeId: string, originalTitle?: string): 
       if (mapping) {
         moduleNum = mapping.moduleNum;
         lessonIdx = mapping.offset + rawLesson;
+        matched = true;
       }
+    }
+  }
+
+  // FALLBACK: canonical "Lesson X.Y" title, for any id the map does not cover.
+  if (!matched && originalTitle) {
+    const titleMatch = originalTitle.match(/Lesson\s+(\d+)\.(\d+)/i);
+    if (titleMatch) {
+      moduleNum = parseInt(titleMatch[1], 10);
+      lessonIdx = parseInt(titleMatch[2], 10);
+      matched = true;
     }
   }
 

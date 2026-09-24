@@ -5,7 +5,7 @@ import { Terminal, CheckCircle2, Clock, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
 import { parseLessonCoordinates } from "@/lib/curriculum-numbering";
-import { fetchLiveCurriculum } from "@/lib/db-curriculum";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
 
 interface ActivityDay {
   date: string;
@@ -24,31 +24,12 @@ interface VerificationItem {
 interface ActivityGridProps {}
 
 export function ActivityGrid() {
-  const { completedLessons, completedCount } = useCurriculumProgress();
-  const [recentVerifications, setRecentVerifications] = React.useState<VerificationItem[]>([]);
-  const [activityHistory, setActivityHistory] = React.useState<Record<string, number>>({});
-  const [isLoading, setIsLoading] = React.useState(true);
-  const reqIdRef = React.useRef(0);
-
-  // Load real activity timestamps from localStorage
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const raw = localStorage.getItem("ai_lms_activity_log");
-        if (raw) {
-          setActivityHistory(JSON.parse(raw));
-        } else if (completedCount > 0) {
-          // If completed lessons exist without timestamps, record today's date
-          const todayStr = new Date().toISOString().split("T")[0];
-          const initial = { [todayStr]: completedCount };
-          localStorage.setItem("ai_lms_activity_log", JSON.stringify(initial));
-          setActivityHistory(initial);
-        }
-      } catch (err) {
-        console.error("Failed to load activity log", err);
-      }
-    }
-  }, [completedCount]);
+  const {
+    completedLessons,
+    completedCount,
+    activityLog: activityHistory,
+  } = useCurriculumProgress();
+  const { curriculum, isLoading } = useCurriculumCatalog();
 
   // Construct 12-week heatmap purely from real user activity history
   const weeks = React.useMemo(() => {
@@ -73,71 +54,52 @@ export function ActivityGrid() {
     return matrix;
   }, [activityHistory]);
 
-  React.useEffect(() => {
-    let isMounted = true;
-    const reqId = ++reqIdRef.current;
+  /**
+   * Derived from the shared catalog snapshot + local progress. Previously this
+   * was an `await fetchLiveCurriculum()` inside an effect with its own unmount
+   * guard and request-id counter; the data was already in memory, so the effect
+   * only ever produced a spinner and a state update.
+   */
+  const recentVerifications = React.useMemo<VerificationItem[]>(() => {
+    if (!curriculum) return [];
 
-    async function loadRecent() {
-      setIsLoading(true);
-      try {
-        const curriculum = await fetchLiveCurriculum();
-        if (!isMounted || reqId !== reqIdRef.current) return;
+    if (completedLessons.length > 0) {
+      // Titles of the most recently completed lessons from the cached nodesMap: O(1) per id.
+      const targetIds = completedLessons.slice(-5);
+      const matchedNodes = targetIds
+        .map((id) => curriculum.nodesMap.get(id))
+        .filter(Boolean) as typeof curriculum.allNodes;
 
-        if (completedLessons.length > 0) {
-          // Fetch exact titles of recently completed lessons from cached nodesMap in O(1)
-          const targetIds = completedLessons.slice(-5);
-          const matchedNodes = targetIds
-            .map((id) => curriculum.nodesMap.get(id))
-            .filter(Boolean) as typeof curriculum.allNodes;
-
-          if (matchedNodes.length > 0) {
-            const mapped: VerificationItem[] = matchedNodes.map((node, i) => {
-              const coords = parseLessonCoordinates(node.id, node.title);
-              return {
-                id: `run-${node.id}`,
-                lesson: coords.displayTitle,
-                type: "Pyodide WASM AST",
-                assertions: "All AST Invariants Passed",
-                time: i === matchedNodes.length - 1 ? "Just now" : `${(matchedNodes.length - i) * 2} hours ago`,
-                status: "PASSED",
-              };
-            });
-            setRecentVerifications(mapped.reverse());
-            return;
-          }
-        }
-
-        // When user has not completed lessons yet, use the initial 3 lessons from curriculum
-        const firstNodes = curriculum.allNodes.slice(0, 3);
-        if (firstNodes.length > 0) {
-          const mapped: VerificationItem[] = firstNodes.map((node, i) => {
-            const coords = parseLessonCoordinates(node.id, node.title);
-            return {
-              id: `starter-${node.id}`,
-              lesson: coords.displayTitle,
-              type: "Pyodide WASM AST",
-              assertions: "Awaiting Verification",
-              time: i === 0 ? "Next in Queue" : "Upcoming",
-              status: "IN_PROGRESS",
-            };
-          });
-          setRecentVerifications(mapped);
-        }
-      } catch (err) {
-        console.error("Failed to load verification telemetry", err);
-      } finally {
-        if (isMounted && reqId === reqIdRef.current) {
-          setIsLoading(false);
-        }
+      if (matchedNodes.length > 0) {
+        const mapped: VerificationItem[] = matchedNodes.map((node, i) => {
+          const coords = parseLessonCoordinates(node.id, node.title);
+          return {
+            id: `run-${node.id}`,
+            lesson: coords.displayTitle,
+            type: "Pyodide WASM AST",
+            assertions: "All AST Invariants Passed",
+            time: i === matchedNodes.length - 1 ? "Just now" : `${(matchedNodes.length - i) * 2} hours ago`,
+            status: "PASSED",
+          };
+        });
+        return mapped.reverse();
       }
     }
 
-    loadRecent();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [completedLessons]);
+    // No completions yet: show the first three lessons of the catalog as the queue.
+    const firstNodes = curriculum.allNodes.slice(0, 3);
+    return firstNodes.map((node, i) => {
+      const coords = parseLessonCoordinates(node.id, node.title);
+      return {
+        id: `starter-${node.id}`,
+        lesson: coords.displayTitle,
+        type: "Pyodide WASM AST",
+        assertions: "Awaiting Verification",
+        time: i === 0 ? "Next in Queue" : "Upcoming",
+        status: "IN_PROGRESS" as const,
+      };
+    });
+  }, [curriculum, completedLessons]);
 
   return (
     <div className="space-y-6">

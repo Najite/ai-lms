@@ -333,7 +333,7 @@ export function HeroSplit() {
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>520 Self-Paced Lessons</span>
+            <span>700 Verified Lessons</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
@@ -341,7 +341,7 @@ export function HeroSplit() {
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>18 Local Workstation Capstones</span>
+            <span>14 Modules • 700 Lessons</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
@@ -359,7 +359,7 @@ export function HeroSplit() {
             }}
             className="font-mono text-xs gap-2"
           >
-            <span>Explore 520 Lessons</span>
+            <span>Explore 700 Lessons</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
 

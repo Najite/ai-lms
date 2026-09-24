@@ -71,7 +71,7 @@ M1_PART1 = [
         "title": "Variables, Data Types & The Python Interpreter",
         "xp": 100,
         "subtopics": [
-            "1.1.1 RAM architecture and heap object allocation model in CPython",
+            "1.1.1 Python values and variables: names that help us use stored information",
             "1.1.2 Primitive types: int, float, str, and bool definitions",
             "1.1.3 Variable naming conventions (PEP 8 snake_case) and assignment mechanics",
             "1.1.4 Dynamic typing vs static typing and runtime type introspection via type()"

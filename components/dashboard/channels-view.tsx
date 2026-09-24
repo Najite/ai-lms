@@ -39,23 +39,23 @@ const PRESET_CHANNELS: Channel[] = [
     id: "staff-distributed",
     title: "Staff SWE: Distributed Systems & Consensus Mastery",
     description:
-      "A laser-focused channel curated for staff-level systems design interviews. Covers Raft state machines, ARIES WAL recovery, and partitioned replication.",
-    tag: "High-Priority Interview Prep",
+      "A laser-focused channel curated for staff-level systems design interviews. Covers Raft state machines, failure detectors, leader election, and partitioned replication.",
+    tag: "High-Priority Systems Design",
     itemsCount: 8,
     estHours: 24,
     completedItems: 3,
     curator: "AI-Native LMS Staff Faculty",
     icon: Network,
     items: [
-      { title: "Lesson 5.1: Raft Cluster Invariants & Quorum Sizing", type: "Lesson", lessonId: "node-5-1" },
-      { title: "Lesson 5.2: WAL Recovery, ARIES & Slotted Page Buffer Pools", type: "Lesson", lessonId: "node-5-2" },
-      { title: "Lesson 5.3: Log Compaction & Snapshot State Transmission", type: "Lesson", lessonId: "node-5-3" },
-      { title: "Capstone 05: Raft Consensus Key-Value Cluster with Multi-Node Fault Injection", type: "Capstone" },
+      { title: "Lesson 10.1: Distributed Systems Foundations & CAP Theorem", type: "Lesson", lessonId: "node-7-1" },
+      { title: "Lesson 10.2: Failure Detectors & Heartbeat Protocols", type: "Lesson", lessonId: "node-7-2" },
+      { title: "Lesson 10.3: Leader Election & Bully Algorithm", type: "Lesson", lessonId: "node-7-3" },
+      { title: "Module 10 Capstone: QuorumCore Distributed Raft Cluster", type: "Capstone" },
     ],
   },
   {
     id: "transformers-scratch",
-    title: "AI Systems: From First-Principles Autograd to Transformer Lab",
+    title: "AI Systems: From First-Principles Autograd to Vector Engines",
     description:
       "Zero high-level abstraction libraries. Build computational graph reverse-mode AD from scratch, self-attention, and paged KV-cache memory management.",
     tag: "Deep Learning Systems",
@@ -65,10 +65,10 @@ const PRESET_CHANNELS: Channel[] = [
     curator: "AI-Native LMS Staff Faculty",
     icon: Sparkles,
     items: [
-      { title: "Lesson 9.8: Computational Graph DAG & Reverse-Mode AD", type: "Lesson", lessonId: "node-9-8" },
-      { title: "Lesson 10.1: Scaled Dot-Product Self-Attention Invariants", type: "Lesson", lessonId: "node-10-1" },
-      { title: "Lesson 11.2: PagedAttention Dynamic Memory Block Allocation", type: "Lesson", lessonId: "node-11-2" },
-      { title: "Capstone 10: TransformerLab Autograd Training Engine", type: "Capstone" },
+      { title: "Lesson 4.8: Automatic Differentiation & Tape Recording", type: "Lesson", lessonId: "node-9-8" },
+      { title: "Lesson 11.1: Dense Vector Embeddings & Similarity Math", type: "Lesson", lessonId: "node-10-1" },
+      { title: "Lesson 13.1: Autonomous Agent Loops & Memory Primitives", type: "Lesson", lessonId: "node-12-1" },
+      { title: "Module 4 Capstone: TensorCore Micro-Autograd Engine", type: "Capstone" },
     ],
   },
   {
@@ -83,9 +83,9 @@ const PRESET_CHANNELS: Channel[] = [
     curator: "AI-Native LMS Staff Faculty",
     icon: Terminal,
     items: [
-      { title: "Lesson 0.7: JSON & Structured Data — The Universal Language of AI", type: "Lesson", lessonId: "node-0-7" },
-      { title: "Lesson 0.8: Clean Functions & Prompt Templating", type: "Lesson", lessonId: "node-0-8" },
-      { title: "Capstone 01: PromptCLI Interactive AI Developer Workbench", type: "Capstone" },
+      { title: "Lesson 1.7: Loop Control & Content Moderation Filters", type: "Lesson", lessonId: "node-0-7" },
+      { title: "Lesson 1.8: Functions, Parameters & Prompt Payloads", type: "Lesson", lessonId: "node-0-8" },
+      { title: "Module 1 Capstone: PromptCLI Developer AI Workbench", type: "Capstone" },
     ],
   },
 ];

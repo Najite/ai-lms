@@ -12,12 +12,12 @@ export interface PhaseData {
 }
 
 export const CURRICULUM_STATS = {
-  totalLessons: 600,
-  totalPhases: 15,
-  totalCapstones: 22,
-  totalSubtopics: 3000,
-  estimatedHours: 490,
-  averagePassRate: "91.8%",
+  totalLessons: 700,
+  totalPhases: 14,
+  totalCapstones: 14,
+  totalSubtopics: 3500,
+  estimatedHours: 560,
+  averagePassRate: "92.4%",
 };
 
 export const CURRICULUM_PHASES: PhaseData[] = [

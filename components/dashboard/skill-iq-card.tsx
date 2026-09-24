@@ -228,7 +228,7 @@ export function SkillIQCard({
               </span>
             </h3>
             <p className="text-xs text-[#8a8f98] max-w-2xl leading-relaxed">
-              Skill IQ replaces blind lesson counts with precision engineering assessment. Instead of doing 600 lessons blindly, test your proficiency to identify and close exact architectural gaps.
+              Skill IQ replaces blind lesson counts with precision engineering assessment. Instead of doing the full 700-lesson curriculum blindly, test your proficiency to identify and close exact architectural gaps.
             </p>
           </div>
 

@@ -30,7 +30,6 @@ import {
 } from "lucide-react";
 import { getSandboxController } from "@/lib/sandbox/sandbox-controller";
 import { ExecutionResult } from "@/lib/sandbox/types";
-import { supabase } from "@/lib/supabase";
 import { HandbookViewer } from "./handbook-viewer";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { cn } from "@/lib/utils";
@@ -42,6 +41,8 @@ import {
   setLastActiveLessonId,
 } from "@/lib/progress-tracker";
 import { parseLessonCoordinates, formatPhaseTitle } from "@/lib/curriculum-numbering";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { fetchLessonDetail, LessonUnavailableError } from "@/lib/db-curriculum";
 
 interface WorkspaceLesson {
   id: string;
@@ -54,6 +55,7 @@ interface WorkspaceLesson {
   criteria?: string;
   failureMode?: string;
   xpReward?: number;
+  isDetailLoaded?: boolean;
 }
 
 interface WorkspaceViewProps {
@@ -61,8 +63,18 @@ interface WorkspaceViewProps {
   initialLessonId?: string | null;
 }
 
+/** Referentially stable empty: `baseLessons` feeds memo deps across renders. */
+const EMPTY_WORKSPACE_LESSONS: WorkspaceLesson[] = [];
+const DEFAULT_STARTER_CODE = "# Write solution here\npass\n";
+const DEFAULT_TEST_SUITE = "# Unit tests\nassert True\n";
+
+/** Per-lesson detail patches keyed by node id (lesson content lives outside the catalog). */
+type LessonDetailPatch = Pick<
+  WorkspaceLesson,
+  "handbook" | "starterCode" | "testSuite" | "criteria" | "failureMode" | "isDetailLoaded"
+>;
+
 export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewProps) {
-  const [lessons, setLessons] = React.useState<WorkspaceLesson[]>([]);
   const [currentLessonIndex, setCurrentLessonIndex] = React.useState(0);
   const [activeMode, setActiveMode] = React.useState<"theory" | "exercise">("theory");
   const [showCheckpointPrompt, setShowCheckpointPrompt] = React.useState(false);
@@ -73,118 +85,155 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
   const [isRunning, setIsRunning] = React.useState(false);
   const [executionResult, setExecutionResult] = React.useState<ExecutionResult | null>(null);
   const [statusMessage, setStatusMessage] = React.useState<string>("Ready to execute verification.");
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isDetailLoading, setIsDetailLoading] = React.useState(false);
   const [completedTheorySet, setCompletedTheorySet] = React.useState<Set<string>>(new Set());
+
+  // STATE-02b: catalog comes from the shared SWR store, not a component-local fetch.
+  const { curriculum, isLoading } = useCurriculumCatalog();
+  const [detailById, setDetailById] = React.useState<Record<string, LessonDetailPatch>>({});
+
+  const baseLessons = React.useMemo<WorkspaceLesson[]>(() => {
+    if (!curriculum || curriculum.allNodes.length === 0) return EMPTY_WORKSPACE_LESSONS;
+    return curriculum.allNodes.map((d) => {
+      const coords = parseLessonCoordinates(d.id, d.title);
+      return {
+        id: d.id,
+        slug: d.slug,
+        phase: formatPhaseTitle(d.phase_id),
+        title: coords.displayTitle,
+        handbook: "",
+        starterCode: DEFAULT_STARTER_CODE,
+        testSuite: DEFAULT_TEST_SUITE,
+        xpReward: d.xp_reward || 150,
+        isDetailLoaded: false,
+      };
+    });
+  }, [curriculum]);
+
+  const lessons = React.useMemo(
+    () =>
+      baseLessons.map((l) => (detailById[l.id] ? { ...l, ...detailById[l.id] } : l)),
+    [baseLessons, detailById]
+  );
 
   const { completedLessons, completedExercises } = useCurriculumProgress();
   const currentLesson = lessons[currentLessonIndex] || null;
 
-  // Fetch all curriculum nodes directly from Supabase (Zero mock fallbacks)
-  React.useEffect(() => {
-    let isMounted = true;
-    async function loadLessons() {
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from("curriculum_nodes")
-          .select("id, slug, phase_id, title, handbook_markdown, starter_code, test_suite, xp_reward")
-          .order("id", { ascending: true })
-          .limit(1000);
+  /**
+   * STATE-04: monotonically increasing token. Every selection bumps it, and any
+   * async detail load that resolves after a newer selection discards its `setCode`
+   * so a slow 2G response can't overwrite the lesson the user actually clicked.
+   */
+  const selectTokenRef = React.useRef(0);
 
-        if (error) {
-          console.error("Failed to load curriculum nodes from Supabase", error);
-        }
-
-        let nodesToUse = data || [];
-
-        // Naturally sort by node index: node-0-1, node-0-2, ... node-0-10, node-1-1...
-        const parseNodeRank = (id: string) => {
-          const match = id.match(/node-(\d+)-(\d+)/);
-          if (match) {
-            return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
-          }
-          return 999999;
-        };
-        nodesToUse = [...nodesToUse].sort((a: any, b: any) => parseNodeRank(a.id) - parseNodeRank(b.id));
-
-        if (isMounted && nodesToUse && nodesToUse.length > 0) {
-          const formatted: WorkspaceLesson[] = nodesToUse.map((d: any) => {
-            let sc = "";
-            let ts = "";
-            let criteria: string | undefined = undefined;
-            let failureMode: string | undefined = undefined;
-
-            if (typeof d.starter_code === "object" && d.starter_code !== null) {
-              sc = d.starter_code["solution.py"] || JSON.stringify(d.starter_code, null, 2);
-            } else if (typeof d.starter_code === "string") {
-              sc = d.starter_code;
-            }
-
-            if (typeof d.test_suite === "object" && d.test_suite !== null) {
-              ts = d.test_suite["tests.py"] || JSON.stringify(d.test_suite, null, 2);
-              criteria = d.test_suite["verification_criteria"];
-              failureMode = d.test_suite["failure_mode"];
-            } else if (typeof d.test_suite === "string") {
-              ts = d.test_suite;
-            }
-
-            const coords = parseLessonCoordinates(d.id, d.title);
-            const finalTitle = coords.displayTitle;
-            const finalPhase = formatPhaseTitle(d.phase_id);
-            const finalHandbook = d.handbook_markdown || "Handbook content is being synthesized.";
-
-            return {
-              id: d.id,
-              slug: d.slug,
-              phase: finalPhase,
-              title: finalTitle,
-              handbook: finalHandbook,
-              starterCode: sc || "# Write solution here\npass\n",
-              testSuite: ts || "# Unit test suite\nassert True\n",
-              criteria,
-              failureMode,
-              xpReward: d.xp_reward || 150,
-            };
-          });
-
-          setLessons(formatted);
-
-          // Find target lesson index
-          let targetIndex = 0;
-          if (initialLessonId) {
-            const foundIdx = formatted.findIndex((l) => l.id === initialLessonId);
-            if (foundIdx !== -1) targetIndex = foundIdx;
-          }
-          setCurrentLessonIndex(targetIndex);
-
-          // Initialize starter code directly from database node
-          const initial = formatted[targetIndex];
-          if (initial) {
-            setCode(initial.starterCode);
-          }
-        }
-      } catch (err) {
-        console.error("Curriculum fetch error", err);
-      } finally {
-        if (isMounted) setIsLoading(false);
+  // On-demand detail loader: loads ~4KB for the active lesson instead of 3MB upfront
+  const ensureLessonDetailLoaded = React.useCallback(
+    async (lesson: WorkspaceLesson): Promise<WorkspaceLesson> => {
+      if (lesson.isDetailLoaded && lesson.handbook) {
+        return lesson;
       }
-    }
-    loadLessons();
-    return () => {
-      isMounted = false;
-    };
-  }, [initialLessonId]);
+      setIsDetailLoading(true);
+      try {
+        const detail = await fetchLessonDetail(lesson.id);
+        let sc = "";
+        let ts = "";
 
-  // Update starter code when switching lessons
-  const handleSelectLesson = (index: number) => {
+        if (typeof detail.starter_code === "object" && detail.starter_code !== null) {
+          sc = detail.starter_code["solution.py"] || JSON.stringify(detail.starter_code, null, 2);
+        } else if (typeof detail.starter_code === "string") {
+          sc = detail.starter_code;
+        }
+
+        if (typeof detail.test_suite === "object" && detail.test_suite !== null) {
+          ts = detail.test_suite["tests.py"] || JSON.stringify(detail.test_suite, null, 2);
+        } else if (typeof detail.test_suite === "string") {
+          ts = detail.test_suite;
+        }
+
+        const fullyLoaded: WorkspaceLesson = {
+          ...lesson,
+          handbook: detail.handbook_markdown || "# Lesson Overview\n\nContent available.",
+          starterCode: sc || "# Write solution here\npass\n",
+          testSuite: ts || "# Unit test suite\nassert True\n",
+          criteria: detail.criteria,
+          failureMode: detail.failure_mode,
+          isDetailLoaded: true,
+        };
+
+        setDetailById((prev) => ({
+          ...prev,
+          [lesson.id]: {
+            handbook: fullyLoaded.handbook,
+            starterCode: fullyLoaded.starterCode,
+            testSuite: fullyLoaded.testSuite,
+            criteria: fullyLoaded.criteria,
+            failureMode: fullyLoaded.failureMode,
+            isDetailLoaded: true,
+          },
+        }));
+
+        return fullyLoaded;
+      } finally {
+        setIsDetailLoading(false);
+      }
+    },
+    []
+  );
+
+  /**
+   * Select the initial lesson once the catalog has arrived (or when
+   * `initialLessonId` changes) and lazy-load its ~4KB detail.
+   */
+  const initializedForKeyRef = React.useRef<string | null | undefined>(undefined);
+  React.useEffect(() => {
+    if (baseLessons.length === 0) return;
+    const key = initialLessonId ?? "__first__";
+    if (initializedForKeyRef.current === key) return;
+    initializedForKeyRef.current = key;
+
+    let targetIndex = 0;
+    if (initialLessonId) {
+      const foundIdx = baseLessons.findIndex((l) => l.id === initialLessonId);
+      if (foundIdx !== -1) targetIndex = foundIdx;
+    }
+    setCurrentLessonIndex(targetIndex);
+
+    const target = baseLessons[targetIndex];
+    if (!target) return;
+
+    const token = ++selectTokenRef.current;
+    void ensureLessonDetailLoaded(target).then((loaded) => {
+      if (token !== selectTokenRef.current) return; // a newer selection won
+      setCode(loaded.starterCode || DEFAULT_STARTER_CODE);
+    });
+  }, [baseLessons, initialLessonId, ensureLessonDetailLoaded]);
+
+  // Update starter code and fetch detail on-demand when switching lessons
+  const handleSelectLesson = async (index: number) => {
+    const token = ++selectTokenRef.current;
     setCurrentLessonIndex(index);
     const target = lessons[index];
     if (target) {
-      setCode(target.starterCode);
       setExecutionResult(null);
       setActiveMode("theory");
       setShowCheckpointPrompt(false);
       setLastActiveLessonId(target.id);
+
+      if (!target.isDetailLoaded) {
+        let loaded: WorkspaceLesson;
+        try {
+          loaded = await ensureLessonDetailLoaded(target);
+        } catch (err) {
+          if (err instanceof LessonUnavailableError) {
+            setStatusMessage(err.message);
+          }
+          return;
+        }
+        if (token !== selectTokenRef.current) return; // STATE-04: stale response guard
+        setCode(loaded.starterCode || DEFAULT_STARTER_CODE);
+      } else {
+        setCode(target.starterCode || DEFAULT_STARTER_CODE);
+      }
     }
   };
 
@@ -215,6 +264,10 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
   // Run sandbox execution
   const handleRunCode = async () => {
     if (!currentLesson) return;
+    if (!currentLesson.isDetailLoaded || !currentLesson.testSuite.trim()) {
+      setStatusMessage("Lesson verification assets are unavailable. Reconnect and retry.");
+      return;
+    }
     setIsRunning(true);
     setStatusMessage("Initializing Pyodide sandbox in isolated Web Worker...");
 
@@ -272,7 +325,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[#5e6ad2]/15 text-[#5e6ad2] border border-[#5e6ad2]/30 font-semibold">
-                MODULE {currentLessonIndex + 1} OF {lessons.length}
+                LESSON {currentLessonIndex + 1} OF {lessons.length}
               </span>
               <span className="text-xs font-mono text-[#8a8f98]">{currentLesson.phase}</span>
               <span className="text-xs font-mono text-[#383b42]">•</span>
@@ -362,9 +415,19 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
         <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
           {/* Main Reading Canvas */}
           <div className="rounded-xl bg-[#0f1011] border border-[#23252a] p-6 lg:p-10 shadow-xl space-y-6">
-            <HandbookViewer
-              content={currentLesson.handbook}
-            />
+            {isDetailLoading ? (
+              <div className="space-y-4 py-8 animate-pulse">
+                <div className="h-7 w-2/5 bg-[#1b1c20] rounded" />
+                <div className="h-4 w-full bg-[#18191c] rounded" />
+                <div className="h-4 w-5/6 bg-[#18191c] rounded" />
+                <div className="h-32 w-full bg-[#141517] rounded" />
+                <div className="h-4 w-4/6 bg-[#18191c] rounded" />
+              </div>
+            ) : (
+              <HandbookViewer
+                content={currentLesson.handbook || "# Lesson Overview\n\nContent available."}
+              />
+            )}
 
             {/* End-of-Module Theory Checkpoint Gate */}
             <div className="mt-12 pt-8 border-t border-[#23252a] space-y-4">

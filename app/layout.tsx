@@ -2,15 +2,18 @@ import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "AI-Native LMS // The Zero-Slop Systems & Computer Science Academy",
+  title: "AI-Native LMS // Zero-Slop Systems Engineering Curriculum",
   description:
-    "An AI-Native Computer Science Learning Platform combining Codecademy's instant in-browser feedback with Educative.io's rigorous text-first depth. 500 lessons, 22 real GitHub capstones, zero artificial urgency, 100% free.",
+    "An AI-Native computer science learning platform with 14 modules, 700 verified lessons, project-based curriculum, and resilient low-bandwidth learning workflows.",
 };
 
+/**
+ * `maximumScale` is deliberately NOT set: locking it to 1 blocks pinch-zoom and
+ * fails WCAG 1.4.4 (Resize Text). Zoom must stay available on low-end phones.
+ */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export default function RootLayout({

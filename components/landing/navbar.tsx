@@ -51,7 +51,7 @@ export function Navbar({ onOpenTutor }: NavbarProps) {
             onClick={() => scrollTo("curriculum-section")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            600 Lessons
+            700 Lessons
           </button>
           <button
             onClick={() => scrollTo("sandbox-section")}

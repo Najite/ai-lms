@@ -16,6 +16,7 @@ import {
   Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CURRICULUM_META, formatLessonTotal } from "@/lib/curriculum-meta";
 
 export type DashboardTab = "overview" | "workspace" | "exercises" | "curriculum" | "capstones" | "notes";
 
@@ -96,7 +97,7 @@ export function DashboardNav({
           <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-[#08090a] border border-[#23252a] font-mono text-xs text-[#8a8f98]">
             <span className="text-[#10b981] font-semibold">{completedLessonsCount}</span>
             <span>/</span>
-            <span>600 Lessons</span>
+            <span>{formatLessonTotal(CURRICULUM_META.totalLessons)} Lessons</span>
           </div>
 
           <Button

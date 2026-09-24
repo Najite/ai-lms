@@ -16,6 +16,8 @@ import { TutorDrawer } from "@/components/tutor/tutor-drawer";
 import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/ui/status-chip";
 import { Terminal, ArrowUpRight, Github } from "lucide-react";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
+import { COMPREHENSIVE_ENTERPRISE_CAPSTONES } from "@/lib/production-capstones";
 
 export default function LandingPage() {
   const [isTutorOpen, setIsTutorOpen] = React.useState(false);
@@ -50,7 +52,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Section 5: Curriculum Browser (15 phases, 600 lessons, 3,000 subtopics) */}
+        {/* Section 5: Curriculum Browser */}
         <div id="curriculum-section">
           <CurriculumBrowser />
         </div>
@@ -97,7 +99,9 @@ export default function LandingPage() {
             </h2>
 
             <p className="text-sm text-[#8a8f98] max-w-2xl mx-auto leading-relaxed">
-              600 comprehensive lessons, 22 verifiable capstones, and an AI tutor grounded in systems architecture.
+              {CURRICULUM_META.totalLessons} comprehensive lessons,{" "}
+              {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} verifiable capstones, and an AI tutor grounded in
+              systems architecture.
               Zero artificial urgency. Zero marketing debt.
             </p>
 
@@ -140,10 +144,10 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-6 text-[#8a8f98]">
             <a href="#curriculum-section" className="hover:text-[#f7f8f8] transition-colors">
-              600 Lessons
+              {CURRICULUM_META.totalLessons} Lessons
             </a>
             <a href="#capstone-section" className="hover:text-[#f7f8f8] transition-colors">
-              22 Capstones
+              {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} Capstones
             </a>
             <a href="#benchmarks-section" className="hover:text-[#f7f8f8] transition-colors">
               Benchmark

@@ -31,9 +31,11 @@ import {
 } from "@/lib/exercises-catalog";
 import { parseLessonCoordinates, formatLabIdentifier } from "@/lib/curriculum-numbering";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
-import { supabase } from "@/lib/supabase";
 import { CodeEditor } from "@/components/ui/code-editor";
 import { ExerciseFormatter } from "./exercise-formatter";
+import { fetchLessonDetail } from "@/lib/db-curriculum";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 
 interface ExerciseViewProps {
   initialLessonId?: string | null;
@@ -47,7 +49,6 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
     markExerciseCompleted,
   } = useCurriculumProgress();
 
-  const [lessonsMap, setLessonsMap] = React.useState<Record<string, { title: string; phase: string }>>({});
   const [selectedExerciseId, setSelectedExerciseId] = React.useState<string>(
     COMPREHENSIVE_EXERCISES_CATALOG[0]?.id || "ex-0-1-1"
   );
@@ -60,69 +61,75 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [showHint, setShowHint] = React.useState(false);
 
-  // Merge static catalog with all database curriculum nodes so 100% of 500 lessons have exercises
+  // Curated exercises catalog with on-demand drill synthesis
   const [allExercises, setAllExercises] = React.useState<ExerciseItem[]>(COMPREHENSIVE_EXERCISES_CATALOG);
 
-  // Fetch all curriculum nodes to ensure every lesson has a hands-on lab
-  React.useEffect(() => {
-    async function loadAllLessonExercises() {
-      const { data } = await supabase
-        .from("curriculum_nodes")
-        .select("id, title, phase_id, starter_code, test_suite, defense_prompts")
-        .order("id", { ascending: true })
-        .limit(600);
-
-      if (data && data.length > 0) {
-        const map: Record<string, { title: string; phase: string }> = {};
-        for (const d of data) {
-          map[d.id] = { title: d.title, phase: d.phase_id };
-        }
-        setLessonsMap(map);
-
-        // Generate 6 progressive drills for all database curriculum nodes
-        const catalogByLesson = new Map<string, ExerciseItem[]>();
-        for (const ex of COMPREHENSIVE_EXERCISES_CATALOG) {
-          if (!catalogByLesson.has(ex.lessonId)) {
-            catalogByLesson.set(ex.lessonId, []);
-          }
-          catalogByLesson.get(ex.lessonId)!.push(ex);
-        }
-
-        // Naturally sort nodes by node index: node-0-1, node-0-2, ... node-0-10, node-1-1...
-        const parseNodeRank = (id: string) => {
-          const match = id.match(/node-(\d+)-(\d+)/);
-          if (match) {
-            return parseInt(match[1], 10) * 10000 + parseInt(match[2], 10);
-          }
-          return 999999;
-        };
-
-        const sortedNodes = [...data].sort((a, b) => parseNodeRank(a.id) - parseNodeRank(b.id));
-        const allCombinedExercises: ExerciseItem[] = [];
-
-        for (const node of sortedNodes) {
-          const custom = catalogByLesson.get(node.id);
-          if (custom && custom.length >= 4) {
-            // Include curated exercises and fill up to 6 drills if needed
-            allCombinedExercises.push(...custom);
-            if (custom.length < 6) {
-              const ladder = createExercisesFromNode(node);
-              for (let idx = custom.length + 1; idx <= 6; idx++) {
-                const fillDrill = ladder.find((d) => d.orderIndex === idx);
-                if (fillDrill) allCombinedExercises.push(fillDrill);
-              }
-            }
-          } else {
-            // Generate standard complete 6-drill ladder
-            allCombinedExercises.push(...createExercisesFromNode(node));
-          }
-        }
-
-        setAllExercises(allCombinedExercises);
+  // Lesson metadata derived from the shared catalog (no `await`, no spinner).
+  const { curriculum } = useCurriculumCatalog();
+  const lessonsMap = React.useMemo(() => {
+    const map: Record<string, { title: string; phase: string }> = {};
+    if (curriculum) {
+      for (const d of curriculum.allNodes) {
+        map[d.id] = { title: d.title, phase: d.phase_id };
       }
     }
-    loadAllLessonExercises();
-  }, []);
+    return map;
+  }, [curriculum]);
+
+  /**
+   * Honest coverage: lessons that actually have at least one companion lab over
+   * the real lesson total. This tile used to hardcode "100% of Lessons" while the
+   * database holds 700 lessons and only ~30 exercises.
+   */
+  const { coveragePercent, exerciseCoverageLabel } = React.useMemo(() => {
+    const lessonIdsWithLab = new Set(allExercises.map((ex) => ex.lessonId));
+    const total = curriculum?.totalLessons || CURRICULUM_META.totalLessons;
+    const pct = Math.round((lessonIdsWithLab.size / total) * 100);
+    return {
+      coveragePercent: `${pct}%`,
+      exerciseCoverageLabel: `${pct}% In-Browser WASM`,
+    };
+  }, [allExercises, curriculum]);
+
+  // PERF-01: build the membership Sets ONCE per change instead of running
+  // `Array.includes()` for every rendered row on every render.
+  const completedLessonSet = React.useMemo(() => new Set(completedLessons), [completedLessons]);
+  const completedExerciseSet = React.useMemo(() => new Set(completedExercises), [completedExercises]);
+
+  // Synthesize drills for an initialLessonId that is not in the curated catalog.
+  React.useEffect(() => {
+    let isMounted = true;
+    async function synthesizeInitial() {
+      if (!initialLessonId) return;
+      try {
+        const alreadyExists = COMPREHENSIVE_EXERCISES_CATALOG.some((ex) => ex.lessonId === initialLessonId);
+        if (alreadyExists) return;
+        const detail = await fetchLessonDetail(initialLessonId);
+        if (isMounted) {
+          const ladder = createExercisesFromNode(detail);
+          // PERF-01: id-keyed merge. `[...ladder, ...prev]` duplicated rows when
+          // StrictMode double-invoked this effect, inflating every count on screen.
+          setAllExercises((prev) => {
+            const byId = new Map<string, ExerciseItem>();
+            for (const item of prev) byId.set(item.id, item);
+            for (const item of ladder) {
+              if (!byId.has(item.id)) byId.set(item.id, item);
+            }
+            return Array.from(byId.values());
+          });
+          if (ladder.length > 0) {
+            setSelectedExerciseId(ladder[0].id);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load curriculum exercises", err);
+      }
+    }
+    synthesizeInitial();
+    return () => {
+      isMounted = false;
+    };
+  }, [initialLessonId]);
 
   // Pre-select exercise corresponding to initialLessonId if provided
   React.useEffect(() => {
@@ -151,11 +158,11 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
 
   const isUnlocked = isExerciseUnlocked(
     activeExercise,
-    completedLessons,
-    completedExercises
+    completedLessonSet,
+    completedExerciseSet
   );
 
-  const isCompleted = completedExercises.includes(activeExercise.id);
+  const isCompleted = completedExerciseSet.has(activeExercise.id);
 
   const handleRunCode = async () => {
     if (!isUnlocked) {
@@ -196,19 +203,27 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
     setStatusMessage("Code reset to initial starter template.");
   };
 
-  const filteredExercises = allExercises.filter((ex) => {
-    const matchesDiff = filterDifficulty === "ALL" || ex.difficulty === filterDifficulty;
-    const lessonInfo = lessonsMap[ex.lessonId];
-    const matchesPhase =
-      filterPhase === "ALL" || (lessonInfo && lessonInfo.phase === filterPhase);
-    const matchesSearch =
-      !searchQuery ||
-      ex.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (ex.leetcodeEquivalent && ex.leetcodeEquivalent.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      ex.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+  // PERF-01: memoized filter — the query is lowercased ONCE per keystroke rather
+  // than `toLowerCase()` re-running for every item and every needle per render.
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredExercises = React.useMemo(
+    () =>
+      allExercises.filter((ex) => {
+        const matchesDiff = filterDifficulty === "ALL" || ex.difficulty === filterDifficulty;
+        const lessonInfo = lessonsMap[ex.lessonId];
+        const matchesPhase =
+          filterPhase === "ALL" || (lessonInfo && lessonInfo.phase === filterPhase);
+        const matchesSearch =
+          !normalizedQuery ||
+          ex.title.toLowerCase().includes(normalizedQuery) ||
+          (ex.leetcodeEquivalent != null &&
+            ex.leetcodeEquivalent.toLowerCase().includes(normalizedQuery)) ||
+          ex.tags.some((t) => t.toLowerCase().includes(normalizedQuery));
 
-    return matchesDiff && matchesPhase && matchesSearch;
-  });
+        return matchesDiff && matchesPhase && matchesSearch;
+      }),
+    [allExercises, filterDifficulty, filterPhase, normalizedQuery, lessonsMap]
+  );
 
   return (
     <div className="space-y-6">
@@ -222,14 +237,25 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
             </span>
             <span className="text-[#383b42]">•</span>
             <span className="text-xs font-mono text-[#10b981]">
-              100% In-Browser WASM • Self-Paced
+              {exerciseCoverageLabel} • Self-Paced
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[#f7f8f8] tracking-tight">
             Hands-On Engineering Labs & Algorithmic Drills
           </h2>
           <p className="text-xs sm:text-sm text-[#8a8f98] max-w-3xl mt-1 leading-relaxed">
-            Every single lesson has an active hands-on lab exercise. Once you complete the theory for a lesson in the Workspace, its companion lab unlocks so you can verify your understanding at your own pace.
+            {curriculum ? (
+              <>
+                Every one of the {curriculum.totalLessons} lessons has an active hands-on lab exercise. Once you
+                complete the theory for a lesson in the Workspace, its companion lab unlocks so you can verify your
+                understanding at your own pace.
+              </>
+            ) : (
+              <>
+                Every lesson has an active hands-on lab exercise. Once you complete the theory for a lesson in the
+                Workspace, its companion lab unlocks so you can verify your understanding at your own pace.
+              </>
+            )}
           </p>
         </div>
 
@@ -247,7 +273,7 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
           </div>
           <div>
             <span className="text-[#8a8f98] block text-[10px]">COVERAGE</span>
-            <span className="text-[#10b981] font-semibold text-sm">100% of Lessons</span>
+            <span className="text-[#10b981] font-semibold text-sm">{coveragePercent} of Lessons</span>
           </div>
         </div>
       </div>
@@ -299,8 +325,11 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
                 const parentLesson = lessonsMap[lessonId];
                 const coords = parseLessonCoordinates(lessonId, parentLesson?.title);
                 const displayLessonTitle = coords.displayTitle;
-                const isLessonDone = completedLessons.includes(lessonId);
-                const lessonSolvedCount = exercises.filter((e) => completedExercises.includes(e.id)).length;
+                const isLessonDone = completedLessonSet.has(lessonId);
+                const lessonSolvedCount = exercises.reduce(
+                  (n, e) => (completedExerciseSet.has(e.id) ? n + 1 : n),
+                  0
+                );
 
                 return (
                   <div key={lessonId} className="rounded-lg bg-[#0c0d10] border border-[#1f2126] p-2.5 space-y-2">
@@ -332,8 +361,8 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
                     {/* Exercises within this lesson */}
                     <div className="space-y-1.5 pl-1">
                       {exercises.map((ex) => {
-                        const unlocked = isExerciseUnlocked(ex, completedLessons, completedExercises);
-                        const solved = completedExercises.includes(ex.id);
+                        const unlocked = isExerciseUnlocked(ex, completedLessonSet, completedExerciseSet);
+                        const solved = completedExerciseSet.has(ex.id);
                         const isSelected = ex.id === activeExercise.id;
                         const labTag = formatLabIdentifier(ex.lessonId, ex.orderIndex);
 

@@ -6,7 +6,7 @@
 
 ## 1. What This Is
 
-A strictly self-paced, AI-augmented Learning Management System engineered to train complete beginners into job-ready **AI-Native Software Engineers**. The platform delivers **600 deep, serialized lessons** (3,000 subtopics), including an accessible beginner programming ramp (Phases 0–3), an interactive in-browser WebAssembly practice sandbox for every lesson, an AI tutor grounded in curriculum materials (RAG via Supabase pgvector), and **22 enterprise capstone projects** executed on the student's local machine (VS Code, Cursor, Neovim) and pushed to GitHub for automated grading.
+A strictly self-paced, AI-augmented Learning Management System engineered to train complete beginners toward **AI-Native Software Engineering**. The live platform currently contains **700 lessons across 14 modules** and **14 module capstone definitions**, including an accessible beginner programming ramp, an interactive in-browser WebAssembly practice sandbox, an AI tutor grounded in curriculum materials, and GitHub-based project verification. Job-readiness remains a target outcome, not a claim proven by row count alone.
 
 An **AI-Native Software Engineer** writes production-grade, clean, maintainable software where AI models, structured data contracts, vector search, streaming APIs, and autonomous tool-using agents are first-class architectural primitives.
 
@@ -71,7 +71,7 @@ Every choice below is a firm decision.
 | Primary LLM | **Gemini 1.5 Flash (Free Tier)** | 15 RPM, 1,000,000 TPM, 1,500 requests/day via Google AI Studio API key at $0 cost. |
 | Embeddings | **text-embedding-004 (Google)** | 768 dimensions, state-of-the-art retrieval quality, free tier allocation. |
 | Vector Index | **pgvector HNSW (`m=16, ef_construction=64`)** | Sub-50ms approximate nearest neighbor retrieval without separate vector database. |
-| Content Generation Engine | **Batch CLI with Pydantic / Zod Schemas** | Populates 600 lessons with structured JSON output, AST validation, and zero hallucinations. |
+| Content Generation Engine | **Batch CLI with Pydantic / Zod Schemas** | Populates the 700-lesson live curriculum with structured output, validation, and explicit source-boundary checks. |
 | SAST & Linter | **Ruff + Semgrep OSS (in GitHub Actions)** | Free open-source security and syntax checkers running inside GitHub CI. |
 
 ### 3.4 Infrastructure & Hosting
@@ -133,7 +133,7 @@ Every choice below is a firm decision.
 
 ### 5.2 Curriculum Architecture & Population Engine
 
-- Strict 3-level hierarchy: `Phase (1–15) → Lesson (1–600) → Subtopic (3,000 total)`
+- Strict 3-level hierarchy: `Module (1–14) → Lesson (1–700) → Source-defined subtopics`
 - Strict serialisation: Students master prerequisite systems concepts (memory, pointers, sockets) before distributed algorithms (Raft, Paxos)
 - **AI Content Population Pipeline**:
   - Gemini 1.5 Flash generates lesson contents using strict Pydantic/Zod JSON schemas
@@ -155,7 +155,7 @@ Every choice below is a firm decision.
 ### 5.4 Capstone Projects: Local Machine & GitHub Automated Grading
 
 - **Decision: Local IDE Development + GitHub Actions CI Grading**
-- Students complete all 22 capstone projects on their **local machine** using their IDE of choice (VS Code, Cursor, Neovim, JetBrains)
+- Students complete the 14 live module capstones on their **local machine** using their IDE of choice (VS Code, Cursor, Neovim, JetBrains)
 - **Workflow**:
   1. Student clones the starter repo from GitHub
   2. Implements the project specifications locally
@@ -264,7 +264,7 @@ All grading on the platform is **objective, automated, and test-driven**. There 
 | **In-Lesson Practice (Python)** | Client-side Pyodide WASM + native `ast.parse` | Test assertion output & AST node match | $0 (Runs on student CPU/RAM) |
 | **In-Lesson Practice (SQL)** | Client-side `sql.js` (SQLite WASM) | Query result set equality | $0 (Runs on student browser) |
 | **In-Lesson Practice (C/Rust/Go)** | Tree-sitter AST parser + local terminal | Syntax & memory structural rules | $0 (Runs on student browser/workstation) |
-| **Capstone Projects (All 22)** | GitHub Actions CI (`pytest`, `cargo test`, `go test -race`) | Automated test suite execution & linter | $0 (GitHub Actions free tier) |
+| **Capstone Projects (14 live modules)** | GitHub Actions CI (`pytest`, `cargo test`, `go test -race`) | Automated test suite execution & linter | $0 (GitHub Actions free tier) |
 | **AI Tutor Feedback** | Gemini 1.5 Flash (SSE Streaming) | Explanatory feedback on test failure traces | $0 (Google AI Studio Free Tier) |
 
 All assessments are reproducible, deterministic, and self-paced. Students receive instant, actionable feedback and can iterate until 100% of test assertions pass.
@@ -317,7 +317,7 @@ All assessments are reproducible, deterministic, and self-paced. Students receiv
 
 ### 6.1 What Makes It Enterprise-Grade
  
-The 22 capstone projects require students to build real AI-native software products and platforms that mirror what senior engineering teams ship in production:
+The 14 live module capstones are intended to require students to build real AI-native software products and platforms that mirror production engineering work. Their job-readiness value is still subject to rubric and human review:
 - Resilient AI Client SDKs with Pydantic contracts and circuit breakers
 - High-throughput streaming AI reverse proxies and rate limiters (FastAPI / ASGI 3.0 / SSE)
 - Multi-tenant knowledge bases with PostgreSQL, pgvector (HNSW), and hybrid search
@@ -427,7 +427,7 @@ On passing:
 ## 7. Relational Database Schema & Data Models
 
 The production database runs on **Supabase PostgreSQL 15**. Currently, two schema models coexist:
-1. **The Graph/Node Schema (`curriculum_phases`, `curriculum_nodes`, `curriculum_edges`, `profiles`)**: Currently live and populated in Supabase with 15 phases and 600 comprehensive lessons (complete with 11KB+ handbooks, starter code, and test suites per node).
+1. **The Graph/Node Schema (`curriculum_phases`, `curriculum_nodes`, `curriculum_edges`, `profiles`)**: Currently live and populated in Supabase with 14 modules and 700 lessons. The lesson records have handbooks, starter code, and test suites, but all content is currently marked `draft` pending review.
 2. **The Relational Normalized Schema (`phases`, `lessons`, `lesson_subtopics`, `user_progress`, `capstone_submissions`, `curriculum_embeddings`)**: Defined in migration files (`supabase/migrations/20240101000000_init_schema.sql`).
 
 ```sql
@@ -706,15 +706,15 @@ This is one of the most important architectural decisions. Building the wrong th
 
 ### Phase 1 — Database & High-Density Foundation
 - [x] Supabase project initialization (PostgreSQL 15, pgvector, pg_trgm live on project `lfsyndffrfwvdfzjsagl`)
-- [x] Execute DDL schema migrations (`curriculum_phases`, `curriculum_nodes`, `curriculum_edges`, `profiles` fully loaded with 600 lessons)
+- [x] Execute DDL schema migrations (`curriculum_phases`, `curriculum_nodes`, `curriculum_edges`, `profiles` loaded with 700 lessons and serialized prerequisite edges)
 - [x] Next.js 14 App Router project setup with Linear High-Density Mechanical Minimalism (Landing page, Curriculum browser, Dashboard, IDE Workspace)
 - [ ] Supabase Auth production integration (GitHub & Google OAuth live callback wiring + PostgreSQL RLS policies)
 - [x] Supabase keepalive cron workflow (`.github/workflows/keepalive.yml`) configured to eliminate 7-day auto-pause
-- **Gate Status: PASSED.** Users can browse 15 phases, 600 lessons, and 3,000 subtopics live with full database grounding.
+- **Gate Status: DATA AVAILABLE, CONTENT REVIEW PENDING.** Users can browse 14 modules and 700 lessons live with database grounding; beginner clarity and job-readiness are not certified by row count.
 
 ### Phase 2 — Curriculum Population & In-Browser WASM Sandbox
 - [x] Offline batch generation scripts (`scripts/populate_supabase.py`, `scripts/enrich_handbooks.py`, `scripts/expand_to_600_lessons.py`) with Gemini 1.5 Flash
-- [x] 600 detailed lesson handbooks (average 8–11 KB of rigorous technical text each), starter code, and test suites stored in Supabase
+- [x] 700 lesson handbooks, starter code, and test suites stored in Supabase; content quality remains `draft` until review gates pass
 - [x] In-browser client-side Python sandbox with Web Worker (`public/workers/python-worker.js`), Pyodide WASM integration, and deterministic execution fallback
 - [x] 4-tier progressive exercise ladder per lesson (Warmup, LeetCode Canonical, Hard Boundary, Systems Engineering) in `lib/exercises-catalog.ts`
 - [ ] In-browser SQLite WASM (`sql.js`) dedicated sandbox tab for database lessons

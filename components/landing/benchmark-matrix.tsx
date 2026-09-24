@@ -13,7 +13,7 @@ export function BenchmarkMatrix() {
     },
     {
       feature: "Curriculum Scope & Depth",
-      ourLms: "600 Lessons • 3,000 Subtopics",
+      ourLms: "700 Verified Lessons • 14 Modules",
       codecademy: "Scattered Short Courses",
       educative: "Isolated Course Modules",
       bootcamp: "40 - 80 Condensed Topics",

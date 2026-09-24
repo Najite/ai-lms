@@ -19,7 +19,7 @@ export function HowItWorks() {
       title: "Grounded RAG AI Tutor",
       subtitle: "Zero Hallucination Assistance",
       description:
-        "Stuck on a tricky concept or algorithm? The AI Tutor retrieves the exact relevant subtopics from the 600-lesson corpus using pgvector HNSW search and streams precise, cited explanations via Server-Sent Events.",
+        "Stuck on a tricky concept or algorithm? The AI Tutor retrieves the exact relevant subtopics from the verified 700-lesson curriculum and streams precise, cited explanations via Server-Sent Events.",
       badge: "< 400ms Streaming TTFT",
       details: ["5,000 embedded knowledge chunks", "Direct citations to lesson paragraphs", "Unlimited queries on free tier"],
     },

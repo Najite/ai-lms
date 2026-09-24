@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurriculumProgress } from "@/lib/progress-tracker";
+import { useCurriculumCatalog } from "@/lib/curriculum-store";
+import { CURRICULUM_META } from "@/lib/curriculum-meta";
 
 interface TrackDefinition {
   id: string;
@@ -98,6 +100,9 @@ interface ProgressMatrixProps {
 
 export function ProgressMatrix({ onSelectTrack, onResumeLesson }: ProgressMatrixProps) {
   const { completedLessons } = useCurriculumProgress();
+  // Live catalog truth (700) — never restate a lesson total as a literal.
+  const { curriculum } = useCurriculumCatalog();
+  const totalLessons = curriculum?.totalLessons ?? CURRICULUM_META.totalLessons;
 
   return (
     <div className="space-y-6">
@@ -115,7 +120,10 @@ export function ProgressMatrix({ onSelectTrack, onResumeLesson }: ProgressMatrix
         </div>
 
         <div className="flex items-center gap-2">
-          <StatusChip status="brand" label="6 PATHS ACTIVE // 700 LESSONS" />
+          <StatusChip
+            status="brand"
+            label={`${TRACK_DEFS.length} PATHS ACTIVE // ${totalLessons} LESSONS`}
+          />
         </div>
       </div>
 

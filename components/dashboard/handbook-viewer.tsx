@@ -21,6 +21,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
   let codeLang = "";
   let inTable = false;
   let tableRows: string[][] = [];
+  let hasRenderedH1 = false;
 
   const flushCode = (key: string) => {
     if (codeBuffer.length > 0) {
@@ -124,18 +125,18 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       const altText = imgMatch[1];
       const imgSrc = imgMatch[2];
       elements.push(
-        <figure key={`img-${i}`} className="my-6 rounded-xl border border-[#23252a] bg-[#07080a] p-2 overflow-hidden shadow-2xl">
+        <figure key={`img-${i}`} className="my-8 overflow-hidden rounded-lg border border-[#23252a] bg-[#08090a] shadow-xl">
           <div className="relative overflow-hidden rounded-lg border border-[#1b1c20] bg-black flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imgSrc}
               alt={altText || "Diagram Illustration"}
-              className="w-full max-h-[480px] object-contain rounded"
+              className="w-full max-h-[520px] object-contain rounded"
               loading="lazy"
             />
           </div>
           {altText && (
-            <figcaption className="mt-2.5 px-2 pb-1 text-center text-xs font-mono text-[#8a8f98] flex items-center justify-center gap-1.5">
+            <figcaption className="px-4 py-3 text-center text-sm text-[#8a8f98] leading-relaxed flex items-center justify-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#5e6ad2]" />
               <span className="text-[#a0a5af] font-medium">Figure:</span> {altText}
             </figcaption>
@@ -147,9 +148,13 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
 
     // Headers
     if (rawLine.startsWith("# ")) {
+      if (hasRenderedH1) {
+        continue;
+      }
+      hasRenderedH1 = true;
       elements.push(
         <div key={`h1-${i}`} className="mt-2 mb-4 pb-2 border-b border-[#23252a]">
-          <h1 className="text-lg font-bold text-[#f7f8f8] tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#f7f8f8] tracking-tight leading-tight flex items-center gap-2">
             <span>{renderFormattedInline(rawLine.replace("# ", "").trim())}</span>
           </h1>
         </div>
@@ -161,7 +166,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       const title = rawLine.replace("## ", "").trim();
       elements.push(
         <div key={`h2-${i}`} className="mt-6 mb-3 flex items-center gap-2 border-l-2 border-[#5e6ad2] pl-3 py-0.5">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#f7f8f8] font-mono">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#f7f8f8] leading-tight">
             {renderFormattedInline(title)}
           </h2>
         </div>
@@ -173,7 +178,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       const title = rawLine.replace("### ", "").trim();
       elements.push(
         <div key={`h3-${i}`} className="mt-4 mb-2 bg-[#0e1013] border border-[#23252a] px-3 py-2 rounded-lg">
-          <h3 className="text-xs font-semibold text-[#6f7be8] font-mono flex items-center gap-2">
+          <h3 className="text-base font-semibold text-[#d9ddff] leading-tight flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-[#5e6ad2]" />
             <span>{renderFormattedInline(title)}</span>
           </h3>
@@ -185,7 +190,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
     if (rawLine.startsWith("#### ")) {
       const title = rawLine.replace("#### ", "").trim();
       elements.push(
-        <h4 key={`h4-${i}`} className="text-xs font-semibold text-[#f7f8f8] font-mono mt-3 mb-1.5 flex items-center gap-1.5">
+        <h4 key={`h4-${i}`} className="text-sm font-semibold text-[#f7f8f8] mt-4 mb-2 flex items-center gap-1.5">
           <span className="text-[#5e6ad2]">▸</span>
           <span>{renderFormattedInline(title)}</span>
         </h4>
@@ -254,7 +259,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       elements.push(
         <blockquote
           key={`bq-${i}`}
-          className="border-l-2 border-[#5e6ad2] pl-3 py-1 my-2 text-xs font-mono text-[#d0d6e0] bg-[#0c0d10] rounded-r"
+          className="border-l-2 border-[#5e6ad2] pl-4 py-2 my-4 text-sm text-[#d0d6e0] bg-[#0c0d10] rounded-r leading-relaxed"
         >
           {renderFormattedInline(quoteText)}
         </blockquote>
@@ -266,9 +271,11 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
     if (rawLine.trim().startsWith("- ") || rawLine.trim().startsWith("* ")) {
       const text = rawLine.trim().substring(2);
       elements.push(
-        <li key={`li-${i}`} className="text-xs text-[#d0d6e0] leading-relaxed my-1 list-disc ml-5 font-mono">
-          {renderFormattedInline(text)}
-        </li>
+        <ul key={`ul-${i}`} className="my-1 ml-5 list-disc">
+          <li className="text-sm text-[#d0d6e0] leading-7">
+            {renderFormattedInline(text)}
+          </li>
+        </ul>
       );
       continue;
     }
@@ -276,9 +283,11 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
     // Ordered lists
     if (rawLine.trim().match(/^\d+\.\s+/)) {
       elements.push(
-        <li key={`ol-${i}`} className="text-xs text-[#d0d6e0] leading-relaxed my-1 list-decimal ml-5 font-mono">
-          {renderFormattedInline(rawLine.trim().replace(/^\d+\.\s+/, ""))}
-        </li>
+        <ol key={`ol-${i}`} className="my-1 ml-5 list-decimal">
+          <li className="text-sm text-[#d0d6e0] leading-7">
+            {renderFormattedInline(rawLine.trim().replace(/^\d+\.\s+/, ""))}
+          </li>
+        </ol>
       );
       continue;
     }
@@ -286,7 +295,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
     // Paragraph
     if (rawLine.trim().length > 0) {
       elements.push(
-        <p key={`p-${i}`} className="text-xs text-[#c1c7d0] leading-relaxed my-2 font-sans">
+        <p key={`p-${i}`} className="text-[15px] text-[#c1c7d0] leading-7 my-4 font-sans">
           {renderFormattedInline(rawLine)}
         </p>
       );
@@ -296,7 +305,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
   if (inCodeBlock) flushCode("code-end");
   if (inTable) flushTable("table-end");
 
-  return <div className="space-y-1.5">{elements}</div>;
+  return <article className="handbook-article space-y-3">{elements}</article>;
 };
 
 // Robust recursive inline formatter for bold (**...**), inline code (`...`), and italic (*...*)

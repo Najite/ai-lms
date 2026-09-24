@@ -7,7 +7,8 @@
     "build": "NODE_OPTIONS='--dns-result-order=ipv4first' next build",
     "start": "NODE_OPTIONS='--dns-result-order=ipv4first' next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "content:validate": "python3 scripts/validate_lesson_content.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
