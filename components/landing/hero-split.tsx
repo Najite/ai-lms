@@ -269,17 +269,17 @@ export function HeroSplit() {
       <div className="lg:col-span-6 space-y-6">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] bg-[#08090a] border border-[#23252a] text-xs text-[#8a8f98] font-mono">
           <span className="w-2 h-2 rounded-full bg-[#4cb782]" />
-          <span>No video lectures. No passive watching. Just runnable code.</span>
+          <span>Learn by running code. Not by watching lectures.</span>
         </div>
 
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#f7f8f8] leading-[1.12]">
-            Mastery isn’t watched. <br />
-            <span className="text-[#5e6ad2]">It’s built in code.</span>
+            Learn systems engineering <br />
+            <span className="text-[#5e6ad2]">by building the system.</span>
           </h1>
           <p className="text-sm sm:text-base text-[#8a8f98] leading-relaxed max-w-xl">
-            Hands-on in-browser courses in AI Agents, System Design, Distributed Consensus, and Compilers.
-            Zero environment setups. Code directly in your browser, then ship 18 verifiable capstones to GitHub.
+            A practical curriculum for AI agents, distributed systems, data structures, compilers, and networked
+            software. Work in the browser, validate every concept with tests, and move from theory to shipped code.
           </p>
         </div>
 
@@ -333,19 +333,19 @@ export function HeroSplit() {
         <div className="grid grid-cols-2 gap-3 pt-1">
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>700 Verified Lessons</span>
+            <span>14 Modules</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>2.5x Faster Than Video</span>
+            <span>700 Lessons</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>14 Modules • 700 Lessons</span>
+            <span>Instant Feedback</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-[#f7f8f8] font-mono">
             <CheckCircle2 className="w-4 h-4 text-[#4cb782] shrink-0" />
-            <span>100% Free &amp; Open ($0.00)</span>
+            <span>Open &amp; Free</span>
           </div>
         </div>
 

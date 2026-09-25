@@ -137,6 +137,9 @@ class SandboxController {
     const timer = setTimeout(() => {
       // Only this request is affected. The worker is recycled because Pyodide
       // state cannot be trusted after an interrupted run.
+      // Must dispose worker BEFORE settling/draining so drain() creates a fresh worker
+      // rather than posting to an interrupted/terminating worker.
+      this.disposeWorker();
       this.settle(next.request.id, {
         id: next.request.id,
         status: "TIMEOUT",
@@ -144,7 +147,6 @@ class SandboxController {
         errorMessage: `Execution exceeded the ${next.timeoutMs}ms watchdog limit and was killed to prevent a browser freeze.`,
         executionDurationMs: next.timeoutMs,
       });
-      this.disposeWorker();
       this.failAll(
         "Sandbox was recycled after a watchdog timeout; please re-run.",
         "FAILED"
@@ -188,7 +190,17 @@ class SandboxController {
   }
 
   public terminate(): void {
+    const queued = [...this.queue];
     this.queue.length = 0;
+    for (const item of queued) {
+      item.resolve({
+        id: item.request.id,
+        status: "FAILED",
+        output: "",
+        errorMessage: "Sandbox terminated by the caller.",
+        executionDurationMs: 0,
+      });
+    }
     this.failAll("Sandbox terminated by the caller.", "FAILED");
     this.disposeWorker();
   }

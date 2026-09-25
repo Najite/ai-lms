@@ -289,6 +289,8 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
         setStatusMessage("✓ All test assertions passed successfully!");
         markExerciseCompleted(`ex-${currentLesson.id}`);
         markLessonCompleted(currentLesson.id, code);
+      } else if (res.status === "UNVERIFIED") {
+        setStatusMessage("⚠ Unverified: Python execution runtime is unavailable (offline or CDN blocked). No completion recorded.");
       } else if (res.status === "TIMEOUT") {
         setStatusMessage("Execution timed out (5,000ms watchdog exceeded).");
       } else {
@@ -327,18 +329,18 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[#5e6ad2]/15 text-[#5e6ad2] border border-[#5e6ad2]/30 font-semibold">
                 LESSON {currentLessonIndex + 1} OF {lessons.length}
               </span>
-              <span className="text-xs font-mono text-[#8a8f98]">{currentLesson.phase}</span>
+              <span className="text-xs text-[#8a8f98]">{currentLesson.phase}</span>
               <span className="text-xs font-mono text-[#383b42]">•</span>
               <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
                 {isExerciseDone ? (
                   <>
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    Exercise Mastered
+                    Practice complete
                   </>
                 ) : (
                   <>
                     <Zap className="w-3.5 h-3.5 text-[#e5993e]" />
-                    Exercise Pending
+                    Practice next
                   </>
                 )}
               </span>
@@ -349,7 +351,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
             </h2>
           </div>
 
-          {/* Dual-Phase Standalone Switcher */}
+          {/* Learner sequence: understand first, then practice. */}
           <div className="flex items-center gap-2 bg-[#0f1011] p-1 rounded-lg border border-[#23252a] shrink-0">
             <button
               onClick={() => setActiveMode("theory")}
@@ -361,7 +363,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               )}
             >
               <BookOpen className="w-3.5 h-3.5 text-[#5e6ad2]" />
-              <span>1. Theory Module</span>
+              <span>1. Learn</span>
               {isTheoryDone && <Check className="w-3 h-3 text-[#10b981]" />}
             </button>
 
@@ -375,7 +377,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               )}
             >
               <Code2 className="w-3.5 h-3.5 text-[#10b981]" />
-              <span>2. Module Exercise</span>
+              <span>2. Practice</span>
               {isExerciseDone && <Check className="w-3 h-3 text-[#10b981]" />}
             </button>
           </div>
@@ -388,7 +390,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               onClick={handlePrevLesson}
               disabled={currentLessonIndex === 0}
               className="gap-1 font-mono text-[11px]"
-              title="Previous Module"
+              title="Previous lesson"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Prev</span>
@@ -399,7 +401,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               onClick={handleNextLesson}
               disabled={currentLessonIndex + 1 >= lessons.length}
               className="gap-1 font-mono text-[11px]"
-              title="Next Module"
+              title="Next lesson"
             >
               <span>Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -429,7 +431,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
               />
             )}
 
-            {/* End-of-Module Theory Checkpoint Gate */}
+            {/* A clear next step keeps the learner moving without urgency. */}
             <div className="mt-12 pt-8 border-t border-[#23252a] space-y-4">
               <div className="rounded-lg bg-[#08090a] border border-[#5e6ad2]/30 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl relative overflow-hidden">
                 <div className="absolute inset-x-0 top-0 h-px bg-[#5e6ad2]/50" />
@@ -438,14 +440,14 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#10b981]" />
                     <span className="text-xs font-mono text-[#10b981] font-semibold uppercase">
-                      Theory Reading Checkpoint
+                      You have reached the practice step
                     </span>
                   </div>
                   <h3 className="text-base font-bold text-[#f7f8f8]">
-                    Ready to prove your understanding in code?
+                    Try the idea in a small exercise
                   </h3>
                   <p className="text-xs text-[#8a8f98] max-w-xl leading-relaxed">
-                    You have reviewed the architectural models and failure invariants. The paired exercise module will verify your implementation with real unit test assertions.
+                    Open the practice area when you are ready. You can retry as many times as you need, and the tests will show which part of the behavior needs attention.
                   </p>
                 </div>
 
@@ -456,7 +458,7 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
                     onClick={handleCompleteTheory}
                     className="gap-2 font-mono text-xs bg-[#5e6ad2] hover:bg-[#6f7cf0] text-white shadow-lg shadow-[#5e6ad2]/20 whitespace-nowrap"
                   >
-                    <span>Complete Theory &amp; Launch Exercise</span>
+                    <span>Continue to practice</span>
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>

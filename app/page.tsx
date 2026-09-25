@@ -95,14 +95,13 @@ export default function LandingPage() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#f7f8f8]">
-              Master Computer Science &amp; Distributed Systems
+              Build the systems skills that actually ship
             </h2>
 
             <p className="text-sm text-[#8a8f98] max-w-2xl mx-auto leading-relaxed">
-              {CURRICULUM_META.totalLessons} comprehensive lessons,{" "}
-              {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} verifiable capstones, and an AI tutor grounded in
-              systems architecture.
-              Zero artificial urgency. Zero marketing debt.
+              {CURRICULUM_META.totalLessons} lessons across {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} portfolio-grade
+              capstones, with guided practice in AI, data structures, networking, and distributed systems.
+              Clear learning paths. Real code. No hype.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -113,7 +112,7 @@ export default function LandingPage() {
                   className="gap-2 font-mono text-xs w-full sm:w-auto bg-[#5e6ad2] hover:bg-[#6f7cf0]"
                 >
                   <Terminal className="w-4 h-4" />
-                  <span>Launch Student Dashboard &amp; IDE</span>
+                  <span>Open Learning Dashboard</span>
                 </Button>
               </a>
               <Button
@@ -139,7 +138,7 @@ export default function LandingPage() {
             </div>
             <span className="text-[#f7f8f8] font-semibold">AI-Native LMS</span>
             <span className="text-[#383b42]">/</span>
-            <span>Zero-Slop Systems Engineering</span>
+            <span>Systems engineering, without the fluff</span>
           </div>
 
           <div className="flex items-center gap-6 text-[#8a8f98]">

@@ -45,31 +45,31 @@ export function Navbar({ onOpenTutor }: NavbarProps) {
             onClick={() => scrollTo("learning-paths")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            Skill Paths
+            Paths
           </button>
           <button
             onClick={() => scrollTo("curriculum-section")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            700 Lessons
+            Curriculum
           </button>
           <button
             onClick={() => scrollTo("sandbox-section")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            Playground
+            Practice
           </button>
           <button
             onClick={() => scrollTo("capstone-section")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            Capstone Grading
+            Capstones
           </button>
           <button
             onClick={() => scrollTo("benchmarks-section")}
             className="hover:text-[#f7f8f8] transition-colors"
           >
-            Why Us
+            Benchmarks
           </button>
         </nav>
 

@@ -154,9 +154,9 @@ export interface DatabaseNodeDetail {
 const CATALOG_CACHE_KEY = "ai_lms_curriculum_catalog_v2";
 // Bump this whenever the handbook contract changes so stale local lesson
 // content cannot hide newly populated Supabase content.
-const LESSON_DETAIL_PREFIX = "ai_lms_lesson_detail_v7_";
+const LESSON_DETAIL_PREFIX = "ai_lms_lesson_detail_v8_";
 /** Bookkeeping key holding the LRU order of cached lesson handbooks. */
-const LESSON_DETAIL_INDEX_KEY = "ai_lms_lesson_detail_index_v7";
+const LESSON_DETAIL_INDEX_KEY = "ai_lms_lesson_detail_index_v8";
 
 /**
  * Hard cap on cached lesson handbooks.

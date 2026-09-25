@@ -75,18 +75,18 @@ export function DashboardSidebar({
       ],
     },
     {
-      groupName: `CURRICULUM (${totalLessons} LESSONS)`,
+      groupName: `YOUR LEARNING (${totalLessons} LESSONS)`,
       items: [
-        { id: "curriculum", label: "Curriculum Tree", icon: BookOpen, badge: `${Math.max(1, totalLessons / 50)} Modules` },
-        { id: "paths", label: "Phase Tracks", icon: Compass, badge: "Structured" },
+        { id: "curriculum", label: "Learning map", icon: BookOpen, badge: `${Math.max(1, totalLessons / 50)} Modules` },
+        { id: "paths", label: "Learning paths", icon: Compass, badge: "Structured" },
       ],
     },
     {
-      groupName: "PRACTICE & VERIFICATION",
+      groupName: "LEARN BY DOING",
       items: [
-        { id: "workspace", label: "Modules & Labs", icon: Terminal, badge: "Dual-Phase" },
-        { id: "exercises", label: "Hands-on Labs", icon: Code2 },
-        { id: "capstones", label: "Phase Capstones", icon: FolderGit2, badge: `${CURRICULUM_META.totalCapstones} Capstones` },
+        { id: "workspace", label: "Learn & practice", icon: Terminal, badge: "Guided" },
+        { id: "exercises", label: "Practice", icon: Code2 },
+        { id: "capstones", label: "Build projects", icon: FolderGit2, badge: `${CURRICULUM_META.totalCapstones} Projects` },
       ],
     },
   ];
@@ -223,8 +223,8 @@ export function DashboardSidebar({
           <Bot className="w-4 h-4 text-[#5e6ad2] shrink-0" />
           {!isCollapsed && (
             <div className="flex-1 text-left truncate">
-              <span className="block font-semibold">Architectural Tutor</span>
-              <span className="text-[10px] text-[#8a8f98] block truncate">Grounded in {totalLessons} Lesson Specs</span>
+              <span className="block font-semibold">Ask for help</span>
+              <span className="text-[10px] text-[#8a8f98] block truncate">Uses your lesson content</span>
             </div>
           )}
         </button>

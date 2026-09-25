@@ -1,0 +1,652 @@
+[
+  {
+    "id": "node-0-1",
+    "title": "Lesson 1.1: Python Basics & Data Types",
+    "curriculum_spec_markdown": "\n# Lesson 1.1: Variables, Data Types & The Python Interpreter\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Subtopics**:\n  - `1.1.1` Python values and variables: names that help us use stored information\n  - `1.1.2` Primitive types: int, float, str, and bool definitions\n  - `1.1.3` Variable naming conventions (PEP 8 snake_case) and assignment mechanics\n  - `1.1.4` Dynamic typing and runtime type inspection via type()`\n\n- **Key Failure Modes & Edge Cases**: Mixing text and numbers without an explicit conversion, causing `TypeError`.\n- **Verification & Mastery Check**: Implement `parse_model_spec(name, tokens, cost)` returning a dictionary with the expected value types.\n\n",
+    "starter_code": {
+      "solution.py": "def parse_model_spec(name, tokens, cost):\n    \"\"\"\n    Returns {'name': str, 'tokens': int, 'cost': float} with proper type casting.\n    \"\"\"\n    # TODO: Implement type casting and dictionary formation\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_model_spec\n\ndef test_parse():\n    res = parse_model_spec('claude-3-5-sonnet', '8192', '0.003')\n    assert res == {'name': 'claude-3-5-sonnet', 'tokens': 8192, 'cost': 0.003}\n    assert isinstance(res['tokens'], int)\n    assert isinstance(res['cost'], float)\n    print('✓ All assertions passed for Lesson 1.1')\n\nif __name__ == '__main__':\n    test_parse()\n",
+      "failure_mode": "Implicit type coercion causing TypeError.",
+      "verification_criteria": "Implement parse_model_spec with proper type casting."
+    }
+  },
+  {
+    "id": "node-0-2",
+    "title": "Lesson 1.2: Operators & Token Bill Math",
+    "curriculum_spec_markdown": "\n# Lesson 1.2: Expressions, Operators & Precedence Hierarchy\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.2.1 Arithmetic operators: +, -, *, /, //, %, **`\n  - `1.2.2 Comparison and relational operators: ==, !=, <, >, <=, >=`\n  - `1.2.3 Boolean operators: and, or, not and short-circuit evaluation semantics`\n  - `1.2.4 Explicit grouping with parentheses to eliminate precedence ambiguity`\n\n- **Key Failure Modes & Edge Cases**: Confusing assignment (=) with equality comparison (==), or wrong operator precedence in financial calculations.\n- **Verification & Mastery Check**: Implement compute_token_bill(input_tokens, output_tokens, rate_per_k, discount_tier) correctly.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def compute_token_bill(input_tokens: int, output_tokens: int, rate_per_k: float, discount_tier: float) -> float:\n    \"\"\"\n    Returns: round(((input+output)/1000) * rate_per_k * (1.0 - discount_tier), 4)\n    \"\"\"\n    # TODO: Implement calculation\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import compute_token_bill\n\ndef test_bill():\n    cost = compute_token_bill(1000, 2000, 0.015, 0.10)\n    assert round(cost, 4) == 0.0405\n    print('✓ All assertions passed for Lesson 1.2')\n\nif __name__ == '__main__':\n    test_bill()\n",
+      "failure_mode": "Wrong operator precedence in calculation.",
+      "verification_criteria": "Compute token bill correctly with all operators."
+    }
+  },
+  {
+    "id": "node-0-3",
+    "title": "Lesson 1.3: String Slicing & Prompt Cleaning",
+    "curriculum_spec_markdown": "\n# Lesson 1.3: String Indexing, Slicing & Immutability\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.3.1 Zero-based indexing and negative index wrapping`\n  - `1.3.2 Slice notation: [start:stop:step] mechanics and default bounds`\n  - `1.3.3 String immutability in CPython and memory safety implications`\n  - `1.3.4 Common string introspection: len(), in membership tests, and slicing boundaries`\n\n- **Key Failure Modes & Edge Cases**: Attempting in-place character assignment on strings, or off-by-one errors in stop index of slices.\n- **Verification & Mastery Check**: Implement extract_prompt_prefix(raw_text, max_len) returning first max_len chars with '...' if truncated.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def extract_prompt_prefix(raw_text: str, max_len: int) -> str:\n    \"\"\"\n    Returns the first max_len characters. Appends '...' if truncated.\n    \"\"\"\n    # TODO: Implement slice-based truncation\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import extract_prompt_prefix\n\ndef test_slice():\n    assert extract_prompt_prefix('Hello World', 5) == 'Hello...'\n    assert extract_prompt_prefix('Hi', 5) == 'Hi'\n    print('✓ All assertions passed for Lesson 1.3')\n\nif __name__ == '__main__':\n    test_slice()\n",
+      "failure_mode": "Off-by-one in stop index.",
+      "verification_criteria": "Truncate and slice strings correctly."
+    }
+  },
+  {
+    "id": "node-0-4",
+    "title": "Lesson 1.4: Conditionals & Model Routing",
+    "curriculum_spec_markdown": "\n# Lesson 1.4: Conditional Branching & Guard Clauses\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.4.1 if, elif, else syntax and 4-space indentation discipline`\n  - `1.4.2 Truth value testing: truthy vs falsy values in Python`\n  - `1.4.3 Guard clause pattern and reducing cognitive complexity`\n  - `1.4.4 Ternary conditional expressions`\n\n- **Key Failure Modes & Edge Cases**: Deeply nested conditionals or mishandling truthiness (treating 0 as non-existent).\n- **Verification & Mastery Check**: Implement classify_model_tier(token_count, is_vip) with guard clauses.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def classify_model_tier(token_count: int, is_vip: bool) -> str:\n    \"\"\"\n    Rules: <= 0 -> 'error', is_vip -> 'opus', > 4000 -> 'sonnet', else -> 'haiku'\n    \"\"\"\n    # TODO: Implement with guard clauses\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import classify_model_tier\n\ndef test_tier():\n    assert classify_model_tier(-5, False) == 'error'\n    assert classify_model_tier(100, True) == 'opus'\n    assert classify_model_tier(5000, False) == 'sonnet'\n    assert classify_model_tier(500, False) == 'haiku'\n    print('✓ All assertions passed for Lesson 1.4')\n\nif __name__ == '__main__':\n    test_tier()\n",
+      "failure_mode": "Nested pyramid instead of guard clauses.",
+      "verification_criteria": "Route models using guard clauses."
+    }
+  },
+  {
+    "id": "node-0-5",
+    "title": "Lesson 1.5: While Loops & API Retry States",
+    "curriculum_spec_markdown": "\n# Lesson 1.5: While Loops & State-Driven Iteration\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.5.1 While loop syntax and boolean termination predicates`\n  - `1.5.2 Loop state mutation and avoiding infinite execution`\n  - `1.5.3 Sentinel values and polling loops`\n  - `1.5.4 Simulating network retries and exponential sleep intervals`\n\n- **Key Failure Modes & Edge Cases**: Forgetting to advance loop state, creating an infinite loop pegging CPU at 100%.\n- **Verification & Mastery Check**: Implement simulate_retry(max_tries, target_success_attempt) returning total attempts.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def simulate_retry(max_tries: int, target_success_attempt: int) -> int:\n    \"\"\"\n    Retries until attempt == target_success_attempt or max_tries exhausted.\n    Returns total number of attempts.\n    \"\"\"\n    # TODO: Implement state-driven while loop\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import simulate_retry\n\ndef test_retry():\n    assert simulate_retry(5, 3) == 3\n    assert simulate_retry(3, 10) == 3\n    print('✓ All assertions passed for Lesson 1.5')\n\nif __name__ == '__main__':\n    test_retry()\n",
+      "failure_mode": "Infinite loop from missing state update.",
+      "verification_criteria": "Correctly count retry attempts."
+    }
+  },
+  {
+    "id": "node-0-6",
+    "title": "Lesson 1.6: For Loops & Prompt Batching",
+    "curriculum_spec_markdown": "\n# Lesson 1.6: For Loops, Iterables & The range() Generator\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.6.1 The Python iteration protocol and iterable traversal`\n  - `1.6.2 The range() built-in: lazy evaluation and step increments`\n  - `1.6.3 Simultaneous index and element tracking with enumerate()`\n  - `1.6.4 Parallel iteration across multiple sequences with zip()`\n\n- **Key Failure Modes & Edge Cases**: Assuming range(1, 5) includes 5 (it stops before 5), causing off-by-one errors.\n- **Verification & Mastery Check**: Implement batch_prompts(prompt_list, batch_size) returning a list of prompt batches.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def batch_prompts(prompts: list, batch_size: int) -> list:\n    \"\"\"\n    Chunks list into sub-lists of length batch_size using range().\n    \"\"\"\n    # TODO: Implement chunking\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import batch_prompts\n\ndef test_batch():\n    data = ['p1', 'p2', 'p3', 'p4', 'p5']\n    batches = batch_prompts(data, 2)\n    assert batches == [['p1', 'p2'], ['p3', 'p4'], ['p5']]\n    print('✓ All assertions passed for Lesson 1.6')\n\nif __name__ == '__main__':\n    test_batch()\n",
+      "failure_mode": "Off-by-one error in range stop index.",
+      "verification_criteria": "Correctly chunk prompts into batches."
+    }
+  },
+  {
+    "id": "node-0-7",
+    "title": "Lesson 1.7: Loop Control & Content Filters",
+    "curriculum_spec_markdown": "\n# Lesson 1.7: Loop Control: break, continue & The else Clause\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.7.1 Immediate loop exit using break`\n  - `1.7.2 Cycle skipping with continue`\n  - `1.7.3 The for-else and while-else search completion construct`\n  - `1.7.4 Eliminating boolean search flag anti-patterns`\n\n- **Key Failure Modes & Edge Cases**: Misinterpreting loop else as running after every iteration rather than only when no break occurred.\n- **Verification & Mastery Check**: Implement validate_stream_cleanliness(tokens, forbidden_word) using for-else.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def validate_stream_cleanliness(tokens: list, forbidden_word: str) -> bool:\n    \"\"\"\n    Returns True if forbidden_word not found (loop completes), False if found (break).\n    \"\"\"\n    # TODO: Use for-else pattern\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import validate_stream_cleanliness\n\ndef test_clean():\n    assert validate_stream_cleanliness(['user', 'query', 'clear'], 'inject') is True\n    assert validate_stream_cleanliness(['user', 'inject', 'query'], 'inject') is False\n    print('✓ All assertions passed for Lesson 1.7')\n\nif __name__ == '__main__':\n    test_clean()\n",
+      "failure_mode": "Using boolean flag instead of for-else idiom.",
+      "verification_criteria": "Correctly validate stream using for-else."
+    }
+  },
+  {
+    "id": "node-0-8",
+    "title": "Lesson 1.8: Functions & Prompt Payloads",
+    "curriculum_spec_markdown": "\n# Lesson 1.8: Functions: Signatures, Parameters & Return Values\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.8.1 Defining functions with def and specifying return contracts`\n  - `1.8.2 Positional arguments, keyword arguments, and default parameters`\n  - `1.8.3 The mutable default argument trap and the None sentinel pattern`\n  - `1.8.4 Pure functions, deterministic output, and side-effect minimization`\n\n- **Key Failure Modes & Edge Cases**: Using mutable default arguments (def fn(cache=[]):) which persist across calls causing state corruption.\n- **Verification & Mastery Check**: Implement build_prompt_payload(query, system_prompt, temp) returning structured request dict.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def build_prompt_payload(query: str, system_prompt: str = 'You are an AI', temp: float = 0.7) -> dict:\n    \"\"\"\n    Returns {'system': system_prompt, 'query': query, 'temperature': temp}.\n    \"\"\"\n    # TODO: Implement parameter binding\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import build_prompt_payload\n\ndef test_payload():\n    p = build_prompt_payload('Summarize text')\n    assert p == {'system': 'You are an AI', 'query': 'Summarize text', 'temperature': 0.7}\n    print('✓ All assertions passed for Lesson 1.8')\n\nif __name__ == '__main__':\n    test_payload()\n",
+      "failure_mode": "Mutable default argument corruption.",
+      "verification_criteria": "Build correct payload dict."
+    }
+  },
+  {
+    "id": "node-0-9",
+    "title": "Lesson 1.9: Scope & Token Pricing Closures",
+    "curriculum_spec_markdown": "\n# Lesson 1.9: Variable Scope, Namespaces & The LEGB Rule\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.9.1 The LEGB lookup resolution order: Local, Enclosing, Global, Built-in`\n  - `1.9.2 Global variable hazards and why pure functions avoid global state mutation`\n  - `1.9.3 Resolving UnboundLocalError when referencing variables before assignment`\n  - `1.9.4 Built-in namespace protection and shadow prevention`\n\n- **Key Failure Modes & Edge Cases**: Accidentally shadowing Python built-ins (list, dict, str, type) disabling them globally.\n- **Verification & Mastery Check**: Implement make_cost_tracker(rate_per_token) returning a closure that accumulates costs.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def make_cost_tracker(rate_per_token: float):\n    total_bill = 0.0\n    def track(tokens: int) -> float:\n        nonlocal total_bill\n        total_bill += tokens * rate_per_token\n        return round(total_bill, 4)\n    return track\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import make_cost_tracker\n\ndef test_tracker():\n    t = make_cost_tracker(0.01)\n    assert t(100) == 1.0\n    assert t(200) == 3.0\n    print('✓ All assertions passed for Lesson 1.9')\n\nif __name__ == '__main__':\n    test_tracker()\n",
+      "failure_mode": "Using global variable instead of closure.",
+      "verification_criteria": "Correctly accumulate costs in closure."
+    }
+  },
+  {
+    "id": "node-0-10",
+    "title": "Lesson 1.10: Debugging Discipline & Assertions",
+    "curriculum_spec_markdown": "\n# Lesson 1.10: Debugging Discipline: Print Debugging, Assertions & pdb\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.10.1 Structured logging and state inspection techniques with f-strings`\n  - `1.10.2 Invariant verification with defensive assert statements`\n  - `1.10.3 The built-in breakpoint() hook and pdb navigation commands`\n  - `1.10.4 Reading and interpreting Python tracebacks from top to bottom`\n\n- **Key Failure Modes & Edge Cases**: Leaving print() statements in production code or missing assert guards on critical inputs.\n- **Verification & Mastery Check**: Implement safe_divide_tokens(total_tokens, chunks) with assert guard against chunks <= 0.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def safe_divide_tokens(total_tokens: int, chunks: int) -> int:\n    \"\"\"\n    Asserts chunks > 0 with message 'chunks must be positive', then returns total_tokens // chunks.\n    \"\"\"\n    # TODO: Implement assertion guard\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import safe_divide_tokens\n\ndef test_debug():\n    assert safe_divide_tokens(1000, 4) == 250\n    try:\n        safe_divide_tokens(1000, 0)\n        assert False\n    except AssertionError as e:\n        assert 'chunks must be positive' in str(e)\n    print('✓ All assertions passed for Lesson 1.10')\n\nif __name__ == '__main__':\n    test_debug()\n",
+      "failure_mode": "Missing assert leaves ZeroDivisionError unguarded.",
+      "verification_criteria": "Guard against invalid inputs with assertions."
+    }
+  },
+  {
+    "id": "node-0-11",
+    "title": "Lesson 1.11: Advanced Args & API Callers",
+    "curriculum_spec_markdown": "\n# Lesson 1.11: Advanced Functions: *args, **kwargs & Higher-Order Functions\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.11.1 Variadic positional arguments with *args`\n  - `1.11.2 Keyword variadic arguments with **kwargs`\n  - `1.11.3 Higher-order functions: passing and returning functions`\n  - `1.11.4 functools.partial for pre-filling arguments`\n\n- **Key Failure Modes & Edge Cases**: Mixing *args and **kwargs in wrong order in function signature.\n- **Verification & Mastery Check**: Implement make_api_caller(base_url, **default_headers) returning a callable that merges headers.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def make_api_caller(base_url: str, **default_headers):\n    def call(endpoint: str, **extra_headers) -> dict:\n        merged = {**default_headers, **extra_headers}\n        return {'url': f'{base_url}{endpoint}', 'headers': merged}\n    return call\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import make_api_caller\n\ndef test_caller():\n    caller = make_api_caller('https://api.example.com', Authorization='Bearer TOKEN')\n    result = caller('/v1/chat', X_Version='2024-01')\n    assert result['url'] == 'https://api.example.com/v1/chat'\n    assert result['headers']['Authorization'] == 'Bearer TOKEN'\n    assert result['headers']['X_Version'] == '2024-01'\n    print('✓ All assertions passed for Lesson 1.11')\n\nif __name__ == '__main__':\n    test_caller()\n",
+      "failure_mode": "Wrong argument ordering in signature.",
+      "verification_criteria": "Merge headers correctly using **kwargs."
+    }
+  },
+  {
+    "id": "node-0-12",
+    "title": "Lesson 1.12: Lambdas & Model Ranking",
+    "curriculum_spec_markdown": "\n# Lesson 1.12: Lambda Functions & Functional Programming Primitives\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.12.1 Lambda expressions: anonymous single-expression function literals`\n  - `1.12.2 map(): applying a transformation function across an iterable`\n  - `1.12.3 filter(): selecting items where predicate returns True`\n  - `1.12.4 sorted() with key= parameter for custom ordering`\n\n- **Key Failure Modes & Edge Cases**: Writing complex multi-step logic in lambdas; lambdas must be single-expression.\n- **Verification & Mastery Check**: Implement rank_models(model_list) sorting by cost_per_1k ascending then context_window descending.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def rank_models(models: list[dict]) -> list[dict]:\n    \"\"\"\n    Sorts by cost_per_1k ascending, then context_window descending.\n    \"\"\"\n    return sorted(models, key=lambda m: (m['cost_per_1k'], -m['context_window']))\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import rank_models\n\ndef test_rank():\n    models = [{'name': 'A', 'cost_per_1k': 0.02, 'context_window': 8000}, {'name': 'B', 'cost_per_1k': 0.01, 'context_window': 16000}, {'name': 'C', 'cost_per_1k': 0.01, 'context_window': 32000}]\n    ranked = rank_models(models)\n    assert ranked[0]['name'] == 'C'\n    assert ranked[1]['name'] == 'B'\n    assert ranked[2]['name'] == 'A'\n    print('✓ All assertions passed for Lesson 1.12')\n\nif __name__ == '__main__':\n    test_rank()\n",
+      "failure_mode": "Using multi-line logic in lambda.",
+      "verification_criteria": "Sort models by composite key correctly."
+    }
+  },
+  {
+    "id": "node-0-13",
+    "title": "Lesson 1.13: Exception Handling & Safe JSON",
+    "curriculum_spec_markdown": "\n# Lesson 1.13: Exception Handling: try, except, else & finally\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.13.1 Python exception hierarchy: BaseException and common subclasses`\n  - `1.13.2 Catching specific exception types to prevent masking failures`\n  - `1.13.3 The else clause: runs only when no exception was raised`\n  - `1.13.4 The finally clause: guaranteed cleanup regardless of success or failure`\n\n- **Key Failure Modes & Edge Cases**: Using bare except: which catches SystemExit and KeyboardInterrupt, making Ctrl+C impossible.\n- **Verification & Mastery Check**: Implement safe_json_parse(raw_text) returning parsed dict or None on json.JSONDecodeError.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import json\n\ndef safe_json_parse(raw_text: str) -> dict | None:\n    try:\n        return json.loads(raw_text)\n    except (json.JSONDecodeError, ValueError):\n        return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import safe_json_parse\n\ndef test_parse():\n    assert safe_json_parse('{\"model\": \"gpt-4o\"}') == {'model': 'gpt-4o'}\n    assert safe_json_parse('not json at all') is None\n    assert safe_json_parse('') is None\n    print('✓ All assertions passed for Lesson 1.13')\n\nif __name__ == '__main__':\n    test_parse()\n",
+      "failure_mode": "Bare except masking SystemExit.",
+      "verification_criteria": "Parse JSON safely without crashes."
+    }
+  },
+  {
+    "id": "node-0-14",
+    "title": "Lesson 1.14: Custom Exceptions & Token Budgets",
+    "curriculum_spec_markdown": "\n# Lesson 1.14: Custom Exceptions & Defensive Error Design\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.14.1 Defining custom exception classes by subclassing Exception`\n  - `1.14.2 Adding structured metadata to exceptions with __init__`\n  - `1.14.3 Re-raising exceptions with raise from for traceback preservation`\n  - `1.14.4 Building error hierarchies: ModelError -> RateLimitError, ContextWindowError`\n\n- **Key Failure Modes & Edge Cases**: Swallowing exceptions without re-raising or logging, making production bugs completely invisible.\n- **Verification & Mastery Check**: Define TokenBudgetExceededError(budget, actual) and enforce_budget(tokens, budget).\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "class TokenBudgetExceededError(Exception):\n    def __init__(self, budget: int, actual: int):\n        self.budget = budget\n        self.actual = actual\n        super().__init__(f'Token budget exceeded: {actual} > {budget}')\n\ndef enforce_budget(tokens: int, budget: int) -> None:\n    if tokens > budget:\n        raise TokenBudgetExceededError(budget=budget, actual=tokens)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import TokenBudgetExceededError, enforce_budget\n\ndef test_budget():\n    enforce_budget(100, 200)\n    try:\n        enforce_budget(500, 200)\n        assert False\n    except TokenBudgetExceededError as e:\n        assert e.budget == 200\n        assert e.actual == 500\n    print('✓ All assertions passed for Lesson 1.14')\n\nif __name__ == '__main__':\n    test_budget()\n",
+      "failure_mode": "Using generic Exception instead of custom class.",
+      "verification_criteria": "Raise structured exception with metadata."
+    }
+  },
+  {
+    "id": "node-0-15",
+    "title": "Lesson 1.15: Standard Library & Pathlib Logs",
+    "curriculum_spec_markdown": "\n# Lesson 1.15: Python Standard Library: os, sys, pathlib & datetime\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.15.1 The os module: process environment and path manipulation`\n  - `1.15.2 The sys module: argv and graceful exit control`\n  - `1.15.3 pathlib.Path: object-oriented cross-platform filesystem navigation`\n  - `1.15.4 datetime and timezone-aware timestamps for log entries`\n\n- **Key Failure Modes & Edge Cases**: Using string concatenation for file paths which breaks on Windows; use pathlib.Path instead.\n- **Verification & Mastery Check**: Implement build_log_path(base_dir, model_name) using pathlib returning a timestamped .jsonl path.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from pathlib import Path\nfrom datetime import datetime\n\ndef build_log_path(base_dir: str, model_name: str) -> Path:\n    today = datetime.now().strftime('%Y%m%d')\n    return Path(base_dir) / 'logs' / f'{model_name}_{today}.jsonl'\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import build_log_path\nfrom pathlib import Path\nfrom datetime import datetime\n\ndef test_log_path():\n    today = datetime.now().strftime('%Y%m%d')\n    p = build_log_path('/var/logs', 'gpt-4o')\n    assert isinstance(p, Path)\n    assert p.name == f'gpt-4o_{today}.jsonl'\n    assert 'logs' in str(p)\n    print('✓ All assertions passed for Lesson 1.15')\n\nif __name__ == '__main__':\n    test_log_path()\n",
+      "failure_mode": "String path concatenation fails on Windows.",
+      "verification_criteria": "Build cross-platform path using pathlib."
+    }
+  },
+  {
+    "id": "node-0-16",
+    "title": "Lesson 1.16: Generators & Lazy Token Streams",
+    "curriculum_spec_markdown": "\n# Lesson 1.16: Generators, Iterators & Lazy Evaluation\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.16.1 The Iterator Protocol: __iter__, __next__, and StopIteration`\n  - `1.16.2 Generator functions with yield: suspending and resuming execution`\n  - `1.16.3 Generator expressions: memory-efficient transforms without list materialization`\n  - `1.16.4 Use cases: streaming AI token responses and large log file processing`\n\n- **Key Failure Modes & Edge Cases**: Materializing a generator into a list before needed, losing all memory efficiency.\n- **Verification & Mastery Check**: Implement token_stream_generator(text, chunk_size) yielding text chunks.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def token_stream_generator(text: str, chunk_size: int):\n    for i in range(0, len(text), chunk_size):\n        yield text[i:i + chunk_size]\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import token_stream_generator\n\ndef test_generator():\n    chunks = list(token_stream_generator('Hello World', 3))\n    assert chunks == ['Hel', 'lo ', 'Wor', 'ld']\n    assert ''.join(token_stream_generator('ABCDE', 2)) == 'ABCDE'\n    print('✓ All assertions passed for Lesson 1.16')\n\nif __name__ == '__main__':\n    test_generator()\n",
+      "failure_mode": "Collecting all chunks into memory before yielding.",
+      "verification_criteria": "Yield correct text chunks lazily."
+    }
+  },
+  {
+    "id": "node-0-17",
+    "title": "Lesson 1.17: Decorators & API Retries",
+    "curriculum_spec_markdown": "\n# Lesson 1.17: Decorators: Function Wrappers & @functools.wraps\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.17.1 Functions as first-class objects in Python`\n  - `1.17.2 The decorator pattern: adding cross-cutting behavior without modifying the original function`\n  - `1.17.3 functools.wraps: preserving __name__, __doc__, and __annotations__`\n  - `1.17.4 Use cases: timing, retry logic, authentication, and structured logging`\n\n- **Key Failure Modes & Edge Cases**: Forgetting @functools.wraps causing all wrapped functions to appear as 'wrapper' in stack traces.\n- **Verification & Mastery Check**: Implement @retry_on_exception(max_attempts) decorator retrying the function on any Exception.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import functools\n\ndef retry_on_exception(max_attempts: int):\n    def decorator(fn):\n        @functools.wraps(fn)\n        def wrapper(*args, **kwargs):\n            last_exc = None\n            for _ in range(max_attempts):\n                try:\n                    return fn(*args, **kwargs)\n                except Exception as e:\n                    last_exc = e\n            raise last_exc\n        return wrapper\n    return decorator\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import retry_on_exception\n\ndef test_retry_decorator():\n    call_count = [0]\n    @retry_on_exception(3)\n    def flaky():\n        call_count[0] += 1\n        if call_count[0] < 3:\n            raise ValueError('not ready')\n        return 'done'\n    assert flaky() == 'done'\n    assert call_count[0] == 3\n    print('✓ All assertions passed for Lesson 1.17')\n\nif __name__ == '__main__':\n    test_retry_decorator()\n",
+      "failure_mode": "Missing @functools.wraps corrupts function metadata.",
+      "verification_criteria": "Decorator retries correctly on exception."
+    }
+  },
+  {
+    "id": "node-0-18",
+    "title": "Lesson 1.18: Context Managers & Latency Timers",
+    "curriculum_spec_markdown": "\n# Lesson 1.18: Context Managers: with Statements & Resource Lifecycle\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.18.1 The context manager protocol: __enter__ and __exit__ contracts`\n  - `1.18.2 Guaranteed resource cleanup via the with statement`\n  - `1.18.3 contextlib.contextmanager for generator-based context managers`\n  - `1.18.4 Use cases: file handles, HTTP clients, database connections, timers`\n\n- **Key Failure Modes & Edge Cases**: Not using with for file operations, leaving open file descriptors and causing OS resource exhaustion.\n- **Verification & Mastery Check**: Implement TimerContext class using __enter__/__exit__ that records elapsed_ms.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import time\n\nclass TimerContext:\n    def __init__(self):\n        self.elapsed_ms = 0.0\n        self._start = None\n\n    def __enter__(self):\n        self._start = time.perf_counter()\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.elapsed_ms = (time.perf_counter() - self._start) * 1000\n        return False\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import TimerContext\nimport time\n\ndef test_timer():\n    with TimerContext() as t:\n        time.sleep(0.01)\n    assert t.elapsed_ms >= 10.0, f'Expected >= 10ms, got {t.elapsed_ms}'\n    print('✓ All assertions passed for Lesson 1.18')\n\nif __name__ == '__main__':\n    test_timer()\n",
+      "failure_mode": "Unclosed resources on exception.",
+      "verification_criteria": "Correctly measure elapsed time."
+    }
+  },
+  {
+    "id": "node-0-19",
+    "title": "Lesson 1.19: Lists & Conversation History Copying",
+    "curriculum_spec_markdown": "\n# Lesson 1.19: Lists In Depth: Mutation, Copying & O(n) Complexity\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.19.1 List as a dynamic array: amortized O(1) append, O(n) insert/remove`\n  - `1.19.2 Shallow copy vs deep copy: copy.copy() vs copy.deepcopy()`\n  - `1.19.3 In-place mutation: sort() vs sorted(), reverse() vs reversed()`\n  - `1.19.4 List concatenation cost: += is O(k) but + creates new O(n+k) list`\n\n- **Key Failure Modes & Edge Cases**: Using list.copy() or slice [:] on nested structures and assuming inner objects are independent.\n- **Verification & Mastery Check**: Implement deep_copy_conversation(history) returning an independent deep copy.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import copy\n\ndef deep_copy_conversation(history: list[dict]) -> list[dict]:\n    return copy.deepcopy(history)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import deep_copy_conversation\n\ndef test_deep_copy():\n    original = [{'role': 'user', 'content': 'Hello'}]\n    copied = deep_copy_conversation(original)\n    copied[0]['content'] = 'Modified'\n    assert original[0]['content'] == 'Hello'\n    print('✓ All assertions passed for Lesson 1.19')\n\nif __name__ == '__main__':\n    test_deep_copy()\n",
+      "failure_mode": "Shallow copy shares references to inner dicts.",
+      "verification_criteria": "Deep copy preserves original independence."
+    }
+  },
+  {
+    "id": "node-0-20",
+    "title": "Lesson 1.20: Comprehensions & Message Normalization",
+    "curriculum_spec_markdown": "\n# Lesson 1.20: List & Dict Comprehensions: Idiomatic Data Transforms\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.20.1 List comprehension: [expr for item in iterable if condition]`\n  - `1.20.2 Dict comprehension: {key: val for item in iterable}`\n  - `1.20.3 Set comprehensions for unique element extraction`\n  - `1.20.4 Nested comprehensions and readability tradeoffs`\n\n- **Key Failure Modes & Edge Cases**: Three-level nested comprehensions sacrificing readability for brevity.\n- **Verification & Mastery Check**: Implement normalize_messages(messages) using a list comprehension to strip and lowercase content.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def normalize_messages(messages: list[dict]) -> list[dict]:\n    return [{**msg, 'content': msg['content'].strip().lower()} for msg in messages]\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import normalize_messages\n\ndef test_normalize():\n    msgs = [{'role': 'user', 'content': '  Hello WORLD  '}]\n    result = normalize_messages(msgs)\n    assert result == [{'role': 'user', 'content': 'hello world'}]\n    assert msgs[0]['content'] == '  Hello WORLD  '\n    print('✓ All assertions passed for Lesson 1.20')\n\nif __name__ == '__main__':\n    test_normalize()\n",
+      "failure_mode": "Mutating the original list in place.",
+      "verification_criteria": "Transform messages without mutating originals."
+    }
+  },
+  {
+    "id": "node-0-21",
+    "title": "Lesson 1.21: Tuples & Structural Unpacking",
+    "curriculum_spec_markdown": "\n# Lesson 1.21: Tuples: Immutable Sequences & Structural Unpacking\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.21.1 Tuples as heterogeneous immutable records vs homogeneous mutable lists`\n  - `1.21.2 Tuple packing and sequence unpacking: a, b, c = (1, 2, 3)`\n  - `1.21.3 Extended unpacking with *rest: first, *middle, last = iterable`\n  - `1.21.4 namedtuple for readable positional record types`\n\n- **Key Failure Modes & Edge Cases**: Confusing single-element tuple syntax: (42) is an int, but (42,) is a tuple.\n- **Verification & Mastery Check**: Implement parse_model_response(response_tuple) unpacking (role, content, tokens_used) into a dict.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def parse_model_response(response_tuple: tuple) -> dict:\n    role, content, tokens_used = response_tuple\n    return {'role': role, 'content': content, 'tokens_used': tokens_used}\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_model_response\n\ndef test_unpack():\n    r = parse_model_response(('assistant', 'Here is the answer', 150))\n    assert r['role'] == 'assistant'\n    assert r['tokens_used'] == 150\n    print('✓ All assertions passed for Lesson 1.21')\n\nif __name__ == '__main__':\n    test_unpack()\n",
+      "failure_mode": "Forgetting trailing comma in single-element tuple.",
+      "verification_criteria": "Unpack tuple into dict correctly."
+    }
+  },
+  {
+    "id": "node-0-22",
+    "title": "Lesson 1.22: Dictionaries & Config Merging",
+    "curriculum_spec_markdown": "\n# Lesson 1.22: Dictionaries: Hash Maps, O(1) Lookups & Key Contracts\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.22.1 Hash tables: O(1) average lookup via hash() and open addressing`\n  - `1.22.2 Safe key access: dict.get(key, default) vs dict[key] raising KeyError`\n  - `1.22.3 Dictionary merging: {**a, **b} spread and dict.update()`\n  - `1.22.4 Hashable key requirements: why lists cannot be dict keys`\n\n- **Key Failure Modes & Edge Cases**: Using mutable objects (lists) as dictionary keys causing TypeError: unhashable type.\n- **Verification & Mastery Check**: Implement merge_model_configs(base_config, overrides) using dict spread without mutating inputs.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def merge_model_configs(base_config: dict, overrides: dict) -> dict:\n    return {**base_config, **overrides}\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import merge_model_configs\n\ndef test_merge():\n    base = {'model': 'haiku', 'temp': 0.7, 'max_tokens': 1024}\n    overrides = {'model': 'sonnet', 'max_tokens': 4096}\n    merged = merge_model_configs(base, overrides)\n    assert merged == {'model': 'sonnet', 'temp': 0.7, 'max_tokens': 4096}\n    assert base['model'] == 'haiku'\n    print('✓ All assertions passed for Lesson 1.22')\n\nif __name__ == '__main__':\n    test_merge()\n",
+      "failure_mode": "Mutating base_config with update().",
+      "verification_criteria": "Merge dicts without mutating inputs."
+    }
+  },
+  {
+    "id": "node-0-23",
+    "title": "Lesson 1.23: Sets & Capability Intersections",
+    "curriculum_spec_markdown": "\n# Lesson 1.23: Sets: Hashing, Deduplication & Set Algebra\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.23.1 Set hash table: O(1) membership testing vs O(n) list search`\n  - `1.23.2 Set construction and automatic deduplication via set(collection)`\n  - `1.23.3 Set operations: union (|), intersection (&), difference (-)`\n  - `1.23.4 Frozenset: immutable hashable sets for use as dictionary keys`\n\n- **Key Failure Modes & Edge Cases**: Expecting ordered iteration from sets; sets are unordered.\n- **Verification & Mastery Check**: Implement find_shared_capabilities(caps_a, caps_b) using intersection and difference.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def find_shared_capabilities(caps_a: set, caps_b: set) -> tuple:\n    shared = caps_a & caps_b\n    exclusive_a = caps_a - caps_b\n    return shared, exclusive_a\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import find_shared_capabilities\n\ndef test_sets():\n    a = {'vision', 'code', 'reasoning'}\n    b = {'vision', 'reasoning', 'audio'}\n    shared, exclusive = find_shared_capabilities(a, b)\n    assert shared == {'vision', 'reasoning'}\n    assert exclusive == {'code'}\n    print('✓ All assertions passed for Lesson 1.23')\n\nif __name__ == '__main__':\n    test_sets()\n",
+      "failure_mode": "Assuming set iteration is ordered.",
+      "verification_criteria": "Correctly compute shared and exclusive capabilities."
+    }
+  },
+  {
+    "id": "node-0-24",
+    "title": "Lesson 1.24: Collections & Token Frequencies",
+    "curriculum_spec_markdown": "\n# Lesson 1.24: Collections Module: Counter, defaultdict & deque\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.24.1 Counter: O(n) frequency counting for any iterable`\n  - `1.24.2 defaultdict: auto-initializing missing keys with factory functions`\n  - `1.24.3 deque: O(1) append and popleft for queues and sliding windows`\n  - `1.24.4 OrderedDict: preserved insertion order and move_to_end()`\n\n- **Key Failure Modes & Edge Cases**: Using regular dict for counting and crashing with KeyError on first unseen key.\n- **Verification & Mastery Check**: Implement count_token_frequencies(token_list) using Counter returning top 3 tokens.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from collections import Counter\n\ndef count_token_frequencies(token_list: list[str]) -> list[tuple]:\n    return Counter(token_list).most_common(3)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import count_token_frequencies\n\ndef test_counter():\n    tokens = ['the', 'cat', 'sat', 'the', 'cat', 'the']\n    top3 = count_token_frequencies(tokens)\n    assert top3[0] == ('the', 3)\n    assert top3[1] == ('cat', 2)\n    print('✓ All assertions passed for Lesson 1.24')\n\nif __name__ == '__main__':\n    test_counter()\n",
+      "failure_mode": "Using dict with manual KeyError handling.",
+      "verification_criteria": "Count and rank token frequencies correctly."
+    }
+  },
+  {
+    "id": "node-0-25",
+    "title": "Lesson 1.25: String Templates & Prompt Hydration",
+    "curriculum_spec_markdown": "\n# Lesson 1.25: String Formatting: f-strings, Templates & Prompt Hydration\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.25.1 f-string expressions and format specs (:.2f, :>10, :0>5)`\n  - `1.25.2 str.format() positional and named substitution`\n  - `1.25.3 string.Template safer substitution preventing injection`\n  - `1.25.4 Prompt template hydration with variable slots`\n\n- **Key Failure Modes & Edge Cases**: Building prompts via string concatenation making multi-variable prompts unmaintainable.\n- **Verification & Mastery Check**: Implement hydrate_prompt(template, variables) using str.format_map().\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def hydrate_prompt(template: str, variables: dict) -> str:\n    return template.format_map(variables)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import hydrate_prompt\n\ndef test_hydrate():\n    tmpl = 'You are a {role}. Answer about {topic} in {lang}.'\n    result = hydrate_prompt(tmpl, {'role': 'developer', 'topic': 'Python', 'lang': 'English'})\n    assert result == 'You are a developer. Answer about Python in English.'\n    try:\n        hydrate_prompt(tmpl, {'role': 'dev'})\n        assert False\n    except KeyError:\n        pass\n    print('✓ All assertions passed for Lesson 1.25')\n\nif __name__ == '__main__':\n    test_hydrate()\n",
+      "failure_mode": "String concatenation vs structured templates.",
+      "verification_criteria": "Hydrate prompt template correctly and raise on missing keys."
+    }
+  },
+  {
+    "id": "node-0-26",
+    "title": "Lesson 1.26: Regex & Markdown JSON Extraction",
+    "curriculum_spec_markdown": "\n# Lesson 1.26: Regular Expressions: Pattern Matching & Text Extraction\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.26.1 The re module: compile(), search(), match(), findall(), sub()`\n  - `1.26.2 Core metacharacters: . * + ? ^ $ [] () | \\`\n  - `1.26.3 Named capture groups: (?P<name>...) for structured extraction`\n  - `1.26.4 Greedy vs lazy quantifiers in AI response parsing`\n\n- **Key Failure Modes & Edge Cases**: Using greedy .* consuming multiple blocks instead of the first one in LLM response extraction.\n- **Verification & Mastery Check**: Implement extract_json_block(text) using non-greedy regex to pull first ```json...``` block.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import re\n\ndef extract_json_block(text: str) -> str | None:\n    match = re.search(r'```(?:json)?\\s*([\\s\\S]*?)```', text)\n    if match:\n        return match.group(1).strip()\n    return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import extract_json_block\n\ndef test_extract():\n    text = 'Here is the output:\\n```json\\n{\"key\": \"value\"}\\n```\\nDone.'\n    result = extract_json_block(text)\n    assert result is not None\n    assert '{\"key\": \"value\"}' in result\n    assert '```' not in result\n    assert extract_json_block('No code block here') is None\n    print('✓ All assertions passed for Lesson 1.26')\n\nif __name__ == '__main__':\n    test_extract()\n",
+      "failure_mode": "Greedy quantifier captures too much.",
+      "verification_criteria": "Extract JSON blocks correctly with non-greedy regex."
+    }
+  },
+  {
+    "id": "node-0-27",
+    "title": "Lesson 1.27: Type Hints & Static Verification",
+    "curriculum_spec_markdown": "\n# Lesson 1.27: Type Hints & Static Analysis with mypy\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.27.1 Type annotation syntax for variables, parameters, and returns`\n  - `1.27.2 Generic containers: list[str], dict[str, int], Optional[T]`\n  - `1.27.3 Union types: str | None (Python 3.10+)`\n  - `1.27.4 Running mypy for static validation`\n\n- **Key Failure Modes & Edge Cases**: Assuming type hints enforce runtime behavior; they are analysis-only tools.\n- **Verification & Mastery Check**: Implement fully annotated parse_completion(response_body) with complete type signatures.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from typing import Optional\n\ndef parse_completion(response_body: dict) -> Optional[str]:\n    try:\n        return response_body['choices'][0]['message']['content']\n    except (KeyError, IndexError, TypeError):\n        return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_completion\n\ndef test_parse():\n    valid = {'choices': [{'message': {'content': 'Hello world'}}]}\n    assert parse_completion(valid) == 'Hello world'\n    assert parse_completion({}) is None\n    assert parse_completion({'choices': []}) is None\n    print('✓ All assertions passed for Lesson 1.27')\n\nif __name__ == '__main__':\n    test_parse()\n",
+      "failure_mode": "Assuming type hints provide runtime enforcement.",
+      "verification_criteria": "Parse completion response with full type annotations."
+    }
+  },
+  {
+    "id": "node-0-28",
+    "title": "Lesson 1.28: Dataclasses & Model Configs",
+    "curriculum_spec_markdown": "\n# Lesson 1.28: Dataclasses & Named Records\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.28.1 @dataclass decorator: auto-generating __init__, __repr__, __eq__`\n  - `1.28.2 field() with default_factory for mutable defaults`\n  - `1.28.3 Frozen dataclasses: immutable records`\n  - `1.28.4 __post_init__ for business logic validation`\n\n- **Key Failure Modes & Edge Cases**: Setting mutable default without field(default_factory=list) causing instance state sharing.\n- **Verification & Mastery Check**: Define @dataclass ModelConfig with post-init validation for temperature range.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from dataclasses import dataclass, field\n\n@dataclass\nclass ModelConfig:\n    name: str\n    temperature: float = 0.7\n    max_tokens: int = 2048\n    tags: list[str] = field(default_factory=list)\n\n    def __post_init__(self):\n        if not (0.0 <= self.temperature <= 2.0):\n            raise ValueError(f'temperature {self.temperature} out of [0.0, 2.0]')\n        if self.max_tokens <= 0:\n            raise ValueError('max_tokens must be positive')\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import ModelConfig\n\ndef test_dataclass():\n    cfg = ModelConfig('gpt-4o', 0.5, 1024)\n    assert cfg.name == 'gpt-4o'\n    assert cfg.tags == []\n    try:\n        ModelConfig('x', temperature=5.0)\n        assert False\n    except ValueError:\n        pass\n    print('✓ All assertions passed for Lesson 1.28')\n\nif __name__ == '__main__':\n    test_dataclass()\n",
+      "failure_mode": "Mutable default argument shared across instances.",
+      "verification_criteria": "Dataclass validates post-init correctly."
+    }
+  },
+  {
+    "id": "node-0-29",
+    "title": "Lesson 1.29: File I/O & Session Logging",
+    "curriculum_spec_markdown": "\n# Lesson 1.29: File I/O: Reading, Writing & pathlib Path Objects\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.29.1 Context manager file access: with open(path, mode) lifecycle`\n  - `1.29.2 Read modes: r, rb, a, w`\n  - `1.29.3 pathlib.Path for cross-platform path composition with / operator`\n  - `1.29.4 Streaming large files efficiently by iterating lines`\n\n- **Key Failure Modes & Edge Cases**: Using write ('w') mode and accidentally truncating log files to zero bytes.\n- **Verification & Mastery Check**: Implement append_session_log(log_path, entry_dict) appending JSONL entries using pathlib.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import json\nfrom pathlib import Path\n\ndef append_session_log(log_path: Path, entry: dict) -> None:\n    with open(log_path, 'a', encoding='utf-8') as f:\n        f.write(json.dumps(entry) + '\\n')\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import append_session_log\nfrom pathlib import Path\nimport json, tempfile\n\ndef test_log():\n    with tempfile.TemporaryDirectory() as tmp:\n        p = Path(tmp) / 'session.jsonl'\n        append_session_log(p, {'role': 'user', 'tokens': 10})\n        append_session_log(p, {'role': 'assistant', 'tokens': 50})\n        lines = p.read_text().strip().split('\\n')\n        assert len(lines) == 2\n        assert json.loads(lines[0])['role'] == 'user'\n        print('✓ All assertions passed for Lesson 1.29')\n\nif __name__ == '__main__':\n    test_log()\n",
+      "failure_mode": "Using 'w' mode instead of 'a' erases existing log.",
+      "verification_criteria": "Append JSONL entries without truncating."
+    }
+  },
+  {
+    "id": "node-0-30",
+    "title": "Lesson 1.30: JSON Serialization & API Logs",
+    "curriculum_spec_markdown": "\n# Lesson 1.30: JSON Serialization: Encoding, Decoding & Schema Validation\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.30.1 json.loads() and json.dumps(): in-memory string parsing and serialization`\n  - `1.30.2 json.load() and json.dump() for file object streaming`\n  - `1.30.3 Custom serialization with default= for datetime and custom objects`\n  - `1.30.4 Schema validation: checking required keys before processing`\n\n- **Key Failure Modes & Edge Cases**: Passing datetime objects to json.dumps() without a custom serializer.\n- **Verification & Mastery Check**: Implement serialize_api_log(record) serializing datetime values as ISO 8601 strings.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import json\nfrom datetime import datetime\n\ndef serialize_api_log(record: dict) -> str:\n    def default_encoder(obj):\n        if isinstance(obj, datetime):\n            return obj.isoformat()\n        raise TypeError(f'Not serializable: {type(obj)}')\n    return json.dumps(record, default=default_encoder)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import serialize_api_log\nimport json\nfrom datetime import datetime\n\ndef test_serialize():\n    record = {'model': 'gpt-4o', 'called_at': datetime(2024, 1, 15, 12, 0, 0), 'tokens': 100}\n    result = serialize_api_log(record)\n    parsed = json.loads(result)\n    assert parsed['called_at'] == '2024-01-15T12:00:00'\n    assert parsed['tokens'] == 100\n    print('✓ All assertions passed for Lesson 1.30')\n\nif __name__ == '__main__':\n    test_serialize()\n",
+      "failure_mode": "TypeError on datetime without custom encoder.",
+      "verification_criteria": "Serialize datetime fields to ISO 8601."
+    }
+  },
+  {
+    "id": "node-0-31",
+    "title": "Lesson 1.31: CSV Datasets & Benchmark Loading",
+    "curriculum_spec_markdown": "\n# Lesson 1.31: CSV & Structured Data Processing\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.31.1 csv.reader and csv.DictReader: reading tabular data`\n  - `1.31.2 csv.writer and csv.DictWriter: writing structured rows`\n  - `1.31.3 Encoding: always specifying encoding='utf-8' and newline=''`\n  - `1.31.4 Streaming rows vs loading all into memory`\n\n- **Key Failure Modes & Edge Cases**: Omitting newline='' in open() on Windows causing blank lines between CSV rows.\n- **Verification & Mastery Check**: Implement load_model_benchmarks(csv_path) returning list of dicts from CSV with headers.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import csv\nfrom pathlib import Path\n\ndef load_model_benchmarks(csv_path: Path) -> list[dict]:\n    with open(csv_path, 'r', encoding='utf-8', newline='') as f:\n        return list(csv.DictReader(f))\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import load_model_benchmarks\nfrom pathlib import Path\nimport tempfile, os\n\ndef test_csv():\n    with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False, encoding='utf-8', newline='') as f:\n        f.write('model,score\\n')\n        f.write('gpt-4o,0.92\\n')\n        f.write('claude-sonnet,0.95\\n')\n        tmp = f.name\n    try:\n        rows = load_model_benchmarks(Path(tmp))\n        assert len(rows) == 2\n        assert rows[0]['model'] == 'gpt-4o'\n    finally:\n        os.unlink(tmp)\n    print('✓ All assertions passed for Lesson 1.31')\n\nif __name__ == '__main__':\n    test_csv()\n",
+      "failure_mode": "Missing newline='' causes extra blank lines.",
+      "verification_criteria": "Load CSV rows as dicts correctly."
+    }
+  },
+  {
+    "id": "node-0-32",
+    "title": "Lesson 1.32: Environment Variables & API Secrets",
+    "curriculum_spec_markdown": "\n# Lesson 1.32: Environment Variables & Secrets Management\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.32.1 Why hardcoding secrets is catastrophic for security`\n  - `1.32.2 os.environ and os.getenv() for safe access`\n  - `1.32.3 .env files with python-dotenv for local injection`\n  - `1.32.4 .gitignore for excluding secrets from version control`\n\n- **Key Failure Modes & Edge Cases**: Committing .env files with API keys to a public GitHub repository.\n- **Verification & Mastery Check**: Implement get_required_env(key) raising EnvironmentError with clear message if key is missing.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import os\n\ndef get_required_env(key: str) -> str:\n    value = os.environ.get(key)\n    if value is None:\n        raise EnvironmentError(f'Missing required environment variable: {key}')\n    return value\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import get_required_env\nimport os\n\ndef test_env():\n    os.environ['TEST_API_KEY'] = 'abc123'\n    assert get_required_env('TEST_API_KEY') == 'abc123'\n    try:\n        get_required_env('NONEXISTENT_XYZ_KEY')\n        assert False\n    except EnvironmentError as e:\n        assert 'NONEXISTENT_XYZ_KEY' in str(e)\n    print('✓ All assertions passed for Lesson 1.32')\n\nif __name__ == '__main__':\n    test_env()\n",
+      "failure_mode": "Hardcoding secrets instead of reading from environment.",
+      "verification_criteria": "Raise clear error on missing env var."
+    }
+  },
+  {
+    "id": "node-0-33",
+    "title": "Lesson 1.33: Command-Line Tools with Argparse",
+    "curriculum_spec_markdown": "\n# Lesson 1.33: Command-Line Interfaces with argparse\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.33.1 ArgumentParser: CLI metadata, description, and epilog`\n  - `1.33.2 Positional vs optional arguments with flags`\n  - `1.33.3 Type casting: type=int, type=float, choices=[]`\n  - `1.33.4 Subcommands with add_subparsers for multi-command CLIs`\n\n- **Key Failure Modes & Edge Cases**: Using optional flags for required arguments without required=True.\n- **Verification & Mastery Check**: Implement build_prompt_cli_parser() returning a configured ArgumentParser.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import argparse\n\ndef build_prompt_cli_parser() -> argparse.ArgumentParser:\n    parser = argparse.ArgumentParser(description='AI Prompt CLI')\n    parser.add_argument('--model', type=str, default='gpt-4o')\n    parser.add_argument('--temp', type=float, default=0.7)\n    parser.add_argument('--prompt', type=str, required=True)\n    return parser\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import build_prompt_cli_parser\n\ndef test_parser():\n    parser = build_prompt_cli_parser()\n    args = parser.parse_args(['--prompt', 'Summarize this', '--model', 'claude-haiku', '--temp', '0.3'])\n    assert args.prompt == 'Summarize this'\n    assert args.model == 'claude-haiku'\n    assert args.temp == 0.3\n    print('✓ All assertions passed for Lesson 1.33')\n\nif __name__ == '__main__':\n    test_parser()\n",
+      "failure_mode": "Missing required=True on required argument.",
+      "verification_criteria": "Parse CLI arguments correctly."
+    }
+  },
+  {
+    "id": "node-0-34",
+    "title": "Lesson 1.34: Environments & Dependency Management",
+    "curriculum_spec_markdown": "\n# Lesson 1.34: Virtual Environments & Dependency Management with uv\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.34.1 Virtual environments: preventing global package pollution`\n  - `1.34.2 Creating environments with python -m venv .venv`\n  - `1.34.3 uv: uv pip install, uv lock, uv sync for fast dependency management`\n  - `1.34.4 requirements.txt vs pyproject.toml for reproducible deployments`\n\n- **Key Failure Modes & Edge Cases**: Installing production dependencies into system Python causing version conflicts.\n- **Verification & Mastery Check**: Implement verify_required_packages(packages) checking if package names are importable.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import importlib\n\ndef verify_required_packages(packages: list[str]) -> dict[str, bool]:\n    result = {}\n    for pkg in packages:\n        try:\n            importlib.import_module(pkg)\n            result[pkg] = True\n        except ImportError:\n            result[pkg] = False\n    return result\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import verify_required_packages\n\ndef test_packages():\n    res = verify_required_packages(['json', 'os', 'nonexistent_package_xyz'])\n    assert res['json'] is True\n    assert res['os'] is True\n    assert res['nonexistent_package_xyz'] is False\n    print('✓ All assertions passed for Lesson 1.34')\n\nif __name__ == '__main__':\n    test_packages()\n",
+      "failure_mode": "Installing to global Python instead of venv.",
+      "verification_criteria": "Check package importability correctly."
+    }
+  },
+  {
+    "id": "node-0-35",
+    "title": "Lesson 1.35: Modules, Packages & Clean Imports",
+    "curriculum_spec_markdown": "\n# Lesson 1.35: Modules, Packages & Import Architecture\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.35.1 Python module system: .py files, sys.path, and sys.modules caching`\n  - `1.35.2 Package structure: __init__.py and __all__ for public API`\n  - `1.35.3 Relative vs absolute imports`\n  - `1.35.4 Avoiding circular imports via dependency injection`\n\n- **Key Failure Modes & Edge Cases**: Creating circular imports causing ImportError or partially-initialized module errors.\n- **Verification & Mastery Check**: Implement format_cost and format_latency with __all__ defining the public API.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "__all__ = ['format_cost', 'format_latency']\n\ndef format_cost(cents: float) -> str:\n    return f'${cents / 100:.4f}'\n\ndef format_latency(ms: float) -> str:\n    return f'{ms:.1f}ms'\n\ndef _internal_helper():\n    pass\n"
+    },
+    "test_suite": {
+      "tests.py": "import solution as m\n\ndef test_module():\n    assert hasattr(m, 'format_cost')\n    assert hasattr(m, 'format_latency')\n    assert m.format_cost(250.0) == '$2.5000'\n    print('✓ All assertions passed for Lesson 1.35')\n\nif __name__ == '__main__':\n    test_module()\n",
+      "failure_mode": "Circular imports crash on startup.",
+      "verification_criteria": "Export public API via __all__."
+    }
+  },
+  {
+    "id": "node-0-36",
+    "title": "Lesson 1.36: Clean Code & Automated Linting",
+    "curriculum_spec_markdown": "\n# Lesson 1.36: Pythonic Code: PEP 8, Linting & Automated Formatters\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.36.1 PEP 8: snake_case, 79-char limits, spacing rules`\n  - `1.36.2 Ruff/Pyflakes for unused imports and undefined names`\n  - `1.36.3 Black formatter for deterministic opinionated code formatting`\n  - `1.36.4 Self-documenting code: meaningful identifiers over inline comments`\n\n- **Key Failure Modes & Edge Cases**: Naming variables l, O, I which are visually indistinguishable from 1, 0, 1 in most fonts.\n- **Verification & Mastery Check**: Implement calculate_adjusted_total(base, bonus, double) with full PEP 8 compliance and docstring.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "BASE_RATE_PER_TOKEN = 0.000015\nVISION_MULTIPLIER = 1.5\n\ndef calculate_adjusted_total(base: float, bonus: float, double: bool = False) -> float:\n    \"\"\"\n    Calculates total of base and bonus, optionally doubled.\n\n    Args:\n        base: Base numeric value.\n        bonus: Bonus to add to base.\n        double: If True, doubles the result.\n\n    Returns:\n        The computed float total.\n    \"\"\"\n    result = base + bonus\n    if double:\n        result *= 2\n    return result\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import calculate_adjusted_total\n\ndef test_pep8():\n    assert calculate_adjusted_total(10.0, 5.0) == 15.0\n    assert calculate_adjusted_total(10.0, 5.0, double=True) == 30.0\n    print('✓ All assertions passed for Lesson 1.36')\n\nif __name__ == '__main__':\n    test_pep8()\n",
+      "failure_mode": "Using ambiguous variable names or magic numbers.",
+      "verification_criteria": "Function is PEP 8 compliant with docstring."
+    }
+  },
+  {
+    "id": "node-0-37",
+    "title": "Lesson 1.37: HTTP Requests to AI APIs with HTTPX",
+    "curriculum_spec_markdown": "\n# Lesson 1.37: Making LLM API Calls with HTTPX: GET, POST & Auth Headers\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.37.1 The HTTPX library: sync vs async clients and keep-alive`\n  - `1.37.2 POST requests: JSON body serialization and Content-Type headers`\n  - `1.37.3 Bearer token authentication via Authorization header`\n  - `1.37.4 Response validation: status_code, raise_for_status(), and JSON parsing`\n\n- **Key Failure Modes & Edge Cases**: Not calling raise_for_status() before parsing, causing silent failures on 4xx/5xx responses.\n- **Verification & Mastery Check**: Implement call_chat_completion(api_key, model, messages) using httpx posting to a chat completions endpoint.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import httpx\n\ndef call_chat_completion(api_key: str, model: str, messages: list[dict], base_url: str = 'https://api.openai.com') -> dict:\n    payload = {'model': model, 'messages': messages}\n    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}\n    with httpx.Client(timeout=30.0) as client:\n        resp = client.post(f'{base_url}/v1/chat/completions', json=payload, headers=headers)\n        resp.raise_for_status()\n        return resp.json()\n"
+    },
+    "test_suite": {
+      "tests.py": "from unittest.mock import patch, MagicMock\nfrom solution import call_chat_completion\n\ndef test_api_call():\n    mock_resp = MagicMock()\n    mock_resp.json.return_value = {'choices': [{'message': {'content': 'Hello'}}]}\n    mock_resp.raise_for_status.return_value = None\n    with patch('httpx.Client') as cls:\n        cls.return_value.__enter__.return_value.post.return_value = mock_resp\n        result = call_chat_completion('sk-test', 'gpt-4o', [{'role': 'user', 'content': 'Hi'}])\n        assert result['choices'][0]['message']['content'] == 'Hello'\n    print('✓ All assertions passed for Lesson 1.37')\n\nif __name__ == '__main__':\n    test_api_call()\n",
+      "failure_mode": "Missing raise_for_status() allows silent 4xx failures.",
+      "verification_criteria": "Make mocked API call and parse response."
+    }
+  },
+  {
+    "id": "node-0-38",
+    "title": "Lesson 1.38: Exponential Backoff & Jitter",
+    "curriculum_spec_markdown": "\n# Lesson 1.38: Exponential Backoff & Jitter for Resilient API Calls\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.38.1 429 Too Many Requests: server-side rate limiting`\n  - `1.38.2 Exponential backoff: wait = base * 2^attempt`\n  - `1.38.3 Full jitter and equal jitter to prevent thundering herds`\n  - `1.38.4 Integrating retry logic with HTTPX`\n\n- **Key Failure Modes & Edge Cases**: Tight retry loop without sleep consuming the entire rate limit budget instantly.\n- **Verification & Mastery Check**: Implement exponential_backoff_sleep(attempt, base_delay, cap, jitter) computing wait time.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import random\n\ndef exponential_backoff_sleep(attempt: int, base_delay: float = 1.0, cap: float = 60.0, jitter: bool = True) -> float:\n    wait = min(cap, base_delay * (2 ** attempt))\n    if jitter:\n        wait = random.uniform(0, wait)\n    return wait\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import exponential_backoff_sleep\n\ndef test_backoff():\n    assert exponential_backoff_sleep(0, base_delay=1.0, jitter=False) == 1.0\n    assert exponential_backoff_sleep(1, base_delay=1.0, jitter=False) == 2.0\n    assert exponential_backoff_sleep(2, base_delay=1.0, jitter=False) == 4.0\n    assert exponential_backoff_sleep(10, base_delay=1.0, cap=30.0, jitter=False) == 30.0\n    print('✓ All assertions passed for Lesson 1.38')\n\nif __name__ == '__main__':\n    test_backoff()\n",
+      "failure_mode": "Retry loop without delay triggers rate limit.",
+      "verification_criteria": "Compute backoff wait times correctly."
+    }
+  },
+  {
+    "id": "node-0-39",
+    "title": "Lesson 1.39: Token Budgets & Counting with Tiktoken",
+    "curriculum_spec_markdown": "\n# Lesson 1.39: Token Budgets & Counting Tokens with tiktoken\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.39.1 Tokens as BPE subword units: why character count != token count`\n  - `1.39.2 The tiktoken library for model-aware tokenization`\n  - `1.39.3 Counting tokens before sending to avoid context window overflow`\n  - `1.39.4 Token budget enforcement: hard limits and truncation strategies`\n\n- **Key Failure Modes & Edge Cases**: Estimating tokens by dividing character count by 4, wildly miscounting non-ASCII text.\n- **Verification & Mastery Check**: Implement count_message_tokens(messages, model) using tiktoken to count chat message tokens.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def count_message_tokens(messages: list[dict], model: str = 'gpt-4o') -> int:\n    try:\n        import tiktoken\n        enc = tiktoken.encoding_for_model(model)\n    except Exception:\n        total_chars = sum(len(m.get('content', '')) + len(m.get('role', '')) for m in messages)\n        return total_chars // 4 + 2\n    total = 0\n    for msg in messages:\n        total += 4\n        total += len(enc.encode(msg.get('role', '')))\n        total += len(enc.encode(msg.get('content', '')))\n    total += 2\n    return total\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import count_message_tokens\n\ndef test_token_count():\n    messages = [{'role': 'user', 'content': 'Hello, how are you?'}]\n    count = count_message_tokens(messages)\n    assert isinstance(count, int)\n    assert 5 < count < 50\n    print('✓ All assertions passed for Lesson 1.39')\n\nif __name__ == '__main__':\n    test_token_count()\n",
+      "failure_mode": "Character / 4 estimate is wildly inaccurate.",
+      "verification_criteria": "Count tokens accurately using tiktoken."
+    }
+  },
+  {
+    "id": "node-0-40",
+    "title": "Lesson 1.40: Structured Prompt Templates & XML Tags",
+    "curriculum_spec_markdown": "\n# Lesson 1.40: Structured Prompt Templates & XML Delimiters\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.40.1 Prompt engineering: system/user/assistant role patterns`\n  - `1.40.2 XML delimiters: <context>, <question>, <instructions> grounding`\n  - `1.40.3 Multi-variable template hydration with validation`\n  - `1.40.4 Few-shot prompting: example (input, output) pairs in messages`\n\n- **Key Failure Modes & Edge Cases**: Flat unstructured prompt strings making programmatic updates impossible.\n- **Verification & Mastery Check**: Implement build_rag_prompt(context_text, user_question, instructions) building XML-delimited messages.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "def build_rag_prompt(context_text: str, user_question: str, instructions: str = 'Answer based on the context only.') -> list[dict]:\n    system_content = f'<instructions>{instructions}</instructions>\\n<context>{context_text}</context>'\n    return [\n        {'role': 'system', 'content': system_content},\n        {'role': 'user', 'content': user_question},\n    ]\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import build_rag_prompt\n\ndef test_rag_prompt():\n    msgs = build_rag_prompt('Python is a language.', 'What is Python?')\n    assert len(msgs) == 2\n    assert '<context>' in msgs[0]['content']\n    assert '<instructions>' in msgs[0]['content']\n    assert msgs[1]['content'] == 'What is Python?'\n    print('✓ All assertions passed for Lesson 1.40')\n\nif __name__ == '__main__':\n    test_rag_prompt()\n",
+      "failure_mode": "Unstructured flat prompt prevents programmatic updates.",
+      "verification_criteria": "Build XML-delimited RAG prompt correctly."
+    }
+  },
+  {
+    "id": "node-0-41",
+    "title": "Lesson 1.41: Parsing LLM JSON Responses & Recovery",
+    "curriculum_spec_markdown": "\n# Lesson 1.41: Parsing LLM Responses: JSON Extraction & Error Recovery\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.41.1 Why LLMs wrap JSON in markdown fences and conversational text`\n  - `1.41.2 Regex fence stripping: removing ```json...``` wrappers`\n  - `1.41.3 XML tag extraction as fallback: <json>...</json>`\n  - `1.41.4 JSON mode and response schemas in modern APIs`\n\n- **Key Failure Modes & Edge Cases**: Calling json.loads() on raw LLM output without stripping markdown fences first.\n- **Verification & Mastery Check**: Implement parse_llm_structured_output(raw_response) trying JSON, XML, then direct parse.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import re, json\n\ndef parse_llm_structured_output(raw_response: str) -> dict | None:\n    fence_match = re.search(r'```(?:json)?\\s*([\\s\\S]*?)```', raw_response)\n    if fence_match:\n        try:\n            return json.loads(fence_match.group(1).strip())\n        except json.JSONDecodeError:\n            pass\n    xml_match = re.search(r'<json>(.*?)</json>', raw_response, re.DOTALL)\n    if xml_match:\n        try:\n            return json.loads(xml_match.group(1).strip())\n        except json.JSONDecodeError:\n            pass\n    try:\n        return json.loads(raw_response.strip())\n    except json.JSONDecodeError:\n        return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_llm_structured_output\n\ndef test_parse():\n    assert parse_llm_structured_output('```json\\n{\"key\": \"value\"}\\n```') == {'key': 'value'}\n    assert parse_llm_structured_output('{\"key\": \"value\"}') == {'key': 'value'}\n    assert parse_llm_structured_output('Not JSON at all') is None\n    print('✓ All assertions passed for Lesson 1.41')\n\nif __name__ == '__main__':\n    test_parse()\n",
+      "failure_mode": "Direct json.loads() on markdown-wrapped output.",
+      "verification_criteria": "Parse structured output with fallback chain."
+    }
+  },
+  {
+    "id": "node-0-42",
+    "title": "Lesson 1.42: Server-Sent Events & Token Streaming",
+    "curriculum_spec_markdown": "\n# Lesson 1.42: Server-Sent Events (SSE): Streaming Token Responses\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.42.1 SSE protocol: text/event-stream, data: prefix, [DONE] sentinel`\n  - `1.42.2 HTTP streaming with httpx iter_lines() on streamed response`\n  - `1.42.3 Parsing SSE: splitting on 'data: ' and skipping empty lines`\n  - `1.42.4 Progressive rendering: printing tokens as they arrive`\n\n- **Key Failure Modes & Edge Cases**: Buffering all SSE lines before processing, negating the latency benefit of streaming.\n- **Verification & Mastery Check**: Implement parse_sse_line(line) extracting JSON payload from SSE data: lines.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import json\n\ndef parse_sse_line(line: str) -> dict | None:\n    line = line.strip()\n    if not line or line == 'data: [DONE]':\n        return None\n    if line.startswith('data: '):\n        payload = line[len('data: '):]\n        try:\n            return json.loads(payload)\n        except json.JSONDecodeError:\n            return None\n    return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_sse_line\n\ndef test_sse():\n    chunk = parse_sse_line('data: {\"choices\": [{\"delta\": {\"content\": \"Hello\"}}]}')\n    assert chunk is not None\n    assert chunk['choices'][0]['delta']['content'] == 'Hello'\n    assert parse_sse_line('data: [DONE]') is None\n    assert parse_sse_line('') is None\n    print('✓ All assertions passed for Lesson 1.42')\n\nif __name__ == '__main__':\n    test_sse()\n",
+      "failure_mode": "Buffering all chunks before processing.",
+      "verification_criteria": "Parse SSE lines and handle DONE sentinel."
+    }
+  },
+  {
+    "id": "node-0-43",
+    "title": "Lesson 1.43: Pydantic v2 & Data Contracts",
+    "curriculum_spec_markdown": "\n# Lesson 1.43: Pydantic v2: Data Validation & Structured Contracts\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.43.1 Pydantic v2 BaseModel: type coercion, validation, schema generation`\n  - `1.43.2 @field_validator and @model_validator for custom validation`\n  - `1.43.3 model_validate() and model_validate_json() for parsing`\n  - `1.43.4 ValidationError introspection: error locations and messages`\n\n- **Key Failure Modes & Edge Cases**: Catching BaseModel instantiation errors with bare except instead of except ValidationError.\n- **Verification & Mastery Check**: Define ChatMessage Pydantic model with Literal role validation and non-empty content validation.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from pydantic import BaseModel, field_validator\nfrom typing import Literal\n\nclass ChatMessage(BaseModel):\n    role: Literal['system', 'user', 'assistant']\n    content: str\n\n    @field_validator('content')\n    @classmethod\n    def content_must_not_be_empty(cls, v: str) -> str:\n        if not v.strip():\n            raise ValueError('content must not be empty or whitespace-only')\n        return v\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import ChatMessage\nfrom pydantic import ValidationError\n\ndef test_pydantic():\n    msg = ChatMessage(role='user', content='Hello')\n    assert msg.role == 'user'\n    try:\n        ChatMessage(role='invalid_role', content='Hi')\n        assert False\n    except ValidationError:\n        pass\n    try:\n        ChatMessage(role='user', content='   ')\n        assert False\n    except ValidationError:\n        pass\n    print('✓ All assertions passed for Lesson 1.43')\n\nif __name__ == '__main__':\n    test_pydantic()\n",
+      "failure_mode": "Bare except masking ValidationError details.",
+      "verification_criteria": "Validate role and content constraints."
+    }
+  },
+  {
+    "id": "node-0-44",
+    "title": "Lesson 1.44: Enforcing Structured AI Outputs",
+    "curriculum_spec_markdown": "\n# Lesson 1.44: Structured AI Outputs: Enforcing JSON Schemas from LLMs\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.44.1 The structured output problem: schema enforcement from LLMs`\n  - `1.44.2 JSON mode and structured output APIs (OpenAI response_format)`\n  - `1.44.3 Pydantic model_json_schema(): generating JSON Schema for API injection`\n  - `1.44.4 End-to-end pipeline: prompt -> API -> Pydantic parse -> typed object`\n\n- **Key Failure Modes & Edge Cases**: Manually writing JSON Schema strings instead of generating them from Pydantic, causing schema drift.\n- **Verification & Mastery Check**: Implement validate_and_parse_completion(raw_json, model_class) using model_validate_json with error recovery.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "from pydantic import BaseModel, ValidationError\nfrom typing import Type, TypeVar\n\nT = TypeVar('T', bound=BaseModel)\n\ndef validate_and_parse_completion(raw_json: str, model_class: Type[T]) -> T | None:\n    try:\n        return model_class.model_validate_json(raw_json)\n    except (ValidationError, ValueError):\n        return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import validate_and_parse_completion\nfrom pydantic import BaseModel\n\nclass SummaryOutput(BaseModel):\n    title: str\n    points: list[str]\n\ndef test_structured():\n    valid = '{\"title\": \"Python Guide\", \"points\": [\"easy\", \"readable\"]}'\n    result = validate_and_parse_completion(valid, SummaryOutput)\n    assert result.title == 'Python Guide'\n    assert validate_and_parse_completion('not valid json', SummaryOutput) is None\n    print('✓ All assertions passed for Lesson 1.44')\n\nif __name__ == '__main__':\n    test_structured()\n",
+      "failure_mode": "Manual JSON Schema construction diverges from Pydantic model.",
+      "verification_criteria": "Parse and validate structured completion output."
+    }
+  },
+  {
+    "id": "node-0-45",
+    "title": "Lesson 1.45: Async Python & Concurrent AI Calls",
+    "curriculum_spec_markdown": "\n# Lesson 1.45: Async Python Basics: asyncio, await & Concurrent IO\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.45.1 The event loop: single-threaded cooperative multitasking`\n  - `1.45.2 async def and await: declaring coroutines and suspending at IO`\n  - `1.45.3 asyncio.gather(): concurrent coroutines without threads`\n  - `1.45.4 async with and async for: async context managers and iterators`\n\n- **Key Failure Modes & Edge Cases**: Blocking the event loop with time.sleep() instead of await asyncio.sleep().\n- **Verification & Mastery Check**: Implement fetch_all_concurrently(urls) using asyncio.gather and httpx.AsyncClient.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import asyncio\nimport httpx\n\nasync def fetch_one(client: httpx.AsyncClient, url: str) -> dict:\n    try:\n        resp = await client.get(url, timeout=10.0)\n        return {'url': url, 'status': resp.status_code}\n    except Exception as e:\n        return {'url': url, 'status': -1, 'error': str(e)}\n\nasync def fetch_all_concurrently(urls: list[str]) -> list[dict]:\n    async with httpx.AsyncClient() as client:\n        return await asyncio.gather(*[fetch_one(client, url) for url in urls])\n"
+    },
+    "test_suite": {
+      "tests.py": "import asyncio\nfrom solution import fetch_all_concurrently\n\ndef test_async_fetch():\n    async def run():\n        results = await fetch_all_concurrently(['https://httpbin.org/get'])\n        assert len(results) == 1\n        assert 'status' in results[0]\n    asyncio.run(run())\n    print('✓ All assertions passed for Lesson 1.45')\n\nif __name__ == '__main__':\n    test_async_fetch()\n",
+      "failure_mode": "time.sleep() blocks the entire event loop.",
+      "verification_criteria": "Fetch URLs concurrently with asyncio."
+    }
+  },
+  {
+    "id": "node-0-46",
+    "title": "Lesson 1.46: Structured JSON Logging for AI Metrics",
+    "curriculum_spec_markdown": "\n# Lesson 1.46: Logging & Structured Observability for AI Applications\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.46.1 Python logging module: Logger, Handler, Formatter hierarchy`\n  - `1.46.2 Log levels: DEBUG, INFO, WARNING, ERROR, CRITICAL`\n  - `1.46.3 Structured JSON logging for machine-parseable log pipelines`\n  - `1.46.4 Logging AI API calls: request_id, model, latency_ms, tokens, cost`\n\n- **Key Failure Modes & Edge Cases**: Using print() for production observability instead of logging module, losing timestamps and levels.\n- **Verification & Mastery Check**: Implement setup_json_logger(name, level) returning a logger emitting structured JSON.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import logging, json\n\nclass JSONFormatter(logging.Formatter):\n    def format(self, record: logging.LogRecord) -> str:\n        entry = {'level': record.levelname, 'name': record.name, 'message': record.getMessage()}\n        if record.exc_info:\n            entry['exception'] = self.formatException(record.exc_info)\n        return json.dumps(entry)\n\ndef setup_json_logger(name: str, level: int = logging.INFO) -> logging.Logger:\n    logger = logging.getLogger(name)\n    logger.setLevel(level)\n    if not logger.handlers:\n        h = logging.StreamHandler()\n        h.setFormatter(JSONFormatter())\n        logger.addHandler(h)\n    return logger\n"
+    },
+    "test_suite": {
+      "tests.py": "import json, logging\nfrom io import StringIO\nfrom solution import setup_json_logger, JSONFormatter\n\ndef test_json_logger():\n    logger = setup_json_logger('test_logger')\n    stream = StringIO()\n    h = logging.StreamHandler(stream)\n    h.setFormatter(JSONFormatter())\n    logger.addHandler(h)\n    logger.info('API call completed')\n    output = stream.getvalue().strip().split('\\n')[-1]\n    record = json.loads(output)\n    assert record['level'] == 'INFO'\n    assert 'API call completed' in record['message']\n    print('✓ All assertions passed for Lesson 1.46')\n\nif __name__ == '__main__':\n    test_json_logger()\n",
+      "failure_mode": "Using print() instead of logging loses log levels.",
+      "verification_criteria": "Emit structured JSON log entries."
+    }
+  },
+  {
+    "id": "node-0-47",
+    "title": "Lesson 1.47: Git Fundamentals & Commit Diffs",
+    "curriculum_spec_markdown": "\n# Lesson 1.47: Git Fundamentals: Commits, Branches & Diffs\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.47.1 Git object model: blobs, trees, commits, and DAG history`\n  - `1.47.2 The 3 Git areas: Working Directory, Staging Index, Repository`\n  - `1.47.3 Branching: git switch -c and merging without panic`\n  - `1.47.4 Inspecting history: git log --oneline --graph and git diff HEAD~1`\n\n- **Key Failure Modes & Edge Cases**: Running git add . without git status first, committing .env or build artifacts.\n- **Verification & Mastery Check**: Implement parse_git_log_line(line) extracting commit hash and message.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import re\n\ndef parse_git_log_line(line: str) -> dict | None:\n    match = re.match(r'^([a-f0-9]{7,40})\\s+(.+)$', line.strip())\n    if match:\n        return {'hash': match.group(1), 'message': match.group(2)}\n    return None\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import parse_git_log_line\n\ndef test_git_log():\n    result = parse_git_log_line('a1b2c3d feat: add token budget enforcement')\n    assert result == {'hash': 'a1b2c3d', 'message': 'feat: add token budget enforcement'}\n    assert parse_git_log_line('not a log line') is None\n    print('✓ All assertions passed for Lesson 1.47')\n\nif __name__ == '__main__':\n    test_git_log()\n",
+      "failure_mode": "Committing secrets via git add . without status check.",
+      "verification_criteria": "Parse git log lines correctly."
+    }
+  },
+  {
+    "id": "node-0-48",
+    "title": "Lesson 1.48: Automated Testing with Pytest",
+    "curriculum_spec_markdown": "\n# Lesson 1.48: Automated Testing with pytest: Fixtures, Parametrize & Coverage\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.48.1 pytest test discovery: test_*.py and test_* functions`\n  - `1.48.2 @pytest.fixture for reusable setup objects`\n  - `1.48.3 @pytest.mark.parametrize for matrix testing`\n  - `1.48.4 pytest-cov for coverage measurement`\n\n- **Key Failure Modes & Edge Cases**: Writing tests that always pass because they never assert specific outcomes.\n- **Verification & Mastery Check**: Write parametrized pytest test suite for compute_token_bill covering 3 edge cases.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "import pytest\n\ndef compute_token_bill(input_tokens: int, output_tokens: int, rate_per_k: float, discount: float) -> float:\n    total = ((input_tokens + output_tokens) / 1000) * rate_per_k * (1.0 - discount)\n    return round(total, 4)\n\n@pytest.mark.parametrize('inp, out, rate, disc, expected', [\n    (1000, 2000, 0.015, 0.10, 0.0405),\n    (0, 0, 0.01, 0.0, 0.0),\n    (5000, 5000, 0.020, 0.50, 0.1),\n])\ndef test_token_bill(inp, out, rate, disc, expected):\n    assert compute_token_bill(inp, out, rate, disc) == expected\n"
+    },
+    "test_suite": {
+      "tests.py": "import pytest\nfrom solution import compute_token_bill\n\n@pytest.mark.parametrize('inp, out, rate, disc, expected', [\n    (1000, 2000, 0.015, 0.10, 0.0405),\n    (0, 0, 0.01, 0.0, 0.0),\n    (5000, 5000, 0.020, 0.50, 0.1),\n])\ndef test_token_bill(inp, out, rate, disc, expected):\n    assert compute_token_bill(inp, out, rate, disc) == expected\n\nif __name__ == '__main__':\n    print('✓ Parametrized tests defined for Lesson 1.48')\n",
+      "failure_mode": "Tests without assert statements give false confidence.",
+      "verification_criteria": "Parametrized tests pass all 3 edge cases."
+    }
+  },
+  {
+    "id": "node-0-49",
+    "title": "Lesson 1.49: Refactoring & Technical Debt",
+    "curriculum_spec_markdown": "\n# Lesson 1.49: Code Reviews, Refactoring & Technical Debt Recognition\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.49.1 Code review: correctness, clarity, and maintainability checks`\n  - `1.49.2 Technical debt signals: long parameter lists, god functions, magic numbers`\n  - `1.49.3 Refactoring patterns: Extract Function, Rename Variable, Replace Magic Number`\n  - `1.49.4 The Boy Scout Rule: leave code cleaner on every commit`\n\n- **Key Failure Modes & Edge Cases**: Refactoring production code without a test suite, breaking behavior invisibly.\n- **Verification & Mastery Check**: Refactor calculate_llm_cost from magic numbers to named constants with full docstring.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "BASE_RATE_PER_TOKEN = 0.000015\nVISION_MULTIPLIER = 1.5\n\ndef calculate_llm_cost(token_count: int, num_requests: int, has_vision: bool = False) -> float:\n    \"\"\"\n    Calculates estimated USD cost for LLM API calls.\n\n    Args:\n        token_count: Tokens per request.\n        num_requests: Number of API requests.\n        has_vision: Whether vision processing is involved (1.5x multiplier).\n\n    Returns:\n        Estimated cost in USD rounded to 6 decimal places.\n    \"\"\"\n    base_cost = token_count * num_requests * BASE_RATE_PER_TOKEN\n    if has_vision:\n        base_cost *= VISION_MULTIPLIER\n    return round(base_cost, 6)\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import calculate_llm_cost\n\ndef test_refactored():\n    assert calculate_llm_cost(1000, 1) == round(1000 * 1 * 0.000015, 6)\n    assert calculate_llm_cost(1000, 1, has_vision=True) == round(0.015 * 1.5, 6)\n    print('✓ All assertions passed for Lesson 1.49')\n\nif __name__ == '__main__':\n    test_refactored()\n",
+      "failure_mode": "Refactoring without tests breaks behavior silently.",
+      "verification_criteria": "Refactored code is clean and tests pass."
+    }
+  },
+  {
+    "id": "node-0-50",
+    "title": "Lesson 1.50: Capstone: PromptCLI — Developer AI Workbench",
+    "curriculum_spec_markdown": "\n# Lesson 1.50: Module 1 Capstone: PromptCLI — AI Prompt Engineering Workbench\n\n- **Module**: `Module 1: Python Programming Foundations`\n- **Status**: `[State: Active | Production Standard | Core]`\n- **Subtopics**:\n  - `1.50.1 Integration: combining all 49 lessons into a production-grade CLI application`\n  - `1.50.2 PromptCLI features: multi-model routing, token budgeting, structured output, session logging`\n  - `1.50.3 Pydantic configuration, argparse CLI, and HTTPX API integration`\n  - `1.50.4 Complete pytest coverage across all modules`\n\n- **Key Failure Modes & Edge Cases**: Building as a monolithic single-file script; must be a proper Python package with separate modules.\n- **Verification & Mastery Check**: Build PromptCLI package with CLI parser, config validator, API caller, response parser, and session logger.\n\n\n\n\n",
+    "starter_code": {
+      "solution.py": "# PromptCLI Capstone Integration\nfrom pydantic import BaseModel, field_validator\nfrom typing import Literal\nimport argparse\n\nclass PromptCLIConfig(BaseModel):\n    model: Literal['gpt-4o', 'claude-3-5-sonnet', 'claude-3-haiku'] = 'gpt-4o'\n    temperature: float = 0.7\n    max_tokens: int = 2048\n    token_budget: int = 100000\n\n    @field_validator('temperature')\n    @classmethod\n    def validate_temp(cls, v):\n        if not 0.0 <= v <= 2.0:\n            raise ValueError(f'temperature {v} not in [0.0, 2.0]')\n        return v\n\ndef build_parser():\n    parser = argparse.ArgumentParser(description='PromptCLI - AI Engineering Workbench')\n    parser.add_argument('--model', default='gpt-4o')\n    parser.add_argument('--temp', type=float, default=0.7)\n    parser.add_argument('--prompt', required=True)\n    parser.add_argument('--budget', type=int, default=100000)\n    return parser\n"
+    },
+    "test_suite": {
+      "tests.py": "from solution import PromptCLIConfig, build_parser\nfrom pydantic import ValidationError\n\ndef test_capstone():\n    cfg = PromptCLIConfig(model='claude-3-haiku', temperature=0.3, max_tokens=512)\n    assert cfg.model == 'claude-3-haiku'\n    try:\n        PromptCLIConfig(temperature=5.0)\n        assert False\n    except ValidationError:\n        pass\n    parser = build_parser()\n    args = parser.parse_args(['--prompt', 'Hello world'])\n    assert args.model == 'gpt-4o'\n    print('✓ PromptCLI Capstone passed for Lesson 1.50')\n\nif __name__ == '__main__':\n    test_capstone()\n",
+      "failure_mode": "Monolithic script is not testable or modular.",
+      "verification_criteria": "Full PromptCLI integration validates correctly."
+    }
+  }
+]

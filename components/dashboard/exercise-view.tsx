@@ -187,6 +187,10 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
       if (res.status === "SUCCESS") {
         setStatusMessage(`✓ All test assertions passed in ${(res.executionDurationMs / 1000).toFixed(3)}s`);
         markExerciseCompleted(activeExercise.id);
+      } else if (res.status === "UNVERIFIED") {
+        setStatusMessage(`⚠ Unverified: Python runtime is currently unavailable (offline or CDN blocked). No completion awarded.`);
+      } else if (res.status === "TIMEOUT") {
+        setStatusMessage(`✗ Execution timed out (watchdog limit exceeded).`);
       } else {
         setStatusMessage(`✗ Test failed: ${res.errorMessage || "AssertionError"}`);
       }
@@ -246,14 +250,11 @@ export function ExerciseView({ initialLessonId, onNavigateToLesson }: ExerciseVi
           <p className="text-xs sm:text-sm text-[#8a8f98] max-w-3xl mt-1 leading-relaxed">
             {curriculum ? (
               <>
-                Every one of the {curriculum.totalLessons} lessons has an active hands-on lab exercise. Once you
-                complete the theory for a lesson in the Workspace, its companion lab unlocks so you can verify your
-                understanding at your own pace.
+                Selected key lessons across all {curriculum.totalLessons} curriculum nodes include hands-on lab exercises and verification test suites. Complete lesson theory to unlock corresponding drills and verify implementation correctness.
               </>
             ) : (
               <>
-                Every lesson has an active hands-on lab exercise. Once you complete the theory for a lesson in the
-                Workspace, its companion lab unlocks so you can verify your understanding at your own pace.
+                Selected key lessons include hands-on lab exercises and verification test suites. Complete lesson theory to unlock corresponding drills and verify implementation correctness.
               </>
             )}
           </p>

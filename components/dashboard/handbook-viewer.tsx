@@ -177,7 +177,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
     if (rawLine.startsWith("### ")) {
       const title = rawLine.replace("### ", "").trim();
       elements.push(
-        <div key={`h3-${i}`} className="mt-4 mb-2 bg-[#0e1013] border border-[#23252a] px-3 py-2 rounded-lg">
+        <div key={`h3-${i}`} className="mt-8 mb-2 border-l-2 border-[#5e6ad2] pl-3 py-1">
           <h3 className="text-base font-semibold text-[#d9ddff] leading-tight flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-[#5e6ad2]" />
             <span>{renderFormattedInline(title)}</span>
@@ -210,7 +210,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       elements.push(
         <div
           key={`alert-warn-${i}`}
-          className="my-3 p-3.5 rounded-lg border border-[#eb5757]/40 bg-[#eb5757]/10 text-[#f7f8f8] text-xs font-mono"
+          className="my-5 p-4 rounded-lg border border-[#eb5757]/40 bg-[#eb5757]/10 text-[#f7f8f8] text-sm"
         >
           <div className="flex items-center gap-2 text-[#eb5757] font-semibold mb-1">
             <AlertTriangle className="w-4 h-4" />
@@ -237,7 +237,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
       elements.push(
         <div
           key={`alert-info-${i}`}
-          className="my-3 p-3.5 rounded-lg border border-[#5e6ad2]/40 bg-[#5e6ad2]/10 text-[#f7f8f8] text-xs font-mono"
+          className="my-5 p-4 rounded-lg border border-[#5e6ad2]/40 bg-[#5e6ad2]/10 text-[#f7f8f8] text-sm"
         >
           <div className="flex items-center gap-2 text-[#5e6ad2] font-semibold mb-1">
             <Info className="w-4 h-4" />
@@ -305,7 +305,7 @@ export const HandbookViewer: React.FC<HandbookViewerProps> = ({ content }) => {
   if (inCodeBlock) flushCode("code-end");
   if (inTable) flushTable("table-end");
 
-  return <article className="handbook-article space-y-3">{elements}</article>;
+  return <article className="handbook-article mx-auto max-w-3xl space-y-3">{elements}</article>;
 };
 
 // Robust recursive inline formatter for bold (**...**), inline code (`...`), and italic (*...*)

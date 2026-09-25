@@ -41,7 +41,7 @@ def load_env() -> Dict[str, str]:
 def supabase_config() -> Tuple[str, str]:
     env = load_env()
     url = env.get("SUPABASE_URL") or env.get("NEXT_PUBLIC_SUPABASE_URL")
-    key = env.get("SUPABASE_SERVICE_ROLE_KEY") or env.get("SUPABASE_ANON_KEY")
+    key = env.get("SUPABASE_SERVICE_ROLE_KEY") or env.get("SUPABASE_ANON_KEY") or env.get("NEXT_PUBLIC_SUPABASE_ANON_KEY")
     if not url or not key:
         raise RuntimeError("Missing Supabase URL or API key in .env.local/.env")
     return url.rstrip("/"), key
