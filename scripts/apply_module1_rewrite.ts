@@ -2,9 +2,25 @@ import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { MODULE_1_HANDBOOKS, buildMediumStyleHandbook } from './module1_authoring';
 
-const env = fs.readFileSync('.env.local', 'utf8');
-const url = env.match(/NEXT_PUBLIC_SUPABASE_URL=(.*)/)![1].trim();
-const serviceRoleKey = 'REDACTED_SUPABASE_SERVICE_ROLE_KEY';
+const envContent = fs.existsSync('.env.local')
+  ? fs.readFileSync('.env.local', 'utf8')
+  : fs.existsSync('.env')
+  ? fs.readFileSync('.env', 'utf8')
+  : '';
+
+const url =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  envContent.match(/NEXT_PUBLIC_SUPABASE_URL=(.*)/)?.[1]?.trim() ||
+  '';
+const serviceRoleKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  envContent.match(/SUPABASE_SERVICE_ROLE_KEY=(.*)/)?.[1]?.trim() ||
+  '';
+
+if (!url || !serviceRoleKey) {
+  console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
 
 const supabase = createClient(url, serviceRoleKey);
 
