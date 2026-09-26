@@ -210,7 +210,13 @@ Every program is built upon clear contracts:
 By keeping your logic modular and clean, you make your code testable and resilient to unexpected inputs.`;
 
   const stepsList = custom?.stepByStep && custom.stepByStep.length > 0
-    ? custom.stepByStep.map((s, i) => `${i + 1}. **${s.split(':')[0]}**: ${s.split(':').slice(1).join(':') || s}`).join('\n')
+    ? custom.stepByStep.map((s, i) => {
+        const parts = s.split(':');
+        if (parts.length > 1) {
+          return `${i + 1}. **${parts[0].trim()}**: ${parts.slice(1).join(':').trim()}`;
+        }
+        return `${i + 1}. ${s}`;
+      }).join('\n')
     : `1. **Review the inputs**: Identify the required arguments, types, and constraints.\n2. **Implement the logic**: Apply the transformation described in the lesson.\n3. **Verify the output**: Check your result against the test assertions.`;
 
   const gotchasList = custom?.commonGotchas && custom.commonGotchas.length > 0

@@ -27,6 +27,9 @@ import {
   Zap,
   Check,
   ExternalLink,
+  Lightbulb,
+  Target,
+  ListChecks,
 } from "lucide-react";
 import { getSandboxController } from "@/lib/sandbox/sandbox-controller";
 import { ExecutionResult } from "@/lib/sandbox/types";
@@ -54,6 +57,9 @@ interface WorkspaceLesson {
   testSuite: string;
   criteria?: string;
   failureMode?: string;
+  exerciseAbout?: string;
+  exerciseGoal?: string;
+  expectedOutput?: string;
   xpReward?: number;
   isDetailLoaded?: boolean;
 }
@@ -71,7 +77,7 @@ const DEFAULT_TEST_SUITE = "# Unit tests\nassert True\n";
 /** Per-lesson detail patches keyed by node id (lesson content lives outside the catalog). */
 type LessonDetailPatch = Pick<
   WorkspaceLesson,
-  "handbook" | "starterCode" | "testSuite" | "criteria" | "failureMode" | "isDetailLoaded"
+  "handbook" | "starterCode" | "testSuite" | "criteria" | "failureMode" | "exerciseAbout" | "exerciseGoal" | "expectedOutput" | "isDetailLoaded"
 >;
 
 export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewProps) {
@@ -157,6 +163,9 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
           testSuite: ts || "# Unit test suite\nassert True\n",
           criteria: detail.criteria,
           failureMode: detail.failure_mode,
+          exerciseAbout: detail.exercise_about,
+          exerciseGoal: detail.exercise_goal,
+          expectedOutput: detail.expected_output,
           isDetailLoaded: true,
         };
 
@@ -168,6 +177,9 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
             testSuite: fullyLoaded.testSuite,
             criteria: fullyLoaded.criteria,
             failureMode: fullyLoaded.failureMode,
+            exerciseAbout: fullyLoaded.exerciseAbout,
+            exerciseGoal: fullyLoaded.exerciseGoal,
+            expectedOutput: fullyLoaded.expectedOutput,
             isDetailLoaded: true,
           },
         }));
@@ -473,42 +485,76 @@ export function WorkspaceView({ onOpenTutor, initialLessonId }: WorkspaceViewPro
       {/* ========================================================================= */}
       {activeMode === "exercise" && (
         <div className="space-y-6 animate-fadeIn">
-          {/* Formatted Standalone Exercise Specifications & Test Criteria */}
+          {/* Formatted Standalone Exercise Specifications & Goals */}
           <div className="rounded-xl bg-[#0b0c0e] border border-[#23252a] p-5 space-y-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-[#1f2126] pb-3">
               <div className="flex items-center gap-2">
-                <Code2 className="w-4 h-4 text-[#10b981]" />
+                <Code2 className="w-4 h-4 text-[#5e6ad2]" />
                 <h3 className="text-sm font-bold text-[#f7f8f8] font-mono">
-                  Verification Lab: {currentLesson.title}
+                  {currentLesson.title}
                 </h3>
               </div>
               <button
                 onClick={() => setActiveMode("theory")}
                 className="text-xs font-mono text-[#8a8f98] hover:text-white transition-colors"
               >
-                ← Review Theory
+                ← Review Handbook
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-              <div className="p-3.5 rounded-lg bg-[#111215] border border-[#23252a] space-y-1.5">
-                <span className="text-[#10b981] font-semibold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  VERIFICATION CRITERIA
-                </span>
-                <p className="text-[#d0d6e0] leading-relaxed">
-                  {currentLesson.criteria ||
-                    "Implement the complete solution in solution.py adhering strictly to the lesson requirements."}
-                </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs font-sans">
+              {/* 1. What this exercise is about */}
+              <div className="p-4 rounded-lg bg-[#0e1013] border border-[#1f2126] space-y-2 flex flex-col justify-between">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#5e6ad2] uppercase tracking-wider">
+                    <Lightbulb className="w-3.5 h-3.5 text-[#5e6ad2]" />
+                    <span>What This Exercise Is About</span>
+                  </div>
+                  <p className="text-[#c1c7d0] leading-relaxed">
+                    {currentLesson.exerciseAbout ||
+                      `Practice applying the core concepts from ${currentLesson.title} in a realistic, real-world programming scenario.`}
+                  </p>
+                </div>
               </div>
-              <div className="p-3.5 rounded-lg bg-[#111215] border border-[#23252a] space-y-1.5">
-                <span className="text-[#f59e0b] font-semibold flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  KEY FAILURE MODE TO AVOID
-                </span>
-                <p className="text-[#d0d6e0] leading-relaxed">
-                  {currentLesson.failureMode ||
-                    "Verify all edge cases, input boundary conditions, and type constraints."}
-                </p>
+
+              {/* 2. What you are solving */}
+              <div className="p-4 rounded-lg bg-[#070809] border border-[#23252a] space-y-2 flex flex-col justify-between">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#10b981] uppercase tracking-wider">
+                    <Target className="w-3.5 h-3.5 text-[#10b981]" />
+                    <span>What You Need to Solve</span>
+                  </div>
+                  <p className="text-[#d0d6e0] leading-relaxed whitespace-pre-line">
+                    {currentLesson.exerciseGoal ||
+                      currentLesson.criteria ||
+                      "Write clean logic in solution.py satisfying all lesson requirements and pass all automated tests."}
+                  </p>
+                </div>
+              </div>
+
+              {/* 3. Expected Output */}
+              <div className="p-4 rounded-lg bg-[#070809] border border-[#23252a] space-y-2 flex flex-col justify-between">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#e5993e] uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5 text-[#e5993e]" />
+                    <span>Expected Result</span>
+                  </div>
+                  {currentLesson.expectedOutput ? (
+                    <pre className="text-[11px] font-mono text-[#10b981] bg-[#0c0d10] p-2.5 rounded border border-[#1b1c20] whitespace-pre-wrap">
+                      {currentLesson.expectedOutput}
+                    </pre>
+                  ) : (
+                    <p className="text-[#a0a5af] leading-relaxed">
+                      All variables or returned values must match the expected calculations and pass the test assertions in tests.py.
+                    </p>
+                  )}
+                </div>
+
+                {currentLesson.failureMode && (
+                  <div className="text-[11px] text-[#8a8f98] border-t border-[#1a1b1f] pt-2 italic">
+                    ⚠️ Avoid: {currentLesson.failureMode}
+                  </div>
+                )}
               </div>
             </div>
           </div>

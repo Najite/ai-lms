@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { StatusChip } from "@/components/ui/status-chip";
 import { Play, Zap, Clock, Terminal, XCircle, CheckCircle2, ShieldCheck, Sparkles, BookOpen } from "lucide-react";

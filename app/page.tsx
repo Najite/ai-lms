@@ -1,7 +1,4 @@
-"use client";
-
 import * as React from "react";
-import { Navbar } from "@/components/landing/navbar";
 import { HeroSplit } from "@/components/landing/hero-split";
 import { SocialProof } from "@/components/landing/social-proof";
 import { InteractiveAdvantage } from "@/components/landing/interactive-advantage";
@@ -10,22 +7,23 @@ import { CurriculumBrowser } from "@/components/landing/curriculum-browser";
 import { PracticeSandbox } from "@/components/sandbox/practice-sandbox";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { CapstoneSection } from "@/components/landing/capstone-section";
-import { BenchmarkMatrix } from "@/components/landing/benchmark-matrix";
-import { Testimonials } from "@/components/landing/testimonials";
-import { TutorDrawer } from "@/components/tutor/tutor-drawer";
 import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/ui/status-chip";
-import { Terminal, ArrowUpRight, Github } from "lucide-react";
+import { Terminal, Github } from "lucide-react";
 import { CURRICULUM_META } from "@/lib/curriculum-meta";
 import { COMPREHENSIVE_ENTERPRISE_CAPSTONES } from "@/lib/production-capstones";
+import {
+  LandingTutorProvider,
+  LandingNavbar,
+  TutorCtaButton,
+} from "@/components/landing/landing-client-wrapper";
 
 export default function LandingPage() {
-  const [isTutorOpen, setIsTutorOpen] = React.useState(false);
-
   return (
-    <div className="min-h-screen bg-[#010102] text-[#f7f8f8] selection:bg-[#5e6ad2]/30 selection:text-white flex flex-col justify-between">
-      {/* Top sticky navigation */}
-      <Navbar onOpenTutor={() => setIsTutorOpen(true)} />
+    <LandingTutorProvider>
+      <div className="min-h-screen bg-[#010102] text-[#f7f8f8] selection:bg-[#5e6ad2]/30 selection:text-white flex flex-col justify-between">
+        {/* Top sticky navigation */}
+        <LandingNavbar />
 
       <main className="flex-1">
         {/* Section 1: Hero Split (Educative interactive intent search + multi-tab live sandbox) */}
@@ -67,41 +65,26 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Section 8: Capstone Verification Engine (22 GitHub Projects) */}
+        {/* Section 8: Capstone Verification Engine (22 Portfolio Projects) */}
         <div id="capstone-section">
           <CapstoneSection />
         </div>
 
-        {/* Section 9: Rigor & Benchmark Matrix vs Competitors */}
-        <section id="benchmarks-section" className="py-20 border-b border-[#23252a] bg-[#010102]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <BenchmarkMatrix />
-          </div>
-        </section>
-
-        {/* Section 10: Developer Testimonials & Outcomes (Educative Social Proof) */}
-        <section className="py-20 border-b border-[#23252a] bg-[#010102]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Testimonials />
-          </div>
-        </section>
-
-        {/* Section 11: Final CTA - Zero Fluff, 100% Free */}
-        <section className="py-24 bg-[#08090a] border-b border-[#23252a]">
+        {/* Section 9: Personal Engineering Launchpad */}
+        <section className="py-20 bg-[#08090a] border-b border-[#23252a]">
           <div className="max-w-5xl mx-auto px-4 text-center space-y-6">
             <div className="inline-flex items-center gap-2">
-              <StatusChip status="passed" label="PERMANENT $0 PROMISE" />
-              <span className="text-xs font-mono text-[#8a8f98]">No credit card • No countdown timers</span>
+              <StatusChip status="brand" label="PERSONAL AI ENGINEERING OS" />
+              <span className="text-xs font-mono text-[#8a8f98]">700 Lessons • 14 Modules • 100% Practical</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#f7f8f8]">
-              Build the systems skills that actually ship
+              Ready to build autonomous AI systems?
             </h2>
 
             <p className="text-sm text-[#8a8f98] max-w-2xl mx-auto leading-relaxed">
-              {CURRICULUM_META.totalLessons} lessons across {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} portfolio-grade
-              capstones, with guided practice in AI, data structures, networking, and distributed systems.
-              Clear learning paths. Real code. No hype.
+              Continue your sequential path through structured data contracts, vector search, streaming APIs,
+              and multi-agent state machines in your local browser sandbox.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -112,18 +95,10 @@ export default function LandingPage() {
                   className="gap-2 font-mono text-xs w-full sm:w-auto bg-[#5e6ad2] hover:bg-[#6f7cf0]"
                 >
                   <Terminal className="w-4 h-4" />
-                  <span>Open Learning Dashboard</span>
+                  <span>Resume Workspace</span>
                 </Button>
               </a>
-              <Button
-                variant="outline"
-                size="md"
-                onClick={() => setIsTutorOpen(true)}
-                className="gap-2 font-mono text-xs w-full sm:w-auto"
-              >
-                <span>Ask Architectural AI Tutor</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#8a8f98]" />
-              </Button>
+              <TutorCtaButton />
             </div>
           </div>
         </section>
@@ -138,7 +113,7 @@ export default function LandingPage() {
             </div>
             <span className="text-[#f7f8f8] font-semibold">AI-Native LMS</span>
             <span className="text-[#383b42]">/</span>
-            <span>Systems engineering, without the fluff</span>
+            <span>Personal AI-Native Software Engineering OS</span>
           </div>
 
           <div className="flex items-center gap-6 text-[#8a8f98]">
@@ -147,9 +122,6 @@ export default function LandingPage() {
             </a>
             <a href="#capstone-section" className="hover:text-[#f7f8f8] transition-colors">
               {COMPREHENSIVE_ENTERPRISE_CAPSTONES.length} Capstones
-            </a>
-            <a href="#benchmarks-section" className="hover:text-[#f7f8f8] transition-colors">
-              Benchmark
             </a>
             <a
               href="https://github.com"
@@ -163,13 +135,11 @@ export default function LandingPage() {
           </div>
 
           <div className="text-[11px] text-[#565961]">
-            MIT Licensed • $0.00 Architecture Guarantee
+            Strictly AI-Native Software Engineering
           </div>
         </div>
       </footer>
-
-      {/* Slide-out Architectural AI Tutor Drawer */}
-      <TutorDrawer isOpen={isTutorOpen} onClose={() => setIsTutorOpen(false)} />
     </div>
+    </LandingTutorProvider>
   );
 }

@@ -269,17 +269,17 @@ export function HeroSplit() {
       <div className="lg:col-span-6 space-y-6">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] bg-[#08090a] border border-[#23252a] text-xs text-[#8a8f98] font-mono">
           <span className="w-2 h-2 rounded-full bg-[#4cb782]" />
-          <span>Learn by running code. Not by watching lectures.</span>
+          <span>Execute code in browser. Master AI-native primitives.</span>
         </div>
 
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#f7f8f8] leading-[1.12]">
-            Learn systems engineering <br />
-            <span className="text-[#5e6ad2]">by building the system.</span>
+            Master AI-Native Software Engineering <br />
+            <span className="text-[#5e6ad2]">from first principles.</span>
           </h1>
           <p className="text-sm sm:text-base text-[#8a8f98] leading-relaxed max-w-xl">
-            A practical curriculum for AI agents, distributed systems, data structures, compilers, and networked
-            software. Work in the browser, validate every concept with tests, and move from theory to shipped code.
+            A practical personal workspace for autonomous agents, Model Context Protocol, vector embeddings,
+            token streaming, and production RAG. Run live code checks, pass AST assertions, and build real AI systems.
           </p>
         </div>
 

@@ -12,7 +12,10 @@ import {
   Check, 
   Code2,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Lightbulb,
+  Target,
+  ListChecks
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ExerciseItem } from "@/lib/exercises-catalog";
@@ -25,9 +28,6 @@ interface ExerciseFormatterProps {
 }
 
 // Cleans LaTeX math syntax to crisp human readable unicode notation
-// e.g. $-10^9 \le a, b \le 10^9$ -> -10⁹ ≤ a, b ≤ 10⁹
-// e.g. $O(1)$ -> O(1)
-// e.g. $2 \le \text{len}(nums) \le 10^5$ -> 2 ≤ len(nums) ≤ 10⁵
 export function formatMathSymbols(text: string): string {
   if (!text) return "";
   return text
@@ -103,7 +103,8 @@ function renderRichInline(text: string): React.ReactNode {
 }
 
 interface ParsedExerciseDescription {
-  problemDescription: string[];
+  about: string[];
+  whatToSolve: string[];
   constraints: string[];
   examples: Array<{
     input?: string;
@@ -116,12 +117,13 @@ interface ParsedExerciseDescription {
 function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
   const lines = markdown.split("\n");
   const result: ParsedExerciseDescription = {
-    problemDescription: [],
+    about: [],
+    whatToSolve: [],
     constraints: [],
     examples: [],
   };
 
-  let section: "desc" | "constraints" | "examples" = "desc";
+  let section: "about" | "whatToSolve" | "constraints" | "examples" = "about";
   let inCodeBlock = false;
   let codeBuffer: string[] = [];
 
@@ -129,33 +131,61 @@ function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
     const line = lines[i];
     const trimmed = line.trim();
 
-    if (trimmed.startsWith("### Problem Description")) {
-      section = "desc";
+    // Section headers
+    if (
+      trimmed.includes("What This Exercise Is About") ||
+      trimmed.startsWith("### Context")
+    ) {
+      section = "about";
       continue;
     }
-    if (trimmed.startsWith("#### Constraints")) {
+    if (
+      trimmed.includes("What We Are Trying to Solve") ||
+      trimmed.startsWith("### Problem Description") ||
+      trimmed.startsWith("### Goal") ||
+      trimmed.startsWith("### Objective")
+    ) {
+      section = "whatToSolve";
+      continue;
+    }
+    if (trimmed.startsWith("#### Constraints") || trimmed.startsWith("### Constraints")) {
       section = "constraints";
       continue;
     }
-    if (trimmed.startsWith("#### Example")) {
+    if (
+      trimmed.includes("Expected Result") ||
+      trimmed.startsWith("#### Example") ||
+      trimmed.startsWith("### Examples")
+    ) {
       section = "examples";
       continue;
     }
 
-    // Code block inside examples
+    // Code block inside examples or description
     if (trimmed.startsWith("```")) {
       if (inCodeBlock) {
         inCodeBlock = false;
         if (codeBuffer.length > 0) {
-          // Parse lines like "Input: ...", "Output: ...", "Explanation: ..."
+          // Parse example pairs (Input, Output, Explanation)
           let currentInput = "";
           let currentOutput = "";
           let currentExplanation = "";
           const rawLines = codeBuffer.join("\n");
 
+          const parsedItems: Array<{ input?: string; output?: string; explanation?: string }> = [];
+
           codeBuffer.forEach((cLine) => {
             const cTrimmed = cLine.trim();
             if (cTrimmed.startsWith("Input:")) {
+              if (currentInput || currentOutput) {
+                parsedItems.push({
+                  input: currentInput,
+                  output: currentOutput,
+                  explanation: currentExplanation,
+                });
+                currentOutput = "";
+                currentExplanation = "";
+              }
               currentInput = cTrimmed.replace(/^Input:\s*/, "");
             } else if (cTrimmed.startsWith("Output:")) {
               currentOutput = cTrimmed.replace(/^Output:\s*/, "");
@@ -165,12 +195,15 @@ function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
           });
 
           if (currentInput || currentOutput) {
-            result.examples.push({
+            parsedItems.push({
               input: currentInput,
               output: currentOutput,
               explanation: currentExplanation,
-              rawCode: rawLines,
             });
+          }
+
+          if (parsedItems.length > 0) {
+            parsedItems.forEach((item) => result.examples.push(item));
           } else {
             result.examples.push({ rawCode: rawLines });
           }
@@ -190,8 +223,10 @@ function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
 
     if (!trimmed) continue;
 
-    if (section === "desc") {
-      result.problemDescription.push(line);
+    if (section === "about") {
+      result.about.push(line);
+    } else if (section === "whatToSolve") {
+      result.whatToSolve.push(line);
     } else if (section === "constraints") {
       if (trimmed.startsWith("-") || trimmed.startsWith("*")) {
         result.constraints.push(trimmed.replace(/^[-*]\s*/, ""));
@@ -199,7 +234,6 @@ function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
         result.constraints.push(trimmed);
       }
     } else if (section === "examples") {
-      // Freeform example line outside of code block
       if (trimmed.includes("Input:") || trimmed.includes("Output:")) {
         const parts = trimmed.split(/->|Output:/);
         if (parts.length >= 2) {
@@ -210,6 +244,11 @@ function parseExerciseMarkdown(markdown: string): ParsedExerciseDescription {
         }
       }
     }
+  }
+
+  // Fallback: If markdown didn't separate about vs whatToSolve, put everything in whatToSolve
+  if (result.about.length === 0 && result.whatToSolve.length === 0) {
+    result.whatToSolve = ["Implement the solution adhering to the instructions and pass all test assertions."];
   }
 
   return result;
@@ -246,7 +285,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
 
   return (
     <div className="rounded-xl bg-[#0b0c0e] border border-[#23252a] p-5 space-y-5 shadow-xl text-left">
-      {/* 1. Header Bar: Identity, Level, Tier, & Optional Nav */}
+      {/* 1. Header Bar: Identity, Level, Tier, & Optional Theory Link */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1f2126]">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
@@ -262,7 +301,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
               {exercise.difficulty}
             </span>
             <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#16171a] text-[#8a8f98] border border-[#2e3038] font-medium">
-              Tier {exercise.orderIndex}: {exercise.tier}
+              Level {exercise.orderIndex}: {exercise.tier}
             </span>
             {exercise.tags && exercise.tags.length > 0 && (
               <span className="text-xs text-[#565961] hidden md:inline">•</span>
@@ -283,7 +322,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
           </h2>
           {exercise.leetcodeEquivalent && (
             <p className="text-xs font-mono text-[#8a8f98]">
-              Interview Equivalent:{" "}
+              Concept Focus:{" "}
               <span className="text-[#d0d6e0] font-semibold">
                 {exercise.leetcodeEquivalent}
               </span>
@@ -297,37 +336,52 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#2e3038] bg-[#141517] hover:bg-[#1a1c20] text-xs font-mono text-[#8a8f98] hover:text-white transition-all shrink-0 self-start sm:self-auto"
           >
             <BookOpen className="w-3.5 h-3.5 text-[#5e6ad2]" />
-            <span>Review Theory</span>
+            <span>Review Lesson Handbook</span>
             <ArrowRight className="w-3 h-3 text-[#565961]" />
           </button>
         )}
       </div>
 
-      {/* 2. Problem Statement (Plain English, Friendly, Formatted) */}
-      <div className="space-y-2.5">
-        <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#8a8f98] uppercase tracking-wider">
-          <Code2 className="w-3.5 h-3.5 text-[#5e6ad2]" />
-          <span>Challenge Invariant</span>
+      {/* 2. Section A: What This Exercise Is About (Real-world Scenario) */}
+      {parsed.about.length > 0 && (
+        <div className="space-y-2 rounded-lg bg-[#0e1013] border border-[#1f2126] p-3.5">
+          <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#5e6ad2] uppercase tracking-wider">
+            <Lightbulb className="w-3.5 h-3.5 text-[#5e6ad2]" />
+            <span>What This Exercise Is About</span>
+          </div>
+          <div className="text-xs sm:text-sm text-[#c1c7d0] leading-relaxed font-sans space-y-1.5">
+            {parsed.about.map((line, idx) => (
+              <p key={idx}>{renderRichInline(line)}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Section B: What We Are Trying to Solve (Clear Requirements & Logic) */}
+      <div className="space-y-2.5 rounded-lg bg-[#070809] border border-[#23252a] p-3.5">
+        <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#10b981] uppercase tracking-wider">
+          <Target className="w-3.5 h-3.5 text-[#10b981]" />
+          <span>What We Are Trying to Solve</span>
         </div>
         <div className="text-xs sm:text-sm text-[#d0d6e0] leading-relaxed font-sans space-y-2">
-          {parsed.problemDescription.length > 0 ? (
-            parsed.problemDescription.map((descLine, idx) => (
-              <p key={idx}>{renderRichInline(descLine)}</p>
+          {parsed.whatToSolve.length > 0 ? (
+            parsed.whatToSolve.map((line, idx) => (
+              <p key={idx}>{renderRichInline(line)}</p>
             ))
           ) : (
             <p>
-              Implement the logic adhering to the module specifications and pass all automated test assertions.
+              Implement the solution in \`solution.py\` following the instructions.
             </p>
           )}
         </div>
       </div>
 
-      {/* 3. Examples Section (Structured LeetCode-style cards) */}
+      {/* 4. Section C: What The Expected Result Looks Like (Example Inputs & Outputs) */}
       {parsed.examples.length > 0 && (
         <div className="space-y-2.5">
           <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#8a8f98] uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#10b981]" />
-            <span>Test Case Demonstration</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#e5993e]" />
+            <span>What The Expected Result Looks Like</span>
           </div>
 
           <div className="grid grid-cols-1 gap-2.5">
@@ -357,7 +411,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
                 )}
                 {ex.output && (
                   <div className="flex items-start gap-2">
-                    <span className="text-[#8a8f98] shrink-0 font-semibold text-[11px]">Output:</span>
+                    <span className="text-[#8a8f98] shrink-0 font-semibold text-[11px]">Expected Result:</span>
                     <span className="text-[#10b981] font-semibold break-all">
                       {formatMathSymbols(ex.output)}
                     </span>
@@ -365,7 +419,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
                 )}
                 {ex.explanation && (
                   <div className="text-[11px] text-[#8a8f98] border-t border-[#1a1b1f] pt-1.5 italic">
-                    💡 Explanation: {formatMathSymbols(ex.explanation)}
+                    💡 Why this result: {formatMathSymbols(ex.explanation)}
                   </div>
                 )}
                 {ex.rawCode && !ex.input && !ex.output && (
@@ -379,12 +433,12 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
         </div>
       )}
 
-      {/* 4. Constraints Section (Badges / Clean Pills) */}
+      {/* 5. Constraints Section (Badges / Clean Pills) */}
       {parsed.constraints.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#8a8f98] uppercase tracking-wider">
             <Cpu className="w-3.5 h-3.5 text-[#e5993e]" />
-            <span>Boundary Invariants & Target Complexity</span>
+            <span>Rules & Invariants</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {parsed.constraints.map((c, cIdx) => (
@@ -392,13 +446,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
                 key={cIdx}
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#121316] border border-[#23252a] text-xs font-mono text-[#c1c7d0]"
               >
-                {c.toLowerCase().includes("time") ? (
-                  <Clock className="w-3 h-3 text-[#5e6ad2]" />
-                ) : c.toLowerCase().includes("space") ? (
-                  <Layers className="w-3 h-3 text-[#10b981]" />
-                ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#e5993e]" />
-                )}
+                <span className="w-1.5 h-1.5 rounded-full bg-[#e5993e]" />
                 <span>{renderRichInline(c)}</span>
               </div>
             ))}
@@ -406,7 +454,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
         </div>
       )}
 
-      {/* 5. Progressive Hint Helper (Anti-Stuck Guarantee) */}
+      {/* 6. Progressive Hint Helper (Anti-Stuck Guarantee) */}
       {exercise.hints && exercise.hints.length > 0 && (
         <div className="pt-2 border-t border-[#1f2126]">
           <button
@@ -415,7 +463,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
           >
             <HelpCircle className="w-3.5 h-3.5" />
             <span className="font-semibold">
-              {showHints ? "Hide Algorithmic Guidance" : "Stuck? View Guided Invariants & Hints"}
+              {showHints ? "Hide Step-by-Step Guidance" : "Need a hint? View Step-by-Step Guidance"}
             </span>
             {showHints ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
@@ -423,7 +471,7 @@ export const ExerciseFormatter: React.FC<ExerciseFormatterProps> = ({
           {showHints && (
             <div className="mt-3 p-3.5 rounded-lg bg-[#0e1013] border border-[#5e6ad2]/20 space-y-2 animate-fadeIn">
               <div className="text-[11px] font-mono font-semibold text-[#5e6ad2] flex items-center gap-1.5">
-                <span>💡 GUIDED THINKING PROCESS (ZERO SPOILERS)</span>
+                <span>💡 GUIDED THINKING PROCESS</span>
               </div>
               <ul className="space-y-1.5 pl-4 list-disc text-xs font-sans text-[#a0a5af] leading-relaxed">
                 {exercise.hints.map((hint, hIdx) => (

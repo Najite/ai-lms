@@ -148,15 +148,18 @@ export interface DatabaseNodeDetail {
   defense_prompts?: any;
   criteria?: string;
   failure_mode?: string;
+  exercise_about?: string;
+  exercise_goal?: string;
+  expected_output?: string;
   xp_reward?: number;
 }
 
 const CATALOG_CACHE_KEY = "ai_lms_curriculum_catalog_v2";
 // Bump this whenever the handbook contract changes so stale local lesson
 // content cannot hide newly populated Supabase content.
-const LESSON_DETAIL_PREFIX = "ai_lms_lesson_detail_v8_";
+const LESSON_DETAIL_PREFIX = "ai_lms_lesson_detail_v16_";
 /** Bookkeeping key holding the LRU order of cached lesson handbooks. */
-const LESSON_DETAIL_INDEX_KEY = "ai_lms_lesson_detail_index_v8";
+const LESSON_DETAIL_INDEX_KEY = "ai_lms_lesson_detail_index_v16";
 
 /**
  * Hard cap on cached lesson handbooks.
@@ -532,10 +535,16 @@ export async function fetchLessonDetail(lessonId: string): Promise<DatabaseNodeD
       const d = res.data;
       let criteria: string | undefined;
       let failure_mode: string | undefined;
+      let exercise_about: string | undefined;
+      let exercise_goal: string | undefined;
+      let expected_output: string | undefined;
 
       if (typeof d.test_suite === "object" && d.test_suite !== null) {
         criteria = d.test_suite["verification_criteria"];
         failure_mode = d.test_suite["failure_mode"];
+        exercise_about = d.test_suite["exercise_about"];
+        exercise_goal = d.test_suite["exercise_goal"] || criteria;
+        expected_output = d.test_suite["expected_output"];
       }
 
       const detail: DatabaseNodeDetail = {
@@ -548,6 +557,9 @@ export async function fetchLessonDetail(lessonId: string): Promise<DatabaseNodeD
         defense_prompts: d.defense_prompts,
         criteria,
         failure_mode,
+        exercise_about,
+        exercise_goal,
+        expected_output,
         xp_reward: d.xp_reward || 100,
       };
 

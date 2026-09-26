@@ -398,7 +398,13 @@ async function runModule1Authoring() {
 3. **Automated Verification**: Ensure every function is backed by test assertions proving its correctness.`;
 
     const stepList = spec?.stepByStep
-      ? spec.stepByStep.map((s, idx) => `${idx + 1}. **${s.split(':')[0]}**: ${s.split(':').slice(1).join(':') || s}`).join('\n')
+      ? spec.stepByStep.map((s, idx) => {
+          const parts = s.split(':');
+          if (parts.length > 1) {
+            return `${idx + 1}. **${parts[0].trim()}**: ${parts.slice(1).join(':').trim()}`;
+          }
+          return `${idx + 1}. ${s}`;
+        }).join('\n')
       : `1. **Examine the Input Arguments**: Check the types and boundary constraints passed to the function.\n2. **Implement the Logic**: Apply the transformation step cleanly without mutating inputs.\n3. **Return the Expected Value**: Ensure your return structure matches what the automated tests assert.`;
 
     const gotchasList = spec?.gotchas

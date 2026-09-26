@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { StatusChip } from "@/components/ui/status-chip";
 import { Quote, CheckCircle2, Star, ArrowUpRight } from "lucide-react";

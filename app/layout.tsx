@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { inter, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "AI-Native LMS // Zero-Slop Systems Engineering Curriculum",
+  title: "AI-Native Software Engineer // Personal Learning OS",
   description:
-    "An AI-Native computer science learning platform with 14 modules, 700 verified lessons, project-based curriculum, and resilient low-bandwidth learning workflows.",
+    "An AI-Native Software Engineering platform with 14 modules, 700 verified lessons, in-browser WASM code execution, and autonomous agent curricula.",
 };
 
 /**
@@ -22,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-[#010102] text-[#f7f8f8] antialiased selection:bg-[#5e6ad2]/30 selection:text-white min-h-screen">
+    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-[#010102] text-[#f7f8f8] font-sans antialiased selection:bg-[#5e6ad2]/30 selection:text-white min-h-screen">
         {children}
       </body>
     </html>

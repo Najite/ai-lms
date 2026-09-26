@@ -29,7 +29,7 @@ export function Navbar({ onOpenTutor }: NavbarProps) {
             </span>
           </Link>
           <span className="text-[#383b42] text-xs">/</span>
-          <StatusChip status="passed" label="ZERO URGENCY" size="sm" />
+          <StatusChip status="passed" label="PERSONAL WORKSPACE" size="sm" />
         </div>
 
         {/* Center Nav Links (Educative / Codecademy style) */}
@@ -65,12 +65,6 @@ export function Navbar({ onOpenTutor }: NavbarProps) {
           >
             Capstones
           </button>
-          <button
-            onClick={() => scrollTo("benchmarks-section")}
-            className="hover:text-[#f7f8f8] transition-colors"
-          >
-            Benchmarks
-          </button>
         </nav>
 
         {/* Right Actions */}
@@ -91,7 +85,7 @@ export function Navbar({ onOpenTutor }: NavbarProps) {
               size="xs"
               className="font-mono text-[11px]"
             >
-              Start Free
+              Enter Dashboard
             </Button>
           </Link>
         </div>

@@ -1,4 +1,12 @@
-export type ExerciseDifficulty = "Easy" | "Medium" | "Hard";
+#!/usr/bin/env python3
+"""
+Generates lib/exercises-catalog.ts with crystal-clear 3-part descriptions for every exercise:
+1. 🎯 What This Exercise Is About (Real-world context)
+2. 🧠 What We Are Trying to Solve (Exact problem & logic)
+3. 📋 What The Expected Result Looks Like (Clear inputs, outputs, and explanations)
+"""
+
+CATALOG_TS = """export type ExerciseDifficulty = "Easy" | "Medium" | "Hard";
 
 export type ExerciseTier =
   | "Concept Warmup"
@@ -143,7 +151,7 @@ Weather monitoring apps receive data in Fahrenheit from certain sensors, but sta
 
 ### 🧠 What We Are Trying to Solve
 Implement \`fahrenheit_to_celsius(f_temp: float) -> float\`:
-- Use the standard scientific formula: $C = (F - 32) \times \frac{5}{9}$.
+- Use the standard scientific formula: $C = (F - 32) \\times \\frac{5}{9}$.
 - Return the converted Celsius temperature rounded to 2 decimal places.
 
 ### 📋 What The Expected Result Looks Like
@@ -646,10 +654,10 @@ School grading portals convert numeric test scores (0 to 100) into standard lett
 
 ### 🧠 What We Are Trying to Solve
 Implement \`evaluate_letter_grade(score: int) -> str\`:
-- Score $\ge 90$: \`"A"\`
-- Score $\ge 80$: \`"B"\`
-- Score $\ge 70$: \`"C"\`
-- Score $\ge 60$: \`"D"\`
+- Score $\\ge 90$: \`"A"\`
+- Score $\\ge 80$: \`"B"\`
+- Score $\\ge 70$: \`"C"\`
+- Score $\\ge 60$: \`"D"\`
 - Otherwise: \`"F"\`
 
 ### 📋 What The Expected Result Looks Like
@@ -919,7 +927,7 @@ print("✓ All assertions passed for Halving Step Counter")
     leetcodeEquivalent: "Bounded Accumulator",
     tags: ["While Loops", "Accumulator"],
     descriptionMarkdown: `### 🎯 What This Exercise Is About
-Procurement systems add items with sequentially increasing costs ($1, $2, $3, $4, \dots$) to a cart as long as the total cost stays within an approved budget.
+Procurement systems add items with sequentially increasing costs ($1, $2, $3, $4, \\dots$) to a cart as long as the total cost stays within an approved budget.
 
 ### 🧠 What We Are Trying to Solve
 Implement \`sum_until_budget(budget_cap: int) -> int\`:
@@ -1020,7 +1028,7 @@ Educational analytics tools scan a class roster of test scores to report how man
 Implement \`count_high_scores(scores: list[int], threshold: int) -> int\`:
 1. Initialize a counter \`count = 0\`.
 2. Iterate through \`scores\` with a \`for\` loop.
-3. If a score is $\ge$ \`threshold\`, increment \`count\` by 1.
+3. If a score is $\\ge$ \`threshold\`, increment \`count\` by 1.
 4. Return the final count.
 
 ### 📋 What The Expected Result Looks Like
@@ -1949,7 +1957,7 @@ Practice and reinforce the concepts learned in **${node.title}**. This exercise 
 
 ### 🧠 What We Are Trying to Solve
 ${cfg.focus}
-${criteria ? `\n**Goal:** ${criteria}` : ""}
+${criteria ? `\\n**Goal:** ${criteria}` : ""}
 
 ### 📋 What The Expected Result Looks Like
 Write code in \`solution.py\` that passes all validation checks in the interactive test suite.`;
@@ -1965,10 +1973,10 @@ Write code in \`solution.py\` that passes all validation checks in the interacti
       descriptionMarkdown: descMd,
       starterCode:
         sc ||
-        `# Practice ${cfg.orderIndex} (${cfg.tier}): ${cfg.subTitle}\n# TODO: Complete the exercise logic\n`,
+        `# Practice ${cfg.orderIndex} (${cfg.tier}): ${cfg.subTitle}\\n# TODO: Complete the exercise logic\\n`,
       testSuite:
         ts ||
-        `import solution\nprint("✓ Practice ${cfg.orderIndex} passed for ${cleanTitle}")\n`,
+        `import solution\\nprint("✓ Practice ${cfg.orderIndex} passed for ${cleanTitle}")\\n`,
       hints: [
         promptHints[(cfg.orderIndex - 1) % promptHints.length],
         `Keep your solution clear, step-by-step, and focused on ${cfg.tier.toLowerCase()}.`,
@@ -2036,3 +2044,9 @@ export function isExerciseUnlocked(
 
   return true;
 }
+"""
+
+with open("/home/sawacha/lms/lib/exercises-catalog.ts", "w") as f:
+    f.write(CATALOG_TS)
+
+print("✓ Successfully regenerated lib/exercises-catalog.ts with 3-part structured descriptions!")
