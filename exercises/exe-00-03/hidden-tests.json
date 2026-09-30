@@ -1,0 +1,74 @@
+[
+  {
+    "id": "HID-01",
+    "name": "DNS Resolution Mapping",
+    "weight": 7.5,
+    "description": "Verifies that the learner correctly mapped domain api.octostore.app to numerical IP address 140.82.121.34.",
+    "target_field": "task_5_resolved_api_ip_address",
+    "expected_value": "140.82.121.34",
+    "rationale": "Remote Address in the DevTools General section displays 140.82.121.34:443 for api.octostore.app."
+  },
+  {
+    "id": "HID-02",
+    "name": "Redirect Chain Analysis (301 Permanent Redirect)",
+    "weight": 7.5,
+    "description": "Verifies that the learner understands that Request R1 initiates the HTTP to HTTPS protocol upgrade.",
+    "target_field": "task_2_redirect_target_url",
+    "expected_value": "https://octostore.app",
+    "rationale": "HTTP 301 permanently instructs clients to upgrade cleartext traffic to the encrypted HTTPS origin."
+  },
+  {
+    "id": "HID-03",
+    "name": "Authentication Error Detection (401 Unauthorized)",
+    "weight": 7.5,
+    "description": "Verifies that the learner correctly identified Request R5 as the authentication failure returning HTTP 401.",
+    "target_field": "task_3_unauthenticated_request_id",
+    "expected_value": "R5",
+    "rationale": "Request R5 to /v1/user/profile failed with 401 Unauthorized because no valid Bearer token was provided in Authorization headers."
+  },
+  {
+    "id": "HID-04",
+    "name": "Forbidden Permission Recognition (403 Forbidden)",
+    "weight": 7.5,
+    "description": "Verifies that the learner correctly identified Request R6 as an authorization permissions failure returning HTTP 403.",
+    "target_field": "task_3_forbidden_request_id",
+    "expected_value": "R6",
+    "rationale": "Request R6 to /v1/admin/revenue recognized user identity but rejected access with 403 Forbidden due to non-admin role."
+  },
+  {
+    "id": "HID-05",
+    "name": "Gateway Timeout Latency Investigation (504 Gateway Timeout)",
+    "weight": 7.5,
+    "description": "Verifies that the learner correctly identified Request R9 as the 15-second upstream timeout failure.",
+    "target_field": "task_4_timeout_bottleneck_request_id",
+    "expected_value": "R9",
+    "rationale": "Request R9 to /v1/pay stalled for 15,000ms before returning 504 Gateway Timeout from an overloaded payment proxy."
+  },
+  {
+    "id": "HID-06",
+    "name": "Insecure Protocol Isolation",
+    "weight": 7.5,
+    "description": "Verifies that the learner accurately spotted the single insecure HTTP endpoint among HTTPS traffic.",
+    "target_field": "task_2_insecure_http_request_id",
+    "expected_value": "R7",
+    "rationale": "Request R7 to legacy-inventory.octostore is the only unencrypted HTTP request in the recorded transaction trace."
+  },
+  {
+    "id": "HID-07",
+    "name": "JSON Payload Error Key Extraction",
+    "weight": 7.5,
+    "description": "Verifies that the learner accurately retrieved the nested error code from structured JSON response.",
+    "target_field": "task_5_error_code_payload",
+    "expected_value": "DB_CONN_TIMEOUT",
+    "rationale": "Directly testing the learner's ability to read and parse JSON objects without running JavaScript code."
+  },
+  {
+    "id": "HID-08",
+    "name": "Multi-Request Root Cause Synthesis",
+    "weight": 7.5,
+    "description": "Verifies that the learner correctly deduced that the database crash (Request R8) was the root trigger of the order breakdown.",
+    "target_field": "task_6_primary_root_cause",
+    "expected_value": "database_connection_crash",
+    "rationale": "The checkout submission crashed at R8 with a database exception, causing the frontend checkout flow to stall."
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "VIS-01",
+    "name": "Identify Successful Request (200 OK)",
+    "weight": 6.67,
+    "description": "Verifies that the learner correctly identified Request R3 as the successful product catalog fetch returning status 200 OK.",
+    "target_field": "task_1_successful_catalog_request_id",
+    "expected_value": "R3",
+    "rationale": "Request R3 fetches /v1/products with a 200 OK status code and returns product catalog data."
+  },
+  {
+    "id": "VIS-02",
+    "name": "Identify Missing Resource (404 Not Found)",
+    "weight": 6.67,
+    "description": "Verifies that the learner correctly identified Request R4 as the missing image resource returning status 404 Not Found.",
+    "target_field": "task_1_missing_asset_request_id",
+    "expected_value": "R4",
+    "rationale": "Request R4 points to a missing image path /images/products/phone_v2.png and receives a 404 Not Found response."
+  },
+  {
+    "id": "VIS-03",
+    "name": "Identify Server Failure (500 Internal Server Error)",
+    "weight": 6.67,
+    "description": "Verifies that the learner correctly identified Request R8 as the server-side backend crash returning status 500.",
+    "target_field": "task_4_backend_crash_request_id",
+    "expected_value": "R8",
+    "rationale": "Request R8 to /v1/checkout/process crashed with HTTP 500 Internal Server Error due to a database exception."
+  },
+  {
+    "id": "VIS-04",
+    "name": "Locate JSON Payload Content",
+    "weight": 6.67,
+    "description": "Verifies that the learner inspected the JSON response body and correctly extracted error code DB_CONN_TIMEOUT.",
+    "target_field": "task_5_error_code_payload",
+    "expected_value": "DB_CONN_TIMEOUT",
+    "rationale": "The JSON response body of Request R8 contains { \"error\": \"DatabaseConnectionException\", \"code\": \"DB_CONN_TIMEOUT\" }."
+  },
+  {
+    "id": "VIS-05",
+    "name": "Identify Insecure Plain HTTP Request",
+    "weight": 6.67,
+    "description": "Verifies that the learner identified Request R7 as using unencrypted plain HTTP instead of secure HTTPS.",
+    "target_field": "task_2_insecure_http_request_id",
+    "expected_value": "R7",
+    "rationale": "Request R7 to legacy-inventory.octostore uses the insecure http:// scheme over port 80."
+  },
+  {
+    "id": "VIS-06",
+    "name": "Inspect Redirection Response Header (Location)",
+    "weight": 6.67,
+    "description": "Verifies that the learner inspected response headers of Request R1 to find the target URL in the Location header.",
+    "target_field": "task_2_redirect_target_url",
+    "expected_value": "https://octostore.app",
+    "rationale": "The 301 Moved Permanently response for http://octostore.app includes header Location: https://octostore.app."
+  }
+]

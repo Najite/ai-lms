@@ -229,12 +229,28 @@ export class LearningService {
             moduleSlug: nextItem.moduleSlug,
             lessonSlug: nextItem.slug,
             title: nextItem.title,
+            summary: nextItem.summary,
+            estimatedMinutes: nextItem.estimatedMinutes,
+            orderIndex: nextItem.lessonOrder,
           }
         : null;
 
       const progress = userId
         ? await this.progressRepo.getUserLessonProgress(userId, lesson.id)
         : null;
+
+      const [dbCompetency, exercise] = await Promise.all([
+        this.learningRepo.getLessonCompetency(lesson.id),
+        this.learningRepo.getLessonExercise(lesson.id, userId),
+      ]);
+
+      // Default fallback if database mapping is not yet migrated
+      const competency = dbCompetency || {
+        code: "DEV-00",
+        title: "Developer Environment & Tooling Fluency",
+        targetState: "introduced" as const,
+        capabilityGate: "Gate 1: Foundations",
+      };
 
       return {
         success: true,
@@ -245,6 +261,8 @@ export class LearningService {
           previousLesson,
           nextLesson,
           progress,
+          competency,
+          exercise,
         },
       };
     } catch (err) {

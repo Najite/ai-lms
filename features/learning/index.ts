@@ -15,7 +15,16 @@ export * from "./components/module-card";
 export * from "./components/lesson-item";
 export * from "./components/lesson-viewer";
 export * from "./components/lesson-navigation";
+export * from "./components/lesson-header";
+export * from "./components/lesson-overview-cards";
+export * from "./components/competency-progress-card";
+export * from "./components/module-progress-hud";
+export * from "./components/next-lesson-card";
+export * from "./components/staff-metadata-drawer";
+export * from "./utils/duration-formatter";
 export * from "./components/lesson-studio";
 export * from "./components/progress-bar";
 export * from "./components/progress-badge";
 export * from "./components/learning-breadcrumbs";
+export * from "./utils/lesson-content-parser";
+

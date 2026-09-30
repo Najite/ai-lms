@@ -8,3 +8,4 @@ export * from "./exercise-completion-card";
 export * from "./exercise-list-page";
 export * from "./exercise-detail-page";
 export * from "./exercise-history-page";
+export * from "./ai-verification";

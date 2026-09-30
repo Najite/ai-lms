@@ -1,0 +1,31 @@
+{
+  "id": "e0000000-0000-0000-0000-000000000003",
+  "category_id": "b0000000-0000-0000-0000-000000000001",
+  "slug": "exe-00-03-network-request-investigation-http-diagnostics",
+  "title": "EXE-00-03: Network Request Investigation & HTTP Diagnostics",
+  "description": "Investigate a simulated cloud application incident in Browser DevTools. Inspect live HTTP requests, status codes (200, 301, 401, 403, 404, 500, 504), metadata headers, JSON payloads, DNS mappings, and synthesize the root cause of production failures.",
+  "difficulty": "intermediate",
+  "estimated_minutes": 50,
+  "starter_code": "{\n  \"exercise_id\": \"exe-00-03\",\n  \"task_1_successful_catalog_request_id\": \"\",\n  \"task_1_missing_asset_request_id\": \"\",\n  \"task_2_redirect_target_url\": \"\",\n  \"task_2_insecure_http_request_id\": \"\",\n  \"task_3_unauthenticated_request_id\": \"\",\n  \"task_3_forbidden_request_id\": \"\",\n  \"task_4_backend_crash_request_id\": \"\",\n  \"task_4_timeout_bottleneck_request_id\": \"\",\n  \"task_5_resolved_api_ip_address\": \"\",\n  \"task_5_error_code_payload\": \"\",\n  \"task_6_primary_root_cause\": \"\"\n}",
+  "solution_code": "{\n  \"exercise_id\": \"exe-00-03\",\n  \"task_1_successful_catalog_request_id\": \"R3\",\n  \"task_1_missing_asset_request_id\": \"R4\",\n  \"task_2_redirect_target_url\": \"https://octostore.app\",\n  \"task_2_insecure_http_request_id\": \"R7\",\n  \"task_3_unauthenticated_request_id\": \"R5\",\n  \"task_3_forbidden_request_id\": \"R6\",\n  \"task_4_backend_crash_request_id\": \"R8\",\n  \"task_4_timeout_bottleneck_request_id\": \"R9\",\n  \"task_5_resolved_api_ip_address\": \"140.82.121.34\",\n  \"task_5_error_code_payload\": \"DB_CONN_TIMEOUT\",\n  \"task_6_primary_root_cause\": \"database_connection_crash\"\n}",
+  "validation_rules": {
+    "exercise_type": "network_request_diagnostics",
+    "pass_threshold": 90,
+    "visible_suite_weight": 40,
+    "hidden_suite_weight": 60,
+    "required_fields": [
+      "task_1_successful_catalog_request_id",
+      "task_1_missing_asset_request_id",
+      "task_2_redirect_target_url",
+      "task_2_insecure_http_request_id",
+      "task_3_unauthenticated_request_id",
+      "task_3_forbidden_request_id",
+      "task_4_backend_crash_request_id",
+      "task_4_timeout_bottleneck_request_id",
+      "task_5_resolved_api_ip_address",
+      "task_5_error_code_payload",
+      "task_6_primary_root_cause"
+    ]
+  },
+  "is_published": true
+}

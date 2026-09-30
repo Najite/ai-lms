@@ -1,0 +1,138 @@
+{
+  "test_suite_id": "TS-EXE-00-02-HIDDEN",
+  "exercise_code": "EXE-00-02",
+  "visibility": "hidden",
+  "total_weight": 60.0,
+  "tests": [
+    {
+      "id": "HID-01",
+      "category": "Standard Streams & Redirection",
+      "name": "Diagnostic Error Stream Separation (`2>`)",
+      "description": "Verifies that the database check isolates stderr (File Descriptor 2) to '/var/log/db_errors.log' without polluting stdout.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "stream_routing.redirection_challenges",
+        "match": {
+          "challenge_id": "REDIR-03",
+          "operator_used": "2>",
+          "stderr_destination": "/var/log/db_errors.log"
+        }
+      },
+      "failure_message": "Error stream redirection failed. Use '2>' to redirect standard error (File Descriptor 2) to an error log file."
+    },
+    {
+      "id": "HID-02",
+      "category": "Standard Streams & Redirection",
+      "name": "Combined Stream Merge Redirection (`2>&1`)",
+      "description": "Verifies that both stdout and stderr are captured into '/var/log/full-incident.log' using '2>&1' stream merging.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "stream_routing.redirection_challenges",
+        "match": {
+          "challenge_id": "REDIR-04",
+          "operator_used": "2>&1",
+          "stdout_destination": "/var/log/full-incident.log"
+        }
+      },
+      "failure_message": "Merged stream redirection failed. The syntax '> /var/log/full-incident.log 2>&1' sends stdout to the file and merges stderr into the same stream."
+    },
+    {
+      "id": "HID-03",
+      "category": "Pipe Flow & Pipeline Construction",
+      "name": "Inter-Stage Stream Binding Invariants",
+      "description": "Verifies that all intermediate nodes (stages 1, 2, 3, 4) take input from 'stdin_from_pipe' and produce 'stdout_to_pipe'.",
+      "weight": 10.0,
+      "assertion": {
+        "type": "custom_pipeline_binding_check",
+        "target": "pipeline_composition.incident_pipeline.stages",
+        "first_stage_input": "file_path",
+        "intermediate_input": "stdin_from_pipe",
+        "intermediate_output": "stdout_to_pipe"
+      },
+      "failure_message": "Pipeline stream binding violated. In a Unix pipeline, intermediate commands must read from standard input (stdin) provided by the upstream pipe rather than reading separate file arguments."
+    },
+    {
+      "id": "HID-04",
+      "category": "Pipe Flow & Pipeline Construction",
+      "name": "Status Code Filter Precision in `grep`",
+      "description": "Verifies that the grep filter accurately searches for HTTP 500 status codes in access logs.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "pipeline_composition.incident_pipeline.stages",
+        "match": {
+          "executable": "grep",
+          "arguments": ["500"]
+        }
+      },
+      "failure_message": "Grep stage failed to isolate HTTP 500 error rows. Ensure the grep arguments specify the error code '500'."
+    },
+    {
+      "id": "HID-05",
+      "category": "Pipe Flow & Pipeline Construction",
+      "name": "Sorting Invariant Preceding `uniq -c` Aggregation",
+      "description": "Verifies that the 'sort' command immediately precedes 'uniq -c', satisfying the POSIX requirement that uniq only detects adjacent duplicate lines.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "adjacent_stage_check",
+        "target": "pipeline_composition.incident_pipeline.stages",
+        "predecessor": "sort",
+        "successor": "uniq"
+      },
+      "failure_message": "Sorting invariant violated! In Unix, 'uniq' only groups adjacent identical lines. A pipeline must execute 'sort' immediately before 'uniq' to aggregate duplicate log entries accurately."
+    },
+    {
+      "id": "HID-06",
+      "category": "Pipeline Triage & Forensic Debugging",
+      "name": "Triage BUG-01: Redirection vs. Pipe Syntax Confusion",
+      "description": "Verifies diagnosis and correction for 'cat log.txt > grep ERROR', replacing '>' with '|'.",
+      "weight": 6.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "diagnostic_triage",
+        "match": {
+          "bug_id": "BUG-01",
+          "root_cause_category": "pipe_vs_redirect_confusion",
+          "corrected_command": "cat /var/log/app.log | grep \"ERROR\""
+        }
+      },
+      "failure_message": "Triage for BUG-01 failed. Using '>' instead of '|' creates a file on disk rather than streaming data to the next command. Use '|' to pipe data into grep."
+    },
+    {
+      "id": "HID-07",
+      "category": "Pipeline Triage & Forensic Debugging",
+      "name": "Triage BUG-02: Stderr Leakage to Terminal Screen",
+      "description": "Verifies diagnosis and correction for 'check-services | wc -l', adding '2>&1' to route error stream into the line counter.",
+      "weight": 6.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "diagnostic_triage",
+        "match": {
+          "bug_id": "BUG-02",
+          "root_cause_category": "stderr_leakage_to_terminal",
+          "corrected_command": "check-services 2>&1 | wc -l"
+        }
+      },
+      "failure_message": "Triage for BUG-02 failed. The standard pipe (|) only redirects stdout (1). Stderr (2) leaks to the terminal unless merged using '2>&1'."
+    },
+    {
+      "id": "HID-08",
+      "category": "Pipeline Triage & Forensic Debugging",
+      "name": "Triage BUG-03: Accidental Log Truncation Prevention",
+      "description": "Verifies diagnosis and correction of destructive single '>' overwrite in recurring log recording, replacing with safe append '>>'.",
+      "weight": 6.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "diagnostic_triage",
+        "match": {
+          "bug_id": "BUG-03",
+          "root_cause_category": "accidental_file_truncation",
+          "corrected_command": "record_incident_step >> /var/log/incident.log"
+        }
+      },
+      "failure_message": "Triage for BUG-03 failed. Using single '>' in a recurring logging loop wipes previous audit logs. Use double '>>' to append safely."
+    }
+  ]
+}

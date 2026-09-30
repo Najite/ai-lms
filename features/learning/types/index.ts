@@ -71,6 +71,31 @@ export interface LessonSummary {
   orderIndex: number;
   estimatedMinutes: number;
   isPublished: boolean;
+  exercise?: LessonExerciseSummary | null;
+}
+
+/**
+ * Associated Practical Exercise Summary for a Lesson
+ */
+export interface LessonExerciseSummary {
+  id: string;
+  lessonId: string;
+  categoryId: string;
+  slug: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  estimatedMinutes: number;
+  objective?: string;
+  expectedOutcome?: string;
+  successCriteria?: string;
+  orderIndex: number;
+  isPublished: boolean;
+  completion?: {
+    id: string;
+    score: number;
+    completedAt: string;
+  } | null;
 }
 
 /**
@@ -103,7 +128,46 @@ export interface ProgressMetrics {
 }
 
 /**
- * Lesson Navigation Context (Adjacent Lessons)
+ * Staff-only Curriculum Engineering Metadata (Progressive Disclosure)
+ */
+export interface StaffLessonMetadata {
+  lessonCode: string | null;
+  sourcePath: string | null;
+  blueprintPath: string | null;
+  version: string | null;
+  status: string | null;
+  targetCompetency: string | null;
+  targetGate: string | null;
+  prerequisites: string[];
+}
+
+/**
+ * Competency Information for Learner Display (Plain English First)
+ */
+export interface LessonCompetencyInfo {
+  code: string;
+  title: string;
+  description?: string | null;
+  targetState: "introduced" | "practicing" | "reinforced" | "mastered";
+  capabilityGate: string;
+  contributionPoints?: number;
+}
+
+/**
+ * Enriched Next Lesson Preview for Navigation
+ */
+export interface NextLessonPreview {
+  pathSlug: string;
+  moduleSlug: string;
+  lessonSlug: string;
+  title: string;
+  summary?: string | null;
+  estimatedMinutes?: number;
+  orderIndex?: number;
+}
+
+/**
+ * Lesson Navigation Context (Adjacent Lessons & Enriched Metadata)
  */
 export interface LessonNavigationContext {
   currentLesson: Lesson;
@@ -115,13 +179,11 @@ export interface LessonNavigationContext {
     lessonSlug: string;
     title: string;
   } | null;
-  nextLesson: {
-    pathSlug: string;
-    moduleSlug: string;
-    lessonSlug: string;
-    title: string;
-  } | null;
+  nextLesson: NextLessonPreview | null;
   progress: UserLearningProgress | null;
+  competency?: LessonCompetencyInfo | null;
+  exercise?: LessonExerciseSummary | null;
+  staffMetadata?: StaffLessonMetadata | null;
 }
 
 /**

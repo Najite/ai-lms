@@ -1,0 +1,66 @@
+[
+  {
+    "id": "HID-01",
+    "name": "Deep Multi-Tier Commit Ancestry Resolution",
+    "description": "Validates full topological reachability and parent links across all 8 nodes in the commit history.",
+    "weight": 7.5,
+    "target_field": "task_2_direct_parent_of_c2",
+    "expected_value": "C1"
+  },
+  {
+    "id": "HID-02",
+    "name": "Common Ancestor Discovery",
+    "description": "Validates discovery of the lowest common ancestor (LCA) between C5 (5c8b2011) and C4 (d19a7e30) as C1.",
+    "weight": 7.5,
+    "target_field": "task_3_common_ancestor_base_commit",
+    "expected_value": "C1"
+  },
+  {
+    "id": "HID-03",
+    "name": "DAG Cycle Detection & Arrow Direction Invariant",
+    "description": "Validates understanding that Git DAG arrows point backward to past parents with zero circular causality loops.",
+    "weight": 7.5,
+    "target_field": "task_2_arrow_direction",
+    "expected_value": "backward_to_past"
+  },
+  {
+    "id": "HID-04",
+    "name": "Branch Pointer Validation & Mechanics",
+    "description": "Validates that a Git branch is an immutable 41-byte text pointer referencing a commit SHA rather than duplicate directory trees.",
+    "weight": 7.5,
+    "target_field": "task_3_branch_storage_type",
+    "expected_value": "lightweight_pointer"
+  },
+  {
+    "id": "HID-05",
+    "name": "Merge Parent Allocation Integrity",
+    "description": "Validates that Parent 1 is allocated to target branch C5 (main) and Parent 2 is allocated to incoming branch C4 (feature/auth-gateway).",
+    "weight": 7.5,
+    "target_field": ["task_4_merge_parent_1_id", "task_4_merge_parent_2_id"],
+    "expected_value": ["C5", "C4"]
+  },
+  {
+    "id": "HID-06",
+    "name": "Remote Graph Synchronization Reasoning",
+    "description": "Validates calculation of the unpushed commit delta between local main (at C7) and remote origin/main (at C5), identifying commits [M6, C7].",
+    "weight": 7.5,
+    "target_field": "task_5_unpushed_local_commits",
+    "expected_value": ["M6", "C7"]
+  },
+  {
+    "id": "HID-07",
+    "name": "DAG Acyclic Guarantee Verification",
+    "description": "Validates understanding of the acyclic property in Git DAGs preventing circular time loops.",
+    "weight": 7.5,
+    "target_field": "task_5_dag_acyclic_guarantee",
+    "expected_value": "time_one_way_no_loops"
+  },
+  {
+    "id": "HID-08",
+    "name": "Active HEAD Branch Identification",
+    "description": "Validates that HEAD is attached to the main branch pointing to commit C7.",
+    "weight": 7.5,
+    "target_field": "task_1_active_head_branch",
+    "expected_value": "main"
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "id": "e0000000-0000-0000-0000-000000000004",
+  "lesson_id": "c0000000-0000-0000-0000-000000000004",
+  "category_id": "a0000000-0000-4000-8000-000000000000",
+  "slug": "exe-00-04-visual-git-graph-reconstruction-diagnostics",
+  "title": "EXE-00-04: Visual Git Graph Reconstruction & Version Control Diagnostics",
+  "description": "Investigate a simulated Git repository timeline desynchronization in the Visual Git Workspace. Trace whole-project snapshots, commit parent arrows, lightweight branch bookmarks, 3-way merge dual-parent topology, and Directed Acyclic Graph (DAG) invariants without typing command-line flags.",
+  "difficulty": "intermediate",
+  "estimated_minutes": 50,
+  "starter_code": "{\"exercise_id\": \"exe-00-04\", \"task_1_root_genesis_commit_id\": \"\", \"task_1_active_head_branch\": \"\", \"task_1_active_head_commit_id\": \"\", \"task_1_feature_branch_tip_id\": \"\", \"task_2_direct_parent_of_c2\": \"\", \"task_2_c4_ancestry_chain\": [], \"task_2_arrow_direction\": \"\", \"task_3_common_ancestor_base_commit\": \"\", \"task_3_branch_storage_type\": \"\", \"task_4_merge_commit_id\": \"\", \"task_4_merge_parent_1_id\": \"\", \"task_4_merge_parent_2_id\": \"\", \"task_5_dag_acyclic_guarantee\": \"\", \"task_5_unpushed_local_commits\": []}",
+  "solution_code": "{\"exercise_id\": \"exe-00-04\", \"task_1_root_genesis_commit_id\": \"C0\", \"task_1_active_head_branch\": \"main\", \"task_1_active_head_commit_id\": \"C7\", \"task_1_feature_branch_tip_id\": \"C4\", \"task_2_direct_parent_of_c2\": \"C1\", \"task_2_c4_ancestry_chain\": [\"C4\", \"C3\", \"C1\", \"C0\"], \"task_2_arrow_direction\": \"backward_to_past\", \"task_3_common_ancestor_base_commit\": \"C1\", \"task_3_branch_storage_type\": \"lightweight_pointer\", \"task_4_merge_commit_id\": \"M6\", \"task_4_merge_parent_1_id\": \"C5\", \"task_4_merge_parent_2_id\": \"C4\", \"task_5_dag_acyclic_guarantee\": \"time_one_way_no_loops\", \"task_5_unpushed_local_commits\": [\"M6\", \"C7\"]}",
+  "validation_rules": {
+    "exercise_type": "visual_git_graph_reconstruction",
+    "pass_threshold": 90,
+    "visible_suite_weight": 40,
+    "hidden_suite_weight": 60
+  },
+  "is_published": true
+}

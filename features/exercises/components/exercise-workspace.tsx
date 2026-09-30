@@ -25,6 +25,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { FilesystemReconstructionWorkspace } from "./filesystem-builder/filesystem-reconstruction-workspace";
+import { NetworkDiagnosticsWorkspace } from "./network-diagnostics/network-diagnostics-workspace";
+import { GitGraphReconstructionWorkspace } from "./git-graph-builder/git-graph-reconstruction-workspace";
+import { AiVerificationWorkspace } from "./ai-verification/ai-verification-workspace";
 
 export interface ExerciseWorkspaceProps {
   slug: string;
@@ -96,6 +100,90 @@ export function ExerciseWorkspace({ slug }: ExerciseWorkspaceProps) {
   const handleResetStarter = () => {
     setCodeBuffer(exercise.starterCode);
   };
+
+  const isVisualFilesystem =
+    exercise.validationRules?.exercise_type === "visual_filesystem_reconstruction" ||
+    slug === "exe-00-01-posix-filesystem-reconstruction";
+
+  if (isVisualFilesystem) {
+    return (
+      <FilesystemReconstructionWorkspace
+        exerciseTitle={exercise.title}
+        estimatedMinutes={exercise.estimatedMinutes}
+        isSubmitting={isSubmitting}
+        isCompleting={isCompleting}
+        validationOutput={latestValidationOutput}
+        activeAttemptState={activeAttempt?.state}
+        isCompleted={isCompleted}
+        onSubmitPayload={(payload) => submitSolution(payload)}
+        onCompleteExercise={completeExercise}
+      />
+    );
+  }
+
+  const isNetworkDiagnostics =
+    exercise.validationRules?.exercise_type === "network_request_diagnostics" ||
+    slug === "exe-00-03-network-diagnostics" ||
+    slug.includes("exe-00-03");
+
+  if (isNetworkDiagnostics) {
+    return (
+      <NetworkDiagnosticsWorkspace
+        exerciseTitle={exercise.title}
+        estimatedMinutes={exercise.estimatedMinutes}
+        isSubmitting={isSubmitting}
+        isCompleting={isCompleting}
+        validationOutput={latestValidationOutput}
+        activeAttemptState={activeAttempt?.state}
+        isCompleted={isCompleted}
+        onSubmitPayload={(payload) => submitSolution(payload)}
+        onCompleteExercise={completeExercise}
+      />
+    );
+  }
+
+  const isVisualGitGraph =
+    exercise.validationRules?.exercise_type === "visual_git_graph_reconstruction" ||
+    slug === "exe-00-04-git-graph-reconstruction" ||
+    slug.includes("exe-00-04");
+
+  if (isVisualGitGraph) {
+    return (
+      <GitGraphReconstructionWorkspace
+        exerciseTitle={exercise.title}
+        estimatedMinutes={exercise.estimatedMinutes}
+        isSubmitting={isSubmitting}
+        isCompleting={isCompleting}
+        validationOutput={latestValidationOutput}
+        activeAttemptState={activeAttempt?.state}
+        isCompleted={isCompleted}
+        onSubmitPayload={(payload) => submitSolution(payload)}
+        onCompleteExercise={completeExercise}
+      />
+    );
+  }
+
+  const isAiVerification =
+    exercise.validationRules?.exercise_type === "ai_verification_evaluation" ||
+    slug === "exe-00-05-ai-verification-evaluation" ||
+    slug.includes("exe-00-05");
+
+  if (isAiVerification) {
+    return (
+      <AiVerificationWorkspace
+        exerciseTitle={exercise.title}
+        estimatedMinutes={exercise.estimatedMinutes}
+        isSubmitting={isSubmitting}
+        isCompleting={isCompleting}
+        validationOutput={latestValidationOutput}
+        activeAttemptState={activeAttempt?.state}
+        isCompleted={isCompleted}
+        onSubmitPayload={(payload) => submitSolution(payload)}
+        onCompleteExercise={completeExercise}
+      />
+    );
+  }
+
 
   return (
     <div className="space-y-6">

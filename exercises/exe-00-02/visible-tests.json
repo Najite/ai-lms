@@ -1,0 +1,115 @@
+{
+  "test_suite_id": "TS-EXE-00-02-VISIBLE",
+  "exercise_code": "EXE-00-02",
+  "visibility": "visible",
+  "total_weight": 40.0,
+  "tests": [
+    {
+      "id": "VIS-01",
+      "category": "CLI Foundations & Environment",
+      "name": "Terminal vs. Shell Architectural Distinction",
+      "description": "Verifies that the learner correctly identifies the terminal emulator as the display/input window and the shell as the command interpreter and process execution engine.",
+      "weight": 5.0,
+      "assertion": {
+        "type": "exact_match_map",
+        "target": "command_anatomy.terminal_vs_shell_classification",
+        "expected": {
+          "terminal_role": "display_input_window",
+          "shell_role": "interpreter_process_launcher"
+        }
+      },
+      "failure_message": "Terminal and shell definitions confused. The terminal is the GUI display window handling keystrokes and pixels; the shell is the interpreter program (e.g. bash, zsh) that parses tokens and runs commands."
+    },
+    {
+      "id": "VIS-02",
+      "category": "Command Anatomy",
+      "name": "Deconstruct `grep` Command Tokens",
+      "description": "Verifies that 'grep -i -n \"FATAL\" /var/log/api-gateway/error.log' is correctly parsed into executable 'grep', flags ['-i', '-n'], and positional arguments ['FATAL', '/var/log/api-gateway/error.log'].",
+      "weight": 5.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "command_anatomy.deconstructed_commands",
+        "match": {
+          "command_id": "CMD-01",
+          "executable": "grep",
+          "flags": ["-i", "-n"],
+          "arguments": ["FATAL", "/var/log/api-gateway/error.log"]
+        }
+      },
+      "failure_message": "Command anatomy parsing failed for grep. Remember: 'grep' is the program, '-i' and '-n' are options modifying behavior, and 'FATAL' and the file path are positional arguments."
+    },
+    {
+      "id": "VIS-03",
+      "category": "Command Anatomy",
+      "name": "Deconstruct `tail` and `curl` Commands",
+      "description": "Verifies accurate decomposition for 'tail -n 50 /var/log/api-gateway/access.log' and 'curl -s -v --connect-timeout 5 https://api.internal/health'.",
+      "weight": 10.0,
+      "assertion": {
+        "type": "find_all_in_array",
+        "target": "command_anatomy.deconstructed_commands",
+        "matches": [
+          {
+            "command_id": "CMD-02",
+            "executable": "tail",
+            "arguments": ["/var/log/api-gateway/access.log"]
+          },
+          {
+            "command_id": "CMD-03",
+            "executable": "curl",
+            "arguments": ["https://api.internal/health"]
+          }
+        ]
+      },
+      "failure_message": "Command anatomy failed for tail or curl. Ensure option flags and values (like '-n 50' and '--connect-timeout 5') are distinguished from target arguments (like URLs and file paths)."
+    },
+    {
+      "id": "VIS-04",
+      "category": "Standard Streams & Redirection",
+      "name": "Clean Stdout Overwrite Redirection (`>`)",
+      "description": "Verifies that health check stdout is redirected with '>' to '/tmp/health.txt' with overwrite mode.",
+      "weight": 5.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "stream_routing.redirection_challenges",
+        "match": {
+          "challenge_id": "REDIR-01",
+          "operator_used": ">",
+          "stdout_destination": "/tmp/health.txt",
+          "file_write_mode": "overwrite"
+        }
+      },
+      "failure_message": "Redirection challenge 1 failed. The single greater-than operator (>) redirects standard output (1) to a file in overwrite mode."
+    },
+    {
+      "id": "VIS-05",
+      "category": "Standard Streams & Redirection",
+      "name": "Historical Audit Append Redirection (`>>`)",
+      "description": "Verifies that audit telemetry is redirected with '>>' to '/var/log/audit.log' in append mode.",
+      "weight": 5.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "stream_routing.redirection_challenges",
+        "match": {
+          "challenge_id": "REDIR-02",
+          "operator_used": ">>",
+          "stdout_destination": "/var/log/audit.log",
+          "file_write_mode": "append"
+        }
+      },
+      "failure_message": "Redirection challenge 2 failed. The double greater-than operator (>>) appends standard output without truncating existing log history."
+    },
+    {
+      "id": "VIS-06",
+      "category": "Pipe Flow & Pipeline Construction",
+      "name": "Five-Stage Linear Log Triage Sequence",
+      "description": "Verifies that the incident triage pipeline follows the exact 5-stage sequential processing order: cat -> grep -> sort -> uniq -> head.",
+      "weight": 10.0,
+      "assertion": {
+        "type": "pipeline_sequence_match",
+        "target": "pipeline_composition.incident_pipeline.stages",
+        "expected_executables": ["cat", "grep", "sort", "uniq", "head"]
+      },
+      "failure_message": "Pipeline stage order is incorrect. The data flow must follow: cat (read log) -> grep (filter errors) -> sort (group identical) -> uniq (count occurrences) -> head (extract top 5)."
+    }
+  ]
+}

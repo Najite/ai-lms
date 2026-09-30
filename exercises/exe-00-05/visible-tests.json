@@ -1,0 +1,71 @@
+{
+  "suite": "visible",
+  "weight": 40,
+  "exercise_id": "exe-00-05",
+  "exercise_code": "EXE-00-05",
+  "exercise_title": "AI Verification & Evaluation Investigation",
+  "target_competency": "AIE-00",
+  "target_state": "verified",
+  "tests": [
+    {
+      "id": "VIS-01",
+      "name": "Identify Hallucinated Package",
+      "description": "Verify learner correctly identifies the hallucinated npm package '@auth/jwt-auto-verify-v2' in PR-101.",
+      "weight": 7,
+      "rule": "VIS-01: Hallucinated Package Detection",
+      "field": "task_1_hallucinated_package_name",
+      "expected": "@auth/jwt-auto-verify-v2",
+      "hint": "Inspect the package import declaration in PR-101 and check registry availability."
+    },
+    {
+      "id": "VIS-02",
+      "name": "Identify Missing Context",
+      "description": "Verify learner identifies the missing database schema and row volume context in PR-102.",
+      "weight": 7,
+      "rule": "VIS-02: Missing Context Identification",
+      "field": "task_2_missing_context_element",
+      "expected": "table_schema_existing_row_volume",
+      "hint": "Check what critical database environmental context was omitted from the prompt."
+    },
+    {
+      "id": "VIS-03",
+      "name": "Identify Unsupported Claim",
+      "description": "Verify learner detects the unsubstantiated claim of 'zero-overhead native caching' in PR-101.",
+      "weight": 6,
+      "rule": "VIS-03: Unsupported Claim Detection",
+      "field": "task_1_unsupported_performance_claim",
+      "expected": "zero_overhead_native_caching",
+      "hint": "Look for claims made by the model that lack empirical benchmark evidence."
+    },
+    {
+      "id": "VIS-04",
+      "name": "Select Best Candidate Response",
+      "description": "Verify learner selects Candidate B as the verified production-ready solution in PR-104.",
+      "weight": 7,
+      "rule": "VIS-04: Best Candidate Selection",
+      "field": "task_4_best_candidate_response_id",
+      "expected": "candidate_b",
+      "hint": "Candidate B uses parameterized RLS policies and rigorous Zod schema validation."
+    },
+    {
+      "id": "VIS-05",
+      "name": "Identify Verification Source",
+      "description": "Verify learner identifies npm Registry 404 and TypeScript compiler error TS2307 as deterministic evidence sources.",
+      "weight": 6,
+      "rule": "VIS-05: Verification Source Identification",
+      "field": "task_1_verification_evidence_source",
+      "expected": "npm_registry_404_ts_compiler_ts2307",
+      "hint": "Deterministic proof requires compiler diagnostics and registry verification."
+    },
+    {
+      "id": "VIS-06",
+      "name": "Detect Confidence vs Correctness",
+      "description": "Verify learner detects the inverted boolean condition in PR-103 despite authoritative docstrings.",
+      "weight": 7,
+      "rule": "VIS-06: Confidence vs Correctness Disconnect",
+      "field": "task_3_confidence_misalignment",
+      "expected": "authoritative_tone_with_flawed_logic",
+      "hint": "Analyze whether the model's confident tone matches the logical truth of the return value."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "suite": "hidden",
+  "weight": 60,
+  "exercise_id": "exe-00-05",
+  "exercise_code": "EXE-00-05",
+  "exercise_title": "AI Verification & Evaluation Investigation",
+  "target_competency": "AIE-00",
+  "target_state": "verified",
+  "tests": [
+    {
+      "id": "HID-01",
+      "name": "False API Property Generation Detection",
+      "description": "Verify detection of unsupported 'thread-safe' claims on non-atomic in-memory operations in PR-103.",
+      "weight": 8,
+      "rule": "HID-01: False API Property Generation",
+      "field": "task_3_false_api_property",
+      "expected": "thread_safe_guarantee_unsupported"
+    },
+    {
+      "id": "HID-02",
+      "name": "Fake Documentation Citation",
+      "description": "Verify detection of fabricated citation 'PostgreSQL Migration RFC-8812' in PR-102.",
+      "weight": 7,
+      "rule": "HID-02: Fake Documentation Citation",
+      "field": "task_2_fake_documentation_citation",
+      "expected": "rfc_8812_postgres_migration"
+    },
+    {
+      "id": "HID-03",
+      "name": "Incorrect Deployment Sequence",
+      "description": "Verify identification of worker process restart before database migration completion in PR-102.",
+      "weight": 8,
+      "rule": "HID-03: Deployment Sequence Defect",
+      "field": "task_2_deployment_sequence_defect",
+      "expected": "workers_started_before_migration_completed"
+    },
+    {
+      "id": "HID-04",
+      "name": "Incomplete Architecture Recommendation",
+      "description": "Verify detection of client-side authorization bypass violating PostgreSQL RLS in Candidate A.",
+      "weight": 8,
+      "rule": "HID-04: Security Architecture Flaw",
+      "field": "task_4_candidate_a_security_defect",
+      "expected": "client_side_authorization_bypassing_rls"
+    },
+    {
+      "id": "HID-05",
+      "name": "Logic Defect Boundary Inversion",
+      "description": "Verify diagnosis of inverted '<' boolean boundary in rate limiter PR-103.",
+      "weight": 8,
+      "rule": "HID-05: Inverted Boundary Condition",
+      "field": "task_3_logic_defect_type",
+      "expected": "inverted_boolean_boundary"
+    },
+    {
+      "id": "HID-06",
+      "name": "Hallucinated Configuration Parameter",
+      "description": "Verify identification of fabricated parameter 'cacheTtlSeconds' in PR-101.",
+      "weight": 7,
+      "rule": "HID-06: Hallucinated Configuration Parameter",
+      "field": "task_1_hallucinated_config_parameter",
+      "expected": "cacheTtlSeconds"
+    },
+    {
+      "id": "HID-07",
+      "name": "Worst Candidate Rejection",
+      "description": "Verify identification of Candidate A as the worst candidate due to disabling RLS.",
+      "weight": 7,
+      "rule": "HID-07: Insecure Candidate Rejection",
+      "field": "task_4_worst_candidate_response_id",
+      "expected": "candidate_a"
+    },
+    {
+      "id": "HID-08",
+      "name": "Multi-Response Evaluation Ranking",
+      "description": "Verify accurate comparative ranking: Candidate B (1st) > Candidate C (2nd) > Candidate A (3rd).",
+      "weight": 7,
+      "rule": "HID-08: Multi-Response Comparative Ranking",
+      "field": "task_4_candidate_rankings",
+      "expected": ["candidate_b", "candidate_c", "candidate_a"]
+    }
+  ]
+}

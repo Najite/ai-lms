@@ -1,0 +1,50 @@
+[
+  {
+    "id": "VIS-01",
+    "name": "Identify Repository Genesis Root Commit",
+    "description": "Validates identification of commit C0 (3a9f1b04) as the repository genesis root node having zero parent pointers.",
+    "weight": 6.67,
+    "target_field": "task_1_root_genesis_commit_id",
+    "expected_value": "C0"
+  },
+  {
+    "id": "VIS-02",
+    "name": "Identify Active HEAD Pointer & Target Commit",
+    "description": "Validates that HEAD currently points to the main branch at commit C7 (7f3b8c44).",
+    "weight": 6.67,
+    "target_field": "task_1_active_head_commit_id",
+    "expected_value": "C7"
+  },
+  {
+    "id": "VIS-03",
+    "name": "Trace Commit Ancestry Backwards",
+    "description": "Validates backwards chain traversal from C4 through parents C3, C1, to root C0.",
+    "weight": 6.67,
+    "target_field": "task_2_c4_ancestry_chain",
+    "expected_value": ["C4", "C3", "C1", "C0"]
+  },
+  {
+    "id": "VIS-04",
+    "name": "Identify 3-Way Merge Commit",
+    "description": "Validates identification of M6 (9e4a2f78) as the 3-way merge commit with dual parent pointers.",
+    "weight": 6.67,
+    "target_field": "task_4_merge_commit_id",
+    "expected_value": "M6"
+  },
+  {
+    "id": "VIS-05",
+    "name": "Determine Branch Fork Origin (Common Ancestor)",
+    "description": "Validates identification of commit C1 (8b2e4c19) as the common ancestor base commit where auth-gateway split from main.",
+    "weight": 6.67,
+    "target_field": "task_3_common_ancestor_base_commit",
+    "expected_value": "C1"
+  },
+  {
+    "id": "VIS-06",
+    "name": "Interpret Feature Branch Tip",
+    "description": "Validates identification of commit C4 (d19a7e30) as the active tip of the feature/auth-gateway branch.",
+    "weight": 6.65,
+    "target_field": "task_1_feature_branch_tip_id",
+    "expected_value": "C4"
+  }
+]

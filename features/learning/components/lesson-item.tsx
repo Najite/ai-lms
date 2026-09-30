@@ -1,9 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { Clock, CheckCircle2, PlayCircle } from "lucide-react";
+import { Clock, CheckCircle2, PlayCircle, Terminal } from "lucide-react";
 import type { LessonSummary, UserLearningProgress } from "../types";
 import { ProgressBadge } from "./progress-badge";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { formatShortEffort } from "../utils/duration-formatter";
 
 export interface LessonItemProps {
   lesson: LessonSummary & { progress?: UserLearningProgress | null };
@@ -23,6 +25,8 @@ export function LessonItem({
   const isCompleted = lesson.progress?.status === "completed";
   const isInProgress = lesson.progress?.status === "in_progress";
   const href = `/learning-paths/${pathSlug}/modules/${moduleSlug}/lessons/${lesson.slug}`;
+  const effortShort = formatShortEffort(lesson.estimatedMinutes);
+  const hasExercise = !!lesson.exercise;
 
   return (
     <Link
@@ -58,7 +62,7 @@ export function LessonItem({
 
         {/* Lesson Details */}
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <h4
               className={cn(
                 "text-sm font-medium transition-colors truncate",
@@ -71,6 +75,16 @@ export function LessonItem({
             >
               {lesson.title}
             </h4>
+
+            {hasExercise && (
+              <Badge
+                variant="outline"
+                className="bg-primary/10 text-primary border-primary/30 text-[10px] px-1.5 py-0 h-4 font-mono shrink-0 gap-1"
+              >
+                <Terminal className="w-2.5 h-2.5" />
+                <span>Exercise</span>
+              </Badge>
+            )}
           </div>
           {lesson.summary && (
             <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{lesson.summary}</p>
@@ -82,7 +96,7 @@ export function LessonItem({
       <div className="flex items-center gap-3 shrink-0 ml-4">
         <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground font-mono">
           <Clock className="w-3.5 h-3.5" />
-          <span>{lesson.estimatedMinutes}m</span>
+          <span>{effortShort}</span>
         </div>
         <ProgressBadge status={lesson.progress?.status} className="text-[10px] px-2 py-0.5" />
       </div>

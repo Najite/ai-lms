@@ -1,0 +1,108 @@
+{
+  "test_suite_id": "TS-EXE-00-01-VISIBLE",
+  "exercise_code": "EXE-00-01",
+  "visibility": "visible",
+  "total_weight": 40.0,
+  "tests": [
+    {
+      "id": "VIS-01",
+      "category": "Topology & Root Anchor",
+      "name": "Root Directory is Single Origin Anchor",
+      "description": "Verifies that the root directory '/' is present and correctly has parent null with no parent directories above it.",
+      "weight": 6.0,
+      "assertion": {
+        "type": "find_in_array",
+        "target": "section_1_topology",
+        "match": {
+          "path": "/",
+          "parent": null
+        }
+      },
+      "failure_message": "The Root directory '/' must exist as the top-level origin of the inverted tree with parent set to null."
+    },
+    {
+      "id": "VIS-02",
+      "category": "Topology & User Workspace",
+      "name": "User Account & Project Hierarchy Structure",
+      "description": "Verifies that /home/alex has parent '/home' and projects folder has parent '/home/alex'.",
+      "weight": 6.0,
+      "assertion": {
+        "type": "find_all_in_array",
+        "target": "section_1_topology",
+        "matches": [
+          { "path": "/home/alex", "parent": "/home" },
+          { "path": "/home/alex/projects", "parent": "/home/alex" },
+          { "path": "/home/alex/projects/cloud-app", "parent": "/home/alex/projects" }
+        ]
+      },
+      "failure_message": "User and project hierarchy is incorrect. Ensure /home/alex points to /home, and cloud-app is nested inside /home/alex/projects."
+    },
+    {
+      "id": "VIS-03",
+      "category": "Absolute Path Resolution",
+      "name": "System Configuration & Server Log Absolute Addresses",
+      "description": "Verifies that the absolute paths for nginx.conf and app.log start with leading slashes from Root.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "exact_match_map",
+        "target": "section_2_absolute_paths",
+        "expected": {
+          "nginx_config": "/etc/nginx.conf",
+          "application_log": "/var/log/app.log"
+        }
+      },
+      "failure_message": "Absolute path resolution failed for system files. Remember that absolute paths always start at the Root forward slash (/), e.g., /etc/nginx.conf."
+    },
+    {
+      "id": "VIS-04",
+      "category": "Absolute Path Resolution",
+      "name": "Project Secrets & Architecture Notes Absolute Paths",
+      "description": "Verifies absolute paths for .env and architecture-notes.md inside the user home tree.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "exact_match_map",
+        "target": "section_2_absolute_paths",
+        "expected": {
+          "architecture_notes": "/home/alex/Documents/architecture-notes.md",
+          "production_env_secrets": "/home/alex/projects/cloud-app/.env"
+        }
+      },
+      "failure_message": "User file absolute paths are incorrect. Check the full path starting from /home/alex."
+    },
+    {
+      "id": "VIS-05",
+      "category": "Relative Path Traversal",
+      "name": "Local Directory Traversal & Child Subfolders",
+      "description": "Verifies relative paths from cloud-app to package.json (same folder) and index.js (inside src/).",
+      "weight": 7.0,
+      "assertion": {
+        "type": "pattern_match_map",
+        "target": "section_3_relative_paths",
+        "rules": {
+          "from_cloud_app_to_package_json": "^(?:\\./)?package\\.json$",
+          "from_cloud_app_to_index_js": "^(?:\\./)?src/index\\.js$"
+        }
+      },
+      "failure_message": "Local relative path failed. When a file is in the same folder, reference it directly ('package.json' or './package.json'). When in a subfolder, use 'src/index.js'."
+    },
+    {
+      "id": "VIS-06",
+      "category": "Dotfiles & Security Matrix",
+      "name": "Hidden Dotfile Flag & Secret Protection",
+      "description": "Verifies that .env is flagged as is_hidden: true and cannot be read by group or others.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "nested_field_match",
+        "target": "section_4_permissions_and_dotfiles.env_secrets",
+        "expected": {
+          "is_hidden": true,
+          "owner.read": true,
+          "owner.write": true,
+          "group.read": false,
+          "others.read": false
+        }
+      },
+      "failure_message": "Security vulnerability detected! The production .env file begins with a period (dotfile, is_hidden: true) and must NEVER be readable by group or others."
+    }
+  ]
+}

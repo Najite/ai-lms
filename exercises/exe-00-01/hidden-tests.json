@@ -1,0 +1,145 @@
+{
+  "test_suite_id": "TS-EXE-00-01-HIDDEN",
+  "exercise_code": "EXE-00-01",
+  "visibility": "hidden",
+  "total_weight": 60.0,
+  "tests": [
+    {
+      "id": "HID-01",
+      "category": "Relative Path Traversal (Deep Sibling)",
+      "name": "Multi-Level Parent Traversal to Sibling Documents Directory",
+      "description": "Verifies step-by-step traversal stepping up two levels from cloud-app to user home then into Documents (../../Documents/architecture-notes.md).",
+      "weight": 8.0,
+      "assertion": {
+        "type": "pattern_match_map",
+        "target": "section_3_relative_paths",
+        "rules": {
+          "from_cloud_app_to_architecture_notes": "^\\.\\./\\.\\./Documents/architecture-notes\\.md$"
+        }
+      },
+      "failure_message": "Failed sibling folder traversal. From /home/alex/projects/cloud-app, step up one level (..) to projects, step up another level (..) to alex, then step down into Documents/architecture-notes.md."
+    },
+    {
+      "id": "HID-02",
+      "category": "Relative Path Traversal (Deep Cross-System)",
+      "name": "Cross-Root Boundary Traversal from Subfolder to /var/log",
+      "description": "Verifies stepping 4 levels up from /home/alex/projects/cloud-app/src all the way to Root, then down into var/log/app.log.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "pattern_match_map",
+        "target": "section_3_relative_paths",
+        "rules": {
+          "from_src_to_application_log": "^\\.\\./\\.\\./\\.\\./\\.\\./var/log/app\\.log$"
+        }
+      },
+      "failure_message": "Deep cross-system relative path failed. Standing in /home/alex/projects/cloud-app/src requires exactly four '..' parent hops to reach Root before navigating to var/log/app.log."
+    },
+    {
+      "id": "HID-03",
+      "category": "Relative Path Traversal (Downward Tree)",
+      "name": "Downward Relative Traversal from User Home to Nested Project Secrets",
+      "description": "Verifies descending from /home/alex down through projects/cloud-app/.env without starting with a leading slash.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "pattern_match_map",
+        "target": "section_3_relative_paths",
+        "rules": {
+          "from_home_to_env_secrets": "^(?:\\./)?projects/cloud-app/\\.env$"
+        }
+      },
+      "failure_message": "Downward relative path from home failed. Do not include a starting '/' (which makes it absolute); write 'projects/cloud-app/.env' directly."
+    },
+    {
+      "id": "HID-04",
+      "category": "Security & Permissions (Execution Rights)",
+      "name": "Executable Script Permission Triplet (index.js)",
+      "description": "Verifies that application_entrypoint (index.js) has execute rights enabled across owner, group, and others.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "nested_field_match",
+        "target": "section_4_permissions_and_dotfiles.application_entrypoint",
+        "expected": {
+          "is_hidden": false,
+          "owner.read": true,
+          "owner.write": true,
+          "owner.execute": true,
+          "group.read": true,
+          "group.write": false,
+          "group.execute": true,
+          "others.read": true,
+          "others.write": false,
+          "others.execute": true
+        }
+      },
+      "failure_message": "Application entrypoint permissions failed. A server entry script must have execute: true for owner, group, and others, while write permissions must remain restricted to owner."
+    },
+    {
+      "id": "HID-05",
+      "category": "Security & Permissions (System Server Config)",
+      "name": "Nginx Server Configuration Least Privilege Defense",
+      "description": "Verifies that /etc/nginx.conf is NOT hidden, has write: false for group and others, and execute: false across all tiers.",
+      "weight": 8.0,
+      "assertion": {
+        "type": "nested_field_match",
+        "target": "section_4_permissions_and_dotfiles.nginx_config",
+        "expected": {
+          "is_hidden": false,
+          "owner.read": true,
+          "owner.write": true,
+          "owner.execute": false,
+          "group.read": true,
+          "group.write": false,
+          "group.execute": false,
+          "others.read": true,
+          "others.write": false,
+          "others.execute": false
+        }
+      },
+      "failure_message": "System config security failed. Nginx config must be read-only for group and others, and must never be executable."
+    },
+    {
+      "id": "HID-06",
+      "category": "Topology Invariants & Boundary Safety",
+      "name": "Complete Inverted Tree Hierarchy Integrity",
+      "description": "Verifies all 12 directory nodes have exact parent references and valid POSIX paths.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "complete_topology_validator",
+        "target": "section_1_topology",
+        "required_nodes_count": 12,
+        "valid_roots": ["/"]
+      },
+      "failure_message": "Filesystem topology tree has orphaned or cyclically referenced directories. Verify every folder has its correct parent."
+    },
+    {
+      "id": "HID-07",
+      "category": "Path Normalization & Anti-Spoofing",
+      "name": "Canonical Path Formatting & Whitespace Defense",
+      "description": "Rejects malformed paths containing double slashes (//), unescaped spaces, or trailing slashes on file leaves.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "path_syntax_sanitizer",
+        "targets": [
+          "section_2_absolute_paths",
+          "section_3_relative_paths"
+        ]
+      },
+      "failure_message": "Path formatting error: Paths must not contain double slashes (//), unneeded trailing slashes on files, or unnormalized dots."
+    },
+    {
+      "id": "HID-08",
+      "category": "Application Entrypoint Coordinate",
+      "name": "Deep Application Entrypoint Absolute Address",
+      "description": "Verifies exact absolute path for /home/alex/projects/cloud-app/src/index.js.",
+      "weight": 7.0,
+      "assertion": {
+        "type": "exact_match_map",
+        "target": "section_2_absolute_paths",
+        "expected": {
+          "application_entrypoint": "/home/alex/projects/cloud-app/src/index.js"
+        }
+      },
+      "failure_message": "Application entrypoint absolute path is incorrect. Expected /home/alex/projects/cloud-app/src/index.js."
+    }
+  ]
+}

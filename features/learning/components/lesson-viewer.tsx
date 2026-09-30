@@ -2,6 +2,14 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { MermaidViewer } from "./mermaid-viewer";
+import {
+  AlertCircle,
+  Lightbulb,
+  Info,
+  AlertTriangle,
+  ShieldAlert,
+} from "lucide-react";
 
 export interface LessonViewerProps {
   content: string;
@@ -12,6 +20,8 @@ export interface LessonViewerProps {
 
 /**
  * Robust, client-safe Markdown renderer tailored for AI-Native LMS lesson content.
+ * Provides support for code blocks, dedicated Mermaid architecture diagrams,
+ * GitHub callout alerts, responsive tables, lists, and formatted typography.
  */
 export function LessonViewer({ content, summary, className }: LessonViewerProps) {
   // Parse markdown into blocks
@@ -29,7 +39,7 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
 
       const trimmed = currentLine.trim();
 
-      // Code Block
+      // Code Block or Mermaid Diagram
       if (trimmed.startsWith("```")) {
         const lang = trimmed.slice(3).trim();
         const codeLines: string[] = [];
@@ -41,6 +51,19 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
           i++;
         }
         i++; // skip closing ```
+
+        // 1. Dedicated Mermaid Architecture Diagram
+        if (lang.toLowerCase() === "mermaid") {
+          elements.push(
+            <MermaidViewer
+              key={`mermaid-${i}`}
+              chart={codeLines.join("\n")}
+            />
+          );
+          continue;
+        }
+
+        // 2. Standard Code Block
         elements.push(
           <div
             key={`code-${i}`}
@@ -110,7 +133,80 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
         continue;
       }
 
-      // Blockquote
+      // Markdown Table
+      if (trimmed.startsWith("|") && trimmed.endsWith("|")) {
+        const tableLines: string[] = [trimmed];
+        i++;
+        while (i < lines.length) {
+          const nextL = lines[i];
+          if (nextL !== undefined && nextL.trim().startsWith("|") && nextL.trim().endsWith("|")) {
+            tableLines.push(nextL.trim());
+            i++;
+          } else {
+            break;
+          }
+        }
+
+        if (tableLines.length >= 2) {
+          const headerLine = tableLines[0];
+          if (!headerLine) continue;
+
+          const rawHeaders = headerLine
+            .split("|")
+            .slice(1, -1)
+            .map((c) => c.trim());
+
+          // Skip delimiter row (tableLines[1], e.g. | :--- | :--- |)
+          const dataRows = tableLines.slice(2).map((rowStr) =>
+            rowStr
+              .split("|")
+              .slice(1, -1)
+              .map((c) => c.trim())
+          );
+
+          elements.push(
+            <div
+              key={`table-${i}`}
+              className="my-6 w-full overflow-x-auto rounded-xl border border-border/70 bg-zinc-950/60 shadow-lg shadow-black/20"
+            >
+              <table className="w-full text-left text-sm border-collapse">
+                <thead className="bg-zinc-900/90 border-b border-border text-xs uppercase font-bold tracking-wider text-muted-foreground">
+                  <tr>
+                    {rawHeaders.map((headerText, hIdx) => (
+                      <th
+                        key={hIdx}
+                        className="px-4 py-3.5 font-semibold text-foreground border-r border-border/30 last:border-r-0"
+                      >
+                        {renderInline(headerText)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/40 font-sans">
+                  {dataRows.map((rowCells, rIdx) => (
+                    <tr
+                      key={rIdx}
+                      className="hover:bg-zinc-900/50 transition-colors duration-150 odd:bg-zinc-950/30 even:bg-zinc-900/20"
+                    >
+                      {rowCells.map((cellText, cIdx) => (
+                        <td
+                          key={cIdx}
+                          className="px-4 py-3 text-foreground/90 align-top leading-relaxed text-xs sm:text-sm border-r border-border/20 last:border-r-0"
+                        >
+                          {renderInline(cellText)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+          continue;
+        }
+      }
+
+      // Blockquote or GitHub Alert Callout
       if (currentLine.startsWith("> ")) {
         const quoteLines: string[] = [currentLine.slice(2)];
         i++;
@@ -123,6 +219,88 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
             break;
           }
         }
+
+        const firstLine = quoteLines[0] || "";
+        const alertMatch = firstLine.match(/^\[!(IMPORTANT|TIP|NOTE|WARNING|CAUTION)\]/i);
+
+        if (alertMatch && alertMatch[1]) {
+          const alertType = alertMatch[1].toUpperCase();
+          const remainingLines = [
+            firstLine.slice(alertMatch[0].length).trim(),
+            ...quoteLines.slice(1),
+          ].filter((l) => l.length > 0);
+
+          const alertStyles = {
+            IMPORTANT: {
+              border: "border-primary/50",
+              bg: "bg-primary/10",
+              text: "text-primary",
+              label: "Important Mindset",
+              icon: AlertCircle,
+            },
+            TIP: {
+              border: "border-emerald-500/50",
+              bg: "bg-emerald-950/20",
+              text: "text-emerald-400",
+              label: "Architectural Tip",
+              icon: Lightbulb,
+            },
+            NOTE: {
+              border: "border-cyan-500/50",
+              bg: "bg-cyan-950/20",
+              text: "text-cyan-400",
+              label: "Pedagogical Note",
+              icon: Info,
+            },
+            WARNING: {
+              border: "border-amber-500/50",
+              bg: "bg-amber-950/20",
+              text: "text-amber-400",
+              label: "Warning & Anti-Pattern",
+              icon: AlertTriangle,
+            },
+            CAUTION: {
+              border: "border-rose-500/50",
+              bg: "bg-rose-950/20",
+              text: "text-rose-400",
+              label: "Critical Caution",
+              icon: ShieldAlert,
+            },
+          }[alertType] || {
+            border: "border-primary/50",
+            bg: "bg-primary/10",
+            text: "text-primary",
+            label: "Notice",
+            icon: Info,
+          };
+
+          const IconComponent = alertStyles.icon;
+
+          elements.push(
+            <div
+              key={`callout-${i}`}
+              className={cn(
+                "my-6 rounded-xl border p-4 sm:p-5 backdrop-blur-sm shadow-sm transition-all",
+                alertStyles.border,
+                alertStyles.bg
+              )}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <IconComponent className={cn("w-4 h-4 shrink-0", alertStyles.text)} />
+                <span className={cn("text-xs font-bold uppercase tracking-wider", alertStyles.text)}>
+                  {alertStyles.label}
+                </span>
+              </div>
+              <div className="space-y-2 text-sm text-foreground/90 leading-relaxed font-sans pl-6">
+                {remainingLines.map((q, qIdx) => (
+                  <p key={qIdx}>{renderInline(q)}</p>
+                ))}
+              </div>
+            </div>
+          );
+          continue;
+        }
+
         elements.push(
           <blockquote
             key={`quote-${i}`}
@@ -198,6 +376,7 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
             !nextL.startsWith("#") &&
             !nextL.startsWith("```") &&
             !nextL.startsWith("> ") &&
+            !nextL.trim().startsWith("|") &&
             !nextL.trim().startsWith("- ") &&
             !/^\d+\.\s/.test(nextL.trim()) &&
             nextL.trim() !== "---"
@@ -222,11 +401,14 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
     return elements;
   };
 
-  // Inline styling: bold, inline code
+  // Inline styling: bold, inline code, links
   const renderInline = (text: string): React.ReactNode => {
-    const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+    const tokenRegex = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
+    const parts = text.split(tokenRegex);
 
     return parts.map((part, idx) => {
+      if (!part) return null;
+
       if (part.startsWith("`") && part.endsWith("`")) {
         return (
           <code
@@ -237,6 +419,7 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
           </code>
         );
       }
+
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
           <strong key={idx} className="font-semibold text-foreground">
@@ -244,6 +427,26 @@ export function LessonViewer({ content, summary, className }: LessonViewerProps)
           </strong>
         );
       }
+
+      const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (linkMatch && linkMatch[1] && linkMatch[2]) {
+        const linkText = linkMatch[1];
+        const linkUrl = linkMatch[2];
+        const isExternal = linkUrl.startsWith("http");
+
+        return (
+          <a
+            key={idx}
+            href={linkUrl}
+            className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors font-medium"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+          >
+            {linkText}
+          </a>
+        );
+      }
+
       return part;
     });
   };
